@@ -1,0 +1,9 @@
+[package]
+name = "rrl"
+version = "0.1.0"
+authors = ["MouseProducedGames"]
+edition = "2018"
+
+[dependencies]
+ncurses = "5.99.0"
+rand = "0.6"
