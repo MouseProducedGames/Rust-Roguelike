@@ -22,8 +22,9 @@ fn main() {
     {
         for y in 1..24
         {
-            map[y][0] = 1;
-            map[y][79] = 1;
+            let row: &mut [u32; 80] = &mut map[y];
+            row[0] = 1;
+            row[79] = 1;
         }
     }
 
