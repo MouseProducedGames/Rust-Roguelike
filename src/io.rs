@@ -39,7 +39,7 @@ pub fn refresh()
     ncurses::printw(s);
 } */
 
-pub fn write_creatures(creatures: Vec<creature::Creature>, player_index: usize)
+pub fn write_creatures(creatures: &Vec<creature::Creature>, player_index: usize)
 {
     let player_creature = &creatures[player_index];
     let ( pc_pos_x, pc_pos_y ) = player_creature.get_position();
@@ -60,7 +60,7 @@ pub fn write_creatures(creatures: Vec<creature::Creature>, player_index: usize)
     }
 }
 
-pub fn write_map(view_x: i32, view_y: i32, map: [[u32; 80]; 25])
+pub fn write_map(view_x: i32, view_y: i32, map: &[[u32; 80]; 25])
 {
     for view_addend_y in -17..18_i32
     {

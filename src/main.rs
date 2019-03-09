@@ -50,15 +50,21 @@ fn main() {
 
     io::init();
 
-    io::write_map(player_pos_x, player_pos_y, map);
-    io::write_map(player_pos_x, player_pos_y, map);
+    let mut game_running = true;
+    while game_running
+    {
+        io::write_map(player_pos_x, player_pos_y, &map);
+        io::write_creatures(&creatures, player_index);
+        io::refresh();
 
-    io::write_creatures(creatures, player_index);
-
-    io::refresh();
-
-    // get_char refreshes the screen. Why??
-    io::get_char();
+        // get_char refreshes the screen. Why??
+        let command = io::get_char();
+        match command
+        {
+            'q' => game_running = false,
+            _ => (),
+        }
+    }
 
     io::close();
 }
