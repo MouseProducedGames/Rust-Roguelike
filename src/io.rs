@@ -38,19 +38,39 @@ pub fn refresh()
     ncurses::printw(s);
 } */
 
-pub fn write_map(map: [[u32; 80]; 25])
+pub fn write_map(view_x: usize, view_y: usize, map: [[u32; 80]; 25])
 {
-    let mut y = -1;
-    for row in map.iter()
+    for view_addend_y in -17..18_i32
     {
-        y = y + 1;
-        let mut x = -1;
+        let map_pos_y = (view_y as i32) + view_addend_y;
+        if map_pos_y < 0
+        {
+            continue;
+        }
+        else if map_pos_y >= 25
+        {
+            break;
+        }
+        let display_pos_y = 18 + view_addend_y;
+        let map_index_y = map_pos_y as usize;
+        let row = map[map_index_y];
         let mut repeat_count = 1;
         let mut lastch = ' ';
-        for tile_type in row.iter()
+        for view_addend_x in -17..18_i32
         {
-            x = x + 1;
-            let ch = MAP_GRAPHICS[*tile_type as usize];
+            let map_pos_x = (view_x as i32) + view_addend_x;
+            if map_pos_x < 0
+            {
+                continue;
+            }
+            else if map_pos_x >= 80
+            {
+                break;
+            }
+            let display_pos_x = 18 + view_addend_x;
+            let map_index_x = map_pos_x as usize;
+            let tile_type = row[map_index_x];
+            let ch = MAP_GRAPHICS[tile_type as usize];
             // let ch = match *is_wall { true => '#', _ => '.', };
             if lastch == ch
             {
@@ -66,7 +86,7 @@ pub fn write_map(map: [[u32; 80]; 25])
                 repeat_count = 0;
             }
             lastch = ch;
-            put_char(x, y, ch);
+            put_char(display_pos_x, display_pos_y, ch);
         }
     }    
 }

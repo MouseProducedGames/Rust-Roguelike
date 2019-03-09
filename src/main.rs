@@ -37,10 +37,15 @@ fn main() {
         }
     }
 
+    let player_pos_x: usize = 8;
+    let player_pos_y: usize = 5;
+
+    map[player_pos_y][player_pos_x] = 2;
+
     io::init();
 
-    io::write_map(map);
-    io::write_map(map);
+    io::write_map(player_pos_x, player_pos_y, map);
+    io::write_map(player_pos_x, player_pos_y, map);
 
     io::refresh();
 
