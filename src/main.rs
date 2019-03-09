@@ -1,5 +1,6 @@
 extern crate rand;
 use rand::{thread_rng, Rng};
+mod creature;
 mod io;
 
 fn main() {
@@ -37,15 +38,22 @@ fn main() {
         }
     }
 
-    let player_pos_x: usize = 8;
-    let player_pos_y: usize = 5;
+    let mut creatures: Vec<creature::Creature> = vec![];
 
-    map[player_pos_y][player_pos_x] = 2;
+    creatures.push(creature::Creature::new( 8, 5 ));
+    let player_index: usize = 0;
+    creatures.push(creature::Creature::new( 12, 7 ));
+
+    let (player_pos_y, player_pos_x) = creatures[player_index].get_position();
+
+    map[player_pos_y as usize][player_pos_x as usize] = 2;
 
     io::init();
 
     io::write_map(player_pos_x, player_pos_y, map);
     io::write_map(player_pos_x, player_pos_y, map);
+
+    io::write_creatures(creatures, player_index);
 
     io::refresh();
 
