@@ -1,5 +1,7 @@
 extern crate ncurses;
 
+static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
+
 pub fn init()
 {
     ncurses::initscr();
@@ -36,7 +38,7 @@ pub fn refresh()
     ncurses::printw(s);
 } */
 
-pub fn write_map(map: [[bool; 80]; 25])
+pub fn write_map(map: [[u32; 80]; 25])
 {
     let mut y = -1;
     for row in map.iter()
@@ -45,10 +47,11 @@ pub fn write_map(map: [[bool; 80]; 25])
         let mut x = -1;
         let mut repeat_count = 1;
         let mut lastch = ' ';
-        for is_wall in row.iter()
+        for tile_type in row.iter()
         {
             x = x + 1;
-            let ch = match *is_wall { true => '#', _ => '.', };
+            let ch = MAP_GRAPHICS[*tile_type as usize];
+            // let ch = match *is_wall { true => '#', _ => '.', };
             if lastch == ch
             {
                 repeat_count = repeat_count + 1;
