@@ -1,5 +1,6 @@
 extern crate ncurses;
 use super::creature;
+use super::tilemap;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
 
@@ -60,8 +61,9 @@ pub fn write_creatures(creatures: &Vec<creature::Creature>, player_index: usize)
     }
 }
 
-pub fn write_map(view_x: i32, view_y: i32, map: &[[u32; 80]; 25])
+pub fn write_map(view_x: i32, view_y: i32, map: &tilemap::Tilemap)
 {
+    let ( map_width, map_height ) = map.get_bounds();
     for view_addend_y in -17..18_i32
     {
         let map_pos_y = view_y + view_addend_y;
@@ -69,13 +71,12 @@ pub fn write_map(view_x: i32, view_y: i32, map: &[[u32; 80]; 25])
         {
             continue;
         }
-        else if map_pos_y >= 25
+        else if (map_pos_y as usize) >= map_height
         {
             break;
         }
         let display_pos_y = 18 + view_addend_y;
         let map_index_y = map_pos_y as usize;
-        let row = map[map_index_y];
         let mut repeat_count = 1;
         let mut lastch = ' ';
         for view_addend_x in -17..18_i32
@@ -85,13 +86,13 @@ pub fn write_map(view_x: i32, view_y: i32, map: &[[u32; 80]; 25])
             {
                 continue;
             }
-            else if map_pos_x >= 80
+            else if (map_pos_x as usize) >= map_width
             {
                 break;
             }
             let display_pos_x = 18 + view_addend_x;
             let map_index_x = map_pos_x as usize;
-            let tile_type = row[map_index_x];
+            let tile_type = map.get_tile(map_index_x, map_index_y);
             let ch = MAP_GRAPHICS[tile_type as usize];
             // let ch = match *is_wall { true => '#', _ => '.', };
             if lastch == ch

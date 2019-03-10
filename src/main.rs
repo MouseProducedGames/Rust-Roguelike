@@ -2,40 +2,38 @@ extern crate rand;
 use rand::{thread_rng, Rng};
 mod creature;
 mod io;
+mod tilemap;
 use crate::creature::Mobile;
 
 fn main() {
     let mut rng = thread_rng();
-    let mut map: [[u32; 80]; 25] = [[0; 80]; 25];
+    let mut map: tilemap::Tilemap = tilemap::Tilemap::new(80, 25);
+    let ( map_width, map_height) = map.get_bounds();
 
     {
-        let top: &mut [u32; 80] = &mut map[0];
-        for x in 0..80
+        for x in 0..map_width
         {
-            top[x] = 1;
+            map.set_tile(x, 0, 1);
         }
-        let bottom: &mut [u32; 80] = &mut map[24];
-        for x in 0..80
+        for x in 0..map_width
         {
-            bottom[x] = 1;
-        }
-    }
-
-    {
-        for y in 1..24
-        {
-            let row: &mut [u32; 80] = &mut map[y];
-            row[0] = 1;
-            row[79] = 1;
+            map.set_tile(x, map_height - 1, 1);
         }
     }
 
-    for y in 1..24
     {
-        let row: &mut [u32; 80] = &mut map[y];
-        for x in 1..79
+        for y in 1..map_height
         {
-            row[x] = rng.gen_range(1, 3);
+            map.set_tile(0, y, 1);
+            map.set_tile(map_width - 1, y, 1);
+        }
+    }
+
+    for y in 1..map_height - 1
+    {
+        for x in 1..map_width - 1
+        {
+            map.set_tile(x, y, rng.gen_range(1, 3));
         }
     }
 
@@ -47,7 +45,7 @@ fn main() {
 
     {
         let (player_pos_x, player_pos_y) = creatures[player_index].get_position();
-        map[player_pos_y as usize][player_pos_x as usize] = 2;
+        map.set_tile(player_pos_x as usize, player_pos_y as usize, 2);
     }
 
     io::init();
