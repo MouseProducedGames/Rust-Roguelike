@@ -67,13 +67,20 @@ pub fn write_map(view_x: i32, view_y: i32, map: &tilemap::Tilemap)
     for view_addend_y in -17..18_i32
     {
         let map_pos_y = view_y + view_addend_y;
+        let check_y;
         if map_pos_y < 0
         {
-            continue;
+            check_y = false;
+            // continue;
         }
         else if (map_pos_y as usize) >= map_height
         {
-            break;
+            check_y = false;
+            // break;
+        }
+        else
+        {
+            check_y = true;
         }
         let display_pos_y = 18 + view_addend_y;
         let map_index_y = map_pos_y as usize;
@@ -82,17 +89,33 @@ pub fn write_map(view_x: i32, view_y: i32, map: &tilemap::Tilemap)
         for view_addend_x in -17..18_i32
         {
             let map_pos_x = view_x + view_addend_x;
+            let check_x;
             if map_pos_x < 0
             {
-                continue;
+                check_x = false;
+                // continue;
             }
             else if (map_pos_x as usize) >= map_width
             {
-                break;
+                check_x = false;
+                // break;
             }
+            else
+            {
+                check_x = true;
+            }
+            let check = check_x && check_y;
             let display_pos_x = 18 + view_addend_x;
-            let map_index_x = map_pos_x as usize;
-            let tile_type = map.get_tile(map_index_x, map_index_y);
+            let tile_type;
+            if check
+            {
+                let map_index_x = map_pos_x as usize;
+                tile_type = map.get_tile(map_index_x, map_index_y);
+            }
+            else
+            {
+                tile_type = 0;
+            }
             let ch = MAP_GRAPHICS[tile_type as usize];
             // let ch = match *is_wall { true => '#', _ => '.', };
             if lastch == ch
