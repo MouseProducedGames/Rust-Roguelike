@@ -5,8 +5,11 @@ mod io;
 mod linear;
 mod multidim;
 mod tilemap;
-use crate::creature::Mobile;
+mod tiletype;
+use creature::Mobile;
 use io::Window;
+use linear::Displacement;
+use tiletype::{ TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID };
 
 fn main() {
     let mut rng = thread_rng();
@@ -64,18 +67,36 @@ fn main() {
 
         // get_char refreshes the screen. Why??
         let command = window.get_char();
+        let player_move;
         match command
         {
-            '1' => creatures[player_index].move_self(-1,  1),
-            '2' => creatures[player_index].move_self( 0,  1),
-            '3' => creatures[player_index].move_self( 1,  1),
-            '4' => creatures[player_index].move_self(-1,  0),
-            '6' => creatures[player_index].move_self( 1,  0),
-            '7' => creatures[player_index].move_self(-1, -1),
-            '8' => creatures[player_index].move_self( 0, -1),
-            '9' => creatures[player_index].move_self( 1, -1),
-            'q' => game_running = false,
-            _ => (),
+            '1' => player_move = Displacement::new(-1,  1),
+            '2' => player_move = Displacement::new( 0,  1),
+            '3' => player_move = Displacement::new( 1,  1),
+            '4' => player_move = Displacement::new(-1,  0),
+            '6' => player_move = Displacement::new( 1,  0),
+            '7' => player_move = Displacement::new(-1, -1),
+            '8' => player_move = Displacement::new( 0, -1),
+            '9' => player_move = Displacement::new( 1, -1),
+            'q' => { player_move = Displacement::new( 0,  0); game_running = false; },
+            _ =>   player_move = Displacement::new( 0,  0),
+        }
+
+        let player_new_pos = player_pos + player_move;
+        let tile_type;
+        if (player_new_pos.x < 0) || (player_new_pos.x as usize >= map_width) ||
+            (player_new_pos.y < 0) || (player_new_pos.y as usize >= map_height)
+        {
+            tile_type = TILE_TYPE_INDEX_VOID;
+        }
+        else
+        {
+            tile_type = map.tile( player_new_pos.x as usize, player_new_pos.y as usize );
+        }
+        let tile_type_data = &TILE_TYPE_DATA[ tile_type as usize ];
+        if tile_type_data.passable()
+        {
+            creatures[player_index].move_self( player_move.x, player_move.y );
         }
     }
 

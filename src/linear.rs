@@ -17,10 +17,10 @@ pub struct Position
 
 impl Displacement
 {
-    /* pub fn new(x: i32, y: i32) -> Self
+    pub fn new(x: i32, y: i32) -> Self
     {
         Self { x, y }
-    }*/
+    }
 
     /* pub fn length_sqr(self) -> i32
     {
