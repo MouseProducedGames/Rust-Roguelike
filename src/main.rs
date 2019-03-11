@@ -3,30 +3,31 @@ use rand::{thread_rng, Rng};
 mod creature;
 mod io;
 mod linear;
+mod multidim;
 mod tilemap;
 use crate::creature::Mobile;
 
 fn main() {
     let mut rng = thread_rng();
     let mut map: tilemap::Tilemap = tilemap::Tilemap::new(80, 25);
-    let ( map_width, map_height) = map.get_bounds();
+    let ( map_width, map_height) = map.bounds();
 
     {
         for x in 0..map_width
         {
-            map.set_tile(x, 0, 1);
+            *map.tile_mut(x, 0) = 1_u32;
         }
         for x in 0..map_width
         {
-            map.set_tile(x, map_height - 1, 1);
+            *map.tile_mut(x, map_height - 1) = 1;
         }
     }
 
     {
         for y in 1..map_height
         {
-            map.set_tile(0, y, 1);
-            map.set_tile(map_width - 1, y, 1);
+            *map.tile_mut(0, y) = 1;
+            *map.tile_mut(map_width - 1, y) = 1;
         }
     }
 
@@ -34,7 +35,7 @@ fn main() {
     {
         for x in 1..map_width - 1
         {
-            map.set_tile(x, y, rng.gen_range(1, 3));
+            *map.tile_mut(x, y) = rng.gen_range(1, 3);
         }
     }
 
@@ -46,7 +47,7 @@ fn main() {
 
     {
         let player_pos = creatures[player_index].get_position();
-        map.set_tile(player_pos.x as usize, player_pos.y as usize, 2);
+        *map.tile_mut(player_pos.x as usize, player_pos.y as usize) = 2;
     }
 
     io::init();

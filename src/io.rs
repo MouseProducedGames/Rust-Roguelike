@@ -64,7 +64,7 @@ pub fn write_creatures(creatures: &Vec<creature::Creature>, player_index: usize)
 
 pub fn write_map(view_x: i32, view_y: i32, map: &tilemap::Tilemap)
 {
-    let ( map_width, map_height ) = map.get_bounds();
+    let ( map_width, map_height ) = map.bounds();
     for view_addend_y in -17..18_i32
     {
         let map_pos_y = view_y + view_addend_y;
@@ -111,11 +111,11 @@ pub fn write_map(view_x: i32, view_y: i32, map: &tilemap::Tilemap)
             if check
             {
                 let map_index_x = map_pos_x as usize;
-                tile_type = map.get_tile(map_index_x, map_index_y);
+                tile_type = map.tile(map_index_x, map_index_y);
             }
             else
             {
-                tile_type = 0;
+                tile_type = 0_u32;
             }
             let ch = MAP_GRAPHICS[tile_type as usize];
             // let ch = match *is_wall { true => '#', _ => '.', };
