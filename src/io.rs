@@ -129,7 +129,7 @@ pub fn write_map(view_x: i32, view_y: i32, map: &tilemap::Tilemap)
             }
             if repeat_count == 5
             {
-                // ncurses::refresh();
+                ncurses::refresh();
                 repeat_count = 0;
             }
             lastch = ch;
