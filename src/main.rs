@@ -6,6 +6,7 @@ mod linear;
 mod multidim;
 mod tilemap;
 use crate::creature::Mobile;
+use io::Window;
 
 fn main() {
     let mut rng = thread_rng();
@@ -50,18 +51,19 @@ fn main() {
         *map.tile_mut(player_pos.x as usize, player_pos.y as usize) = 2;
     }
 
-    io::init();
+    Window::init();
+    let window = Window::new();
 
     let mut game_running = true;
     while game_running
     {
         let player_pos = creatures[player_index].get_position();
-        io::write_map(player_pos.x, player_pos.y, &map);
-        io::write_creatures(&creatures, player_index);
-        io::refresh();
+        window.write_map(player_pos.x, player_pos.y, &map);
+        window.write_creatures(&creatures, player_index);
+        window.refresh();
 
         // get_char refreshes the screen. Why??
-        let command = io::get_char();
+        let command = window.get_char();
         match command
         {
             '1' => creatures[player_index].move_self(-1,  1),
@@ -77,5 +79,5 @@ fn main() {
         }
     }
 
-    io::close();
+    Window::close();
 }

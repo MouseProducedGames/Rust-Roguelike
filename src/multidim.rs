@@ -45,3 +45,34 @@ impl<T> Multidim<T> where T: Copy + Clone + Default
         ( pos0 * self.len1 ) + pos1
     }
 }
+
+/*
+impl<T> Copy for Multidim<T> {}
+
+impl<T> Clone for Multidim<T> where T: Copy + Clone + Default
+{
+    fn clone(&self) -> Self
+    {
+        let mut output: Self =
+            Self {
+                values: Vec::new(),
+                len0: self.len0,
+                len1: self.len1,
+            };
+        output.values.resize(self.len0 * self.len1, self.values);
+        output;
+    }
+}
+
+impl<T> Default for Multidim<T> where T: Copy + Clone + Default
+{
+    fn default() -> Self
+    {
+        Self {
+            values: Vec::new(),
+            len0: 0_usize,
+            len1: 0_usize,
+        }
+    }
+}
+*/
