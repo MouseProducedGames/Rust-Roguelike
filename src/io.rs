@@ -1,14 +1,14 @@
 extern crate ncurses;
 use super::creature;
-use super::linear::{ Position };
-// use super::multidim::Multidim;
+use super::multidim::Multidim;
 use super::tilemap;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
 
 pub struct Window
 {
-    // buffers: [Multidim<char>; 2],
+    buffers: [Multidim<char>; 2],
+    back_buffer_index: usize,
 }
 
 impl Window
@@ -24,19 +24,35 @@ impl Window
         ncurses::noecho();
     }
 
-    pub fn new() -> Self
-    {
-        Self {
-            /* buffers: [
-                Multidim::new( 40, 80 ),
-                Multidim::new( 40, 80 )
-            ], */
-        }
-    }
-
     pub fn close()
     {
         ncurses::endwin();
+    }
+
+    pub fn new() -> Self
+    {
+        let mut output =
+            Self {
+                buffers: [
+                    Multidim::new( 40, 80 ),
+                    Multidim::new( 40, 80 )
+                ],
+                back_buffer_index: 0,
+            };
+        
+        let front_buffer_index = output.front_buffer_index();
+        let buffers = &mut output.buffers;
+        let ( buffer_height, buffer_width ) = buffers[ output.back_buffer_index ].bounds();
+        for y in 0..buffer_height
+        {
+            for x in 0..buffer_width
+            {
+                *buffers[ front_buffer_index ].value_mut( y, x ) = ' ';
+                *buffers[ output.back_buffer_index ].value_mut( y, x) = ' ';
+            }
+        }
+        
+        output
     }
 
     pub fn get_char(&self) -> char
@@ -49,9 +65,74 @@ impl Window
             };
     }
 
-    pub fn refresh(&self)
+    pub fn present(&mut self)
     {
+        {
+            self.back_buffer_index = 1 - self.back_buffer_index;
+            let buffers = &self.buffers;
+            let back_buffer = &buffers[ self.back_buffer_index ];
+            let front_buffer = &buffers[ self.front_buffer_index() ];
+            let ( buffer_height, buffer_width ) = front_buffer.bounds();
+            let mut yi = -1_i32;
+            for y in 0..buffer_height
+            {
+                yi += 1;
+                let mut xi = -1_i32;
+                // Without the repeat_count check, repeated characters (5 or more)
+                // are placed in the same spot.
+                let mut repeat_count = 1;
+                let mut lastch = ' ';
+                for x in 0..buffer_width
+                {
+                    xi += 1;
+                    let back_ch = *back_buffer.value( y, x );
+                    let front_ch = *front_buffer.value( y, x );
+                    if front_ch == back_ch
+                    {
+                        // lastch = front_ch;
+                        repeat_count = repeat_count + 1;
+                        if repeat_count >= 5
+                        {
+                            ncurses::refresh();
+                            repeat_count = 0;
+                        }
+                        continue;
+                    }
+        
+                    if lastch == front_ch
+                    {
+                        repeat_count = repeat_count + 1;
+                    }
+                    else
+                    {
+                        repeat_count = 1;
+                    }
+                    if repeat_count >= 5
+                    {
+                        ncurses::refresh();
+                        repeat_count = 0;
+                    }
+                    lastch = front_ch;
+    
+                    self.put_char(xi, yi, front_ch);
+                }
+            }
+        }
         ncurses::refresh();
+
+        {
+            let front_buffer_index = self.front_buffer_index();
+            let buffers = &mut self.buffers;
+            let ( buffer_height, buffer_width ) = buffers[ self.back_buffer_index ].bounds();
+            for y in 0..buffer_height
+            {
+                for x in 0..buffer_width
+                {
+                    let val = *buffers[ front_buffer_index ].value( y, x );
+                    *buffers[ self.back_buffer_index ].value_mut( y, x) = val;
+                }
+            }
+        }
     }
 
     /* pub fn write_line(s: &str)
@@ -59,8 +140,9 @@ impl Window
         ncurses::printw(s);
     } */
 
-    pub fn write_creatures(&self, creatures: &Vec<creature::Creature>, player_index: usize)
+    pub fn write_creatures(&mut self, creatures: &Vec<creature::Creature>, player_index: usize)
     {
+        let back_buffer = &mut self.buffers[self.back_buffer_index];
         let player_creature = &creatures[player_index];
         for creature_index in 0..creatures.len()
         {
@@ -75,14 +157,15 @@ impl Window
                 continue;
             }
 
-            let display_pos = Position::new(18, 18) + dist;
-            self.put_char( display_pos.x, display_pos.y, ch );
+            let ( display_pos_x, display_pos_y ) = (18 + dist.x, 18 + dist.y);
+            *back_buffer.value_mut(display_pos_y as usize, display_pos_x as usize) = ch;
         }
     }
 
-    pub fn write_map(&self, view_x: i32, view_y: i32, map: &tilemap::Tilemap)
+    pub fn write_map(&mut self, view_x: i32, view_y: i32, map: &tilemap::Tilemap)
     {
         let ( map_width, map_height ) = map.bounds();
+        let back_buffer = &mut self.buffers[self.back_buffer_index];
         for view_addend_y in -17..18_i32
         {
             let map_pos_y = view_y + view_addend_y;
@@ -101,10 +184,8 @@ impl Window
             {
                 check_y = true;
             }
-            let display_pos_y = 18 + view_addend_y;
+            let display_pos_y = (18 + view_addend_y) as usize;
             let map_index_y = map_pos_y as usize;
-            let mut repeat_count = 1;
-            let mut lastch = ' ';
             for view_addend_x in -17..18_i32
             {
                 let map_pos_x = view_x + view_addend_x;
@@ -124,7 +205,7 @@ impl Window
                     check_x = true;
                 }
                 let check = check_x && check_y;
-                let display_pos_x = 18 + view_addend_x;
+                let display_pos_x = (18 + view_addend_x) as usize;
                 let tile_type;
                 if check
                 {
@@ -137,23 +218,14 @@ impl Window
                 }
                 let ch = MAP_GRAPHICS[tile_type as usize];
                 // let ch = match *is_wall { true => '#', _ => '.', };
-                if lastch == ch
-                {
-                    repeat_count = repeat_count + 1;
-                }
-                else
-                {
-                    repeat_count = 1;
-                }
-                if repeat_count == 5
-                {
-                    ncurses::refresh();
-                    repeat_count = 0;
-                }
-                lastch = ch;
-                self.put_char(display_pos_x, display_pos_y, ch);
+                *back_buffer.value_mut(display_pos_y, display_pos_x) = ch;
             }
         }    
+    }
+
+    fn front_buffer_index(&self) -> usize
+    {
+        1 - self.back_buffer_index
     }
 
     /* fn move_cursor(x: i32, y: i32)

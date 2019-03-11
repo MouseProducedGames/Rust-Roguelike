@@ -52,7 +52,7 @@ fn main() {
     }
 
     Window::init();
-    let window = Window::new();
+    let mut window = Window::new();
 
     let mut game_running = true;
     while game_running
@@ -60,7 +60,7 @@ fn main() {
         let player_pos = creatures[player_index].get_position();
         window.write_map(player_pos.x, player_pos.y, &map);
         window.write_creatures(&creatures, player_index);
-        window.refresh();
+        window.present();
 
         // get_char refreshes the screen. Why??
         let command = window.get_char();
