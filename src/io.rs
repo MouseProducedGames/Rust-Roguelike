@@ -1,5 +1,6 @@
 extern crate ncurses;
 use super::creature;
+use super::linear::{ Position };
 use super::tilemap;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
@@ -43,21 +44,21 @@ pub fn refresh()
 pub fn write_creatures(creatures: &Vec<creature::Creature>, player_index: usize)
 {
     let player_creature = &creatures[player_index];
-    let ( pc_pos_x, pc_pos_y ) = player_creature.get_position();
     for creature_index in 0..creatures.len()
     {
+        let pc_pos = player_creature.get_position();
         let current_creature = &creatures[creature_index];
         let ch = if creature_index == player_index { '@' } else { 'C' };
-        let ( cc_pos_x, cc_pos_y ) = current_creature.get_position();
-        let ( dist_x, dist_y ) = ( cc_pos_x - pc_pos_x, cc_pos_y - pc_pos_y );
-        if (dist_x < -17) || (dist_x > 17) ||
-           (dist_y < -17) || (dist_y > 17)
+        let cc_pos = current_creature.get_position();
+        let dist = cc_pos - pc_pos;
+        if (dist.x < -17) || (dist.x > 17) ||
+           (dist.y < -17) || (dist.y > 17)
         {
             continue;
         }
 
-        let ( display_pos_x, display_pos_y ) = ( 18 + dist_x, 18 + dist_y );
-        put_char( display_pos_x, display_pos_y, ch );
+        let display_pos = Position::new(18, 18) + dist;
+        put_char( display_pos.x, display_pos.y, ch );
     }
 }
 
@@ -128,7 +129,7 @@ pub fn write_map(view_x: i32, view_y: i32, map: &tilemap::Tilemap)
             }
             if repeat_count == 5
             {
-                ncurses::refresh();
+                // ncurses::refresh();
                 repeat_count = 0;
             }
             lastch = ch;

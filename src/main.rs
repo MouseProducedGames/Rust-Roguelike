@@ -2,6 +2,7 @@ extern crate rand;
 use rand::{thread_rng, Rng};
 mod creature;
 mod io;
+mod linear;
 mod tilemap;
 use crate::creature::Mobile;
 
@@ -44,8 +45,8 @@ fn main() {
     creatures.push(creature::Creature::new( 12, 7 ));
 
     {
-        let (player_pos_x, player_pos_y) = creatures[player_index].get_position();
-        map.set_tile(player_pos_x as usize, player_pos_y as usize, 2);
+        let player_pos = creatures[player_index].get_position();
+        map.set_tile(player_pos.x as usize, player_pos.y as usize, 2);
     }
 
     io::init();
@@ -53,8 +54,8 @@ fn main() {
     let mut game_running = true;
     while game_running
     {
-        let (player_pos_x, player_pos_y) = creatures[player_index].get_position();
-        io::write_map(player_pos_x, player_pos_y, &map);
+        let player_pos = creatures[player_index].get_position();
+        io::write_map(player_pos.x, player_pos.y, &map);
         io::write_creatures(&creatures, player_index);
         io::refresh();
 
