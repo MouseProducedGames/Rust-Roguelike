@@ -1,17 +1,27 @@
 extern crate rand;
 use rand::{thread_rng, Rng};
 mod creature;
+mod creature_logic;
+mod creature_logic_none;
+mod creature_logic_player;
+mod game_state;
 mod io;
 mod linear;
 mod multidim;
 mod tilemap;
 mod tiletype;
-use creature::Mobile;
+use creature_logic::CreatureLogic;
+use creature_logic_none::CreatureLogicNone;
+use creature_logic_player::CreatureLogicPlayer;
+use game_state::GameState;
 use io::Window;
-use linear::Displacement;
-use tiletype::{ TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID };
 
 fn main() {
+    Window::init();
+    let mut window = Window::new();
+
+    let mut game_state: GameState = GameState::new( &mut window );
+
     let mut rng = thread_rng();
     let mut map: tilemap::Tilemap = tilemap::Tilemap::new(80, 25);
     let ( map_width, map_height) = map.bounds();
@@ -43,60 +53,33 @@ fn main() {
         }
     }
 
+    let creature_logic_none = CreatureLogicNone::new();
+    let creature_logic_player = CreatureLogicPlayer::new();
     let mut creatures: Vec<creature::Creature> = vec![];
 
-    creatures.push(creature::Creature::new( 8, 5 ));
+    creatures.push(creature::Creature::new( &creature_logic_player as &dyn CreatureLogic, 8, 5 ));
     let player_index: usize = 0;
-    creatures.push(creature::Creature::new( 12, 7 ));
+    creatures.push(creature::Creature::new( &creature_logic_none as &dyn CreatureLogic, 12, 7 ));
 
     {
         let player_pos = creatures[player_index].get_position();
         *map.tile_mut(player_pos.x as usize, player_pos.y as usize) = 2;
     }
 
-    Window::init();
-    let mut window = Window::new();
-
-    let mut game_running = true;
-    while game_running
+    while game_state.alive()
     {
-        let player_pos = creatures[player_index].get_position();
-        window.write_map(player_pos.x, player_pos.y, &map);
-        window.write_creatures(&creatures, player_index);
-        window.present();
-
-        // get_char refreshes the screen. Why??
-        let command = window.get_char();
-        let player_move;
-        match command
         {
-            '1' => player_move = Displacement::new(-1,  1),
-            '2' => player_move = Displacement::new( 0,  1),
-            '3' => player_move = Displacement::new( 1,  1),
-            '4' => player_move = Displacement::new(-1,  0),
-            '6' => player_move = Displacement::new( 1,  0),
-            '7' => player_move = Displacement::new(-1, -1),
-            '8' => player_move = Displacement::new( 0, -1),
-            '9' => player_move = Displacement::new( 1, -1),
-            'q' => { player_move = Displacement::new( 0,  0); game_running = false; },
-            _ =>   player_move = Displacement::new( 0,  0),
+            let player_pos = creatures[player_index].get_position();
+            game_state.window_mut().write_map(player_pos.x, player_pos.y, &map);
+            game_state.window_mut().write_creatures(&creatures, player_index);
+            game_state.window_mut().present();
         }
 
-        let player_new_pos = player_pos + player_move;
-        let tile_type;
-        if (player_new_pos.x < 0) || (player_new_pos.x as usize >= map_width) ||
-            (player_new_pos.y < 0) || (player_new_pos.y as usize >= map_height)
         {
-            tile_type = TILE_TYPE_INDEX_VOID;
-        }
-        else
-        {
-            tile_type = map.tile( player_new_pos.x as usize, player_new_pos.y as usize );
-        }
-        let tile_type_data = &TILE_TYPE_DATA[ tile_type as usize ];
-        if tile_type_data.passable()
-        {
-            creatures[player_index].move_self( player_move.x, player_move.y );
+            for creature in &mut creatures
+            {
+               creature.update( &map, &mut game_state );
+            }
         }
     }
 
