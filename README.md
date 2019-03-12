@@ -9,14 +9,17 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 
 ## Roadmap
 
+Items marked with a strikethrough. are complete.
+
 ### Roadmap for v0.1
 
 * Model-Controller for creatures (AI and player).
-* Very simple map gen.
-* Text Map display.
-* Input.
-* Tile system.
-* Game state management.
+..* Random wander AI.
+* ~~Very simple map gen.~~
+* ~~Text Map display.~~
+* ~~Input.~~
+* ~~Tile system.~~
+* ~~Game state management.~~
 
 ### Roadmap for v0.2
 
