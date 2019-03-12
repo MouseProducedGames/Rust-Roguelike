@@ -12,13 +12,13 @@ type TileType = u32;
 type Width = usize;
 type Height = usize;
 
-pub struct Tilemap/* <'a> */
+pub struct Tilemap
 {
     id: TypeId,
     tiles: Multidim<TileType>,
 }
 
-impl/* <'a> */ Tilemap/* <'a> */
+impl Tilemap
 {
     pub fn new(width: Width, height: Height) -> Self
     {
@@ -128,7 +128,7 @@ impl/* <'a> */ Tilemap/* <'a> */
 
 }
 
-impl/* <'a> */ Hash for Tilemap/* <'a> */
+impl Hash for Tilemap
 {
   fn hash<H: Hasher>(&self, state: &mut H)
   {
@@ -136,7 +136,7 @@ impl/* <'a> */ Hash for Tilemap/* <'a> */
   }
 }
 
-impl/* <'a> */ PartialEq for Tilemap/* <'a> */
+impl PartialEq for Tilemap
 {
   fn eq(&self, other: &Tilemap) -> bool
   {
@@ -144,4 +144,4 @@ impl/* <'a> */ PartialEq for Tilemap/* <'a> */
   }
 }
 
-impl/* <'a> */ Eq for Tilemap/* <'a> */ {}
+impl Eq for Tilemap {}

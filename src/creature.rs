@@ -7,7 +7,7 @@ use super::game_state::GameState;
 use super::linear;
 use super::linear::{ Displacement, Position };
 use super::tilemap::Tilemap;
-use super::multidim::Multidim;
+use super::visibility::VisibilityMap;
 
 pub trait Mobile
 {
@@ -19,7 +19,7 @@ pub struct Creature<'a>
     logic: &'a CreatureLogic,
     pos: linear::Position,
     sight_range: i32,
-    visibility_lookup: HashMap<&'a Tilemap, Multidim<bool>>,
+    visibility_lookup: HashMap<&'a Tilemap, VisibilityMap>,
 }
 
 impl<'a> Creature<'a>
@@ -39,7 +39,7 @@ impl<'a> Creature<'a>
         if self.visibility_lookup.contains_key(map) == false
         {
             let ( map_width, map_height ) = map.bounds();
-            self.visibility_lookup.insert(map, Multidim::new( map_height, map_width ));
+            self.visibility_lookup.insert(map, VisibilityMap::new( map_width, map_height ));
         }
 
         let pos = self.get_position();
@@ -76,7 +76,7 @@ impl<'a> Creature<'a>
                     {
                         break;
                     }
-                    *visibility.value_mut( check_pos.y as usize, check_pos.x as usize ) = true;
+                    *visibility.value_mut( check_pos.x as usize, check_pos.y as usize ) = true;
                     if map.transparent_pos( check_pos ) == false
                     {
                         break;
@@ -96,7 +96,7 @@ impl<'a> Creature<'a>
         self.pos
     }
 
-    pub fn get_visibility<'b>(&self, map: &Tilemap) -> Option<&Multidim<bool>>
+    pub fn get_visibility<'b>(&self, map: &Tilemap) -> Option<&VisibilityMap>
     {
         self.visibility_lookup.get(map)
     }

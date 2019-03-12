@@ -193,8 +193,7 @@ impl Window
             {
                 let display_pos_x = (18 + view_addend_x) as usize;
                 let map_pos = view_pos + Displacement::new( view_addend_x, view_addend_y );
-                if visibility.is_i32_in_bounds( map_pos.y, map_pos.x ) == false ||
-                    *visibility.value( map_pos.y as usize, map_pos.x as usize ) == false
+                if visibility.value_pos( map_pos ) == false
                 {
                     *back_buffer.value_mut(display_pos_y, display_pos_x) = ' ';
                     continue;
