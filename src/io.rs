@@ -1,12 +1,8 @@
 // External includes.
 extern crate ncurses;
-use std::boxed::Box;
-use std::iter::Map;
 use std::iter::Iterator;
-use std::slice::{ Iter, IterMut };
 
 // Internal includes.
-use super::creature::Creature;
 use super::creature_view::CreatureView;
 use super::linear::Position;
 use super::multidim::Multidim;
@@ -149,15 +145,7 @@ impl Window
         ncurses::printw(s);
     } */
 
-    // pub fn write_creatures(&mut self, creatures: &Map<IterMut<'_, CreatureView>>, player_index: usize)
-    // pub fn write_creatures(&mut self, creatures: &Vec<Creature>, player_index: usize)
-    // pub fn write_creatures(&mut self, creatures: bool, player_index: usize)
-    // pub fn write_creatures(&mut self, creatures: &Iterator<Item= &CreatureView>, player_index: usize)
-    // pub fn write_creatures(&mut self, creatures: &Box<Map<Iter<'_, CreatureView>, [closure@src/main.rs:99:84: 99:106]>>, player_index: usize)
-    // pub fn write_creatures(&mut self, creatures: &Box<Map<Iter<'_, Creature>, &CreatureView>>, player_index: usize)
-    // pub fn write_creatures(&mut self, creatures: Box<Map<Iter<&Creature>, std::ops::Fn(&Creature, &CreatureView)>>, player_index: usize)
-    // pub fn write_creatures(&mut self, creatures: &Map<Iter<'_, Creature>, &CreatureView>, player_index: usize)
-    pub fn write_creatures<'a, Hehehe>(&mut self, view_pos: Position, creatures: Hehehe, _player_index: usize) where Hehehe: Iterator<Item = &'a CreatureView>
+    pub fn write_creatures<'a, TEnumerable>(&mut self, view_pos: Position, creatures: TEnumerable, _player_index: usize) where TEnumerable: Iterator<Item = &'a CreatureView>
     {
         let back_buffer = &mut self.buffers[self.back_buffer_index];
         // let player_creature = &creatures[player_index];

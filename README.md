@@ -15,47 +15,48 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 
 ### Roadmap for v0.1
 
-* Model-Controller for creatures (AI and player).</span>
-  * Random wander AI.</span>
-* Very simple map gen.</span>
-* Text Map display.</span>
-* Input.</span>
-* Tile system.</span>
-* Game state management.</span>
+* Model-Controller for creatures (AI and player).
+  * Random wander AI.
+* Very simple map gen.
+* Text Map display.
+* Input.
+* Tile system.
+* Game state management.
 
 ### Roadmap for v0.2
 
-* ! Model-View-Controller for creatures (AI and player).</span>
-* ! Basic Attribute system (Strength, Agility, Hit Points).</span>
-* ! Visibility and seen tile system.</span>
+* Model-View-Controller for creatures (AI and player).
+* ! Visibility and seen tile system.
+..* ! Sight range for creatures.
 
 ### Roadmap for v0.3
 
-* ! AI support for visibility-based movement/exploration.</span>
-  * Exploration implemented through random wander.</span>
-  * ! Movement over visible and seen tiles imlemented through A*.</span>
+* ! AI support for visibility-based movement/exploration.
+  * Exploration implemented through random wander.
+  * ! Movement over visible and seen tiles imlemented through A*.
 
 ### Roadmap for v0.4
 
-* ! Basic faction system.</span>
-  * ! Player will be in one faction; all AI in a second facton.</span>
+* ! Basic faction system.
+  * ! Player will be in one faction; all AI in a second facton.
 
 ### Roadmap for v0.5
 
-* ! Love-Fear/Hate AI system.</span>
-  * ! Cluster with friends (love strong friends more).</span>
-  * ! Run from strong enemies.</span>
-  * ! Attack weak enemies.</span>
-* ! Basic combat system.</span>
-  * ! AI will hate weaker creatures of other factions.</span>
-  * ! AI will fear stronger creatures of other factions.</span>
-  * ! Creatures will not be able to attack creatures of their own faction.</span>
-  * ! Player can attack creatures of other factions by attempting to move to their tile.</span>
+* ! Basic Attribute system (Strength, Agility, Hit Points).
+* ! Love-Fear/Hate AI system.
+  * ! Cluster with friends (love strong friends more).
+  * ! Run from strong enemies.
+  * ! Attack weak enemies.
+* ! Basic combat system.
+  * ! AI will hate weaker creatures of other factions.
+  * ! AI will fear stronger creatures of other factions.
+  * ! Creatures will not be able to attack creatures of their own faction.
+  * ! Player can attack creatures of other factions by attempting to move to their tile.
 
 ### Roadmap for v0.6
 
-* ! Full Attribute system (???).</span>
-* ! ???</span>
+* ! Full Attribute system (???).
+* ! ???
 
 ### Timelines for these items are long or uncertain
 
