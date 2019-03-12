@@ -2,7 +2,7 @@
 use rand::Rng;
 
 // Internal dependencies.
-use super::creature::{ Creature, Mobile };
+use super::creature_view::CreatureView;
 use super::creature_logic::CreatureLogic;
 use super::game_state::GameState;
 use super::linear::Displacement;
@@ -19,7 +19,7 @@ impl CreatureLogicWander
 
 impl CreatureLogic for CreatureLogicWander
 {
-    fn update(&self, target: &mut Creature, map: &Tilemap, game_state: &mut GameState)
+    fn update(&self, target: &mut CreatureView, map: &Tilemap, game_state: &mut GameState)
     {
         let ( map_height, map_width ) = map.bounds();
         let command = game_state.rng().gen_range(1, 10);

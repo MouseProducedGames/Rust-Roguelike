@@ -1,4 +1,4 @@
-use super::creature::{ Creature, Mobile };
+use super::creature_view::CreatureView;
 use super::creature_logic::CreatureLogic;
 use super::game_state::GameState;
 use super::linear::Displacement;
@@ -15,7 +15,7 @@ impl CreatureLogicPlayer
 
 impl CreatureLogic for CreatureLogicPlayer
 {
-    fn update(&self, target: &mut Creature, map: &Tilemap, game_state: &mut GameState)
+    fn update(&self, target: &mut CreatureView, map: &Tilemap, game_state: &mut GameState)
     {
         let ( map_height, map_width ) = map.bounds();
         // get_char refreshes the screen. Why??

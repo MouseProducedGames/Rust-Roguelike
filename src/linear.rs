@@ -19,7 +19,7 @@ impl Displacement
 {
     pub fn new(x: i32, y: i32) -> Self
     {
-        Self { x, y }
+        Self { x: x, y: y }
     }
 
     /* pub fn length_sqr(self) -> i32
@@ -60,7 +60,7 @@ impl Position
 {
     pub fn new(x: i32, y: i32) -> Self
     {
-        Self { x, y }
+        Self { x: x, y: y }
     }
 
     /* pub fn length_sqr(self) -> i32

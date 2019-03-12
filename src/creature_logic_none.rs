@@ -1,4 +1,4 @@
-use super::creature::Creature;
+use super::creature_view::CreatureView;
 use super::creature_logic::CreatureLogic;
 use super::game_state::GameState;
 use super::tilemap::Tilemap;
@@ -14,5 +14,5 @@ impl CreatureLogicNone
 
 impl CreatureLogic for CreatureLogicNone
 {
-    fn update(&self, _target: &mut Creature, _map: &Tilemap, _game_state: &mut GameState) {}
+    fn update(&self, _target: &mut CreatureView, _map: &Tilemap, _game_state: &mut GameState) {}
 }

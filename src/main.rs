@@ -7,16 +7,19 @@ mod creature_logic;
 // mod creature_logic_none;
 mod creature_logic_player;
 mod creature_logic_wander;
+mod creature_view;
 mod game_state;
 mod io;
 mod linear;
 mod multidim;
 mod tilemap;
 mod tiletype;
+use creature::Creature;
 use creature_logic::CreatureLogic;
 // use creature_logic_none::CreatureLogicNone;
 use creature_logic_player::CreatureLogicPlayer;
 use creature_logic_wander::CreatureLogicWander;
+use creature_view::CreatureView;
 use game_state::GameState;
 use io::Window;
 
@@ -59,11 +62,29 @@ fn main() {
     // let creature_logic_none = CreatureLogicNone::new();
     let creature_logic_player = CreatureLogicPlayer::new();
     let creature_logic_wander = CreatureLogicWander::new();
-    let mut creatures: Vec<creature::Creature> = vec![];
+    let mut creatures: Vec<Creature> = vec![];
+    // let mut creatures: Vec<&CreatureView> = vec![];
 
-    creatures.push(creature::Creature::new( &creature_logic_player as &dyn CreatureLogic, 8, 5 ));
-    let player_index: usize = 0;
-    creatures.push(creature::Creature::new( &creature_logic_wander as &dyn CreatureLogic, 12, 7 ));
+    let player_index: usize;
+    {
+        {
+            creatures.push(creature::Creature::new( &creature_logic_player as &dyn CreatureLogic, 8, 5 ));
+            /* match creature_datas.last()
+            {
+                Some(creature) => creatures.push(creature),
+            _ => (),
+            } */
+        }
+        player_index = 0;
+        {
+            creatures.push(creature::Creature::new( &creature_logic_wander as &dyn CreatureLogic, 12, 7 ));
+            /* match creature_datas.last()
+            {
+                Some(creature) => creatures.push(creature),
+                _ => (),
+            } */
+        }
+    }
 
     {
         let player_pos = creatures[player_index].get_position();
@@ -75,7 +96,8 @@ fn main() {
         {
             let player_pos = creatures[player_index].get_position();
             game_state.window_mut().write_map(player_pos.x, player_pos.y, &map);
-            game_state.window_mut().write_creatures(&creatures, player_index);
+            let test = Box::new(creatures.iter().map(|e| e as &CreatureView));
+            game_state.window_mut().write_creatures(player_pos, test, player_index);
             game_state.window_mut().present();
         }
 
