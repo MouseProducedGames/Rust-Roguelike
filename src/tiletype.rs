@@ -4,7 +4,7 @@ pub struct TileTypeData
     // transparent: bool,
 }
 
-pub const TILE_TYPE_INDEX_VOID: u32 = 0;
+pub const _TILE_TYPE_INDEX_VOID: u32 = 0;
 pub static TILE_TYPE_DATA: [TileTypeData; 3] =
     [
         // The void.

@@ -1,38 +1,41 @@
+// External dependencies.
+use rand::Rng;
+
+// Internal dependencies.
 use super::creature::{ Creature, Mobile };
 use super::creature_logic::CreatureLogic;
 use super::game_state::GameState;
 use super::linear::Displacement;
 use super::tilemap::Tilemap;
 
-pub struct CreatureLogicPlayer
+pub struct CreatureLogicWander
 {
 }
 
-impl CreatureLogicPlayer
+impl CreatureLogicWander
 {
     pub fn new() -> Self { Self {} }
 }
 
-impl CreatureLogic for CreatureLogicPlayer
+impl CreatureLogic for CreatureLogicWander
 {
     fn update(&self, target: &mut Creature, map: &Tilemap, game_state: &mut GameState)
     {
         let ( map_height, map_width ) = map.bounds();
-        // get_char refreshes the screen. Why??
-        let command = game_state.window().get_char();
+        let command = game_state.rng().gen_range(1, 10);
         let target_move;
         match command
         {
-            '1' =>   target_move = Displacement::new(-1,  1),
-            '2' =>   target_move = Displacement::new( 0,  1),
-            '3' =>   target_move = Displacement::new( 1,  1),
-            '4' =>   target_move = Displacement::new(-1,  0),
-            '6' =>   target_move = Displacement::new( 1,  0),
-            '7' =>   target_move = Displacement::new(-1, -1),
-            '8' =>   target_move = Displacement::new( 0, -1),
-            '9' =>   target_move = Displacement::new( 1, -1),
-            'q' => { target_move = Displacement::new( 0,  0); game_state.kill(); },
-            _ =>     target_move = Displacement::new( 0,  0),
+            1 =>   target_move = Displacement::new(-1,  1),
+            2 =>   target_move = Displacement::new( 0,  1),
+            3 =>   target_move = Displacement::new( 1,  1),
+            4 =>   target_move = Displacement::new(-1,  0),
+            5 =>   target_move = Displacement::new( 0,  0),
+            6 =>   target_move = Displacement::new( 1,  0),
+            7 =>   target_move = Displacement::new(-1, -1),
+            8 =>   target_move = Displacement::new( 0, -1),
+            9 =>   target_move = Displacement::new( 1, -1),
+            _ =>   target_move = Displacement::new( 0,  0),
         }
 
         let target_pos = target.get_position();
@@ -55,4 +58,3 @@ impl CreatureLogic for CreatureLogicPlayer
     }
 }
 
-    

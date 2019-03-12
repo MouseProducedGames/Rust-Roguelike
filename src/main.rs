@@ -1,9 +1,12 @@
-extern crate rand;
-use rand::{thread_rng, Rng};
+// External dependencies
+use rand::Rng;
+
+// Internal dependencies.
 mod creature;
 mod creature_logic;
-mod creature_logic_none;
+// mod creature_logic_none;
 mod creature_logic_player;
+mod creature_logic_wander;
 mod game_state;
 mod io;
 mod linear;
@@ -11,8 +14,9 @@ mod multidim;
 mod tilemap;
 mod tiletype;
 use creature_logic::CreatureLogic;
-use creature_logic_none::CreatureLogicNone;
+// use creature_logic_none::CreatureLogicNone;
 use creature_logic_player::CreatureLogicPlayer;
+use creature_logic_wander::CreatureLogicWander;
 use game_state::GameState;
 use io::Window;
 
@@ -22,7 +26,6 @@ fn main() {
 
     let mut game_state: GameState = GameState::new( &mut window );
 
-    let mut rng = thread_rng();
     let mut map: tilemap::Tilemap = tilemap::Tilemap::new(80, 25);
     let ( map_width, map_height) = map.bounds();
 
@@ -49,17 +52,18 @@ fn main() {
     {
         for x in 1..map_width - 1
         {
-            *map.tile_mut(x, y) = rng.gen_range(1, 3);
+            *map.tile_mut(x, y) = game_state.rng().gen_range(1, 3);
         }
     }
 
-    let creature_logic_none = CreatureLogicNone::new();
+    // let creature_logic_none = CreatureLogicNone::new();
     let creature_logic_player = CreatureLogicPlayer::new();
+    let creature_logic_wander = CreatureLogicWander::new();
     let mut creatures: Vec<creature::Creature> = vec![];
 
     creatures.push(creature::Creature::new( &creature_logic_player as &dyn CreatureLogic, 8, 5 ));
     let player_index: usize = 0;
-    creatures.push(creature::Creature::new( &creature_logic_none as &dyn CreatureLogic, 12, 7 ));
+    creatures.push(creature::Creature::new( &creature_logic_wander as &dyn CreatureLogic, 12, 7 ));
 
     {
         let player_pos = creatures[player_index].get_position();
