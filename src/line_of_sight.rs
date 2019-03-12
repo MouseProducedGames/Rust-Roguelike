@@ -2,12 +2,27 @@
 
 // internal includes
 use super::linear::{ Displacement, Position };
+use super::mapping::Mapping;
 use super::tilemap::Tilemap;
 use super::visibility::{ VisibilityMap, VisibilityType };
 
 pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight_range: i32, map: &Tilemap)
 {
     let sight_range_sqr = ( sight_range * sight_range ) as f64;
+
+    for y in -( sight_range + 1 )..( sight_range + 1 )
+    {
+        for x in -( sight_range + 1 )..( sight_range + 1)
+        {
+            let check_pos = pos + Displacement::new( x, y );
+            if visibility.is_pos_in_bounds( check_pos ) &&
+                visibility.value_pos( check_pos ) == VisibilityType::Visible
+            {
+                *visibility.value_mut( check_pos.x as usize, check_pos.y as usize ) = VisibilityType::Seen;
+            }
+        }
+    }
+    
     for to_y in -sight_range..sight_range
     {
         for to_x in -sight_range..sight_range

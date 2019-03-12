@@ -11,6 +11,7 @@ use super::multidim::Multidim;
 use super::tilemap;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
+static SEEN_MAP_GRAPHICS: [char; 3] = [ ' ', 'x', '-' ];
 
 pub struct Window
 {
@@ -194,14 +195,20 @@ impl Window
             {
                 let display_pos_x = (18 + view_addend_x) as usize;
                 let map_pos = view_pos + Displacement::new( view_addend_x, view_addend_y );
-                if visibility.value_pos( map_pos ) == VisibilityType::None
+                let ch;
+                match visibility.value_pos( map_pos )
                 {
-                    *back_buffer.value_mut(display_pos_y, display_pos_x) = ' ';
-                    continue;
+                    VisibilityType::None => ch = ' ',
+                    VisibilityType::Seen => {
+                        let tile_type = map.tile_pos( map_pos );
+                        ch = SEEN_MAP_GRAPHICS[tile_type as usize];
+                    },
+                    VisibilityType::Visible => { 
+                        let tile_type = map.tile_pos( map_pos );
+                        ch = MAP_GRAPHICS[tile_type as usize];
+                    },
                 }
                 
-                let tile_type = map.tile_pos( map_pos );
-                let ch = MAP_GRAPHICS[tile_type as usize];
                 // let ch = match *is_wall { true => '#', _ => '.', };
                 *back_buffer.value_mut(display_pos_y, display_pos_x) = ch;
             }

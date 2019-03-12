@@ -10,7 +10,7 @@ use super::linear::Position;
 pub enum VisibilityType
 {
     None,
-    _Seen,
+    Seen,
     Visible
 }
 
