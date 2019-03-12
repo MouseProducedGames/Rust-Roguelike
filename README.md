@@ -1,15 +1,15 @@
-* Rust Roguelike *
+# Rust Roguelike
 
 Rust Roguelike is a text-based roguelike written in Rust, and licensed under the MIT license.
 
-** Current State **
+# Current State
 
 * Wander around a small map with randomly-placed walls and floors.
 * Movement using the number pad.
 
-** Roadmap **
+## Roadmap
 
-*** Roadmap for v0.1 ***
+### Roadmap for v0.1
 
 * Model-Controller for creatures (AI and player).
 * Very simple map gen.
@@ -18,24 +18,24 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 * Tile system.
 * Game state management.
 
-*** Roadmap for v0.2 ***
+### Roadmap for v0.2
 
 * Model-View-Controller for creatures (AI and player).
 * Basic Attribute system (Strength, Agility, Hit Points).
 * Visibility and seen tile system.
 
-*** Roadmap for v0.3 ***
+### Roadmap for v0.3
 
 * AI support for visibility-based movement/exploration.
 ..* Exploration implemented through random wander.
 ..* Movement over visible and seen tiles imlemented through A*.
 
-*** Roadmap for v0.4 ***
+### Roadmap for v0.4
 
 * Basic faction system.
 ..* Player will be in one faction; all AI in a second facton.
 
-** Roadmap for v0.5 ***
+### Roadmap for v0.5
 
 * Love-Fear/Hate AI system.
 ..* Cluster with friends (love strong friends more).
@@ -47,12 +47,12 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 ..* Creatures will not be able to attack creatures of their own faction.
 ..* Player can attack creatures of other factions by attempting to move to their tile.
 
-*** Roadmap for v0.6 ***
+### Roadmap for v0.6
 
 * Full Attribute system (???).
 * ???
 
-*** Timelines for these items are long or uncertain ***
+### Timelines for these items are long or uncertain
 
 * Hard-coded ability system.
 * Items (armour, melee weaponds, shields).
@@ -61,23 +61,23 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 * Spells.
 * Magic items.
 
-** Why Rust Roguelike? **
+## Why Rust Roguelike?
 
 I'm not good at names.
 
-** Why Rust? **
+## Why Rust?
 
 * Rust is a statically-typed language focused on safety and speed.
 * Rust provides static memory management, where the lifetimes of most objects can be known at compile tme.
 * Rust has a robust, albiet developing, community and toolset.
 * I wanted to learn a new programming language.
 
-** Why a Roguelike? **
+## Why a Roguelike?
 
 Rust Roguelike exists as a Rust programming exercise due to the following factors:
 
 * The best way for a games programmer to learn how to make games, is to make games.
-* The best way to learn how to program in a language, is to make programs in that languag.
+* The best way to learn how to program in a language, is to make programs in that language.
 ..* These may seem self-evident, but are worth noting.
 * *In my opinion*, text-based Roguelikes are an excellent way for an experienced solo programmer to learn how to program in a language.
 ..* They require no art assets beyond the fonts text present on the computer.
