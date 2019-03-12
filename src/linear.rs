@@ -1,5 +1,6 @@
-use std::ops::{ Add, Sub };
+use std::cmp::{ Eq, PartialEq };
 use std::convert::From;
+use std::ops::{ Add, Sub };
 
 #[derive(Copy, Clone)]
 pub struct Displacement
@@ -22,10 +23,10 @@ impl Displacement
         Self { x: x, y: y }
     }
 
-    /* pub fn length_sqr(self) -> i32
+    pub fn length_sqr(self) -> i32
     {
         return self.x * self.x + self.y * self.y;
-    } */
+    }
 }
 
 impl Add<Displacement> for Displacement
@@ -77,7 +78,17 @@ impl Add<Displacement> for Position
     {
         Position { x: self.x + other.x, y: self.y + other.y }
     }
-}    
+}
+
+impl Eq for Position {}
+
+impl PartialEq for Position
+{
+    fn eq(&self, other: &Position) -> bool
+    {
+        self.x == other.x && self.y == other.y
+    }
+}
 
 impl Sub<Displacement> for Position
 {

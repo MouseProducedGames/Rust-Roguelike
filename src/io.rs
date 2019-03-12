@@ -3,8 +3,9 @@ extern crate ncurses;
 use std::iter::Iterator;
 
 // Internal includes.
+use super::creature::Creature;
 use super::creature_view::CreatureView;
-use super::linear::Position;
+use super::linear::{ Displacement, Position };
 use super::multidim::Multidim;
 use super::tilemap;
 
@@ -145,7 +146,12 @@ impl Window
         ncurses::printw(s);
     } */
 
-    pub fn write_creatures<'a, TEnumerable>(&mut self, view_pos: Position, creatures: TEnumerable, _player_index: usize) where TEnumerable: Iterator<Item = &'a CreatureView>
+    pub fn write_creatures<'a, TEnumerable>(
+        &mut self,
+        view_pos: Position,
+        creatures: TEnumerable,
+        _player_index: usize
+    ) where TEnumerable: Iterator<Item = &'a CreatureView>
     {
         let back_buffer = &mut self.buffers[self.back_buffer_index];
         // let player_creature = &creatures[player_index];
@@ -169,60 +175,32 @@ impl Window
         }
     }
 
-    pub fn write_map(&mut self, view_x: i32, view_y: i32, map: &tilemap::Tilemap)
+    pub fn write_map(&mut self, viewpoint_creature: &Creature, map: &tilemap::Tilemap)
     {
-        let ( map_width, map_height ) = map.bounds();
+        let view_pos = viewpoint_creature.get_position();
+        let visibility;
+        match viewpoint_creature.get_visibility(map)
+        {
+            Some(vis_map) => visibility = vis_map,
+            _ => return,
+        }
+        
         let back_buffer = &mut self.buffers[self.back_buffer_index];
         for view_addend_y in -17..18_i32
         {
-            let map_pos_y = view_y + view_addend_y;
-            let check_y;
-            if map_pos_y < 0
-            {
-                check_y = false;
-                // continue;
-            }
-            else if (map_pos_y as usize) >= map_height
-            {
-                check_y = false;
-                // break;
-            }
-            else
-            {
-                check_y = true;
-            }
             let display_pos_y = (18 + view_addend_y) as usize;
-            let map_index_y = map_pos_y as usize;
             for view_addend_x in -17..18_i32
             {
-                let map_pos_x = view_x + view_addend_x;
-                let check_x;
-                if map_pos_x < 0
-                {
-                    check_x = false;
-                    // continue;
-                }
-                else if (map_pos_x as usize) >= map_width
-                {
-                    check_x = false;
-                    // break;
-                }
-                else
-                {
-                    check_x = true;
-                }
-                let check = check_x && check_y;
                 let display_pos_x = (18 + view_addend_x) as usize;
-                let tile_type;
-                if check
+                let map_pos = view_pos + Displacement::new( view_addend_x, view_addend_y );
+                if visibility.is_i32_in_bounds( map_pos.y, map_pos.x ) == false ||
+                    *visibility.value( map_pos.y as usize, map_pos.x as usize ) == false
                 {
-                    let map_index_x = map_pos_x as usize;
-                    tile_type = map.tile(map_index_x, map_index_y);
+                    *back_buffer.value_mut(display_pos_y, display_pos_x) = ' ';
+                    continue;
                 }
-                else
-                {
-                    tile_type = 0_u32;
-                }
+                
+                let tile_type = map.tile_pos( map_pos );
                 let ch = MAP_GRAPHICS[tile_type as usize];
                 // let ch = match *is_wall { true => '#', _ => '.', };
                 *back_buffer.value_mut(display_pos_y, display_pos_x) = ch;

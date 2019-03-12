@@ -26,6 +26,17 @@ impl<T> Multidim<T> where T: Copy + Clone + Default
         ( self.len0(), self.len1(), )
     }
 
+    pub fn is_in_bounds(&self, pos0: usize, pos1: usize) -> bool
+    {
+        ( ( pos0 >= self.len0() ) || ( pos1 >= self.len1() ) ) == false
+    }
+
+    pub fn is_i32_in_bounds(&self, pos0: i32, pos1: i32) -> bool
+    {
+        ( ( pos0 < 0 ) || ( pos1 < 0 ) ) == false &&
+            self.is_in_bounds(pos0 as usize, pos1 as usize)
+    }
+
     pub fn len0(&self) -> usize { self.len0 }
     pub fn len1(&self) -> usize { self.len1 }
 

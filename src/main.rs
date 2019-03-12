@@ -94,17 +94,24 @@ fn main() {
     while game_state.alive()
     {
         {
-            let player_pos = creatures[player_index].get_position();
-            game_state.window_mut().write_map(player_pos.x, player_pos.y, &map);
-            let test = Box::new(creatures.iter().map(|e| e as &CreatureView));
-            game_state.window_mut().write_creatures(player_pos, test, player_index);
+            for creature in &mut creatures
+            {
+                creature.calculate_visibility(&map);
+            }
+        }
+
+        {
+            let player_pos = creatures[ player_index ].get_position();
+            game_state.window_mut().write_map( &creatures[ player_index ], &map );
+            let test = Box::new( creatures.iter().map( |e| e as &CreatureView ) );
+            game_state.window_mut().write_creatures( player_pos, test, player_index );
             game_state.window_mut().present();
         }
 
         {
             for creature in &mut creatures
             {
-               creature.update( &map, &mut game_state );
+                creature.update( &map, &mut game_state );
             }
         }
     }

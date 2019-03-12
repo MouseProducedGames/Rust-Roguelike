@@ -17,7 +17,6 @@ impl CreatureLogic for CreatureLogicPlayer
 {
     fn update(&self, target: &mut CreatureView, map: &Tilemap, game_state: &mut GameState)
     {
-        let ( map_width, map_height ) = map.bounds();
         // get_char refreshes the screen. Why??
         let command = game_state.window().get_char();
         let target_move;
@@ -37,18 +36,8 @@ impl CreatureLogic for CreatureLogicPlayer
 
         let target_pos = target.get_position();
         let target_new_pos = target_pos + target_move;
-        let passable;
-        if (target_new_pos.x < 0) || (target_new_pos.x as usize >= map_width) ||
-            (target_new_pos.y < 0) || (target_new_pos.y as usize >= map_height)
-        {
-            passable = false;
-        }
-        else
-        {
-            passable = map.passable( target_new_pos.x as usize, target_new_pos.y as usize );
-        }
 
-        if passable
+        if map.passable_pos( target_new_pos )
         {
             target.move_self( target_move.x, target_move.y );
         }

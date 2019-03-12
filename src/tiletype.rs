@@ -1,18 +1,18 @@
 pub struct TileTypeData
 {
     passable: bool,
-    // transparent: bool,
+    transparent: bool,
 }
 
-pub const _TILE_TYPE_INDEX_VOID: u32 = 0;
+pub const TILE_TYPE_INDEX_VOID: u32 = 0;
 pub static TILE_TYPE_DATA: [TileTypeData; 3] =
     [
         // The void.
-        TileTypeData{ passable: false, /* transparent: true */ },
+        TileTypeData{ passable: false, transparent: true  },
         // Wall.
-        TileTypeData{ passable: false, /* transparent: false */ },
+        TileTypeData{ passable: false, transparent: false },
         // Floor.
-        TileTypeData{ passable: true, /* transparent: true */ }
+        TileTypeData{ passable: true,  transparent: true  }
     ];
 
 impl TileTypeData
@@ -30,8 +30,8 @@ impl TileTypeData
         self.passable
     }
 
-    /* pub fn transparent(&self) -> bool
+    pub fn transparent(&self) -> bool
     {
         self.transparent
-    } */
+    }
 }
