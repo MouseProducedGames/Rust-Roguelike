@@ -21,7 +21,7 @@ impl CreatureLogic for CreatureLogicWander
 {
     fn update(&self, target: &mut CreatureView, map: &Tilemap, game_state: &mut GameState)
     {
-        let ( map_height, map_width ) = map.bounds();
+        let ( map_width, map_height ) = map.bounds();
         let command = game_state.rng().gen_range(1, 10);
         let target_move;
         match command
