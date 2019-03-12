@@ -3,7 +3,7 @@
 // internal includes
 use super::linear::{ Displacement, Position };
 use super::tilemap::Tilemap;
-use super::visibility::VisibilityMap;
+use super::visibility::{ VisibilityMap, VisibilityType };
 
 pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight_range: i32, map: &Tilemap)
 {
@@ -31,7 +31,7 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
                 {
                     break;
                 }
-                *visibility.value_mut( check_pos.x as usize, check_pos.y as usize ) = true;
+                *visibility.value_mut( check_pos.x as usize, check_pos.y as usize ) = VisibilityType::Visible;
                 if map.transparent_pos( check_pos ) == false
                 {
                     break;

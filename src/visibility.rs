@@ -1,10 +1,27 @@
+// External includes
+use std::default::Default;
+
+// Internal includes
 use super::mapping::Mapping;
 use super::multidim::Multidim;
 use super::linear::Position;
 
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub enum VisibilityType
+{
+    None,
+    _Seen,
+    Visible
+}
+
+impl Default for VisibilityType
+{
+    fn default() -> Self { VisibilityType::None }
+}
+
 pub struct VisibilityMap
 {
-    values: Multidim<bool>,
+    values: Multidim<VisibilityType>,
 }
 
 impl VisibilityMap
@@ -24,12 +41,19 @@ impl VisibilityMap
         self.values.len0()
     }
 
-    pub fn value(&self, pos_x: usize, pos_y: usize) -> bool
+    pub fn value(&self, pos_x: usize, pos_y: usize) -> VisibilityType
     {
-        *self.values.value( pos_y, pos_x )
+        if self.is_in_bounds( pos_x, pos_y )
+        {
+            *self.values.value( pos_y, pos_x )
+        }
+        else
+        {
+            VisibilityType::None
+        }
     }
 
-    pub fn value_pos(&self, pos: Position ) -> bool
+    pub fn value_pos(&self, pos: Position ) -> VisibilityType
     {
         if self.is_pos_in_bounds( pos )
         {
@@ -37,11 +61,11 @@ impl VisibilityMap
         }
         else
         {
-            false
+            VisibilityType::None
         }
     }
 
-    pub fn value_mut<'a>(&'a mut self, pos_x: usize, pos_y: usize) -> &'a mut bool
+    pub fn value_mut<'a>(&'a mut self, pos_x: usize, pos_y: usize) -> &'a mut VisibilityType
     {
         self.values.value_mut( pos_y, pos_x )
     }

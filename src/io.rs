@@ -6,6 +6,7 @@ use std::iter::Iterator;
 use super::creature::Creature;
 use super::creature_view::CreatureView;
 use super::linear::{ Displacement, Position };
+use super::visibility::VisibilityType;
 use super::multidim::Multidim;
 use super::tilemap;
 
@@ -193,7 +194,7 @@ impl Window
             {
                 let display_pos_x = (18 + view_addend_x) as usize;
                 let map_pos = view_pos + Displacement::new( view_addend_x, view_addend_y );
-                if visibility.value_pos( map_pos ) == false
+                if visibility.value_pos( map_pos ) == VisibilityType::None
                 {
                     *back_buffer.value_mut(display_pos_y, display_pos_x) = ' ';
                     continue;
