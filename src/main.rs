@@ -11,6 +11,7 @@ mod creature_view;
 mod game_state;
 mod io;
 mod linear;
+mod line_of_sight;
 mod mapping;
 mod multidim;
 mod tilemap;
