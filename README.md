@@ -10,7 +10,7 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 ## Roadmap
 
 * Completed items do not have any prefix attached.
-* + Items in progress are preceded by a plus sign.
+* \+ Items in progress are preceded by a plus sign.
 * ! Uncompleted items are preceded by an exclamation mark.
 
 ### Roadmap for v0.1
