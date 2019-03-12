@@ -27,7 +27,7 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 
 * Model-View-Controller for creatures (AI and player).
 * ! Visibility and seen tile system.
-..* ! Sight range for creatures.
+  * ! Sight range for creatures.
 
 ### Roadmap for v0.3
 
