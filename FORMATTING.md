@@ -128,3 +128,12 @@ match expr {
 ### Trait Templates
 
 [pub] trait struct_name< CamelType0, CamelType1, CamelType2, ... >
+
+## Variables
+
+let variable_name;
+let mut variable_name;
+
+If a variable is accessed from elsewhere two or more times:
+* In the same context, prefer pulling the variable in to the context.
+* In contiguous contexts, consider pulling the variable in to the outer context IF all subcontexts of the outer context reference that variable.x

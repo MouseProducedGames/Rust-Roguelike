@@ -3,19 +3,19 @@ use rand::thread_rng;
 use rand::rngs::ThreadRng;
 use super::io::Window;
 
-pub struct GameState<'a>
+pub struct GameState
 {
     alive: bool,
-    window: &'a mut Window
+    window: Window,
 }
 
-impl<'a> GameState<'a>
+impl GameState
 {
-    pub fn new(window: &'a mut Window) -> Self
+    pub fn new() -> Self
     {
         Self {
             alive: true,
-            window: window,
+            window: Window::new(),
         }
     }
 
@@ -34,13 +34,13 @@ impl<'a> GameState<'a>
         thread_rng()
     }
 
-    pub fn window(&self) -> & Window
+    pub fn window(&self) -> &Window
     {
-        self.window
+        &self.window
     }
 
     pub fn window_mut(&mut self) -> &mut Window
     {
-        return self.window
+        return &mut self.window
     }
 }
