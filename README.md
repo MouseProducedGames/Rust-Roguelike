@@ -9,9 +9,9 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 
 ## Roadmap
 
-<span style="color:green">* Completed items are green.</span>
-<span style="color:yellow">* items in progress are yellow.</span>
-<span style="color:red">* finished items are red.</span>
+* <span style="color:green">Completed items are green.</span>
+* <span style="color:yellow">items in progress are yellow.</span>
+* <span style="color:red">finished items are red.</span>
 
 ### Roadmap for v0.1
 
