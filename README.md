@@ -14,7 +14,7 @@ Items marked with a strikethrough. are complete.
 ### Roadmap for v0.1
 
 * Model-Controller for creatures (AI and player).
-..* Random wander AI.
+  * Random wander AI.
 * ~~Very simple map gen.~~
 * ~~Text Map display.~~
 * ~~Input.~~
@@ -30,25 +30,25 @@ Items marked with a strikethrough. are complete.
 ### Roadmap for v0.3
 
 * AI support for visibility-based movement/exploration.
-..* Exploration implemented through random wander.
-..* Movement over visible and seen tiles imlemented through A*.
+  * Exploration implemented through random wander.
+  * Movement over visible and seen tiles imlemented through A*.
 
 ### Roadmap for v0.4
 
 * Basic faction system.
-..* Player will be in one faction; all AI in a second facton.
+  * Player will be in one faction; all AI in a second facton.
 
 ### Roadmap for v0.5
 
 * Love-Fear/Hate AI system.
-..* Cluster with friends (love strong friends more).
-..* Run from strong enemies
-..* Attack weak enemies.
+  * Cluster with friends (love strong friends more).
+  * Run from strong enemies
+  * Attack weak enemies.
 * Basic combat system.
-..* AI will hate weaker creatures of other factions.
-..* AI will fear stronger creatures of other factions.
-..* Creatures will not be able to attack creatures of their own faction.
-..* Player can attack creatures of other factions by attempting to move to their tile.
+  * AI will hate weaker creatures of other factions.
+  * AI will fear stronger creatures of other factions.
+  * Creatures will not be able to attack creatures of their own faction.
+  * Player can attack creatures of other factions by attempting to move to their tile.
 
 ### Roadmap for v0.6
 
@@ -81,13 +81,13 @@ Rust Roguelike exists as a Rust programming exercise due to the following factor
 
 * The best way for a games programmer to learn how to make games, is to make games.
 * The best way to learn how to program in a language, is to make programs in that language.
-..* These may seem self-evident, but are worth noting.
+  * These may seem self-evident, but are worth noting.
 * *In my opinion*, text-based Roguelikes are an excellent way for an experienced solo programmer to learn how to program in a language.
-..* They require no art assets beyond the fonts text present on the computer.
-..* They contain a complete game loop: A player-character, creature AI, movement system, display, input, event system, game logic, and game mechanics.
-..* With proper separation of concerns into modules, a graphical display can be added after completion, or during development.
-..* With a proper event system, an audio system can be plugged into your event system later.
-..* At the end of it, you have a potentially-salable game.
-..* The MIT license was chosen so that this project could be used, by anyone, as the basis for a salable game.
+  * They require no art assets beyond the fonts text present on the computer.
+  * They contain a complete game loop: A player-character, creature AI, movement system, display, input, event system, game logic, and game mechanics.
+  * With proper separation of concerns into modules, a graphical display can be added after completion, or during development.
+  * With a proper event system, an audio system can be plugged into your event system later.
+  * At the end of it, you have a potentially-salable game.
+  * The MIT license was chosen so that this project could be used, by anyone, as the basis for a salable game.
 
 Rust Roguelike is (C) MouseProducedGames under the MIT license.
