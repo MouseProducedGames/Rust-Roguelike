@@ -19,14 +19,6 @@ use io::Window;
 use world::{ Mapping, Tilemap };
 
 fn main() {
-    /* ncurses::initscr();
-    ncurses::keypad(ncurses::stdscr(), true);
-    // ncurses::raw();
-    ncurses::curs_set(ncurses::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
-    ncurses::nonl();
-    ncurses::cbreak();
-    ncurses::noecho(); */
-
     Window::init();
     let mut window = Window::new();
     let mut game_state = GameState::new();
@@ -71,15 +63,6 @@ fn main() {
     world.register::< CreatureLogicPlayer >();
     world.register::< Position >();
 
-    // let player_faction = game_state.factions_mut().add();
-    // let _monster_faction = game_state.factions_mut().add();
-    
-    // let creature_logic_none = CreatureLogicNone::new();
-    // let creature_logic_player = CreatureLogicPlayer::new();
-    // let creature_logic_wander = CreatureLogicWander::new();
-    // let mut creatures: Vec< Creature > = vec![];
-    // let mut creatures: Vec< &CreatureView > = vec![];
-
     let player =
         world
         .create_entity()
@@ -87,44 +70,6 @@ fn main() {
         .with(Position::new( 8, 5 ))
         .build();
 
-    /* let player_index: usize;
-    {
-        {
-            creatures.push(
-                creature::Creature::new(
-                    &creature_logic_player as &dyn CreatureLogic,
-                    8, 5,
-                    player_faction
-                )
-            );
-            /* match creature_datas.last()
-            {
-                Some( creature ) => creatures.push( creature ),
-            _ => (),
-            } */
-        }
-        player_index = 0;
-        {
-            creatures.push(
-                creature::Creature::new(
-                    &creature_logic_wander as &dyn CreatureLogic,
-                    12, 7,
-                    player_faction
-                )
-            );
-            /* match creature_datas.last()
-            {
-                Some( creature ) => creatures.push( creature ),
-                _ => (),
-            } */
-        }
-    } */
-
-/*     {
-        let player_pos = creatures[ player_index ].get_position();
-        *map.tile_type_mut( player_pos.x as usize, player_pos.y as usize ) = 2;
-} */
-    
     let mut creature_display_system = CreatureDisplaySystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
 
@@ -135,41 +80,7 @@ fn main() {
         world.maintain();
     
         creature_display_system.run_now(&world.res);
-    
-        /*         for y in 0..map.width()
-        {
-            for x in 0..map.height()
-            {
-                match map.tile_type( x, y ) {
-                    0 => 
-                }
-            }
-        } */
-/*         {
-            for creature in &mut creatures
-            {
-                creature.calculate_visibility( &map );
-            }
-        }
-
-        {
-            let window = game_state.window_mut();
-            let player_pos = creatures[ player_index ].get_position();
-            window.write_map( &creatures[ player_index ], &map );
-            let test = Box::new( creatures.iter().map( |e| e as &CreatureView ) );
-            window.write_creatures( player_pos, test, player_index );
-            window.present();
-        }
-
-        {
-            for creature in &mut creatures
-            {
-                creature.update( &map, &mut game_state );
-            }
-        } */
     }
-
-    // ncurses::endwin();
 
     Window::close();
 }
