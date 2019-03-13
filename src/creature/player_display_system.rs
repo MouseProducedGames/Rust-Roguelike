@@ -19,7 +19,7 @@ impl<'a> System<'a> for PlayerDisplaySystem
         WriteExpect< 'a, Window >,
     );
 
-    fn run( &mut self, ( map, _player_marker, player_pos, visibility, window ): Self::SystemData )
+    fn run( &mut self, ( map, player_marker, player_pos, visibility, window ): Self::SystemData )
     {
         use specs::join::Join;
 
@@ -27,7 +27,7 @@ impl<'a> System<'a> for PlayerDisplaySystem
         let map_hash = calculate_hash( &*map );
         let mut window = window;
 
-        for ( player_pos, visibility ) in ( &player_pos, &visibility ).join()
+        for ( _, player_pos, visibility ) in ( &player_marker, &player_pos, &visibility ).join()
         {
             let visibility_lookup = visibility.visibility_lookup();
             

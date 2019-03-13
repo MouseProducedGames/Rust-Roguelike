@@ -29,7 +29,7 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
         WriteStorage< 'a, Position >,
     );
 
-    fn run( &mut self, ( map, window, game_state, player_pos, _player_marker, mut logic, mut pos ): Self::SystemData)
+    fn run( &mut self, ( map, window, game_state, player_pos, player_marker, mut logic, mut pos ): Self::SystemData)
     {
         use specs::Join;
 
@@ -38,7 +38,7 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
         let mut player_pos = player_pos;
         let window = window;
 
-        for ( _logic, pos ) in ( &mut logic, &mut pos ).join()
+        for ( _logic, pos, _ ) in ( &mut logic, &mut pos, &player_marker ).join()
         { 
 //             let game_state = logic.game_state;
             

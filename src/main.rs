@@ -14,6 +14,8 @@ use creature::{
     CreatureDisplaySystem,
     CreatureLogicPlayer,
     CreatureLogicPlayerSystem,
+    CreatureLogicWander,
+    CreatureLogicWanderSystem,
     CreatureVisibilitySystem,
     PlayerDisplaySystem,
     PlayerMarker,
@@ -71,6 +73,7 @@ fn main() {
     world.add_resource( Window::new() );
     world.add_resource( PlayerPosition( Position::new( 8, 5 ) ) );
     world.register::< CreatureLogicPlayer >();
+    world.register::< CreatureLogicWander >();
     world.register::< PlayerMarker >();
     world.register::< Position >();
     world.register::< SightRange >();
@@ -85,8 +88,17 @@ fn main() {
         .with( Visibility::new() )
         .build();
 
+    world.
+        create_entity()
+        .with( CreatureLogicWander )
+        .with( Position::new( 12, 8 ) )
+        .with( SightRange::new( 5 ) )
+        .with( Visibility::new() )
+        .build();
+
     let mut creature_display_system = CreatureDisplaySystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
+    let mut creature_wander_logic = CreatureLogicWanderSystem;
     let mut creature_visibility_system = CreatureVisibilitySystem;
     let mut player_display_system = PlayerDisplaySystem;
 
@@ -103,6 +115,10 @@ fn main() {
         world.write_resource::< Window >().present();
         
         creature_player_logic.run_now( &world.res );
+
+        world.maintain();
+
+        creature_wander_logic.run_now( &world.res );
 
         world.maintain();
     }

@@ -17,7 +17,7 @@ pub mod visibility;
 pub use creature_display_system::CreatureDisplaySystem;
 // pub use creature_logic::CreatureLogic;
 pub use creature_logic_player::{ CreatureLogicPlayer, CreatureLogicPlayerSystem };
-// pub use creature_logic_wander::CreatureLogicWander;
+pub use creature_logic_wander::{ CreatureLogicWander, CreatureLogicWanderSystem };
 // pub use creature_view::CreatureView;
 pub use creature_visibility_system::CreatureVisibilitySystem;
 pub use player_display_system::PlayerDisplaySystem;

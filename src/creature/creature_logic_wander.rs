@@ -1,50 +1,62 @@
-/* // External dependencies.
+// External dependencies.
+use specs::{ Component, NullStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage };
 use rand::Rng;
 
 // Internal dependencies.
-use super::CreatureView;
-use super::CreatureLogic;
 use super::super::game_state::GameState;
-use crate::rrl_math::Displacement;
+use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
-pub struct CreatureLogicWander
+#[derive(Default)]
+pub struct CreatureLogicWander;
+
+impl Component for CreatureLogicWander
 {
+    type Storage = NullStorage<Self>;
 }
 
-impl CreatureLogicWander
-{
-    pub fn new() -> Self { Self {} }
-}
+pub struct CreatureLogicWanderSystem;
 
-impl CreatureLogic for CreatureLogicWander
+impl<'a> System<'a> for CreatureLogicWanderSystem
 {
-    fn update(&self, target: &mut CreatureView, map: &Tilemap, game_state: &mut GameState)
+    type SystemData = (
+        ReadExpect< 'a, Tilemap >,
+        ReadStorage< 'a, CreatureLogicWander >,
+        WriteExpect< 'a, GameState >,
+        WriteStorage< 'a, Position >,
+    );
+    
+    fn run( &mut self, ( map, creature_logic_wander, game_state, mut pos ): Self::SystemData )
     {
-        let command = game_state.rng().gen_range(1, 10);
-        let target_move;
-        match command
-        {
-            1 =>   target_move = Displacement::new(-1,  1),
-            2 =>   target_move = Displacement::new( 0,  1),
-            3 =>   target_move = Displacement::new( 1,  1),
-            4 =>   target_move = Displacement::new(-1,  0),
-            5 =>   target_move = Displacement::new( 0,  0),
-            6 =>   target_move = Displacement::new( 1,  0),
-            7 =>   target_move = Displacement::new(-1, -1),
-            8 =>   target_move = Displacement::new( 0, -1),
-            9 =>   target_move = Displacement::new( 1, -1),
-            _ =>   target_move = Displacement::new( 0,  0),
-        }
+        use specs::join::Join;
+        
+        let mut game_state = game_state;
+        let map = map;
 
-        let target_pos = target.get_position();
-        let target_new_pos = target_pos + target_move;
-
-        if map.passable_pos( target_new_pos )
+        for ( _, pos ) in ( &creature_logic_wander, &mut pos ).join()
         {
-            target.move_self( target_move.x, target_move.y );
+            let command = game_state.rng().gen_range(1, 10);
+            let target_move;
+            match command
+            {
+                1 =>   target_move = Displacement::new(-1,  1),
+                2 =>   target_move = Displacement::new( 0,  1),
+                3 =>   target_move = Displacement::new( 1,  1),
+                4 =>   target_move = Displacement::new(-1,  0),
+                5 =>   target_move = Displacement::new( 0,  0),
+                6 =>   target_move = Displacement::new( 1,  0),
+                7 =>   target_move = Displacement::new(-1, -1),
+                8 =>   target_move = Displacement::new( 0, -1),
+                9 =>   target_move = Displacement::new( 1, -1),
+                _ =>   target_move = Displacement::new( 0,  0),
+            }
+
+            let new_pos = *pos + target_move;
+
+            if map.passable_pos( new_pos )
+            {
+                *pos = new_pos;
+            }
         }
     }
 }
-
-*/

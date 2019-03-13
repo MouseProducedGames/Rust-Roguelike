@@ -5,7 +5,6 @@ extern crate ncurses;
 // Internal includes.
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::{ Tilemap, VisibilityMap, VisibilityType };
-// use super::creature::{ Creature, CreatureView };
 use super::multidim::Multidim;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
@@ -149,12 +148,14 @@ impl Window
     pub fn write_creature( &mut self, creature_pos: Position, view_pos: Position )
     {
         let disp = creature_pos - view_pos;
-        if (disp.x < -17) || (disp.x > 17) ||
-            (disp.y < -17) || (disp.y > 17)
+        if ( disp.x < -17 ) || ( disp.x > 17 ) ||
+            ( disp.y < -17 ) || ( disp.y > 17 )
         {
             return;
         }
-        self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
+        let ( display_pos_x, display_pos_y ) = ( 18 + disp.x, 18 + disp.y );
+        *self.buffers[ self.back_buffer_index ].value_mut( display_pos_y as usize, display_pos_x as usize ) = 'C';
+        // self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
     }
 
     /* pub fn write_creatures<'a, TEnumerable>(
