@@ -1,5 +1,4 @@
 // External includes
-use specs::{ Component, VecStorage };
 use std::any::TypeId;
 use std::cmp::{ Eq, PartialEq };
 use std::hash::{ Hash, Hasher };
@@ -99,11 +98,6 @@ impl Tilemap
         self.tile_pos( pos ).transparent()
     }
 
-}
-
-impl Component for Tilemap
-{
-    type Storage = VecStorage<Self>;
 }
 
 impl Hash for Tilemap

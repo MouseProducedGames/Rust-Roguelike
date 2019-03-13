@@ -1,26 +1,26 @@
 // External includes
-use specs::{ ReadStorage, System };
+use specs::{ ReadStorage, System, WriteExpect };
 
 // Internal includes
 pub use crate::rrl_math::Position;
 pub use super::super::io::Window;
 
-pub struct CreatureDisplaySystem<'a>
-{
-    pub window: &'a mut Window,
-}
+pub struct CreatureDisplaySystem;
 
-impl<'a> System<'a> for CreatureDisplaySystem<'a>
+impl<'a> System<'a> for CreatureDisplaySystem
 {
-    type SystemData = ReadStorage<'a, Position>;
+    type SystemData = (
+        WriteExpect<'a, Window>,
+        ReadStorage<'a, Position>
+    );
 
-    fn run( &mut self, pos: Self::SystemData )
+    fn run( &mut self, ( mut window, pos ): Self::SystemData )
     {
         use specs::join::Join;
-        
+
         for pos in pos.join()
         {
-            self.window.write_character( pos );
+            window.write_character( pos );
         }
     }
 }

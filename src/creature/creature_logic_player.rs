@@ -1,13 +1,13 @@
 // External includes
 use ncurses;
-use specs::{ Component, ReadStorage, System, VecStorage, WriteStorage };
+use specs::{ Component, DenseVecStorage, ReadExpect, System, WriteExpect, WriteStorage };
 
 // Internal includes
 
 
 // use super::CreatureView;
 // use super::CreatureLogic;
-// use super::super::game_state::GameState;
+use super::super::game_state::GameState;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -15,27 +15,27 @@ pub struct CreatureLogicPlayer {}
 
 impl Component for CreatureLogicPlayer
 {
-    type Storage = VecStorage<Self>;
+    type Storage = DenseVecStorage<Self>;
 }
 
-pub struct CreatureLogicPlayerSystem
-{
-    pub end_game_signal: bool,
-}
+pub struct CreatureLogicPlayerSystem;
 
 impl<'a> System<'a> for CreatureLogicPlayerSystem
 {
     type SystemData = (
+        ReadExpect< 'a, Tilemap >,
+        WriteExpect< 'a, GameState >,
         WriteStorage< 'a, CreatureLogicPlayer >,
         WriteStorage< 'a, Position >,
-        ReadStorage< 'a, Tilemap >
     );
 
-    fn run( &mut self, ( mut logic, mut pos, map ): Self::SystemData)
+    fn run( &mut self, ( map, mut game_state, mut logic, mut pos ): Self::SystemData)
     {
         use specs::Join;
 
-        for ( _logic, pos, map) in ( &mut logic, &mut pos, &map ).join()
+        let map = map;
+
+        for ( _logic, pos ) in ( &mut logic, &mut pos ).join()
         { 
 //             let game_state = logic.game_state;
             
@@ -60,7 +60,7 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
                 '7' =>   target_move = Displacement::new(-1, -1),
                 '8' =>   target_move = Displacement::new( 0, -1),
                 '9' =>   target_move = Displacement::new( 1, -1),
-                'q' => { target_move = Displacement::new( 0,  0); self.end_game_signal = true; },
+                'q' => { target_move = Displacement::new( 0,  0); game_state.kill(); },
                 _ =>     target_move = Displacement::new( 0,  0),
             }
 

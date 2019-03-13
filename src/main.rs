@@ -65,9 +65,11 @@ fn main() {
     }
 
     let mut world = World::new();
-    world.register::<CreatureLogicPlayer>();
-    world.register::<Position>();
-    world.register::<Tilemap>();
+    world.add_resource( game_state );
+    world.add_resource( map );
+    world.add_resource( window );
+    world.register::< CreatureLogicPlayer >();
+    world.register::< Position >();
 
     // let player_faction = game_state.factions_mut().add();
     // let _monster_faction = game_state.factions_mut().add();
@@ -78,11 +80,11 @@ fn main() {
     // let mut creatures: Vec< Creature > = vec![];
     // let mut creatures: Vec< &CreatureView > = vec![];
 
-    world
+    let player =
+        world
         .create_entity()
         .with(CreatureLogicPlayer {})
         .with(Position::new( 8, 5 ))
-        .with(map)
         .build();
 
     /* let player_index: usize;
@@ -121,25 +123,19 @@ fn main() {
 /*     {
         let player_pos = creatures[ player_index ].get_position();
         *map.tile_type_mut( player_pos.x as usize, player_pos.y as usize ) = 2;
-    } */
+} */
+    
+    let mut creature_display_system = CreatureDisplaySystem;
+    let mut creature_player_logic = CreatureLogicPlayerSystem;
 
-    let mut test = CreatureLogicPlayerSystem { end_game_signal: false };
-
-    while game_state.alive()
+    while world.read_resource::<GameState>().alive()
     {
-        test.run_now(&world.res);
+        creature_player_logic.run_now(&world.res);
+
         world.maintain();
-
-        {
-            let mut creature_display_system = CreatureDisplaySystem { window: &mut window };
-            creature_display_system.run_now(&world.res);
-        }
-
-        if test.end_game_signal
-        {
-            game_state.kill();
-        }
-        
+    
+        creature_display_system.run_now(&world.res);
+    
         /*         for y in 0..map.width()
         {
             for x in 0..map.height()
