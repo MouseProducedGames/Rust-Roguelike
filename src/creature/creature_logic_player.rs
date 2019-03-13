@@ -7,6 +7,7 @@ use specs::{ Component, ReadStorage, System, VecStorage, WriteStorage };
 
 // use super::CreatureView;
 // use super::CreatureLogic;
+// use super::super::game_state::GameState;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -17,7 +18,10 @@ impl Component for CreatureLogicPlayer
     type Storage = VecStorage<Self>;
 }
 
-pub struct CreatureLogicPlayerSystem;
+pub struct CreatureLogicPlayerSystem
+{
+    pub end_game_signal: bool,
+}
 
 impl<'a> System<'a> for CreatureLogicPlayerSystem
 {
@@ -56,7 +60,7 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
                 '7' =>   target_move = Displacement::new(-1, -1),
                 '8' =>   target_move = Displacement::new( 0, -1),
                 '9' =>   target_move = Displacement::new( 1, -1),
-   //              'q' => { target_move = Displacement::new( 0,  0); game_state.kill(); },
+                'q' => { target_move = Displacement::new( 0,  0); self.end_game_signal = true; },
                 _ =>     target_move = Displacement::new( 0,  0),
             }
 

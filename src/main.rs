@@ -123,12 +123,17 @@ fn main() {
         *map.tile_type_mut( player_pos.x as usize, player_pos.y as usize ) = 2;
     } */
 
-    let mut test = CreatureLogicPlayerSystem;
+    let mut test = CreatureLogicPlayerSystem { end_game_signal: false };
 
     while game_state.alive()
     {
         test.run_now(&world.res);
         world.maintain();
+
+        if test.end_game_signal
+        {
+            game_state.kill();
+        }
         
         /*         for y in 0..map.width()
         {
