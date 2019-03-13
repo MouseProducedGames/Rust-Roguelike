@@ -1,5 +1,5 @@
-use super::creature::{ Creature, Mobile };
-use super::linear::Position;
+use super::{ Creature, Mobile };
+use super::super::linear::Position;
 
 pub trait CreatureView
 {

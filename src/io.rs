@@ -3,8 +3,7 @@ extern crate ncurses;
 use std::iter::Iterator;
 
 // Internal includes.
-use super::creature::Creature;
-use super::creature_view::CreatureView;
+use super::creature::{ Creature, CreatureView };
 use super::linear::{ Displacement, Position };
 use super::visibility::VisibilityType;
 use super::multidim::Multidim;

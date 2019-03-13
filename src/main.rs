@@ -3,11 +3,7 @@ use rand::Rng;
 
 // Internal dependencies.
 mod creature;
-mod creature_logic;
 // mod creature_logic_none;
-mod creature_logic_player;
-mod creature_logic_wander;
-mod creature_view;
 mod game_state;
 mod io;
 mod linear;
@@ -17,12 +13,8 @@ mod multidim;
 mod tilemap;
 mod tiletype;
 mod visibility;
-use creature::Creature;
-use creature_logic::CreatureLogic;
+use creature::{ Creature, CreatureLogic, CreatureLogicPlayer, CreatureLogicWander, CreatureView };
 // use creature_logic_none::CreatureLogicNone;
-use creature_logic_player::CreatureLogicPlayer;
-use creature_logic_wander::CreatureLogicWander;
-use creature_view::CreatureView;
 use game_state::GameState;
 use io::Window;
 use mapping::Mapping;

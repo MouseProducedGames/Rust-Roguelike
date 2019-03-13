@@ -1,6 +1,6 @@
-use super::creature_view::CreatureView;
-use super::game_state::GameState;
-use super::tilemap::Tilemap;
+use super::CreatureView;
+use super::super::game_state::GameState;
+use super::super::tilemap::Tilemap;
 
 pub trait CreatureLogic
 {

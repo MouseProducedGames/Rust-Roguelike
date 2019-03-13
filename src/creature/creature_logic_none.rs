@@ -1,7 +1,7 @@
-use super::creature_view::CreatureView;
-use super::creature_logic::CreatureLogic;
-use super::game_state::GameState;
-use super::tilemap::Tilemap;
+use super::CreatureView;
+use super::CreatureLogic;
+use super::super::game_state::GameState;
+use super::super::tilemap::Tilemap;
 
 pub struct CreatureLogicNone
 {
