@@ -1,11 +1,11 @@
-/* // External includes.
+// External includes.
 extern crate ncurses;
-use std::iter::Iterator;
+// use std::iter::Iterator;
 
 // Internal includes.
-use crate::rrl_math::{ Displacement, Position };
-use crate::world::{ Tilemap, VisibilityType };
-use super::creature::{ Creature, CreatureView };
+use crate::rrl_math::{ /* Displacement, */ Position };
+// use crate::world::{ Tilemap, VisibilityType };
+// use super::creature::{ Creature, CreatureView };
 use super::multidim::Multidim;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
@@ -144,9 +144,14 @@ impl Window
     /* pub fn write_line(s: &str)
     {
         ncurses::printw(s);
-    } */
+} */
 
-    pub fn write_creatures<'a, TEnumerable>(
+    pub fn write_character( &mut self, pos: &Position )
+    {
+        self.put_char( pos.x, pos.y, 'C' );
+    }
+
+    /* pub fn write_creatures<'a, TEnumerable>(
         &mut self,
         view_pos: Position,
         creatures: TEnumerable,
@@ -173,9 +178,9 @@ impl Window
             let ( display_pos_x, display_pos_y ) = (18 + dist.x, 18 + dist.y);
             *back_buffer.value_mut(display_pos_y as usize, display_pos_x as usize) = ch;
         }
-    }
+    } */
 
-    pub fn write_map(&mut self, viewpoint_creature: &Creature, map: &Tilemap)
+    /* pub fn write_map(&mut self, viewpoint_creature: &Creature, map: &Tilemap)
     {
         let view_pos = viewpoint_creature.get_position();
         let visibility;
@@ -211,7 +216,7 @@ impl Window
                 *back_buffer.value_mut(display_pos_y, display_pos_x) = ch;
             }
         }    
-    }
+    } */
 
     fn front_buffer_index(&self) -> usize
     {
@@ -233,4 +238,3 @@ impl Window
         ncurses::mvaddch(y, x, ch as u64);
     }
 }
-*/

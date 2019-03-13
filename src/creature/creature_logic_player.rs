@@ -72,7 +72,7 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
                 *pos = *pos + target_move;
             }
 
-            ncurses::mvaddch( pos.y, pos.x, 'C' as u64 );
+            // ncurses::mvaddch( pos.y, pos.x, 'C' as u64 );
         }
     }
 }

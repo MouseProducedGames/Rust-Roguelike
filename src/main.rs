@@ -10,25 +10,25 @@ mod io;
 mod rrl_math;
 mod multidim;
 mod world;
-use ncurses;
-use creature::{ CreatureLogicPlayer, CreatureLogicPlayerSystem /* Faction, */ /* SightRange, */ /* System, */ /* Visibility, */ };
+use creature::{ CreatureDisplaySystem, CreatureLogicPlayer, CreatureLogicPlayerSystem };
 // use creature_logic_none::CreatureLogicNone;
 use game_state::GameState;
 use rrl_math::{ Position };
 use specs::{ Builder, /* System, */ World, RunNow };
-// use io::Window;
+use io::Window;
 use world::{ Mapping, Tilemap };
 
 fn main() {
-    ncurses::initscr();
+    /* ncurses::initscr();
     ncurses::keypad(ncurses::stdscr(), true);
     // ncurses::raw();
     ncurses::curs_set(ncurses::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
     ncurses::nonl();
     ncurses::cbreak();
-    ncurses::noecho();
+    ncurses::noecho(); */
 
-    // Window::init();
+    Window::init();
+    let mut window = Window::new();
     let mut game_state = GameState::new();
     
     let mut map: Tilemap = Tilemap::new( 80, 25 );
@@ -130,6 +130,11 @@ fn main() {
         test.run_now(&world.res);
         world.maintain();
 
+        {
+            let mut creature_display_system = CreatureDisplaySystem { window: &mut window };
+            creature_display_system.run_now(&world.res);
+        }
+
         if test.end_game_signal
         {
             game_state.kill();
@@ -168,7 +173,7 @@ fn main() {
         } */
     }
 
-    ncurses::endwin();
+    // ncurses::endwin();
 
-    // Window::close();
+    Window::close();
 }
