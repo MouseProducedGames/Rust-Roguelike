@@ -4,6 +4,7 @@ use rand::Rng;
 // Internal dependencies.
 mod creature;
 // mod creature_logic_none;
+mod faction;
 mod game_state;
 mod io;
 mod rrl_math;
@@ -52,6 +53,9 @@ fn main() {
         }
     }
 
+    let player_faction = game_state.factions_mut().add();
+    let _monster_faction = game_state.factions_mut().add();
+    
     // let creature_logic_none = CreatureLogicNone::new();
     let creature_logic_player = CreatureLogicPlayer::new();
     let creature_logic_wander = CreatureLogicWander::new();
@@ -63,7 +67,9 @@ fn main() {
         {
             creatures.push(
                 creature::Creature::new(
-                    &creature_logic_player as &dyn CreatureLogic, 8, 5
+                    &creature_logic_player as &dyn CreatureLogic,
+                    8, 5,
+                    player_faction
                 )
             );
             /* match creature_datas.last()
@@ -76,7 +82,9 @@ fn main() {
         {
             creatures.push(
                 creature::Creature::new(
-                    &creature_logic_wander as &dyn CreatureLogic, 12, 7
+                    &creature_logic_wander as &dyn CreatureLogic,
+                    12, 7,
+                    player_faction
                 )
             );
             /* match creature_datas.last()

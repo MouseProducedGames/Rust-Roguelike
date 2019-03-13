@@ -2,10 +2,11 @@
 use std::collections::hash_map::HashMap;
 
 // internal includes
-use super::CreatureLogic;
-use super::super::game_state::GameState;
 use crate::rrl_math::Position;
 use crate::world::{ line_of_sight, Mapping, Tilemap, VisibilityMap };
+use super::super::game_state::GameState;
+use super::super::faction::FactionData;
+use super::CreatureLogic;
 
 pub trait Mobile
 {
@@ -18,17 +19,19 @@ pub struct Creature<'a>
     pos: Position,
     sight_range: i32,
     visibility_lookup: HashMap< &'a Tilemap, VisibilityMap >,
+    faction: FactionData,
 }
 
 impl<'a> Creature<'a>
 {
-    pub fn new( logic: &'a CreatureLogic, start_x: i32, start_y: i32 ) -> Self
+    pub fn new( logic: &'a CreatureLogic, start_x: i32, start_y: i32, faction: FactionData ) -> Self
     {
         Self {
             logic: logic,
             pos: Position::new( start_x, start_y ),
             sight_range: 5,
             visibility_lookup: HashMap::new(),
+            faction: faction,
         }
     }
 
@@ -66,6 +69,11 @@ impl<'a> Creature<'a>
 
     pub fn update( &mut self, map: &Tilemap, game_state: &mut GameState )
     {
+        if game_state.factions().has_faction_changed( self.faction )
+        {
+            self.faction = game_state.factions().get_faction_state( self.faction );
+        }
+        
         self.logic.update( self, map, game_state );
     }
 }

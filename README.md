@@ -38,7 +38,8 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 ### Roadmap for v0.4
 
 * ! Basic faction system.
-  * ! Player will be in one faction; all AI in a second facton.
+  * ! Player will be in one faction; all AI in a second faction.
+    * ! Optionally start the player with an ally or squire. 
 
 ### Roadmap for v0.5
 
