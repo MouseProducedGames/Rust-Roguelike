@@ -1,28 +1,56 @@
 // External includes
-use std::collections::hash_map::HashMap;
+use specs::{ Component, VecStorage };
+// use std::collections::hash_map::HashMap;
 
 // internal includes
-use crate::rrl_math::Position;
-use crate::world::{ line_of_sight, Mapping, Tilemap, VisibilityMap };
-use super::super::game_state::GameState;
+// use crate::rrl_math::Position;
+// use crate::world::{ /* line_of_sight, Mapping, */ /* Tilemap, VisibilityMap */ };
+// use super::super::game_state::GameState;
 use super::super::faction::FactionData;
-use super::CreatureLogic;
+// use super::CreatureLogic;
 
-pub trait Mobile
+/* pub trait Mobile
 {
     fn move_self( &mut self, move_x: i32, move_y: i32 );
-}
+} */
 
-pub struct Creature<'a>
+/* pub struct Creature<'a>
 {
     logic: &'a CreatureLogic,
     pos: Position,
-    sight_range: i32,
-    visibility_lookup: HashMap< &'a Tilemap, VisibilityMap >,
+} */
+
+pub struct Faction
+{
     faction: FactionData,
 }
 
-impl<'a> Creature<'a>
+impl Component for Faction
+{
+    type Storage = VecStorage<Self>;
+}
+
+pub struct SightRange
+{
+    sight_range: i32,
+}
+
+impl Component for SightRange
+{
+    type Storage = VecStorage<Self>;
+}
+
+/* pub struct Visibility
+{    
+    visibility_lookup: HashMap< &'a Tilemap, VisibilityMap >,
+} */
+
+/* impl Component for Visibility
+{
+    type Storage = VecStorage<Self>;
+} */
+
+/* impl<'a> Creature<'a>
 {
     pub fn new( logic: &'a CreatureLogic, start_x: i32, start_y: i32, faction: FactionData ) -> Self
     {
@@ -85,4 +113,4 @@ impl<'a> Mobile for Creature<'a>
         self.pos.x += move_x;
         self.pos.y += move_y;
     }
-}
+} */

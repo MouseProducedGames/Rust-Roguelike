@@ -2,12 +2,12 @@ extern crate rand;
 use rand::thread_rng;
 use rand::rngs::ThreadRng;
 use super::faction::FactionLookup;
-use super::io::Window;
+// use super::io::Window;
 
 pub struct GameState
 {
     alive: bool,
-    window: Window,
+    // window: Window,
     factions: FactionLookup,
 }
 
@@ -17,7 +17,7 @@ impl GameState
     {
         Self {
             alive: true,
-            window: Window::new(),
+            // window: Window::new(),
             factions: FactionLookup::new(),
         }
     }
@@ -47,7 +47,7 @@ impl GameState
         thread_rng()
     }
 
-    pub fn window(&self) -> &Window
+    /* pub fn window(&self) -> &Window
     {
         &self.window
     }
@@ -55,5 +55,5 @@ impl GameState
     pub fn window_mut(&mut self) -> &mut Window
     {
         return &mut self.window
-    }
+    } */
 }

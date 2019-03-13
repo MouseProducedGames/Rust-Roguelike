@@ -2,15 +2,21 @@
 use std::cmp::{ Eq, PartialEq };
 use std::convert::From;
 use std::ops::{ Add, Sub };
+use specs::{ Component, VecStorage };
 
 // Internal includes
 use super::Position;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Displacement
 {
     pub x: i32,
     pub y: i32,
+}
+
+impl Component for Displacement
+{
+    type Storage = VecStorage<Self>;
 }
 
 impl Displacement

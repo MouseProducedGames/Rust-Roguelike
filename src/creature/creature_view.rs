@@ -1,4 +1,4 @@
-use super::{ Creature, Mobile };
+/* use super::{ Creature, Mobile };
 use crate::rrl_math::Position;
 
 pub trait CreatureView
@@ -24,3 +24,4 @@ impl<'a> CreatureView for Creature<'a> where Creature<'a>: Mobile
 
     }
 }
+ */

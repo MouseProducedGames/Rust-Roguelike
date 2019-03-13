@@ -1,4 +1,4 @@
-// External dependencies.
+/* // External dependencies.
 use rand::Rng;
 
 // Internal dependencies.
@@ -47,3 +47,4 @@ impl CreatureLogic for CreatureLogicWander
     }
 }
 
+*/

@@ -1,4 +1,4 @@
-// External includes.
+/* // External includes.
 extern crate ncurses;
 use std::iter::Iterator;
 
@@ -233,3 +233,4 @@ impl Window
         ncurses::mvaddch(y, x, ch as u64);
     }
 }
+*/
