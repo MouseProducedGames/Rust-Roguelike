@@ -1,4 +1,4 @@
-use super::linear::Position;
+use crate::rrl_math::Position;
 
 pub trait Mapping
 {

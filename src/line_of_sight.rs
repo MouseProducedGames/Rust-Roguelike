@@ -1,7 +1,7 @@
 // External includes
 
 // internal includes
-use super::linear::{ Displacement, Position };
+use crate::rrl_math::{ Displacement, Position };
 use super::mapping::Mapping;
 use super::tilemap::Tilemap;
 use super::visibility::{ VisibilityMap, VisibilityType };

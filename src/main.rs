@@ -6,7 +6,7 @@ mod creature;
 // mod creature_logic_none;
 mod game_state;
 mod io;
-mod linear;
+mod rrl_math;
 mod line_of_sight;
 mod mapping;
 mod multidim;

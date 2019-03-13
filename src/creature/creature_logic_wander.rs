@@ -5,7 +5,7 @@ use rand::Rng;
 use super::CreatureView;
 use super::CreatureLogic;
 use super::super::game_state::GameState;
-use super::super::linear::Displacement;
+use crate::rrl_math::Displacement;
 use super::super::tilemap::Tilemap;
 
 pub struct CreatureLogicWander

@@ -4,7 +4,7 @@ use std::iter::Iterator;
 
 // Internal includes.
 use super::creature::{ Creature, CreatureView };
-use super::linear::{ Displacement, Position };
+use crate::rrl_math::{ Displacement, Position };
 use super::visibility::VisibilityType;
 use super::multidim::Multidim;
 use super::tilemap;

@@ -4,7 +4,7 @@ use std::collections::hash_map::HashMap;
 // internal includes
 use super::CreatureLogic;
 use super::super::game_state::GameState;
-use super::super::linear::Position;
+use crate::rrl_math::Position;
 use super::super::line_of_sight;
 use super::super::mapping::Mapping;
 use super::super::tilemap::Tilemap;

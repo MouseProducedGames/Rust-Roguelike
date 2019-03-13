@@ -4,7 +4,7 @@ use std::default::Default;
 // Internal includes
 use super::mapping::Mapping;
 use super::multidim::Multidim;
-use super::linear::Position;
+use crate::rrl_math::Position;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum VisibilityType

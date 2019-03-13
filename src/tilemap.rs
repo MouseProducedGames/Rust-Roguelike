@@ -4,7 +4,7 @@ use std::cmp::{ Eq, PartialEq };
 use std::hash::{ Hash, Hasher };
 
 // Internal includes
-use super::linear::Position;
+use crate::rrl_math::Position;
 use super::mapping::Mapping;
 use super::multidim::Multidim;
 use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA, TileTypeData };
