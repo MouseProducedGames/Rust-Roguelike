@@ -200,11 +200,11 @@ impl Window
                 {
                     VisibilityType::None => ch = ' ',
                     VisibilityType::Seen => {
-                        let tile_type = map.tile_pos( map_pos );
+                        let tile_type = map.tile_type_pos( map_pos );
                         ch = SEEN_MAP_GRAPHICS[tile_type as usize];
                     },
                     VisibilityType::Visible => { 
-                        let tile_type = map.tile_pos( map_pos );
+                        let tile_type = map.tile_type_pos( map_pos );
                         ch = MAP_GRAPHICS[tile_type as usize];
                     },
                 }

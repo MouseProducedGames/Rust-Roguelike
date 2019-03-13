@@ -7,7 +7,7 @@ use std::hash::{ Hash, Hasher };
 use super::linear::Position;
 use super::mapping::Mapping;
 use super::multidim::Multidim;
-use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA };
+use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA, TileTypeData };
 
 type TileType = u32;
 type Width = usize;
@@ -39,31 +39,27 @@ impl Tilemap
         self.tiles.len1()
     }
     
-    pub fn passable(&self, pos_x: Width, pos_y: Height) -> bool
+    pub fn _passable(&self, pos_x: Width, pos_y: Height) -> bool
     {
-        if self.is_in_bounds( pos_x, pos_y )
-        {
-            TILE_TYPE_DATA[ self.tile( pos_x, pos_y ) as usize ].passable()
-        }
-        else
-        {
-            TILE_TYPE_DATA[ TILE_TYPE_INDEX_VOID as usize ].passable()
-        }
+        self._tile( pos_x, pos_y ).passable()
     }
 
     pub fn passable_pos(&self, pos: Position) -> bool
     {
-        if self.is_pos_in_bounds(pos)
-        {
-            self.passable( pos.x as usize, pos.y as usize )
-        }
-        else
-        {
-            TILE_TYPE_DATA[ TILE_TYPE_INDEX_VOID as usize ].passable()
-        }
+        self.tile_pos( pos ).passable()
     }
 
-    pub fn tile(&self, pos_x: Width, pos_y: Height) -> TileType
+    pub fn _tile(&self, pos_x: Width, pos_y: Height) -> TileTypeData
+    {
+        TILE_TYPE_DATA[ self.tile_type( pos_x, pos_y ) as usize ]
+    }
+
+    pub fn tile_pos(&self, pos: Position) -> TileTypeData
+    {
+        TILE_TYPE_DATA[ self.tile_type_pos( pos ) as usize ]
+    }
+    
+    pub fn tile_type(&self, pos_x: Width, pos_y: Height) -> TileType
     {
         if self.is_in_bounds( pos_x, pos_y )
         {
@@ -75,16 +71,16 @@ impl Tilemap
         }
     }
 
-    pub fn tile_mut<'b>(&'b mut self, pos_x: Width, pos_y: Height) -> &'b mut TileType
+    pub fn tile_type_mut<'b>(&'b mut self, pos_x: Width, pos_y: Height) -> &'b mut TileType
     {
-            self.tiles.value_mut( pos_y, pos_x )
+        self.tiles.value_mut( pos_y, pos_x )
     }
     
-    pub fn tile_pos(&self, pos: Position) -> TileType
+    pub fn tile_type_pos(&self, pos: Position) -> TileType
     {
         if self.is_pos_in_bounds( pos )
         {
-            self.tile(pos.x as usize, pos.y as usize)
+            self.tile_type(pos.x as usize, pos.y as usize)
         }
         else
         {
@@ -92,28 +88,14 @@ impl Tilemap
         }
     }
 
-    pub fn transparent(&self, pos_x: Width, pos_y: Height) -> bool
+    pub fn _transparent(&self, pos_x: Width, pos_y: Height) -> bool
     {
-        if self.is_in_bounds( pos_x, pos_y )
-        {
-            TILE_TYPE_DATA[ self.tile( pos_x, pos_y ) as usize ].transparent()
-        }
-        else
-        {
-            TILE_TYPE_DATA[ TILE_TYPE_INDEX_VOID as usize ].transparent()
-        }
+        self._tile( pos_x, pos_y ).transparent()
     }
 
     pub fn transparent_pos(&self, pos: Position) -> bool
     {
-        if self.is_pos_in_bounds(pos)
-        {
-            self.transparent( pos.x as usize, pos.y as usize )
-        }
-        else
-        {
-            TILE_TYPE_DATA[ TILE_TYPE_INDEX_VOID as usize ].transparent()
-        }
+        self.tile_pos( pos ).transparent()
     }
 
 }
