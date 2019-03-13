@@ -1,11 +1,11 @@
 // External includes
-use specs::{ Component, NullStorage };
-// use std::collections::hash_map::HashMap;
+use specs::{ Component, NullStorage, VecStorage };
+use std::collections::hash_map::HashMap;
 
 // internal includes
 use std::default::Default;
 use crate::rrl_math::Position;
-// use crate::world::{ /* line_of_sight, Mapping, */ /* Tilemap, VisibilityMap */ };
+use crate::world::VisibilityMap;
 // use super::super::game_state::GameState;
 // use super::super::faction::FactionData;
 // use super::CreatureLogic;
@@ -58,25 +58,61 @@ impl Component for _Faction
     type Storage = VecStorage<Self>;
 } */
 
-/* pub struct _SightRange
+pub struct SightRange
 {
-    sight_range: i32,
+    value: i32,
 }
 
-impl Component for _SightRange
+impl SightRange
+{
+    pub fn new( value: i32 ) -> Self
+    {
+        Self { value: value }
+    }
+    
+    pub fn sight_range( &self ) -> i32
+    {
+        self.value
+    }
+}
+
+impl Component for SightRange
 {
     type Storage = VecStorage<Self>;
-} */
+}
 
-/* pub struct Visibility
+pub struct Visibility
 {    
-    visibility_lookup: HashMap< &'a Tilemap, VisibilityMap >,
-} */
+    visibility_lookup: HashMap< u64, VisibilityMap >,
+}
 
-/* impl Component for Visibility
+impl Visibility
+{
+    pub fn new() -> Visibility
+    {
+        Self { visibility_lookup: HashMap::new() }
+    }
+    
+    pub fn visibility_lookup( &self ) -> &HashMap< u64, VisibilityMap >
+    {
+        &self.visibility_lookup
+    }
+    
+    pub fn visibility_lookup_mut( &mut self ) -> &mut HashMap< u64, VisibilityMap >
+    {
+        &mut self.visibility_lookup
+    }
+    
+    /* pub fn get_visibility( &self, map: &Tilemap ) -> Option< &VisibilityMap >
+    {
+        self.visibility_lookup.get( &calculate_hash( map ) )
+    } */
+}
+
+impl Component for Visibility
 {
     type Storage = VecStorage<Self>;
-} */
+}
 
 /* impl<'a> Creature<'a>
 {

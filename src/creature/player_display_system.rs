@@ -1,9 +1,9 @@
 // External includes
-use specs::{ ReadExpect, ReadStorage, System, WriteExpect };
+pub use specs::{ ReadExpect, ReadStorage, System, WriteExpect };
 
 // Internal includes
-pub use crate::creature::PlayerMarker;
-pub use crate::rrl_math::Position;
+pub use crate::creature::{ PlayerMarker, Visibility };
+pub use crate::rrl_math::{ calculate_hash, Position };
 pub use crate::world::Tilemap;
 pub use super::super::io::Window;
 
@@ -15,20 +15,30 @@ impl<'a> System<'a> for PlayerDisplaySystem
         ReadExpect< 'a, Tilemap >,
         ReadStorage< 'a, PlayerMarker >,
         ReadStorage< 'a, Position >,
-        WriteExpect< 'a, Window >
+        ReadStorage< 'a, Visibility >,
+        WriteExpect< 'a, Window >,
     );
 
-    fn run( &mut self, ( map, _player_marker, player_pos, window ): Self::SystemData )
+    fn run( &mut self, ( map, _player_marker, player_pos, visibility, window ): Self::SystemData )
     {
         use specs::join::Join;
 
         let map = map;
-        let player_pos = player_pos;
+        let map_hash = calculate_hash( &*map );
         let mut window = window;
 
-        for player_pos in player_pos.join()
+        for ( player_pos, visibility ) in ( &player_pos, &visibility ).join()
         {
-            window.write_map( *player_pos, &map );
+            let visibility_lookup = visibility.visibility_lookup();
+            
+            let visibility;
+            match visibility_lookup.get( &map_hash )
+            {
+                Some( vis_map ) => visibility = vis_map,
+                _ => continue,
+            }
+            
+            window.write_map( *player_pos, &map, &visibility );
         }
     }
 }

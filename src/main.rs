@@ -14,9 +14,12 @@ use creature::{
     CreatureDisplaySystem,
     CreatureLogicPlayer,
     CreatureLogicPlayerSystem,
+    CreatureVisibilitySystem,
     PlayerDisplaySystem,
     PlayerMarker,
-    PlayerPosition
+    PlayerPosition,
+    SightRange,
+    Visibility
 };
 // use creature_logic_none::CreatureLogicNone;
 use game_state::GameState;
@@ -70,29 +73,38 @@ fn main() {
     world.register::< CreatureLogicPlayer >();
     world.register::< PlayerMarker >();
     world.register::< Position >();
+    world.register::< SightRange >();
+    world.register::< Visibility >();
 
     world
         .create_entity()
         .with( CreatureLogicPlayer {}) 
         .with( Position::new( 8, 5 ) )
         .with( PlayerMarker )
+        .with( SightRange::new( 5 ) )
+        .with( Visibility::new() )
         .build();
 
     let mut creature_display_system = CreatureDisplaySystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
+    let mut creature_visibility_system = CreatureVisibilitySystem;
     let mut player_display_system = PlayerDisplaySystem;
 
     while world.read_resource::< GameState >().alive()
     {
-        creature_player_logic.run_now( &world.res );
-
-        world.maintain();
+        creature_visibility_system.run_now( &world.res );
 
         player_display_system.run_now( &world.res );
     
         creature_display_system.run_now( &world.res );
 
+        world.maintain();
+
         world.write_resource::< Window >().present();
+        
+        creature_player_logic.run_now( &world.res );
+
+        world.maintain();
     }
 
     Window::close();
