@@ -6,6 +6,7 @@ use super::creature_logic::CreatureLogic;
 use super::game_state::GameState;
 use super::linear::Position;
 use super::line_of_sight;
+use super::mapping::Mapping;
 use super::tilemap::Tilemap;
 use super::visibility::VisibilityMap;
 

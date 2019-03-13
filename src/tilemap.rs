@@ -5,6 +5,7 @@ use std::hash::{ Hash, Hasher };
 
 // Internal includes
 use super::linear::Position;
+use super::mapping::Mapping;
 use super::multidim::Multidim;
 use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA };
 
@@ -27,28 +28,17 @@ impl Tilemap
             tiles: Multidim::new( height, width )
         }
     }
-    
-    pub fn bounds(&self) -> ( Width, Height)
-    {
-        let ( height, width ) = self.tiles.bounds();
-        ( width, height )
-    }
 
-    pub fn is_in_bounds(&self, pos_x: Width, pos_y: Height) -> bool
+    pub fn height(&self) -> usize
     {
-        let ( width, height ) = self.bounds();
-        ( (pos_x >= width) || ( pos_y >= height ) ) == false
+        self.tiles.len0()
     }
     
-    pub fn is_pos_in_bounds(&self, pos: Position) -> bool
+    pub fn width(&self) -> usize
     {
-        let ( width, height ) = self.bounds();
-        (
-            (pos.x < 0) || (pos.x as usize >= width) ||
-                (pos.y < 0) || (pos.y as usize >= height)
-        ) == false
+        self.tiles.len1()
     }
-
+    
     pub fn passable(&self, pos_x: Width, pos_y: Height) -> bool
     {
         if self.is_in_bounds( pos_x, pos_y )
@@ -134,6 +124,19 @@ impl Hash for Tilemap
   {
       self.id.hash(state);
   }
+}
+
+impl Mapping for Tilemap
+{
+    fn height( &self ) -> usize
+    {
+        Tilemap::height ( self )
+    }
+
+    fn width( &self ) -> usize
+    {
+        Tilemap::width ( self )
+    }
 }
 
 impl PartialEq for Tilemap

@@ -25,6 +25,7 @@ use creature_logic_wander::CreatureLogicWander;
 use creature_view::CreatureView;
 use game_state::GameState;
 use io::Window;
+use mapping::Mapping;
 
 fn main() {
     Window::init();
