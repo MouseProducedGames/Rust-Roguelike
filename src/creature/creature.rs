@@ -1,5 +1,5 @@
 // External includes
-use specs::{ Component, VecStorage };
+use specs::{ Component, NullStorage };
 // use std::collections::hash_map::HashMap;
 
 // internal includes
@@ -7,8 +7,16 @@ use std::default::Default;
 use crate::rrl_math::Position;
 // use crate::world::{ /* line_of_sight, Mapping, */ /* Tilemap, VisibilityMap */ };
 // use super::super::game_state::GameState;
-use super::super::faction::FactionData;
+// use super::super::faction::FactionData;
 // use super::CreatureLogic;
+
+#[derive(Default)]
+pub struct PlayerMarker;
+
+impl Component for PlayerMarker
+{
+    type Storage = NullStorage<Self>;
+}
 
 /* pub trait Mobile
 {
@@ -24,13 +32,13 @@ use super::super::faction::FactionData;
 // #[derive(Default)]
 pub struct PlayerPosition( pub Position );
 
-impl PlayerPosition
+/* impl PlayerPosition
 {
     pub fn new( pos: Position )
     {
         Self( pos );
     }
-}
+} */
 
 impl Default for PlayerPosition
 {
@@ -40,25 +48,25 @@ impl Default for PlayerPosition
     }
 }
 
-pub struct Faction
+/* pub struct _Faction
 {
     faction: FactionData,
 }
 
-impl Component for Faction
+impl Component for _Faction
 {
     type Storage = VecStorage<Self>;
-}
+} */
 
-pub struct SightRange
+/* pub struct _SightRange
 {
     sight_range: i32,
 }
 
-impl Component for SightRange
+impl Component for _SightRange
 {
     type Storage = VecStorage<Self>;
-}
+} */
 
 /* pub struct Visibility
 {    

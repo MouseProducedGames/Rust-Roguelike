@@ -1,10 +1,10 @@
 // External includes
-use ncurses;
-use specs::{ Component, DenseVecStorage, ReadExpect, System, WriteExpect, WriteStorage };
+use specs::{ Component, DenseVecStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage };
 
 // Internal includes
 use super::super::game_state::GameState;
-use crate::creature::PlayerPosition;
+use super::super::io::Window;
+use crate::creature::{ PlayerMarker, PlayerPosition };
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -21,19 +21,22 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
 {
     type SystemData = (
         ReadExpect< 'a, Tilemap >,
+        ReadExpect< 'a, Window >,
         WriteExpect< 'a, GameState >,
         WriteExpect< 'a, PlayerPosition >,
+        ReadStorage< 'a, PlayerMarker >,
         WriteStorage< 'a, CreatureLogicPlayer >,
         WriteStorage< 'a, Position >,
     );
 
-    fn run( &mut self, ( map, mut game_state, mut player_pos, mut logic, mut pos ): Self::SystemData)
+    fn run( &mut self, ( map, window, game_state, player_pos, _player_marker, mut logic, mut pos ): Self::SystemData)
     {
         use specs::Join;
 
         let mut game_state = game_state;
         let map = map;
         let mut player_pos = player_pos;
+        let window = window;
 
         for ( _logic, pos ) in ( &mut logic, &mut pos ).join()
         { 
@@ -41,14 +44,8 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
             
             // get_char refreshes the screen. Why??
             // let command = game_state.window().get_char();
-            let command =
-                match
-                std::char::from_u32(ncurses::getch() as u32)
-                {
-                    None => ' ',
-                    Some(v) => v,
-                };
-            
+            let command = window.get_char();
+                
             let target_move;
             match command
             {
@@ -73,8 +70,6 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
             }
 
             player_pos.0 = *pos;
-
-            // ncurses::mvaddch( pos.y, pos.x, 'C' as u64 );
         }
     }
 }

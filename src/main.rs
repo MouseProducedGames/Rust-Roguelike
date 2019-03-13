@@ -14,6 +14,8 @@ use creature::{
     CreatureDisplaySystem,
     CreatureLogicPlayer,
     CreatureLogicPlayerSystem,
+    PlayerDisplaySystem,
+    PlayerMarker,
     PlayerPosition
 };
 // use creature_logic_none::CreatureLogicNone;
@@ -25,7 +27,6 @@ use world::{ Mapping, Tilemap };
 
 fn main() {
     Window::init();
-    let mut window = Window::new();
     let mut game_state = GameState::new();
     
     let mut map: Tilemap = Tilemap::new( 80, 25 );
@@ -64,28 +65,34 @@ fn main() {
     let mut world = World::new();
     world.add_resource( game_state );
     world.add_resource( map );
-    world.add_resource( window );
+    world.add_resource( Window::new() );
     world.add_resource( PlayerPosition( Position::new( 8, 5 ) ) );
     world.register::< CreatureLogicPlayer >();
+    world.register::< PlayerMarker >();
     world.register::< Position >();
 
-    let player =
-        world
+    world
         .create_entity()
         .with( CreatureLogicPlayer {}) 
-        .with( Position::new( 8, 5 ) ) 
+        .with( Position::new( 8, 5 ) )
+        .with( PlayerMarker )
         .build();
 
     let mut creature_display_system = CreatureDisplaySystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
+    let mut player_display_system = PlayerDisplaySystem;
 
-    while world.read_resource::<GameState>().alive()
+    while world.read_resource::< GameState >().alive()
     {
-        creature_player_logic.run_now(&world.res);
+        creature_player_logic.run_now( &world.res );
 
         world.maintain();
+
+        player_display_system.run_now( &world.res );
     
-        creature_display_system.run_now(&world.res);
+        creature_display_system.run_now( &world.res );
+
+        world.write_resource::< Window >().present();
     }
 
     Window::close();

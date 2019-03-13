@@ -1,4 +1,4 @@
-// External includes
+/* // External includes
 
 // Internal includes
 
@@ -111,3 +111,4 @@ impl FactionLookup
         self.values[ index ]
     }
 }
+*/

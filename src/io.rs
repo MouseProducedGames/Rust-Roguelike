@@ -3,13 +3,13 @@ extern crate ncurses;
 // use std::iter::Iterator;
 
 // Internal includes.
-use crate::rrl_math::{ /* Displacement, */ Position };
-// use crate::world::{ Tilemap, VisibilityType };
+use crate::rrl_math::{ Displacement, Position };
+use crate::world::{ Tilemap /*, VisibilityType */ };
 // use super::creature::{ Creature, CreatureView };
 use super::multidim::Multidim;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
-static SEEN_MAP_GRAPHICS: [char; 3] = [ ' ', 'x', '-' ];
+// static SEEN_MAP_GRAPHICS: [char; 3] = [ ' ', 'x', '-' ];
 
 pub struct Window
 {
@@ -186,15 +186,15 @@ impl Window
         }
     } */
 
-    /* pub fn write_map(&mut self, viewpoint_creature: &Creature, map: &Tilemap)
+    pub fn write_map(&mut self, /* viewpoint_creature: &Creature, */ view_pos: Position, map: &Tilemap)
     {
-        let view_pos = viewpoint_creature.get_position();
+        /* let view_pos = viewpoint_creature.get_position();
         let visibility;
         match viewpoint_creature.get_visibility(map)
         {
             Some(vis_map) => visibility = vis_map,
             _ => return,
-        }
+        } */
         
         let back_buffer = &mut self.buffers[self.back_buffer_index];
         for view_addend_y in -17..18_i32
@@ -204,8 +204,8 @@ impl Window
             {
                 let display_pos_x = (18 + view_addend_x) as usize;
                 let map_pos = view_pos + Displacement::new( view_addend_x, view_addend_y );
-                let ch;
-                match visibility.value_pos( map_pos )
+                let ch = MAP_GRAPHICS[ map.tile_type_pos( map_pos ) as usize ];
+                /* match visibility.value_pos( map_pos )
                 {
                     VisibilityType::None => ch = ' ',
                     VisibilityType::Seen => {
@@ -216,13 +216,13 @@ impl Window
                         let tile_type = map.tile_type_pos( map_pos );
                         ch = MAP_GRAPHICS[tile_type as usize];
                     },
-                }
+                } */
                 
                 // let ch = match *is_wall { true => '#', _ => '.', };
                 *back_buffer.value_mut(display_pos_y, display_pos_x) = ch;
             }
         }    
-    } */
+    }
 
     fn front_buffer_index(&self) -> usize
     {

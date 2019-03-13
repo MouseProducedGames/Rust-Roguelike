@@ -1,4 +1,4 @@
-// External includes
+/* // External includes
 
 // internal includes
 use crate::rrl_math::{ Displacement, Position };
@@ -60,3 +60,4 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
         }
     }
 }
+*/

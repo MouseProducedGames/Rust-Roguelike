@@ -16,7 +16,7 @@ impl<'a> System<'a> for CreatureDisplaySystem
         WriteExpect< 'a, Window >
     );
 
-    fn run( &mut self, ( view_pos, pos, mut window ): Self::SystemData )
+    fn run( &mut self, ( view_pos, pos, window ): Self::SystemData )
     {
         use specs::join::Join;
 
