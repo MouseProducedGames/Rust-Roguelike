@@ -71,7 +71,7 @@ impl Tilemap
         }
     }
 
-    pub fn tile_type_mut<'b>(&'b mut self, pos_x: Width, pos_y: Height) -> &'b mut TileType
+    pub fn tile_type_mut(&mut self, pos_x: Width, pos_y: Height) -> &mut TileType
     {
         self.tiles.value_mut( pos_y, pos_x )
     }

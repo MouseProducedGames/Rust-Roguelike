@@ -87,7 +87,10 @@ fn main() {
         .with( SightRange::new( 5 ) )
         .with( Visibility::new() )
         .build();
-
+    {
+        *(&mut *world.write_resource::< Tilemap >()).tile_type_mut( 8, 5 ) = 2;
+    }
+    
     world.
         create_entity()
         .with( CreatureLogicWander )
