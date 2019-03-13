@@ -146,9 +146,15 @@ impl Window
         ncurses::printw(s);
 } */
 
-    pub fn write_character( &mut self, pos: &Position )
+    pub fn write_creature( &mut self, creature_pos: Position, view_pos: Position )
     {
-        self.put_char( pos.x, pos.y, 'C' );
+        let disp = creature_pos - view_pos;
+        if (disp.x < -17) || (disp.x > 17) ||
+            (disp.y < -17) || (disp.y > 17)
+        {
+            return;
+        }
+        self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
     }
 
     /* pub fn write_creatures<'a, TEnumerable>(

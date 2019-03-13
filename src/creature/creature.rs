@@ -3,7 +3,8 @@ use specs::{ Component, VecStorage };
 // use std::collections::hash_map::HashMap;
 
 // internal includes
-// use crate::rrl_math::Position;
+use std::default::Default;
+use crate::rrl_math::Position;
 // use crate::world::{ /* line_of_sight, Mapping, */ /* Tilemap, VisibilityMap */ };
 // use super::super::game_state::GameState;
 use super::super::faction::FactionData;
@@ -19,6 +20,25 @@ use super::super::faction::FactionData;
     logic: &'a CreatureLogic,
     pos: Position,
 } */
+
+// #[derive(Default)]
+pub struct PlayerPosition( pub Position );
+
+impl PlayerPosition
+{
+    pub fn new( pos: Position )
+    {
+        Self( pos );
+    }
+}
+
+impl Default for PlayerPosition
+{
+    fn default() -> Self
+    {
+        Self( Position::new( 0, 0 ) )
+    }
+}
 
 pub struct Faction
 {

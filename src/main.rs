@@ -10,7 +10,12 @@ mod io;
 mod rrl_math;
 mod multidim;
 mod world;
-use creature::{ CreatureDisplaySystem, CreatureLogicPlayer, CreatureLogicPlayerSystem };
+use creature::{
+    CreatureDisplaySystem,
+    CreatureLogicPlayer,
+    CreatureLogicPlayerSystem,
+    PlayerPosition
+};
 // use creature_logic_none::CreatureLogicNone;
 use game_state::GameState;
 use rrl_math::{ Position };
@@ -60,14 +65,15 @@ fn main() {
     world.add_resource( game_state );
     world.add_resource( map );
     world.add_resource( window );
+    world.add_resource( PlayerPosition( Position::new( 8, 5 ) ) );
     world.register::< CreatureLogicPlayer >();
     world.register::< Position >();
 
     let player =
         world
         .create_entity()
-        .with(CreatureLogicPlayer {})
-        .with(Position::new( 8, 5 ))
+        .with( CreatureLogicPlayer {}) 
+        .with( Position::new( 8, 5 ) ) 
         .build();
 
     let mut creature_display_system = CreatureDisplaySystem;

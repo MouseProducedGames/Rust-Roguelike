@@ -3,11 +3,8 @@ use ncurses;
 use specs::{ Component, DenseVecStorage, ReadExpect, System, WriteExpect, WriteStorage };
 
 // Internal includes
-
-
-// use super::CreatureView;
-// use super::CreatureLogic;
 use super::super::game_state::GameState;
+use crate::creature::PlayerPosition;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -25,15 +22,18 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
     type SystemData = (
         ReadExpect< 'a, Tilemap >,
         WriteExpect< 'a, GameState >,
+        WriteExpect< 'a, PlayerPosition >,
         WriteStorage< 'a, CreatureLogicPlayer >,
         WriteStorage< 'a, Position >,
     );
 
-    fn run( &mut self, ( map, mut game_state, mut logic, mut pos ): Self::SystemData)
+    fn run( &mut self, ( map, mut game_state, mut player_pos, mut logic, mut pos ): Self::SystemData)
     {
         use specs::Join;
 
+        let mut game_state = game_state;
         let map = map;
+        let mut player_pos = player_pos;
 
         for ( _logic, pos ) in ( &mut logic, &mut pos ).join()
         { 
@@ -72,10 +72,9 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
                 *pos = *pos + target_move;
             }
 
+            player_pos.0 = *pos;
+
             // ncurses::mvaddch( pos.y, pos.x, 'C' as u64 );
         }
     }
 }
-
-
-    

@@ -8,7 +8,7 @@ use std::ops::{ Add, Sub };
 use super::Displacement;
 
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Default)]
 pub struct Position
 {
     pub x: i32,
