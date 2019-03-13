@@ -7,23 +7,19 @@ mod creature;
 mod game_state;
 mod io;
 mod rrl_math;
-mod line_of_sight;
-mod mapping;
 mod multidim;
-mod tilemap;
-mod tiletype;
-mod visibility;
+mod world;
 use creature::{ Creature, CreatureLogic, CreatureLogicPlayer, CreatureLogicWander, CreatureView };
 // use creature_logic_none::CreatureLogicNone;
 use game_state::GameState;
 use io::Window;
-use mapping::Mapping;
+use world::{ Mapping, Tilemap };
 
 fn main() {
     Window::init();
     let mut game_state: GameState = GameState::new();
 
-    let mut map: tilemap::Tilemap = tilemap::Tilemap::new( 80, 25 );
+    let mut map: Tilemap = Tilemap::new( 80, 25 );
     let ( map_width, map_height ) = map.bounds();
 
     {

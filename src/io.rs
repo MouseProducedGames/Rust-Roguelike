@@ -3,11 +3,10 @@ extern crate ncurses;
 use std::iter::Iterator;
 
 // Internal includes.
-use super::creature::{ Creature, CreatureView };
 use crate::rrl_math::{ Displacement, Position };
-use super::visibility::VisibilityType;
+use crate::world::{ Tilemap, VisibilityType };
+use super::creature::{ Creature, CreatureView };
 use super::multidim::Multidim;
-use super::tilemap;
 
 static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
 static SEEN_MAP_GRAPHICS: [char; 3] = [ ' ', 'x', '-' ];
@@ -176,7 +175,7 @@ impl Window
         }
     }
 
-    pub fn write_map(&mut self, viewpoint_creature: &Creature, map: &tilemap::Tilemap)
+    pub fn write_map(&mut self, viewpoint_creature: &Creature, map: &Tilemap)
     {
         let view_pos = viewpoint_creature.get_position();
         let visibility;

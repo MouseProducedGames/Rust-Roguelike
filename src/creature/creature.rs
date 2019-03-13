@@ -5,10 +5,7 @@ use std::collections::hash_map::HashMap;
 use super::CreatureLogic;
 use super::super::game_state::GameState;
 use crate::rrl_math::Position;
-use super::super::line_of_sight;
-use super::super::mapping::Mapping;
-use super::super::tilemap::Tilemap;
-use super::super::visibility::VisibilityMap;
+use crate::world::{ line_of_sight, Mapping, Tilemap, VisibilityMap };
 
 pub trait Mobile
 {

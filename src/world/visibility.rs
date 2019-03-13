@@ -2,8 +2,8 @@
 use std::default::Default;
 
 // Internal includes
-use super::mapping::Mapping;
-use super::multidim::Multidim;
+use super::super::multidim::Multidim;
+use super::Mapping;
 use crate::rrl_math::Position;
 
 #[derive(Copy, Clone, Eq, PartialEq)]

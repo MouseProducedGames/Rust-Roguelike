@@ -6,7 +6,7 @@ use super::CreatureView;
 use super::CreatureLogic;
 use super::super::game_state::GameState;
 use crate::rrl_math::Displacement;
-use super::super::tilemap::Tilemap;
+use crate::world::Tilemap;
 
 pub struct CreatureLogicWander
 {

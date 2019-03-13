@@ -5,8 +5,8 @@ use std::hash::{ Hash, Hasher };
 
 // Internal includes
 use crate::rrl_math::Position;
+use super::super::multidim::Multidim;
 use super::mapping::Mapping;
-use super::multidim::Multidim;
 use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA, TileTypeData };
 
 type TileType = u32;
