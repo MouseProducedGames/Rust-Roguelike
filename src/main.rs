@@ -9,7 +9,6 @@ Documentation:
 // External dependencies
 
 // Internal dependencies.
-use std::ops::Range;
 mod creature;
 mod dungen;
 mod faction;
@@ -32,7 +31,7 @@ use creature::{
     SightRange,
     Visibility
 };
-use dungen::Dungen;
+use dungen::{ Dungen, RandomlyTileDungeon };
 use dungen::draw_funcs::{ DrawTileRect, FillTile, FillTileRectRandRange };
 use faction::Faction;
 use game_state::GameState;
@@ -48,14 +47,7 @@ fn main() {
     // let mut map: Tilemap = Tilemap::new( 80, 25 );
     let mut map: Tilemap =
         Tilemap::new( 80, 25 )
-        .fill_tile( 2 )
-        .draw_tile_rect( 0, 0, 80, 25, 1 )
-        .fill_tile_rect_rand_range(
-            1, 1,
-            79, 24,
-            1, 3,
-            &mut game_state.rng()
-        )
+        .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
         .finish();
     // let ( map_width, map_height ) = map.bounds();
 

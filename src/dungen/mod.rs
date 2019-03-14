@@ -11,4 +11,6 @@ Documentation:
 // Internal includes.
 pub mod draw_funcs;
 pub mod dungen;
+pub mod randomly_tile_dungeon;
 pub use dungen::Dungen;
+pub use randomly_tile_dungeon::RandomlyTileDungeon;
