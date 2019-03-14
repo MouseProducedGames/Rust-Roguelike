@@ -2,8 +2,8 @@
 use std::default::Default;
 
 // Internal includes
-use super::super::multidim::Multidim;
-use super::Mapping;
+use super::super::multimap::Multimap;
+use crate::world::Mapping;
 use crate::rrl_math::Position;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
@@ -21,31 +21,31 @@ impl Default for VisibilityType
 
 pub struct VisibilityMap
 {
-    values: Multidim<VisibilityType>,
+    values: Multimap<VisibilityType>,
 }
 
 impl VisibilityMap
 {
     pub fn new(width: usize, height: usize) -> Self
     {
-        Self { values: Multidim::new( height, width ) }
+        Self { values: Multimap::new( width, height ) }
+    }
+
+    pub fn height(&self) -> usize
+    {
+        self.values.height()
     }
 
     pub fn width(&self) -> usize
     {
-        self.values.len1()
+        self.values.width()
     }
     
-    pub fn height(&self) -> usize
-    {
-        self.values.len0()
-    }
-
     pub fn value(&self, pos_x: usize, pos_y: usize) -> VisibilityType
     {
         if self.is_in_bounds( pos_x, pos_y )
         {
-            *self.values.value( pos_y, pos_x )
+            *self.values.value( pos_x, pos_y )
         }
         else
         {
@@ -67,7 +67,7 @@ impl VisibilityMap
 
     pub fn value_mut<'a>(&'a mut self, pos_x: usize, pos_y: usize) -> &'a mut VisibilityType
     {
-        self.values.value_mut( pos_y, pos_x )
+        self.values.value_mut( pos_x, pos_y )
     }
 }
 

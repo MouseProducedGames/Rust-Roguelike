@@ -1,3 +1,11 @@
+/** Copyright (C) 2019 MouseProducedGames
+
+See license in the LICENSE file
+
+Documentation:
+
+**/
+
 extern crate rand;
 use rand::thread_rng;
 use rand::rngs::ThreadRng;

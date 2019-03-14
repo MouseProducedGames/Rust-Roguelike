@@ -1,3 +1,11 @@
+/** Copyright (C) 2019 MouseProducedGames
+
+See license in the LICENSE file
+
+Documentation:
+
+**/
+
 // External dependencies.
 use specs::{ Component, NullStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage };
 use rand::Rng;

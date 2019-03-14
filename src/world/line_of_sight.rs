@@ -2,9 +2,7 @@
 
 // internal includes
 use crate::rrl_math::{ Displacement, Position };
-use super::mapping::Mapping;
-use super::tilemap::Tilemap;
-use super::visibility::{ VisibilityMap, VisibilityType };
+use crate::world::{ Mapping, Tilemap, VisibilityMap, VisibilityType };
 
 pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight_range: i32, map: &Tilemap)
 {

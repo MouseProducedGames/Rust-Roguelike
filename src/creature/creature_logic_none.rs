@@ -1,3 +1,11 @@
+/** Copyright (C) 2019 MouseProducedGames
+
+See license in the LICENSE file
+
+Documentation:
+
+**/
+
 use super::CreatureView;
 use super::CreatureLogic;
 use super::super::game_state::GameState;

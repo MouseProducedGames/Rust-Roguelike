@@ -1,3 +1,20 @@
+/** Copyright (C) 2019 MouseProducedGames
+
+See license in the LICENSE file
+
+Documentation:
+
+The purpose of Multidim is to provide a standard generic two-dimensional array.
+
+This prevents duplicating work, and the errors that would pop up if each type
+that nneded a two-dimensional array, had to compose one themselves.
+
+**/
+
+
+// External includes
+
+// Internal includes
 use std::default::Default;
 
 pub struct Multidim<T> where T: Copy + Clone + Default
@@ -56,34 +73,3 @@ impl<T> Multidim<T> where T: Copy + Clone + Default
         ( pos0 * self.len1 ) + pos1
     }
 }
-
-/*
-impl<T> Copy for Multidim<T> {}
-
-impl<T> Clone for Multidim<T> where T: Copy + Clone + Default
-{
-    fn clone(&self) -> Self
-    {
-        let mut output: Self =
-            Self {
-                values: Vec::new(),
-                len0: self.len0,
-                len1: self.len1,
-            };
-        output.values.resize(self.len0 * self.len1, self.values);
-        output;
-    }
-}
-
-impl<T> Default for Multidim<T> where T: Copy + Clone + Default
-{
-    fn default() -> Self
-    {
-        Self {
-            values: Vec::new(),
-            len0: 0_usize,
-            len1: 0_usize,
-        }
-    }
-}
-*/

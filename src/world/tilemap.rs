@@ -5,7 +5,7 @@ use std::hash::{ Hash, Hasher };
 
 // Internal includes
 use crate::rrl_math::Position;
-use super::super::multidim::Multidim;
+use super::super::multimap::Multimap;
 use super::mapping::Mapping;
 use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA, TileTypeData };
 
@@ -16,7 +16,7 @@ type Height = usize;
 pub struct Tilemap
 {
     id: TypeId,
-    tiles: Multidim<TileType>,
+    tiles: Multimap<TileType>,
 }
 
 impl Tilemap
@@ -25,18 +25,18 @@ impl Tilemap
     {
         Self {
             id: TypeId::of::<Tilemap>(),
-            tiles: Multidim::new( height, width )
+            tiles: Multimap::new( width, height )
         }
     }
 
     pub fn height(&self) -> usize
     {
-        self.tiles.len0()
+        self.tiles.height()
     }
     
     pub fn width(&self) -> usize
     {
-        self.tiles.len1()
+        self.tiles.width()
     }
     
     pub fn _passable(&self, pos_x: Width, pos_y: Height) -> bool
@@ -63,7 +63,7 @@ impl Tilemap
     {
         if self.is_in_bounds( pos_x, pos_y )
         {
-            *self.tiles.value( pos_y, pos_x )
+            *self.tiles.value( pos_x, pos_y )
         }
         else
         {
@@ -73,7 +73,7 @@ impl Tilemap
 
     pub fn tile_type_mut(&mut self, pos_x: Width, pos_y: Height) -> &mut TileType
     {
-        self.tiles.value_mut( pos_y, pos_x )
+        self.tiles.value_mut( pos_x, pos_y )
     }
     
     pub fn tile_type_pos(&self, pos: Position) -> TileType

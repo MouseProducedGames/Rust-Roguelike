@@ -1,3 +1,11 @@
+/** Copyright (C) 2019 MouseProducedGames
+
+See license in the LICENSE file
+
+Documentation:
+
+**/
+
 // External dependencies
 use rand::Rng;
 
@@ -9,6 +17,7 @@ mod game_state;
 mod io;
 mod rrl_math;
 mod multidim;
+mod multimap;
 mod world;
 use creature::{
     CreatureDisplaySystem,
