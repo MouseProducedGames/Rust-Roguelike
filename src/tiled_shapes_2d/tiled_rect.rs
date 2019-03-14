@@ -62,7 +62,7 @@ impl TiledShapeDef2D for TiledRect
         half + half
     }
 
-    fn iter_circumference( &mut self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
+    fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
     {
         let ( width, height ) = ( self.width(), self.height() );
         let index = *iter_index;
@@ -91,7 +91,7 @@ impl TiledShapeDef2D for TiledRect
         }
     }
     
-    fn iter_surface_area( &mut self, iter_index: &mut ( u32, u32 ) ) -> Option< ( u32, u32 ) >
+    fn iter_surface_area( &self, iter_index: &mut ( u32, u32 ) ) -> Option< ( u32, u32 ) >
     {
         iter_index.0 += 1;
 

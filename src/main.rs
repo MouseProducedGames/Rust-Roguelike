@@ -34,12 +34,10 @@ use creature::{
     Visibility
 };
 use dungen::{ Dungen, RandomlyTileDungeon };
-use dungen::draw_funcs::{ DrawTileRect, FillTile, FillTileRectRandRange };
 use faction::Faction;
 use game_state::GameState;
 use io::Window;
 use rrl_math::{ Position };
-use tiled_shapes_2d::{ TiledRect, TiledShapeDef2D };
 use world::Tilemap;
 
 fn main() {

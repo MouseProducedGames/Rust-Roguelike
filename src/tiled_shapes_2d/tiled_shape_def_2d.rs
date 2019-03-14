@@ -15,22 +15,22 @@ pub trait TiledShapeDef2D
 {
     fn circumference( &self ) -> u32;
     
-    fn iter_circumference( &mut self, iter_index: &mut u32 ) -> Option< ( u32, u32) >;
+    fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32) >;
     
-    fn iter_surface_area( &mut self, iter_index: &mut ( u32, u32 ) ) -> Option< ( u32, u32) >;
+    fn iter_surface_area( &self, iter_index: &mut ( u32, u32 ) ) -> Option< ( u32, u32) >;
     
     fn surface_area( &self ) -> u32;
 }
 
 pub struct TiledShape2DCircumferenceIterator<'a>
 {
-    shape: &'a mut TiledShapeDef2D,
+    shape: &'a TiledShapeDef2D,
     iter_index: u32,
 }
 
 impl<'a> TiledShape2DCircumferenceIterator<'a>
 {
-    pub fn new( shape: &'a mut TiledShapeDef2D ) -> Self
+    pub fn new( shape: &'a TiledShapeDef2D ) -> Self
     {
         Self { shape: shape, iter_index: 0 }
     }
@@ -56,13 +56,13 @@ impl<'a> Iterator for TiledShape2DCircumferenceIterator<'a>
 
 pub struct TiledShape2DSurfaceAreaIterator<'a>
 {
-    shape: &'a mut TiledShapeDef2D,
+    shape: &'a TiledShapeDef2D,
     iter_index: ( u32, u32 ),
 }
 
 impl<'a> TiledShape2DSurfaceAreaIterator<'a>
 {
-    pub fn new( shape: &'a mut TiledShapeDef2D ) -> Self
+    pub fn new( shape: &'a TiledShapeDef2D ) -> Self
     {
         Self { shape: shape, iter_index: ( 0, 0 ) }
     }

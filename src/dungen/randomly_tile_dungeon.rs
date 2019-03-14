@@ -11,8 +11,9 @@ extern crate rand;
 use rand::rngs::ThreadRng;
 
 // Internal includes.
+use crate::dungen::draw_funcs::{ DrawTileShape, FillTile, FillTileRectRandRange };
+use crate::tiled_shapes_2d::TiledRect;
 use crate::world::{ Mapping, Tilemap };
-use crate::dungen::draw_funcs::{ DrawTileRect, FillTile, FillTileRectRandRange };
 
 pub trait RandomlyTileDungeon
 {
@@ -34,11 +35,11 @@ impl RandomlyTileDungeon for Tilemap
         let ( width, height ) = self.bounds();
         self
             .fill_tile( 2 )
-            .draw_tile_rect( 0, 0, width, height, 1 )
+            .draw_tile_shape( &TiledRect::with_absolute_bounds( 0, 0, width as u32, height as u32 ), 1 )
             .fill_tile_rect_rand_range(
                 1, 1,
                 width - 2, height - 2,
-                1, 3,
+                start_range, end_range,
                 rnd
             )
     }
