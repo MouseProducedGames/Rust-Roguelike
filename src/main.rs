@@ -7,11 +7,11 @@ Documentation:
 **/
 
 // External dependencies
-use rand::Rng;
 
 // Internal dependencies.
+use std::ops::Range;
 mod creature;
-// mod creature_logic_none;
+mod dungen;
 mod faction;
 mod game_state;
 mod io;
@@ -32,22 +32,34 @@ use creature::{
     SightRange,
     Visibility
 };
-// use creature_logic_none::CreatureLogicNone;
+use dungen::Dungen;
+use dungen::draw_funcs::{ DrawTileRect, FillTile, FillTileRectRandRange };
 use faction::Faction;
 use game_state::GameState;
 use rrl_math::{ Position };
 use specs::{ Builder, /* System, */ World, RunNow };
 use io::Window;
-use world::{ Mapping, Tilemap };
+use world::Tilemap;
 
 fn main() {
     Window::init();
     let mut game_state = GameState::new();
     
-    let mut map: Tilemap = Tilemap::new( 80, 25 );
-    let ( map_width, map_height ) = map.bounds();
+    // let mut map: Tilemap = Tilemap::new( 80, 25 );
+    let mut map: Tilemap =
+        Tilemap::new( 80, 25 )
+        .fill_tile( 2 )
+        .draw_tile_rect( 0, 0, 80, 25, 1 )
+        .fill_tile_rect_rand_range(
+            1, 1,
+            79, 24,
+            1, 3,
+            &mut game_state.rng()
+        )
+        .finish();
+    // let ( map_width, map_height ) = map.bounds();
 
-    {
+    /* {
         for x in 0..map_width
         {
             *map.tile_type_mut(x, 0) = 1_u32;
@@ -75,7 +87,7 @@ fn main() {
                 *map.tile_type_mut( x, y ) = rng.gen_range( 1, 3 );
             }
         }
-    }
+    } */
 
     let mut world = World::new();
     world.add_resource( game_state );

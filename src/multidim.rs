@@ -73,3 +73,37 @@ impl<T> Multidim<T> where T: Copy + Clone + Default
         ( pos0 * self.len1 ) + pos1
     }
 }
+
+/* impl Copy for Vec<u32> {}
+
+impl Clone for Vec<u32>
+{
+    fn clone( &self ) -> Self
+    {
+        let mut output = Vec::<u32>::new();
+        output.resize( self.len() );
+        for i in self.len()
+        {
+            output[ i ] = self[ i ];
+        }
+
+        output;
+    }
+}
+
+impl Copy for Multidim<u32> {}
+
+impl Clone for Multidim<u32>
+{
+    fn clone( &self ) -> Self
+    {
+        let mut output = Multidim::new( self.len0(), self.len1() );
+        for i in self.values.len()
+        {
+            output.values[ i ] = self.values[ i ];
+        }
+
+        output;
+    }
+}
+*/
