@@ -33,6 +33,7 @@ use creature::{
     Visibility
 };
 // use creature_logic_none::CreatureLogicNone;
+use faction::Faction;
 use game_state::GameState;
 use rrl_math::{ Position };
 use specs::{ Builder, /* System, */ World, RunNow };
@@ -83,6 +84,7 @@ fn main() {
     world.add_resource( PlayerPosition( Position::new( 8, 5 ) ) );
     world.register::< CreatureLogicPlayer >();
     world.register::< CreatureLogicWander >();
+    world.register::< Faction >();
     world.register::< PlayerMarker >();
     world.register::< Position >();
     world.register::< SightRange >();
@@ -90,7 +92,8 @@ fn main() {
 
     world
         .create_entity()
-        .with( CreatureLogicPlayer {}) 
+        .with( CreatureLogicPlayer {} )
+        .with( Faction::new( 0 ) )
         .with( Position::new( 8, 5 ) )
         .with( PlayerMarker )
         .with( SightRange::new( 5 ) )
@@ -103,6 +106,7 @@ fn main() {
     world.
         create_entity()
         .with( CreatureLogicWander )
+        .with( Faction::new( 0 ) )
         .with( Position::new( 12, 8 ) )
         .with( SightRange::new( 5 ) )
         .with( Visibility::new() )
