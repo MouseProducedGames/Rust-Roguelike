@@ -9,7 +9,7 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::tiled_shapes_2d::{ TiledShape2DIterator, TiledRect };
+use crate::tiled_shapes_2d::{ TiledShape2DSurfaceAreaIterator, TiledRect };
 use crate::world::Tilemap ;
 use super::FillTileShape;
 
@@ -23,7 +23,7 @@ impl FillTile for Tilemap
     fn fill_tile( &mut self, tile_type: u32 ) -> &mut Tilemap
     {
         self.fill_tile_shape(
-            &mut TiledShape2DIterator::new(
+            &mut TiledShape2DSurfaceAreaIterator::new(
                 &mut TiledRect::with_absolute_bounds( 0, 0, self.width() as u32, self.height() as u32 )
             ),
             tile_type )

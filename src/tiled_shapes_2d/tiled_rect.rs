@@ -4,7 +4,7 @@ See license in the LICENSE file
 
 Documentation:
 
-**/
+ **/
 
 // External dependencies
 
@@ -62,7 +62,36 @@ impl TiledShapeDef2D for TiledRect
         half + half
     }
 
-    fn iter_next( &mut self, iter_index: &mut ( u32, u32 ) ) -> Option< ( u32, u32 ) >
+    fn iter_circumference( &mut self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
+    {
+        let ( width, height ) = ( self.width(), self.height() );
+        let index = *iter_index;
+        *iter_index += 1;
+        if index < width
+        {
+            return Some( ( index, 0 ) );
+        }
+        else if index < ( width + height )
+        {
+            return Some( ( ( width - 1 ), ( index - width ) ) );
+        }
+        else if index < ( width + height + width )
+        {
+            let temp = index - ( width + height );
+            return Some( ( temp, ( height - 1 ) ) );
+        }
+        else if index < ( width + height + width + height )
+        {
+            let temp = index - ( width + height + width );
+            return Some( ( 0, temp ) );
+        }
+        else
+        {
+            return None;
+        }
+    }
+    
+    fn iter_surface_area( &mut self, iter_index: &mut ( u32, u32 ) ) -> Option< ( u32, u32 ) >
     {
         iter_index.0 += 1;
 

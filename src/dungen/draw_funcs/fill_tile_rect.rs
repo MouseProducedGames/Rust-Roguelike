@@ -9,14 +9,15 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::tiled_shapes_2d::TiledShape2DIterator;
+use std::iter::Iterator;
+// use crate::tiled_shapes_2d::TiledShape2DIterator;
 use crate::world::Tilemap ;
 
 pub trait FillTileShape
 { 
     fn fill_tile_shape(
         &mut self,
-        shape: &mut TiledShape2DIterator,
+        shape: &mut Iterator< Item = ( u32, u32 )>,
         tile_type: u32
     ) -> &mut Tilemap;
 }
@@ -25,7 +26,7 @@ impl FillTileShape for Tilemap
 {
     fn fill_tile_shape(
         &mut self,
-        shape: &mut TiledShape2DIterator,
+        shape: &mut Iterator< Item = ( u32, u32 )>,
         tile_type: u32
     ) -> &mut Tilemap
     {

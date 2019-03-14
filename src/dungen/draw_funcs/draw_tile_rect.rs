@@ -10,6 +10,8 @@ Documentation:
 
 // Internal includes.
 use crate::world::Tilemap ;
+use crate::dungen::draw_funcs::FillTileShape;
+use crate::tiled_shapes_2d::{ TiledShape2DCircumferenceIterator, TiledRect };
 
 pub trait DrawTileRect
 { 
@@ -30,7 +32,14 @@ impl DrawTileRect for Tilemap
         tile_type: u32
     ) -> &mut Tilemap
     {
-        let ( right, bottom ) = ( left + width, top + height );
+        self.fill_tile_shape(
+            &mut TiledShape2DCircumferenceIterator::new(
+                &mut TiledRect::with_absolute_bounds( 0, 0, self.width() as u32, self.height() as u32 )
+            ),
+            tile_type
+        )
+
+        /* let ( right, bottom ) = ( left + width, top + height );
 
         {
             for x in left..right
@@ -50,6 +59,6 @@ impl DrawTileRect for Tilemap
             }
         }
 
-        self
+        self */
     }
 }
