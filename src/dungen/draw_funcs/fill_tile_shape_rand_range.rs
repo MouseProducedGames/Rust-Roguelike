@@ -12,14 +12,14 @@ use rand::Rng;
 use rand::rngs::ThreadRng;
 
 // Internal includes.
-use crate::tiled_shapes_2d::{ TiledShapeDef2D, TiledShape2DSurfaceAreaIterator };
+use crate::tiled_shapes_2d::{ TiledShape2D, TiledShape2DSurfaceAreaIterator };
 use crate::world::Tilemap ;
 
 pub trait FillTileShapeRandRange
 { 
     fn fill_tile_shape_rand_range(
         &mut self,
-        shape: &TiledShapeDef2D,
+        shape: &TiledShape2D,
         start_range: u32, end_range: u32,
         rnd: &mut ThreadRng
     ) -> &mut Tilemap;
@@ -29,7 +29,7 @@ impl FillTileShapeRandRange for Tilemap
 {
     fn fill_tile_shape_rand_range(
         &mut self,
-        shape: &TiledShapeDef2D,
+        shape: &TiledShape2D,
         start_range: u32, end_range: u32,
         rnd: &mut ThreadRng
     ) -> &mut Tilemap

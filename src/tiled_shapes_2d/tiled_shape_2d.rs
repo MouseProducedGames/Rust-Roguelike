@@ -11,7 +11,7 @@ Documentation:
 // Internal dependencies.
 use std::iter::Iterator;
 
-pub trait TiledShapeDef2D
+pub trait TiledShape2D
 {
     fn circumference( &self ) -> u32;
     
@@ -24,13 +24,13 @@ pub trait TiledShapeDef2D
 
 pub struct TiledShape2DCircumferenceIterator<'a>
 {
-    shape: &'a TiledShapeDef2D,
+    shape: &'a TiledShape2D,
     iter_index: u32,
 }
 
 impl<'a> TiledShape2DCircumferenceIterator<'a>
 {
-    pub fn new( shape: &'a TiledShapeDef2D ) -> Self
+    pub fn new( shape: &'a TiledShape2D ) -> Self
     {
         Self { shape: shape, iter_index: 0 }
     }
@@ -56,13 +56,13 @@ impl<'a> Iterator for TiledShape2DCircumferenceIterator<'a>
 
 pub struct TiledShape2DSurfaceAreaIterator<'a>
 {
-    shape: &'a TiledShapeDef2D,
+    shape: &'a TiledShape2D,
     iter_index: u32,
 }
 
 impl<'a> TiledShape2DSurfaceAreaIterator<'a>
 {
-    pub fn new( shape: &'a TiledShapeDef2D ) -> Self
+    pub fn new( shape: &'a TiledShape2D ) -> Self
     {
         Self { shape: shape, iter_index: 0 }
     }

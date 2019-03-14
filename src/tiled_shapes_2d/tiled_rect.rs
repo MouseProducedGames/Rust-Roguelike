@@ -9,7 +9,7 @@ Documentation:
 // External dependencies
 
 // Internal dependencies.
-use crate::tiled_shapes_2d::TiledShapeDef2D;
+use crate::tiled_shapes_2d::TiledShape2D;
 
 pub struct TiledRect
 {
@@ -53,7 +53,7 @@ impl TiledRect
     }
 }
 
-impl TiledShapeDef2D for TiledRect
+impl TiledShape2D for TiledRect
 {
     fn circumference( &self ) -> u32
     {

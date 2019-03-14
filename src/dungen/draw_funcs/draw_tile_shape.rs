@@ -11,13 +11,13 @@ Documentation:
 // Internal includes.
 use crate::world::Tilemap ;
 use crate::dungen::draw_funcs::FillTileShape;
-use crate::tiled_shapes_2d::{ TiledShape2DCircumferenceIterator, TiledShapeDef2D };
+use crate::tiled_shapes_2d::{ TiledShape2DCircumferenceIterator, TiledShape2D };
 
 pub trait DrawTileShape
 { 
     fn draw_tile_shape(
         &mut self,
-        shape: &TiledShapeDef2D,
+        shape: &TiledShape2D,
         tile_type: u32
     ) -> &mut Tilemap;
 }
@@ -26,7 +26,7 @@ impl DrawTileShape for Tilemap
 {
     fn draw_tile_shape(
         &mut self,
-        shape: &TiledShapeDef2D,
+        shape: &TiledShape2D,
         tile_type: u32
     ) -> &mut Tilemap
     {
