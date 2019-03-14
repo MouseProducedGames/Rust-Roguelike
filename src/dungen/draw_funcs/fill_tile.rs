@@ -9,8 +9,9 @@ Documentation:
 // External includes.
 
 // Internal includes.
+use crate::tiled_shapes_2d::{ TiledShape2DIterator, TiledRect };
 use crate::world::Tilemap ;
-use super::FillTileRect;
+use super::FillTileShape;
 
 pub trait FillTile
 { 
@@ -21,6 +22,10 @@ impl FillTile for Tilemap
 {
     fn fill_tile( &mut self, tile_type: u32 ) -> &mut Tilemap
     {
-        self.fill_tile_rect( 0, 0, self.width(), self.height(), tile_type )
+        self.fill_tile_shape(
+            &mut TiledShape2DIterator::new(
+                &mut TiledRect::with_absolute_bounds( 0, 0, self.width() as u32, self.height() as u32 )
+            ),
+            tile_type )
     }
 }

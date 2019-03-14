@@ -7,6 +7,7 @@ Documentation:
 **/
 
 // External dependencies
+use specs::{ Builder, /* System, */ World, RunNow };
 
 // Internal dependencies.
 mod creature;
@@ -17,6 +18,7 @@ mod io;
 mod rrl_math;
 mod multidim;
 mod multimap;
+mod tiled_shapes_2d;
 mod world;
 use creature::{
     CreatureDisplaySystem,
@@ -35,9 +37,9 @@ use dungen::{ Dungen, RandomlyTileDungeon };
 use dungen::draw_funcs::{ DrawTileRect, FillTile, FillTileRectRandRange };
 use faction::Faction;
 use game_state::GameState;
-use rrl_math::{ Position };
-use specs::{ Builder, /* System, */ World, RunNow };
 use io::Window;
+use rrl_math::{ Position };
+use tiled_shapes_2d::{ TiledRect, TiledShapeDef2D };
 use world::Tilemap;
 
 fn main() {

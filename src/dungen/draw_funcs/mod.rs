@@ -15,5 +15,5 @@ pub mod fill_tile_rect;
 pub mod fill_tile_rect_rand_range;
 pub use draw_tile_rect::DrawTileRect;
 pub use fill_tile::FillTile;
-pub use fill_tile_rect::FillTileRect;
+pub use fill_tile_rect::FillTileShape;
 pub use fill_tile_rect_rand_range::FillTileRectRandRange;

@@ -9,35 +9,29 @@ Documentation:
 // External includes.
 
 // Internal includes.
+use crate::tiled_shapes_2d::TiledShape2DIterator;
 use crate::world::Tilemap ;
 
-pub trait FillTileRect
+pub trait FillTileShape
 { 
-    fn fill_tile_rect(
+    fn fill_tile_shape(
         &mut self,
-        left: usize, top: usize,
-        width: usize, height: usize,
+        shape: &mut TiledShape2DIterator,
         tile_type: u32
     ) -> &mut Tilemap;
 }
 
-impl FillTileRect for Tilemap
+impl FillTileShape for Tilemap
 {
-    fn fill_tile_rect(
+    fn fill_tile_shape(
         &mut self,
-        left: usize, top: usize,
-        width: usize, height: usize,
+        shape: &mut TiledShape2DIterator,
         tile_type: u32
     ) -> &mut Tilemap
     {
-        let ( right, bottom ) = ( left + width, top + height );
-        
-        for y in top..bottom
+        for ( x, y ) in shape
         {
-            for x in left..right
-            {
-                *self.tile_type_mut( x, y ) = tile_type;
-            }
+            *self.tile_type_mut( x as usize, y as usize ) = tile_type;
         }
         
         self
