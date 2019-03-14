@@ -14,6 +14,7 @@ pub mod creature_display_system;
 pub mod creature_logic_player;
 pub mod creature_logic_wander;
 pub mod creature_visibility_system;
+pub mod love_fear_hate;
 pub mod player_display_system;
 pub mod player_marker;
 pub mod player_position;
