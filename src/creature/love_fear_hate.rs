@@ -43,7 +43,7 @@ impl LoveFearHate
         self.value
     }
 
-    pub fn love_value( &self, my_rel_str: f32 ) -> f32
+    pub fn calc_love( &self, my_rel_str: f32 ) -> f32
     {
         match self.value > 0.0 {
             // If their relative strength is greater than mine,
@@ -53,7 +53,7 @@ impl LoveFearHate
         }
     }
 
-    pub fn fear_value( &self, my_rel_str: f32 ) -> f32
+    pub fn calc_fear( &self, my_rel_str: f32 ) -> f32
     {
         match self.value < 0.0 {
             // If my relative strength is less than theirs,
@@ -63,7 +63,7 @@ impl LoveFearHate
         }
     }
 
-    pub fn hate_value( &self, my_rel_str: f32 ) -> f32
+    pub fn calc_hate( &self, my_rel_str: f32 ) -> f32
     {
         match self.value < 0.0 {
             // If my relative strength is greater than theirs,
