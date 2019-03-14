@@ -30,10 +30,12 @@ impl DrawTileShape for Tilemap
         tile_type: u32
     ) -> &mut Tilemap
     {
-        self.fill_tile_shape(
-            &mut TiledShape2DCircumferenceIterator::new( shape ),
-            tile_type
-        )
+        for ( x, y ) in TiledShape2DCircumferenceIterator::new( shape )
+        {
+            *self.tile_type_mut( x as usize, y as usize ) = tile_type;
+        }
+
+        self
 
         /* let ( right, bottom ) = ( left + width, top + height );
 

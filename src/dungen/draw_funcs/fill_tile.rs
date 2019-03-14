@@ -23,9 +23,8 @@ impl FillTile for Tilemap
     fn fill_tile( &mut self, tile_type: u32 ) -> &mut Tilemap
     {
         self.fill_tile_shape(
-            &mut TiledShape2DSurfaceAreaIterator::new(
-                &mut TiledRect::with_absolute_bounds( 0, 0, self.width() as u32, self.height() as u32 )
-            ),
-            tile_type )
+            &TiledRect::with_absolute_bounds( 0, 0, self.width() as u32, self.height() as u32 ),
+            tile_type
+        )
     }
 }
