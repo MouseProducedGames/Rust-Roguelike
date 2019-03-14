@@ -91,23 +91,18 @@ impl TiledShapeDef2D for TiledRect
         }
     }
     
-    fn iter_surface_area( &self, iter_index: &mut ( u32, u32 ) ) -> Option< ( u32, u32 ) >
+    fn iter_surface_area( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
     {
-        iter_index.0 += 1;
-
-        if iter_index.0 >= self.right
+        let ( width, height ) = ( self.width(), self.height() );
+        let index = *iter_index;
+        *iter_index += 1;
+        let x = index % width;
+        let y = index / width;
+        if y == height
         {
-            iter_index.0 = self.left;
-            iter_index.1 += 1;
-
-            if iter_index.1 >= self.bottom
-            {
-                *iter_index = ( 0, 0 );
-                return None;
-            }
+            return None;
         }
-
-        Some( *iter_index )
+        return Some( ( ( self.left + x ), ( self.top + y ) ) );
     }
     
     fn surface_area( &self ) -> u32
