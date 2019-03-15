@@ -36,12 +36,12 @@ impl TileTypeData
         }
     } */
 
-    pub fn passable(&self) -> bool
+    pub fn passable( self ) -> bool
     {
         self.passable
     }
 
-    pub fn transparent(&self) -> bool
+    pub fn transparent( self ) -> bool
     {
         self.transparent
     }

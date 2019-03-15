@@ -70,12 +70,12 @@ impl Window
 
     pub fn get_char(&self) -> char
     {
-        return match
-            std::char::from_u32(ncurses::getch() as u32)
-            {
-                None => ' ',
-                Some(v) => v,
-            };
+        match
+            std::char::from_u32( ncurses::getch() as u32 )
+        {
+            None => ' ',
+            Some(v) => v,
+        } 
     }
 
     pub fn present(&mut self)
@@ -103,7 +103,7 @@ impl Window
                     if front_ch == back_ch
                     {
                         // lastch = front_ch;
-                        repeat_count = repeat_count + 1;
+                        repeat_count += 1;
                         if repeat_count >= 5
                         {
                             ncurses::refresh();
@@ -114,12 +114,13 @@ impl Window
         
                     if lastch == front_ch
                     {
-                        repeat_count = repeat_count + 1;
+                        repeat_count += 1;
                     }
                     else
                     {
                         repeat_count = 1;
                     }
+                    
                     if repeat_count >= 5
                     {
                         ncurses::refresh();

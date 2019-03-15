@@ -32,7 +32,7 @@ impl<'a> TiledShape2DCircumferenceIterator<'a>
 {
     pub fn new( shape: &'a TiledShape2D ) -> Self
     {
-        Self { shape: shape, iter_index: 0 }
+        Self { shape, iter_index: 0 }
     }
 
     fn iter_next( &mut self ) -> Option< ( u32, u32 ) >
@@ -64,7 +64,7 @@ impl<'a> TiledShape2DSurfaceAreaIterator<'a>
 {
     pub fn new( shape: &'a TiledShape2D ) -> Self
     {
-        Self { shape: shape, iter_index: 0 }
+        Self { shape, iter_index: 0 }
     }
 
     fn iter_next( &mut self ) -> Option< ( u32, u32 ) >

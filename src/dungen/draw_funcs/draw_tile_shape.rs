@@ -10,7 +10,6 @@ Documentation:
 
 // Internal includes.
 use crate::world::Tilemap ;
-use crate::dungen::draw_funcs::FillTileShape;
 use crate::tiled_shapes_2d::{ TiledShape2DCircumferenceIterator, TiledShape2D };
 
 pub trait DrawTileShape

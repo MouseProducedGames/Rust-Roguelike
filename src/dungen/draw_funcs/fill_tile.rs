@@ -9,7 +9,7 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::tiled_shapes_2d::{ TiledShape2DSurfaceAreaIterator, TiledRect };
+use crate::tiled_shapes_2d::TiledRect;
 use crate::world::Tilemap ;
 use super::FillTileShape;
 

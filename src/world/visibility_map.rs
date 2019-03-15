@@ -46,11 +46,7 @@ impl VisibilityMap
         if self.is_in_bounds( pos_x, pos_y )
         {
             *self.values.value( pos_x, pos_y )
-        }
-        else
-        {
-            VisibilityType::None
-        }
+        } else { VisibilityType::None }
     }
 
     pub fn value_pos(&self, pos: Position ) -> VisibilityType
@@ -59,13 +55,10 @@ impl VisibilityMap
         {
             self.value( pos.x as usize, pos.y as usize )
         }
-        else
-        {
-            VisibilityType::None
-        }
+        else { VisibilityType::None }
     }
 
-    pub fn value_mut<'a>(&'a mut self, pos_x: usize, pos_y: usize) -> &'a mut VisibilityType
+    pub fn value_mut(&mut self, pos_x: usize, pos_y: usize) -> &mut VisibilityType
     {
         self.values.value_mut( pos_x, pos_y )
     }

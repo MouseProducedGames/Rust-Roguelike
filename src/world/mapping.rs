@@ -36,12 +36,12 @@ pub trait Mapping
 
     fn is_i32_in_height(&self, pos_y: i32) -> bool
     {
-        return pos_y >= 0 && self.is_in_height( pos_y as usize)
+        pos_y >= 0 && self.is_in_height( pos_y as usize )
     }
 
     fn is_i32_in_width(&self, pos_x: i32) -> bool
     {
-        return pos_x >= 0 && self.is_in_width( pos_x as usize)
+        pos_x >= 0 && self.is_in_width( pos_x as usize )
     }
 
     fn is_in_height(&self, pos_y: usize) -> bool

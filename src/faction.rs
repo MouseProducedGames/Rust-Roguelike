@@ -21,7 +21,7 @@ impl Faction
 {
     pub fn new( id: u32 ) -> Self
     {
-        Self { id: id }
+        Self { id }
     }
 }
 

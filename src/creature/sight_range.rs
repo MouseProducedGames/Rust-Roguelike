@@ -20,7 +20,7 @@ impl SightRange
 {
     pub fn new( value: i32 ) -> Self
     {
-        Self { value: value }
+        Self { value }
     }
     
     pub fn sight_range( &self ) -> i32

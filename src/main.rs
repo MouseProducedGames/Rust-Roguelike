@@ -33,7 +33,7 @@ use creature::{
     SightRange,
     Visibility
 };
-use dungen::{ Dungen, RandomlySplitDungeon, RandomlyTileDungeon, SplitType };
+use dungen::{ Dungen, RandomlySplitDungeon, /* RandomlyTileDungeon, */ SplitType };
 use faction::Faction;
 use game_state::GameState;
 use io::Window;
@@ -46,7 +46,7 @@ fn main() {
     let mut game_state = GameState::new();
     
     // let mut map: Tilemap = Tilemap::new( 80, 25 );
-    let mut map: Tilemap =
+    let map: Tilemap =
         Tilemap::new( 80, 40 )
     // .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
         .randomly_split_dungeon(

@@ -65,10 +65,7 @@ impl Tilemap
         {
             *self.tiles.value( pos_x, pos_y )
         }
-        else
-        {
-            TILE_TYPE_INDEX_VOID
-        }
+        else { TILE_TYPE_INDEX_VOID }
     }
 
     pub fn tile_type_mut(&mut self, pos_x: Width, pos_y: Height) -> &mut TileType
@@ -82,10 +79,7 @@ impl Tilemap
         {
             self.tile_type(pos.x as usize, pos.y as usize)
         }
-        else
-        {
-            TILE_TYPE_INDEX_VOID
-        }
+        else { TILE_TYPE_INDEX_VOID }
     }
 
     pub fn _transparent(&self, pos_x: Width, pos_y: Height) -> bool

@@ -12,15 +12,15 @@ use rand::Rng;
 use rand::rngs::ThreadRng;
 
 // Internal includes.
-use crate::dungen::draw_funcs::{ DrawTileShape, FillTileShape, FillTileShapeRandRange };
+use crate::dungen::draw_funcs::{ DrawTileShape, FillTileShape };
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{ Mapping, Tilemap };
+use crate::world::Tilemap;
 
 #[derive( Copy, Clone, PartialEq, Eq )]
 pub enum SplitType
 {
     LongestDimension,
-    Random
+    _Random
 }
 
 pub trait RandomlySplitDungeon
@@ -48,11 +48,13 @@ impl RandomlySplitDungeon for Tilemap
             ( area.left(), area.top(), area.right(), area.bottom() );
         let ( width, height ) = ( area.width(), area.height() );
 
-        match ( ( width > min_width ) && ( height > min_height ) ) ||
-         ( ( split_type == SplitType::LongestDimension ) && ( ( width > min_width ) || ( height > min_height ) ) ) {
-            true => (),
-            false => return self,
-        }
+        if ( ( width > min_width ) && ( height > min_height ) ) ||
+            (
+                ( split_type == SplitType::LongestDimension ) &&
+                    ( ( width > min_width ) || ( height > min_height ) )
+            )
+        {
+        } else { return self; }
 
         
         let split_width;
@@ -72,33 +74,33 @@ impl RandomlySplitDungeon for Tilemap
                     split_width = rnd.gen_bool( 0.5 );
                 }
             },
-            SplitType::Random => {
+            SplitType::_Random => {
                 split_width = rnd.gen_bool( 0.5 );
             }
         }
 
         /* let ( put_door_x, put_door_y );
         match split_width {
-            true => {
-                split_on = width / 2;
-            },
-            false => {
-                split_on = height / 2;
-            }
-        } */
+        true => {
+        split_on = width / 2;
+    },
+        false => {
+        split_on = height / 2;
+    }
+    } */
 
         let split_min;
         let split_max;
         let ( put_door_x, put_door_y );
-        match split_width {
-            true => {
-                split_min = min_width;
-                split_max = width - min_width;
-            },
-            false => {
-                split_min = min_height;
-                split_max = height - min_height;
-            }
+        if split_width
+        {
+            split_min = min_width;
+            split_max = width - min_width;
+        }
+        else
+        {
+            split_min = min_height;
+            split_max = height - min_height;
         }
 
         
@@ -119,33 +121,33 @@ impl RandomlySplitDungeon for Tilemap
         let split_line;
         let ( room_left0, room_top0, room_right0, room_bottom0 );
         let ( room_left1, room_top1, room_right1, room_bottom1 );
-        match split_width {
-            true => {
-                split_line =
-                    TiledRect::with_absolute_bounds(
-                        left + split_on, top,
-                        left + split_on, bottom
-                    );
-                put_door_x = left + split_on;
-                put_door_y = rnd.gen_range( top + 1, bottom - 1 );
-                room_left0 = left; room_top0 = top;
-                room_right0 = left + split_on; room_bottom0 = bottom;
-                room_left1 = left + split_on; room_top1 = top;
-                room_right1 = right; room_bottom1 = bottom;
-            },
-            false => {
-                split_line =
-                    TiledRect::with_absolute_bounds(
-                        left, top + split_on,
-                        right, top + split_on
-                    );
-                put_door_x = rnd.gen_range( left + 1, right - 1 );
-                put_door_y = top + split_on;
-                room_left0 = left; room_top0 = top;
-                room_right0 = right; room_bottom0 = top + split_on;
-                room_left1 = left; room_top1 = top + split_on;
-                room_right1 = right; room_bottom1 = bottom;
-            },
+        if split_width
+        {
+            split_line =
+                TiledRect::with_absolute_bounds(
+                    left + split_on, top,
+                    left + split_on, bottom
+                );
+            put_door_x = left + split_on;
+            put_door_y = rnd.gen_range( top + 1, bottom - 1 );
+            room_left0 = left; room_top0 = top;
+            room_right0 = left + split_on; room_bottom0 = bottom;
+            room_left1 = left + split_on; room_top1 = top;
+            room_right1 = right; room_bottom1 = bottom;
+        }
+        else
+        {
+            split_line =
+                TiledRect::with_absolute_bounds(
+                    left, top + split_on,
+                    right, top + split_on
+                );
+            put_door_x = rnd.gen_range( left + 1, right - 1 );
+            put_door_y = top + split_on;
+            room_left0 = left; room_top0 = top;
+            room_right0 = right; room_bottom0 = top + split_on;
+            room_left1 = left; room_top1 = top + split_on;
+            room_right1 = right; room_bottom1 = bottom;
         }
 
         self

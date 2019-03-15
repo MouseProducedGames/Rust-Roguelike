@@ -29,12 +29,11 @@ impl TiledRect
         let ( use_left, use_right, use_top, use_bottom );
         if left > right
         { use_right = left; use_left = right; }
-        else
-        { use_left = left; use_right = right; }
+        else { use_left = left; use_right = right; }
+
         if top > bottom
         { use_top = bottom; use_bottom = top; }
-        else
-        { use_top = top; use_bottom = bottom; }
+        else { use_top = top; use_bottom = bottom; }
 
         Self {
             left: use_left, top: use_top,
@@ -89,26 +88,23 @@ impl TiledShape2D for TiledRect
         *iter_index += 1;
         if index < width
         {
-            return Some( ( self.left + index, self.top ) );
+            Some( ( self.left + index, self.top ) )
         }
         else if index < ( width + height )
         {
-            return Some( ( self.right, self.top + ( index - width ) ) );
+            Some( ( self.right, self.top + ( index - width ) ) )
         }
         else if index < ( width + height + width )
         {
             let temp = index - ( width + height );
-            return Some( ( self.left + temp, self.bottom ) );
+            Some( ( self.left + temp, self.bottom ) )
         }
         else if index < ( width + height + width + height )
         {
             let temp = index - ( width + height + width );
-            return Some( ( self.left, self.top + temp ) );
+            Some( ( self.left, self.top + temp ) )
         }
-        else
-        {
-            return None;
-        }
+        else { None }
     }
     
     fn iter_surface_area( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
@@ -122,7 +118,8 @@ impl TiledShape2D for TiledRect
         {
             return None;
         }
-        return Some( ( ( self.left + x ), ( self.top + y ) ) );
+        
+        Some( ( ( self.left + x ), ( self.top + y ) ) )
     }
     
     fn surface_area( &self ) -> u32

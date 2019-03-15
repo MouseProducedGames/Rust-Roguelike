@@ -31,11 +31,11 @@ impl<T> Multidim<T> where T: Copy + Clone + Default
         let mut output: Self =
             Self {
                 values: Vec::<T>::new(),
-                len0: len0,
-                len1: len1,
+                len0,
+                len1,
             };
         output.values.resize( len0 * len1, Default::default() );
-        return output;
+        output
     }
     
     pub fn bounds( &self ) -> ( usize, usize )
@@ -62,7 +62,7 @@ impl<T> Multidim<T> where T: Copy + Clone + Default
         &self.values[ self.get_index( pos0, pos1 ) ]
     }
 
-    pub fn value_mut<'a>( &'a mut self, pos0: usize, pos1: usize ) -> &'a mut T
+    pub fn value_mut( &mut self, pos0: usize, pos1: usize ) -> &mut T
     {
         let index = self.get_index( pos0, pos1 );
         &mut self.values[ index ]
