@@ -15,8 +15,8 @@ use crate::rrl_math::{ Displacement, Position };
 use crate::world::{ Tilemap, VisibilityMap, VisibilityType };
 use super::multidim::Multidim;
 
-static MAP_GRAPHICS: [char; 3] = [ ' ', '#', '.' ];
-static SEEN_MAP_GRAPHICS: [char; 3] = [ ' ', 'x', '-' ];
+static MAP_GRAPHICS: [ char; 4 ] = [ ' ', '#', '.', '+' ];
+static SEEN_MAP_GRAPHICS: [ char; 4 ] = [ ' ', 'x', '-', '=' ];
 
 pub struct Window
 {

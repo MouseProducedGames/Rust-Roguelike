@@ -29,7 +29,7 @@ pub trait RandomlySplitDungeon
         &mut self,
         area: &TiledRect, split_type: SplitType,
         min_width: u32, min_height: u32,
-        door_tile_type: u32, wall_tile_type: u32,
+        door_tile_type: u32, floor_tile_type: u32, wall_tile_type: u32,
         rnd: &mut ThreadRng
     ) -> &mut Tilemap;
 }
@@ -40,7 +40,7 @@ impl RandomlySplitDungeon for Tilemap
         &mut self,
         area: &TiledRect, split_type: SplitType,
         min_width: u32, min_height: u32,
-        door_tile_type: u32, wall_tile_type: u32,
+        door_tile_type: u32, floor_tile_type: u32, wall_tile_type: u32,
         rnd: &mut ThreadRng
     ) -> &mut Tilemap
     {
@@ -124,7 +124,7 @@ impl RandomlySplitDungeon for Tilemap
                 split_line =
                     TiledRect::with_absolute_bounds(
                         left + split_on, top,
-                        left + split_on + 1, bottom
+                        left + split_on, bottom
                     );
                 put_door_x = left + split_on;
                 put_door_y = rnd.gen_range( top + 1, bottom - 1 );
@@ -137,7 +137,7 @@ impl RandomlySplitDungeon for Tilemap
                 split_line =
                     TiledRect::with_absolute_bounds(
                         left, top + split_on,
-                        right, top + split_on + 1
+                        right, top + split_on
                     );
                 put_door_x = rnd.gen_range( left + 1, right - 1 );
                 put_door_y = top + split_on;
@@ -149,26 +149,26 @@ impl RandomlySplitDungeon for Tilemap
         }
 
         self
-            .fill_tile_shape( &TiledRect::with_absolute_bounds( left, top, right, bottom ), door_tile_type )
-            .draw_tile_shape( &TiledRect::with_absolute_bounds( left, top, right, bottom ), wall_tile_type );
-        // .fill_tile_shape( &split_line, 1 );
+            .fill_tile_shape( &TiledRect::with_absolute_bounds( left, top, right, bottom ), floor_tile_type )
+            .draw_tile_shape( &TiledRect::with_absolute_bounds( left, top, right, bottom ), wall_tile_type )
+            .fill_tile_shape( &split_line, wall_tile_type );
         let split_type0 = split_type;
         let split_type1 = split_type;
         self.randomly_split_dungeon(
             &TiledRect::with_absolute_bounds( room_left0, room_top0, room_right0, room_bottom0 ),
             split_type0,
             min_width, min_height,
-            door_tile_type, wall_tile_type,
+            door_tile_type, floor_tile_type, wall_tile_type,
             rnd
         );
         self.randomly_split_dungeon(
             &TiledRect::with_absolute_bounds( room_left1, room_top1, room_right1, room_bottom1 ),
             split_type1,
             min_width, min_height,
-            door_tile_type, wall_tile_type,
+            door_tile_type, floor_tile_type, wall_tile_type,
             rnd
         );
-        *self.tile_type_mut( put_door_x as usize, put_door_y as usize ) = 2;
+        *self.tile_type_mut( put_door_x as usize, put_door_y as usize ) = door_tile_type;
         self
     }
 }

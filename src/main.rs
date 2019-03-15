@@ -47,13 +47,13 @@ fn main() {
     
     // let mut map: Tilemap = Tilemap::new( 80, 25 );
     let mut map: Tilemap =
-        Tilemap::new( 80, 25 )
+        Tilemap::new( 80, 40 )
     // .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
         .randomly_split_dungeon(
-            &TiledRect::with_absolute_bounds( 0, 0, 79, 24 ),
+            &TiledRect::with_absolute_bounds( 0, 0, 79, 39 ),
             SplitType::LongestDimension,
             6, 6,
-            2, 1,
+            3, 2, 1,
             &mut game_state.rng() )
         .finish();
     // let ( map_width, map_height ) = map.bounds();
