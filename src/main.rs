@@ -33,11 +33,12 @@ use creature::{
     SightRange,
     Visibility
 };
-use dungen::{ Dungen, RandomlyTileDungeon };
+use dungen::{ Dungen, RandomlySplitDungeon, RandomlyTileDungeon, SplitType };
 use faction::Faction;
 use game_state::GameState;
 use io::Window;
 use rrl_math::{ Position };
+use tiled_shapes_2d::TiledRect;
 use world::Tilemap;
 
 fn main() {
@@ -47,7 +48,13 @@ fn main() {
     // let mut map: Tilemap = Tilemap::new( 80, 25 );
     let mut map: Tilemap =
         Tilemap::new( 80, 25 )
-        .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
+    // .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
+        .randomly_split_dungeon(
+            &TiledRect::with_absolute_bounds( 0, 0, 79, 24 ),
+            SplitType::LongestDimension,
+            6, 6,
+            2, 1,
+            &mut game_state.rng() )
         .finish();
     // let ( map_width, map_height ) = map.bounds();
 

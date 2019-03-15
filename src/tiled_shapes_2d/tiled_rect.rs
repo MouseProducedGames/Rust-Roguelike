@@ -42,14 +42,34 @@ impl TiledRect
         }
     }
 
+    pub fn bottom( &self ) -> u32
+    {
+        self.bottom
+    }
+    
     pub fn height( &self ) -> u32
     {
-        self.bottom - self.top
+        ( self.bottom - self.top ) + 1
+    }
+
+    pub fn left( &self ) -> u32
+    {
+        self.left
+    }
+    
+    pub fn right( &self ) -> u32
+    {
+        self.right
+    }
+    
+    pub fn top( &self ) -> u32
+    {
+        self.top
     }
     
     pub fn width( &self ) -> u32
     {
-        self.right - self.left
+        ( self.right - self.left ) + 1
     }
 }
 
@@ -69,21 +89,21 @@ impl TiledShape2D for TiledRect
         *iter_index += 1;
         if index < width
         {
-            return Some( ( index, 0 ) );
+            return Some( ( self.left + index, self.top ) );
         }
         else if index < ( width + height )
         {
-            return Some( ( ( width - 1 ), ( index - width ) ) );
+            return Some( ( self.right, self.top + ( index - width ) ) );
         }
         else if index < ( width + height + width )
         {
             let temp = index - ( width + height );
-            return Some( ( temp, ( height - 1 ) ) );
+            return Some( ( self.left + temp, self.bottom ) );
         }
         else if index < ( width + height + width + height )
         {
             let temp = index - ( width + height + width );
-            return Some( ( 0, temp ) );
+            return Some( ( self.left, self.top + temp ) );
         }
         else
         {
