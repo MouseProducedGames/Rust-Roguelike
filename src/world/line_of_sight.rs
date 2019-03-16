@@ -8,9 +8,9 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
 {
     let sight_range_sqr = f64::from( sight_range * sight_range );
 
-    for y in -( sight_range + 1 )..=sight_range
+    for y in -( sight_range + 1 )..=( sight_range + 1 )
     {
-        for x in -( sight_range + 1 )..=sight_range
+        for x in -( sight_range + 1 )..=( sight_range + 1 )
         {
             let check_pos = pos + Displacement::new( x, y );
             if visibility.is_pos_in_bounds( check_pos ) &&
@@ -21,9 +21,9 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
         }
     }
     
-    for to_y in -sight_range..sight_range
+    for to_y in -sight_range..=sight_range
     {
-        for to_x in -sight_range..sight_range
+        for to_x in -sight_range..=sight_range
         {
             let disp = Displacement::new( to_x, to_y );
 
@@ -33,6 +33,8 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
             let dist = ( ( disp_x * disp_x ) + ( disp_y * disp_y ) ).sqrt();
             let disp_norm_x = disp_x / dist;
             let disp_norm_y = disp_y / dist;
+            let disp_move_x = disp_norm_x / 2.0;
+            let disp_move_y = disp_norm_y / 2.0;
             let mut move_pos_x: f64 = 0.0;
             let mut move_pos_y: f64 = 0.0;
             let mut check_pos_x = f64::from( pos.x ) + 0.5;
@@ -50,10 +52,10 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
                     break;
                 }
 
-                check_pos_x += disp_norm_x;
-                check_pos_y += disp_norm_y;
-                move_pos_x += disp_norm_x;
-                move_pos_y += disp_norm_y;
+                check_pos_x += disp_move_x;
+                check_pos_y += disp_move_y;
+                move_pos_x += disp_move_x;
+                move_pos_y += disp_move_y;
             }
         }
     }
