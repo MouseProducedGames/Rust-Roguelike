@@ -46,10 +46,10 @@ fn main() {
     let mut game_state = GameState::new();
     
     let map: Tilemap =
-        Tilemap::new( 80, 40 )
+        Tilemap::new( 40, 30 )
     // .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
         .split_dungeon(
-            &TiledRect::with_absolute_bounds( 0, 0, 79, 39 ),
+            &TiledRect::with_absolute_bounds( 0, 0, 39, 29 ),
             SplitType::LongestDimension,
             Bounds { width: 6, height: 6 },
             3, 2, 1,
