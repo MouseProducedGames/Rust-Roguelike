@@ -74,6 +74,11 @@ impl TiledRect
 
 impl TiledShape2D for TiledRect
 {
+    fn bottom( &self ) -> u32
+    {
+        self.bottom()
+    }
+
     fn circumference( &self ) -> u32
     {
         // Should be optimized: TWo gets, two adds, and a return.
@@ -122,8 +127,23 @@ impl TiledShape2D for TiledRect
         Some( ( ( self.left + x ), ( self.top + y ) ) )
     }
     
+    fn left( &self ) -> u32
+    {
+        self.left()
+    }
+
+    fn right( &self ) -> u32
+    {
+        self.right()
+    }
+
     fn surface_area( &self ) -> u32
     {
         self.height() * self.width()
+    }
+
+    fn top( &self ) -> u32
+    {
+        self.top()
     }
 }

@@ -197,7 +197,7 @@ impl TiledArea for TiledAreaFilter
 {
     fn bottom( &self ) -> u32
     {
-        self.area.bottom()
+        self.area.bottom().min( self.shape_filter.bottom() )
     }
     
     fn circumference( &self ) -> u32
@@ -212,7 +212,7 @@ impl TiledArea for TiledAreaFilter
 
     fn height( &self ) -> u32
     {
-        self.area.height()
+        self.bottom() - self.top()
     }
 
     fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
@@ -227,12 +227,12 @@ impl TiledArea for TiledAreaFilter
     
     fn left( &self ) -> u32
     {
-        self.area.left()
+        self.area.left().max( self.shape_filter.left() )
     }
     
     fn right( &self ) -> u32
     {
-        self.area.right()
+        self.area.right().min( self.shape_filter.right() )
     }
     
     fn surface_area( &self ) -> u32
@@ -252,17 +252,22 @@ impl TiledArea for TiledAreaFilter
 
     fn top( &self ) -> u32
     {
-        self.area.top()
+        self.area.top().max( self.shape_filter.top() )
     }
     
     fn width( &self ) -> u32
     {
-        self.area.width()
+        self.right() - self.left()
     }
 }
 
 impl TiledShape2D for TiledArea
 {
+    fn bottom( &self ) -> u32
+    {
+        TiledArea::bottom( self )
+    }
+
     fn circumference( &self ) -> u32
     {
         TiledArea::circumference( self )
@@ -278,14 +283,34 @@ impl TiledShape2D for TiledArea
         TiledArea::iter_surface_area( self, iter_index )
     }
 
+    fn left( &self ) -> u32
+    {
+        TiledArea::left( self )
+    }
+
+    fn right( &self ) -> u32
+    {
+        TiledArea::right( self )
+    }
+
     fn surface_area( &self ) -> u32
     {
         TiledArea::surface_area( self )
+    }
+
+    fn top( &self ) -> u32
+    {
+        TiledArea::top( self )
     }
 }
 
 impl TiledShape2D for Box<dyn TiledArea>
 {
+    fn bottom( &self ) -> u32
+    {
+        self.bottom()
+    }
+    
     fn circumference( &self ) -> u32
     {
         self.circumference()
@@ -301,8 +326,23 @@ impl TiledShape2D for Box<dyn TiledArea>
         self.iter_surface_area( iter_index )
     }
 
+    fn left( &self ) -> u32
+    {
+        self.left()
+    }
+    
+    fn right( &self ) -> u32
+    {
+        self.right()
+    }
+    
     fn surface_area( &self ) -> u32
     {
         self.surface_area()
+    }
+
+    fn top( &self ) -> u32
+    {
+        self.top()
     }
 }

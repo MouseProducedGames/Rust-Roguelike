@@ -13,13 +13,21 @@ use std::iter::Iterator;
 
 pub trait TiledShape2D
 {
+    fn bottom( &self ) -> u32;
+    
     fn circumference( &self ) -> u32;
     
     fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32) >;
     
     fn iter_surface_area( &self, iter_index: &mut u32 ) -> Option< ( u32, u32) >;
+
+    fn left( &self ) -> u32;
+    
+    fn right( &self ) -> u32;
     
     fn surface_area( &self ) -> u32;
+
+    fn top( &self ) -> u32;
 }
 
 pub struct TiledShape2DCircumferenceIterator<'a>
