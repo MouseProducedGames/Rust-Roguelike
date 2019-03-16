@@ -48,10 +48,6 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
 
         for ( _logic, pos, _ ) in ( &mut logic, &mut pos, &player_marker ).join()
         { 
-//             let game_state = logic.game_state;
-            
-            // get_char refreshes the screen. Why??
-            // let command = game_state.window().get_char();
             let command = window.get_char();
                 
             let target_move;

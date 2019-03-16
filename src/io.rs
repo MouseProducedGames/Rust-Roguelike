@@ -167,45 +167,8 @@ impl Window
         // self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
     }
 
-    /* pub fn write_creatures<'a, TEnumerable>(
-        &mut self,
-        view_pos: Position,
-        creatures: TEnumerable,
-        _player_index: usize
-    ) where TEnumerable: Iterator<Item = &'a CreatureView>
-    {
-        let back_buffer = &mut self.buffers[self.back_buffer_index];
-        // let player_creature = &creatures[player_index];
-        // for creature_index in 0..creatures.len()
-        for current_creature in creatures
-        {
-            // let pc_pos = player_creature.get_position();
-            // let current_creature = &creatures[creature_index];
-            // let ch = if creature_index == player_index { '@' } else { 'C' };
-            let ch = 'C';
-            let cc_pos = current_creature.get_position();
-            let dist = cc_pos - view_pos;
-            if (dist.x < -17) || (dist.x > 17) ||
-               (dist.y < -17) || (dist.y > 17)
-            {
-                continue;
-            }
-
-            let ( display_pos_x, display_pos_y ) = (18 + dist.x, 18 + dist.y);
-            *back_buffer.value_mut(display_pos_y as usize, display_pos_x as usize) = ch;
-        }
-    } */
-
     pub fn write_map( &mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap )
     {
-        /* let view_pos = viewpoint_creature.get_position();
-        let visibility;
-        match viewpoint_creature.get_visibility(map)
-        {
-            Some(vis_map) => visibility = vis_map,
-            _ => return,
-        } */
-        
         let back_buffer = &mut self.buffers[ self.back_buffer_index ];
         for view_addend_y in -17..18_i32
         {

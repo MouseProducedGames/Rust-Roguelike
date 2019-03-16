@@ -79,16 +79,6 @@ impl RandomlySplitDungeon for Tilemap
             }
         }
 
-        /* let ( put_door_x, put_door_y );
-        match split_width {
-        true => {
-        split_on = width / 2;
-    },
-        false => {
-        split_on = height / 2;
-    }
-    } */
-
         let split_min;
         let split_max;
         let ( put_door_x, put_door_y );

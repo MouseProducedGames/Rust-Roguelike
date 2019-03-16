@@ -57,7 +57,7 @@ impl<'a> Iterator for TiledShape2DCircumferenceIterator<'a>
 pub struct TiledShape2DSurfaceAreaIterator<'a>
 {
     shape: &'a TiledShape2D,
-    iter_index: u32,
+   iter_index: u32,
 }
 
 impl<'a> TiledShape2DSurfaceAreaIterator<'a>

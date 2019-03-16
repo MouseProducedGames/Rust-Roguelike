@@ -35,27 +35,5 @@ impl DrawTileShape for Tilemap
         }
 
         self
-
-        /* let ( right, bottom ) = ( left + width, top + height );
-
-        {
-            for x in left..right
-            {
-                *self.tile_type_mut( x, top ) = tile_type;
-                // Range is exclusive on bottom.
-                *self.tile_type_mut( x, bottom - 1 ) = tile_type;
-            }
-        }
-
-        {
-            for y in ( top + 1 )..( bottom - 1 )
-            {
-                *self.tile_type_mut( left, y ) = tile_type;
-                // Range is exclusive on right.
-                *self.tile_type_mut( right - 1, y ) = tile_type;
-            }
-        }
-
-        self */
     }
 }

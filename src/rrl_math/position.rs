@@ -35,10 +35,6 @@ impl Position
         Self { x, y }
     }
 
-    /* pub fn length_sqr(self) -> i32
-    {
-        return self.x * self.x + self.y * self.y;
-    } */
 }
 
 impl Add<Displacement> for Position

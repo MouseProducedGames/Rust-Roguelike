@@ -28,13 +28,13 @@ pub static TILE_TYPE_DATA: [TileTypeData; 4] =
 
 impl TileTypeData
 {
-    /* pub fn new(passable: bool, transparent: bool) -> Self
+    pub fn _new(passable: bool, transparent: bool) -> Self
     {
         Self {
             passable: passable,
             transparent: transparent,
         }
-    } */
+    }
 
     pub fn passable( self ) -> bool
     {
