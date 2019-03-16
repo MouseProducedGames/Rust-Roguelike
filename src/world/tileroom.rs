@@ -304,7 +304,7 @@ impl TiledShape2D for TiledArea
     }
 }
 
-impl TiledShape2D for Box<dyn TiledArea>
+/* impl TiledShape2D for Box<dyn TiledArea>
 {
     fn bottom( &self ) -> u32
     {
@@ -345,4 +345,4 @@ impl TiledShape2D for Box<dyn TiledArea>
     {
         self.top()
     }
-}
+} */
