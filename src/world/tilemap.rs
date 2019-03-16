@@ -1,3 +1,11 @@
+/** Copyright (C) 2019 MouseProducedGames
+
+See license in the LICENSE file
+
+Documentation:
+
+**/
+
 // External includes
 use std::any::TypeId;
 use std::cmp::{ Eq, PartialEq };
