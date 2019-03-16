@@ -96,7 +96,7 @@ impl TiledArea for Tilemap
 {
     fn bottom( &self ) -> u32
     {
-        self.height()
+        self.height() - 1
     }
     
     fn circumference( &self ) -> u32
@@ -123,16 +123,17 @@ impl TiledArea for Tilemap
         *iter_index += 1;
         if index < width
         {
-            Some( ( index, height ) )
+            Some( ( index, height - 1 ) )
         }
         else if index < ( width + height )
         {
-            Some( ( width, height + ( index - width ) ) )
+            let temp = ( index - width );
+            Some( ( width - 1,  temp ) )
         }
         else if index < ( width + height + width )
         {
             let temp = index - ( width + height );
-            Some( ( temp, height ) )
+            Some( ( temp, height - 1 ) )
         }
         else if index < ( width + height + width + height )
         {
@@ -164,7 +165,7 @@ impl TiledArea for Tilemap
     
     fn right( &self ) -> u32
     {
-        self.width()
+        self.width() - 1
     }
     
     fn surface_area( &self ) -> u32
@@ -189,7 +190,7 @@ impl TiledArea for Tilemap
     
     fn width( &self ) -> u32
     {
-        self.width() as u32
+        self.width()
     }
 }
 
@@ -197,7 +198,8 @@ impl TiledArea for TiledAreaFilter
 {
     fn bottom( &self ) -> u32
     {
-        self.area.bottom().min( self.shape_filter.bottom() )
+        // self.area.bottom().min( self.shape_filter.bottom() )
+        self.shape_filter.bottom()
     }
     
     fn circumference( &self ) -> u32
@@ -212,12 +214,17 @@ impl TiledArea for TiledAreaFilter
 
     fn height( &self ) -> u32
     {
-        self.bottom() - self.top()
+        // ( ( self.bottom() - self.top() ) + 1 ).min( self.area.height() )
+        // self.shape_filter.height()
+        ( self.bottom() - self.top() ) + 1
     }
 
     fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
     {
+//         let adjuxt_x = self.shape_filter.left() - self.area.left();
+//         let adjuxt_y = self.shape_filter.top() - self.area.top();
         self.shape_filter.iter_circumference( iter_index )
+//         ( ( x + adjust_x ))
     }
     
     fn iter_surface_area( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
@@ -227,12 +234,14 @@ impl TiledArea for TiledAreaFilter
     
     fn left( &self ) -> u32
     {
-        self.area.left().max( self.shape_filter.left() )
+        // self.area.left().max( self.shape_filter.left() )
+        self.shape_filter.left()
     }
     
     fn right( &self ) -> u32
     {
-        self.area.right().min( self.shape_filter.right() )
+        // self.area.right().min( self.shape_filter.right() )
+        self.shape_filter.right()
     }
     
     fn surface_area( &self ) -> u32
@@ -252,12 +261,15 @@ impl TiledArea for TiledAreaFilter
 
     fn top( &self ) -> u32
     {
-        self.area.top().max( self.shape_filter.top() )
+        // self.area.top().max( self.shape_filter.top() )
+        self.shape_filter.top()
     }
     
     fn width( &self ) -> u32
     {
-        self.right() - self.left()
+        // ( ( self.right() - self.left() ) + 1 ).min( self.area.width() )
+        // self.shape_filter.width()
+        ( self.right() - self.left() ) - 1
     }
 }
 

@@ -4,7 +4,7 @@ See license in the LICENSE file
 
 Documentation:
 
-**/
+ **/
 
 // External dependencies
 use specs::{ Builder, /* System, */ World, RunNow };
@@ -42,6 +42,7 @@ use tiled_shapes_2d::TiledRect;
 use world::{ TiledArea, Tilemap };
 
 fn main() {
+
     Window::init();
     let mut game_state = GameState::new();
     
@@ -103,7 +104,7 @@ fn main() {
         creature_visibility_system.run_now( &world.res );
 
         player_display_system.run_now( &world.res );
-    
+        
         creature_display_system.run_now( &world.res );
 
         world.maintain();

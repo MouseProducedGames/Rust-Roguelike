@@ -97,7 +97,7 @@ impl TiledShape2D for TiledRect
         }
         else if index < ( width + height )
         {
-            Some( ( self.right, self.top + ( index - width ) ) )
+            Some( ( self.right , self.top + ( index - width ) ) )
         }
         else if index < ( width + height + width )
         {
