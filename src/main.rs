@@ -39,17 +39,18 @@ use game_state::GameState;
 use io::Window;
 use rrl_math::{ Bounds,  Position };
 use tiled_shapes_2d::TiledRect;
-use world::Tilemap;
+use world::{ TiledArea, Tilemap };
 
 fn main() {
     Window::init();
     let mut game_state = GameState::new();
     
-    let map: Tilemap =
-        Tilemap::new( 40, 30 )
+    let temp_map: Tilemap = Tilemap::new( 40, 30 );
+    let boxed_map: Box<dyn TiledArea> = Box::new( temp_map );
+    let map =
+        boxed_map
     // .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
         .split_dungeon(
-            &TiledRect::with_absolute_bounds( 0, 0, 39, 29 ),
             SplitType::LongestDimension,
             Bounds { width: 6, height: 6 },
             3, 2, 1,

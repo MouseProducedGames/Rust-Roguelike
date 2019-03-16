@@ -16,7 +16,7 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
             if visibility.is_pos_in_bounds( check_pos ) &&
                 visibility.value_pos( check_pos ) == VisibilityType::Visible
             {
-                *visibility.value_mut( check_pos.x as usize, check_pos.y as usize ) = VisibilityType::Seen;
+                *visibility.value_mut( check_pos.x as u32, check_pos.y as u32 ) = VisibilityType::Seen;
             }
         }
     }
@@ -46,7 +46,7 @@ pub fn calculate_visibility(visibility: &mut VisibilityMap, pos: Position, sight
                 {
                     break;
                 }
-                *visibility.value_mut( check_pos.x as usize, check_pos.y as usize ) = VisibilityType::Visible;
+                *visibility.value_mut( check_pos.x as u32, check_pos.y as u32 ) = VisibilityType::Visible;
                 if map.transparent_pos( check_pos ) == false
                 {
                     break;

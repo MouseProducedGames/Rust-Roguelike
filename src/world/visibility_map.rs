@@ -26,22 +26,22 @@ pub struct VisibilityMap
 
 impl VisibilityMap
 {
-    pub fn new(width: usize, height: usize) -> Self
+    pub fn new(width: u32, height: u32) -> Self
     {
         Self { values: Multimap::new( width, height ) }
     }
 
-    pub fn height(&self) -> usize
+    pub fn height(&self) -> u32
     {
         self.values.height()
     }
 
-    pub fn width(&self) -> usize
+    pub fn width(&self) -> u32
     {
         self.values.width()
     }
     
-    pub fn value(&self, pos_x: usize, pos_y: usize) -> VisibilityType
+    pub fn value(&self, pos_x: u32, pos_y: u32) -> VisibilityType
     {
         if self.is_in_bounds( pos_x, pos_y )
         {
@@ -53,12 +53,12 @@ impl VisibilityMap
     {
         if self.is_pos_in_bounds( pos )
         {
-            self.value( pos.x as usize, pos.y as usize )
+            self.value( pos.x as u32, pos.y as u32 )
         }
         else { VisibilityType::None }
     }
 
-    pub fn value_mut(&mut self, pos_x: usize, pos_y: usize) -> &mut VisibilityType
+    pub fn value_mut(&mut self, pos_x: u32, pos_y: u32) -> &mut VisibilityType
     {
         self.values.value_mut( pos_x, pos_y )
     }
@@ -66,12 +66,12 @@ impl VisibilityMap
 
 impl Mapping for VisibilityMap
 {
-    fn height( &self ) -> usize
+    fn height( &self ) -> u32
     {
         VisibilityMap::height( self )
     }
 
-    fn width( &self ) -> usize
+    fn width( &self ) -> u32
     {
         VisibilityMap::width( self )
     }

@@ -18,8 +18,8 @@ use super::mapping::Mapping;
 use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA, TileTypeData };
 
 type TileType = u32;
-type Width = usize;
-type Height = usize;
+type Width = u32;
+type Height = u32;
 
 pub struct Tilemap
 {
@@ -37,12 +37,12 @@ impl Tilemap
         }
     }
 
-    pub fn height(&self) -> usize
+    pub fn height(&self) -> Height
     {
         self.tiles.height()
     }
     
-    pub fn width(&self) -> usize
+    pub fn width(&self) -> Width
     {
         self.tiles.width()
     }
@@ -85,7 +85,7 @@ impl Tilemap
     {
         if self.is_pos_in_bounds( pos )
         {
-            self.tile_type(pos.x as usize, pos.y as usize)
+            self.tile_type( pos.x as u32, pos.y as u32 )
         }
         else { TILE_TYPE_INDEX_VOID }
     }
@@ -112,12 +112,12 @@ impl Hash for Tilemap
 
 impl Mapping for Tilemap
 {
-    fn height( &self ) -> usize
+    fn height( &self ) -> Height
     {
         Tilemap::height ( self )
     }
 
-    fn width( &self ) -> usize
+    fn width( &self ) -> Width
     {
         Tilemap::width ( self )
     }

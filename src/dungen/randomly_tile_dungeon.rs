@@ -1,4 +1,4 @@
-/** Copyright (C) 2019 MouseProducedGames
+/* /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
 
@@ -43,3 +43,4 @@ impl RandomlyTileDungeon for Tilemap
             )
     }
 }
+*/

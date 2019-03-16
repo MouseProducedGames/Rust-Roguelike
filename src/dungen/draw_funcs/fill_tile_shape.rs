@@ -9,31 +9,43 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::tiled_shapes_2d::{ TiledShape2D, TiledShape2DSurfaceAreaIterator };
-use crate::world::Tilemap ;
+use crate::tiled_shapes_2d::{ TiledShape2DSurfaceAreaIterator };
+use crate::world::TiledArea ;
 
 pub trait FillTileShape
 { 
     fn fill_tile_shape(
-        &mut self,
-        shape: &TiledShape2D,
+        mut self,
         tile_type: u32
-    ) -> &mut Tilemap;
+    ) -> Box<dyn TiledArea>;
 }
 
-impl FillTileShape for Tilemap
+impl FillTileShape for Box<dyn TiledArea>
 {
     fn fill_tile_shape(
-        &mut self,
-        shape: &TiledShape2D,
+        mut self,
         tile_type: u32
-    ) -> &mut Tilemap
+    ) -> Box<dyn TiledArea>
     {
-        for ( x, y ) in TiledShape2DSurfaceAreaIterator::new( shape )
+        let mut iter_index: u32 = 0;
+        let mut keep_going: bool = true;
+        while keep_going
         {
-            *self.tile_type_mut( x as usize, y as usize ) = tile_type;
+            let ( x, y );
+            match self.iter_surface_area( &mut iter_index ) {
+                Some( ( it_x, it_y ) ) => { x = it_x; y = it_y },
+                _ => { keep_going = false; continue; }
+            }
+            *self.tile_type_mut( x, y ) = tile_type;
+        }
+
+        self
+
+        /* for ( x, y ) in TiledShape2DSurfaceAreaIterator::new( &self )
+        {
+            *self.tile_type_mut( x, y ) = tile_type;
         }
         
-        self
+        self */
     }
 }

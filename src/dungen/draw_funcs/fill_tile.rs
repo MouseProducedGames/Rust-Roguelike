@@ -9,22 +9,18 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::tiled_shapes_2d::TiledRect;
-use crate::world::Tilemap ;
+use crate::world::TiledArea;
 use super::FillTileShape;
 
 pub trait FillTile
 { 
-    fn fill_tile( &mut self, tile_type: u32 ) -> &mut Tilemap;
+    fn fill_tile( mut self, tile_type: u32 ) ->  Box<dyn TiledArea>;
 }
 
-impl FillTile for Tilemap
+impl FillTile for Box<dyn TiledArea>
 {
-    fn fill_tile( &mut self, tile_type: u32 ) -> &mut Tilemap
+    fn fill_tile( mut self, tile_type: u32 ) -> Box<dyn TiledArea>
     {
-        self.fill_tile_shape(
-            &TiledRect::with_absolute_bounds( 0, 0, self.width() as u32, self.height() as u32 ),
-            tile_type
-        )
+        self.fill_tile_shape( tile_type )
     }
 }

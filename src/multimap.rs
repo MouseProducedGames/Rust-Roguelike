@@ -33,42 +33,42 @@ pub struct Multimap<T> where T: Copy + Clone + Default
 
 impl<T> Multimap<T> where T: Copy + Clone + Default
 {
-    pub fn new(width: usize, height: usize) -> Self
+    pub fn new(width: u32, height: u32) -> Self
     {
         Self {
-            values: Multidim::new( height, width )
+            values: Multidim::new( height as usize, width as usize )
         }
     }
 
-    pub fn height(&self) -> usize
+    pub fn height(&self) -> u32
     {
-        self.values.len0()
+        self.values.len0() as u32
     }
     
-    pub fn width(&self) -> usize
+    pub fn width(&self) -> u32
     {
-        self.values.len1()
+        self.values.len1() as u32
     }
     
-    pub fn value(&self, pos_x: usize, pos_y: usize) -> &T
+    pub fn value(&self, pos_x: u32, pos_y: u32) -> &T
     {
-        self.values.value( pos_y, pos_x )
+        self.values.value( pos_y as usize, pos_x as usize )
     }
 
-    pub fn value_mut(&mut self, pos_x: usize, pos_y: usize) -> &mut T
+    pub fn value_mut(&mut self, pos_x: u32, pos_y: u32) -> &mut T
     {
-        self.values.value_mut( pos_y, pos_x )
+        self.values.value_mut( pos_y as usize, pos_x as usize )
     }
 }
 
 impl<T> Mapping for Multimap<T> where T: Copy + Clone + Default
 {
-    fn height( &self ) -> usize
+    fn height( &self ) -> u32
     {
         Multimap::height ( self )
     }
 
-    fn width( &self ) -> usize
+    fn width( &self ) -> u32
     {
         Multimap::width ( self )
     }

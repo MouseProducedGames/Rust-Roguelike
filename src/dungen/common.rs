@@ -13,7 +13,7 @@ use crate::world::Tilemap ;
 
 pub trait DungenCommon
 { 
-    fn create_new( width: usize, height: usize ) -> Tilemap
+    fn create_new( width: u32, height: u32 ) -> Tilemap
     {
         Tilemap::new( width, height )
     }

@@ -13,21 +13,28 @@ use crate::dungen::DungenCommon;
 use crate::tiled_shapes_2d::TiledShape2D;
 use super::{ Mapping, Tilemap };
 
-pub struct TiledAreaFilter<'a>
+pub struct TiledAreaFilter
 {
-    area: &'a mut TiledArea,
-    shape_filter: &'a mut TiledShape2D,
+    area: Box<dyn TiledArea>,
+    shape_filter: Box<dyn TiledShape2D>,
 }
 
-impl<'a> TiledAreaFilter<'a>
+impl TiledAreaFilter
 {
-    pub fn new( area: &'a mut TiledArea, shape_filter: &'a mut TiledShape2D ) -> Self
+    pub fn new( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Self
     {
         Self { area: area, shape_filter: shape_filter }
     }
+
+    pub fn new_boxed( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Box<dyn TiledArea>
+    {
+        let output: Box<dyn TiledArea> =
+            Box::new( Self { area: area, shape_filter: shape_filter } );
+        output
+    }
 }
 
-impl<'a> DungenCommon for TiledAreaFilter<'a>
+impl DungenCommon for TiledAreaFilter
 {
     fn finish( &mut self ) -> Tilemap
     {
@@ -37,19 +44,21 @@ impl<'a> DungenCommon for TiledAreaFilter<'a>
 
 impl Mapping for TiledArea
 {
-    fn height( &self ) -> usize
+    fn height( &self ) -> u32
     {
-        TiledArea::height( self ) as usize
+        TiledArea::height( self ) as u32
     }
 
-    fn width( &self ) -> usize
+    fn width( &self ) -> u32
     {
-        TiledArea::width( self ) as usize
+        TiledArea::width( self ) as u32
     }
 }
 
 pub trait TiledArea
 {
+    fn bottom( &self ) -> u32;
+    
     fn circumference( &self ) -> u32;
 
     fn finish( &mut self ) -> Tilemap;
@@ -59,13 +68,19 @@ pub trait TiledArea
     fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >;
     
     fn iter_surface_area( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >;
+
+    fn left( &self ) -> u32;
+    
+    fn right( &self ) -> u32;
     
     fn surface_area( &self ) -> u32;
 
-    fn value( &self, x: u32, y: u32 ) -> u32;
+    fn tile_type( &self, x: u32, y: u32 ) -> u32;
 
-    fn value_mut( &mut self, x: u32, y: u32 ) -> &mut u32;
+    fn tile_type_mut( &mut self, x: u32, y: u32 ) -> &mut u32;
 
+    fn top( &self ) -> u32;
+    
     fn width( &self ) -> u32;
 }
 
@@ -79,6 +94,11 @@ impl DungenCommon for TiledArea
 
 impl TiledArea for Tilemap
 {
+    fn bottom( &self ) -> u32
+    {
+        self.height()
+    }
+    
     fn circumference( &self ) -> u32
     {
         // Should be optimized: TWo gets, two adds, and a return.
@@ -137,29 +157,49 @@ impl TiledArea for Tilemap
         Some( ( ( x ), ( y ) ) )
     }
     
+    fn left( &self ) -> u32
+    {
+        0
+    }
+    
+    fn right( &self ) -> u32
+    {
+        self.width()
+    }
+    
     fn surface_area( &self ) -> u32
     {
         ( self.height() * self.width() ) as u32
     }
 
-    fn value( &self, x: u32, y: u32 ) -> u32
+    fn tile_type( &self, x: u32, y: u32 ) -> u32
     {
-        self.tile_type( x as usize, y as usize )
+        self.tile_type( x, y )
     }
 
-    fn value_mut( &mut self, x: u32, y: u32 ) -> &mut u32
+    fn tile_type_mut( &mut self, x: u32, y: u32 ) -> &mut u32
     {
-        self.tile_type_mut( x as usize, y as usize )
+        self.tile_type_mut( x, y )
     }
 
+    fn top( &self ) -> u32
+    {
+        0
+    }
+    
     fn width( &self ) -> u32
     {
         self.width() as u32
     }
 }
 
-impl<'a> TiledArea for TiledAreaFilter<'a>
+impl TiledArea for TiledAreaFilter
 {
+    fn bottom( &self ) -> u32
+    {
+        self.area.bottom()
+    }
+    
     fn circumference( &self ) -> u32
     {
         self.shape_filter.circumference()
@@ -185,21 +225,36 @@ impl<'a> TiledArea for TiledAreaFilter<'a>
         self.shape_filter.iter_surface_area( iter_index )
     }
     
+    fn left( &self ) -> u32
+    {
+        self.area.left()
+    }
+    
+    fn right( &self ) -> u32
+    {
+        self.area.right()
+    }
+    
     fn surface_area( &self ) -> u32
     {    
         self.shape_filter.surface_area()
     }
 
-    fn value( &self, x: u32, y: u32 ) -> u32
+    fn tile_type( &self, x: u32, y: u32 ) -> u32
     {
-        self.area.value( x, y )
+        self.area.tile_type( x, y )
     }
 
-    fn value_mut( &mut self, x: u32, y: u32 ) -> &mut u32
+    fn tile_type_mut( &mut self, x: u32, y: u32 ) -> &mut u32
     {
-        self.area.value_mut( x, y )
+        self.area.tile_type_mut( x, y )
     }
 
+    fn top( &self ) -> u32
+    {
+        self.area.top()
+    }
+    
     fn width( &self ) -> u32
     {
         self.area.width()
@@ -226,5 +281,28 @@ impl TiledShape2D for TiledArea
     fn surface_area( &self ) -> u32
     {
         TiledArea::surface_area( self )
+    }
+}
+
+impl TiledShape2D for Box<dyn TiledArea>
+{
+    fn circumference( &self ) -> u32
+    {
+        self.circumference()
+    }
+
+    fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
+    {
+        self.iter_circumference( iter_index )
+    }
+
+    fn iter_surface_area( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >
+    {
+        self.iter_surface_area( iter_index )
+    }
+
+    fn surface_area( &self ) -> u32
+    {
+        self.surface_area()
     }
 }

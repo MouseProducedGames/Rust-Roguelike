@@ -15,4 +15,4 @@ pub mod split_dungeon;
 pub mod randomly_tile_dungeon;
 pub use common::DungenCommon;
 pub use split_dungeon::{ SplitDungeon, SplitType };
-pub use randomly_tile_dungeon::RandomlyTileDungeon;
+// pub use randomly_tile_dungeon::RandomlyTileDungeon;
