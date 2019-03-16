@@ -9,7 +9,8 @@ Documentation:
 // External includes
 
 // Internal includes
-use super::super::tiled_shapes_2d::TiledShape2D;
+use crate::dungen::DungenCommon;
+use crate::tiled_shapes_2d::TiledShape2D;
 use super::{ Mapping, Tilemap };
 
 pub struct TiledAreaFilter<'a>
@@ -23,6 +24,14 @@ impl<'a> TiledAreaFilter<'a>
     pub fn new( area: &'a mut TiledArea, shape_filter: &'a mut TiledShape2D ) -> Self
     {
         Self { area: area, shape_filter: shape_filter }
+    }
+}
+
+impl<'a> DungenCommon for TiledAreaFilter<'a>
+{
+    fn finish( &mut self ) -> Tilemap
+    {
+        self.area.finish()
     }
 }
 
@@ -43,6 +52,8 @@ pub trait TiledArea
 {
     fn circumference( &self ) -> u32;
 
+    fn finish( &mut self ) -> Tilemap;
+        
     fn height( &self ) -> u32;
 
     fn iter_circumference( &self, iter_index: &mut u32 ) -> Option< ( u32, u32 ) >;
@@ -58,6 +69,14 @@ pub trait TiledArea
     fn width( &self ) -> u32;
 }
 
+impl DungenCommon for TiledArea
+{
+    fn finish( &mut self ) -> Tilemap
+    {
+        TiledArea::finish( self )
+    }    
+}
+
 impl TiledArea for Tilemap
 {
     fn circumference( &self ) -> u32
@@ -67,6 +86,11 @@ impl TiledArea for Tilemap
         ( half + half ) as u32
     }
 
+    fn finish( &mut self ) -> Tilemap
+    {
+        DungenCommon::finish( self )
+    }
+    
     fn height( &self ) -> u32
     {
         self.height() as u32
@@ -140,6 +164,11 @@ impl<'a> TiledArea for TiledAreaFilter<'a>
     {
         self.shape_filter.circumference()
     }
+
+    fn finish( &mut self ) -> Tilemap
+    {
+        self.area.finish()
+    }    
 
     fn height( &self ) -> u32
     {
