@@ -26,7 +26,7 @@ pub enum SplitType
 
 pub trait SplitDungeon
 {
-    fn randomly_split_dungeon(
+    fn split_dungeon(
         &mut self,
         area: &TiledRect, split_type: SplitType,
         min_bounds: Bounds,
@@ -37,7 +37,7 @@ pub trait SplitDungeon
 
 impl SplitDungeon for Tilemap
 {
-    fn randomly_split_dungeon(
+    fn split_dungeon(
         &mut self,
         area: &TiledRect, split_type: SplitType,
         min_bounds: Bounds,
@@ -49,10 +49,10 @@ impl SplitDungeon for Tilemap
             ( area.left(), area.top(), area.right(), area.bottom() );
         let ( width, height ) = ( area.width(), area.height() );
 
-        if ( ( width > min_width ) && ( height > min_height ) ) ||
+        if ( ( width > min_bounds.width ) && ( height > min_bounds.height ) ) ||
             (
                 ( split_type == SplitType::LongestDimension ) &&
-                    ( ( width > min_width ) || ( height > min_height ) )
+                    ( ( width > min_bounds.width ) || ( height > min_bounds.height ) )
             )
         {
         } else { return self; }
@@ -85,13 +85,13 @@ impl SplitDungeon for Tilemap
         let ( put_door_x, put_door_y );
         if split_width
         {
-            split_min = min_width;
-            split_max = width - min_width;
+            split_min = min_bounds.width;
+            split_max = width - min_bounds.width;
         }
         else
         {
-            split_min = min_height;
-            split_max = height - min_height;
+            split_min = min_bounds.height;
+            split_max = height - min_bounds.height;
         }
 
         
@@ -147,17 +147,17 @@ impl SplitDungeon for Tilemap
             .fill_tile_shape( &split_line, wall_tile_type );
         let split_type0 = split_type;
         let split_type1 = split_type;
-        self.randomly_split_dungeon(
+        self.split_dungeon(
             &TiledRect::with_absolute_bounds( room_left0, room_top0, room_right0, room_bottom0 ),
             split_type0,
-            min_width, min_height,
+            min_bounds,
             door_tile_type, floor_tile_type, wall_tile_type,
             rnd
         );
-        self.randomly_split_dungeon(
+        self.split_dungeon(
             &TiledRect::with_absolute_bounds( room_left1, room_top1, room_right1, room_bottom1 ),
             split_type1,
-            min_width, min_height,
+            min_bounds,
             door_tile_type, floor_tile_type, wall_tile_type,
             rnd
         );

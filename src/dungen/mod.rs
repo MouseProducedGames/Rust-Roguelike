@@ -11,8 +11,8 @@ Documentation:
 // Internal includes.
 pub mod draw_funcs;
 pub mod common;
-pub mod randomly_split_dungeon;
+pub mod split_dungeon;
 pub mod randomly_tile_dungeon;
 pub use common::DungenCommon;
-pub use randomly_split_dungeon::{ RandomlySplitDungeon, SplitType };
+pub use split_dungeon::{ SplitDungeon, SplitType };
 pub use randomly_tile_dungeon::RandomlyTileDungeon;
