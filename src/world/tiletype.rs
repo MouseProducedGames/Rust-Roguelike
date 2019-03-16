@@ -31,8 +31,8 @@ impl TileTypeData
     pub fn _new(passable: bool, transparent: bool) -> Self
     {
         Self {
-            passable: passable,
-            transparent: transparent,
+            passable,
+            transparent,
         }
     }
 

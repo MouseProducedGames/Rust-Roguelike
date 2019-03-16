@@ -36,7 +36,7 @@ impl Displacement
 
     pub fn _length_sqr(self) -> i32
     {
-        return self.x * self.x + self.y * self.y;
+        self.x * self.x + self.y * self.y
     }
 }
 
