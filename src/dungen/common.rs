@@ -11,7 +11,7 @@ Documentation:
 // Internal includes.
 use crate::world::Tilemap ;
 
-pub trait Dungen
+pub trait DungenCommon
 { 
     fn create_new( width: usize, height: usize ) -> Tilemap
     {
@@ -21,7 +21,7 @@ pub trait Dungen
     fn finish( &mut self ) -> Tilemap;
 }
 
-impl Dungen for Tilemap
+impl DungenCommon for Tilemap
 {
     fn finish( &mut self ) -> Tilemap
     {

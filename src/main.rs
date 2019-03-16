@@ -33,7 +33,7 @@ use creature::{
     SightRange,
     Visibility
 };
-use dungen::{ Dungen, RandomlySplitDungeon, /* RandomlyTileDungeon, */ SplitType };
+use dungen::{ DungenCommon, RandomlySplitDungeon, /* RandomlyTileDungeon, */ SplitType };
 use faction::Faction;
 use game_state::GameState;
 use io::Window;
