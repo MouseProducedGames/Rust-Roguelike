@@ -255,8 +255,12 @@ impl Drop for Window
 {
     fn drop( &mut self )
     {
-        match self.term.terminal().clear( crossterm::ClearType::All )
-        {
+        match self.term.cursor().show() {
+            Ok(_v) => (),
+            // We shouldn't panic; but we should inform the user.
+            _ => println!( "Could not restore cursor visibility!" ),
+        }
+        match self.term.terminal().clear( crossterm::ClearType::All ) {
             Ok(_v) => (),
             // We should not panic here.
             // Fear is the shutdown-killer that brings total confusion.
