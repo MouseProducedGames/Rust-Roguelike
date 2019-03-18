@@ -86,11 +86,17 @@ impl Window
 
     pub fn get_char( &self ) -> char
     {
+        self.move_cursor( 0, 0 );
+        let ch;
         match self.term.input().read_char()
         {
-            Ok(ch) => ch,
-            _ => ' ',
+            Ok(v) => ch = v,
+            _ => ch = ' ',
         }
+        self.move_cursor( 0, 0 );
+        println!(" ");
+        ch
+        
         /* if let Some(Ok(key)) = self.term.input().read_async().bytes().next()
         {
             key as char
@@ -224,22 +230,23 @@ impl Window
         1 - self.back_buffer_index
     }
 
-    /* fn move_cursor(x: i32, y: i32)
+    fn move_cursor( &self, x: i32, y: i32)
     {
-        ncurses::mv(y, x);
-    } */
+        match self.term.cursor().goto( x as u16, y as u16 ) {
+            Ok(_v) => (),
+            _ => panic!( "Could not move cursor to ( {}, {} )", x, y )
+        }
+    }
 
-    /* fn write_char(ch: char)
+    fn write_char(&self, ch: char)
     {
-        ncurses::addch(ch as u64);
-    } */
+        println!( "{}", ch );
+    }
 
     fn put_char(&self, x: i32, y: i32, ch: char)
     {
-        match self.term.cursor().goto( x as u16, y as u16 ) {
-            Ok(_v) => println!( "{}", ch ),
-            _ => panic!( "Could not move cursor to ( {}, {} )", x, y )
-        }
+        self.move_cursor( x, y );
+        self.write_char( ch );
         // ncurses::mvaddch(y, x, ch as u64);
     }
 }
