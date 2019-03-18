@@ -59,7 +59,7 @@ impl<'a> SplitDungeon<'a>
 
 impl<'a> DungeonGenerator for SplitDungeon<'a>
 {
-    fn apply( &mut self, area: &mut Box<dyn TiledArea> )
+    fn apply( &mut self, area: &mut dyn TiledArea )
     {
         let ( left, top, right, bottom ) =
             ( area.left(), area.top(), area.right(), area.bottom() );
@@ -161,21 +161,19 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
             FillTileShape::new( self.floor_tile_type ).apply( area );
             DrawTileShape::new( self.wall_tile_type ).apply( area );
 
-            let mut temp_area: Box<dyn TiledArea>;
+            let mut temp_area: TiledAreaFilter;
             temp_area =
-                Box::new(
-                    TiledAreaFilter::new(
-                        area,
-                        Box::new( split_line )
-                    )
+                TiledAreaFilter::new(
+                    area,
+                    Box::new( split_line )
                 );
             FillTileShape::new( self.wall_tile_type ).apply( &mut temp_area );
         }
         {
             let rect =
                 Box::new( TiledRect::with_absolute_bounds( room_left0, room_top0, room_right0, room_bottom0 ) );
-            let mut temp_area: Box<dyn TiledArea>;
-            temp_area = Box::new( TiledAreaFilter::new( area, rect ) );
+            let mut temp_area: TiledAreaFilter;
+            temp_area = TiledAreaFilter::new( area, rect );
             SplitDungeon::new(
                 self.split_type,
                 self.min_bounds,
@@ -188,8 +186,8 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
         {
             let rect =
                 Box::new( TiledRect::with_absolute_bounds( room_left1, room_top1, room_right1, room_bottom1 ) );
-            let mut temp_area: Box<dyn TiledArea>;
-            temp_area = Box::new( TiledAreaFilter::new( area, rect ) );
+            let mut temp_area: TiledAreaFilter;
+            temp_area = TiledAreaFilter::new( area, rect );
             SplitDungeon::new(
                 self.split_type,
                 self.min_bounds,

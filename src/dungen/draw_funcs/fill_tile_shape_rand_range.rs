@@ -22,9 +22,17 @@ pub struct FillTileShapeRandRange<'a>
     rnd: &'a mut ThreadRng
 }
 
+impl<'a> FillTileShapeRandRange<'a>
+{
+    pub fn new( start_range: u32, end_range: u32, rnd: &'a mut ThreadRng ) -> Self
+    {
+        Self { start_range: start_range, end_range: end_range, rnd: rnd }
+    }
+}
+
 impl<'a> DungeonGenerator for FillTileShapeRandRange<'a>
 { 
-    fn apply( &mut self, area: &mut Box<dyn TiledArea> )
+    fn apply( &mut self, area: &mut dyn TiledArea )
     {
         let mut iter_index: u32 = 0;
         let mut keep_going: bool = true;

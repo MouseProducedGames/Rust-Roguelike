@@ -9,7 +9,7 @@ Documentation:
 // External dependencies
 
 // Internal dependencies.
-use std::iter::Iterator;
+// use std::iter::Iterator;
 
 pub trait TiledShape2D
 {
@@ -30,7 +30,7 @@ pub trait TiledShape2D
     fn top( &self ) -> u32;
 }
 
-pub struct TiledShape2DCircumferenceIterator<'a>
+/* pub struct TiledShape2DCircumferenceIterator<'a>
 {
     shape: &'a TiledShape2D,
     iter_index: u32,
@@ -60,9 +60,9 @@ impl<'a> Iterator for TiledShape2DCircumferenceIterator<'a>
     {
         self.iter_next()
     }
-}
+} */
 
-pub struct TiledShape2DSurfaceAreaIterator<'a>
+/* pub struct TiledShape2DSurfaceAreaIterator<'a>
 {
     shape: &'a TiledShape2D,
    iter_index: u32,
@@ -92,4 +92,4 @@ impl<'a> Iterator for TiledShape2DSurfaceAreaIterator<'a>
     {
         self.iter_next()
     }
-}
+} */
