@@ -42,7 +42,7 @@ use world::Tilemap;
 
 fn main() {
 
-    Window::init();
+    // Window::init();
     let mut game_state = GameState::new();
 
     let map;
@@ -121,5 +121,5 @@ fn main() {
         world.maintain();
     }
 
-    Window::close();
+    // Window::close();
 }

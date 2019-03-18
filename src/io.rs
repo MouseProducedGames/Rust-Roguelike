@@ -7,7 +7,11 @@ Documentation:
 **/
 
 // External includes.
-extern crate ncurses;
+extern crate crossterm;
+extern crate crossterm_cursor;
+extern crate crossterm_input;
+extern crate crossterm_screen;
+// extern crate ncurses;
 // use std::iter::Iterator;
 
 // Internal includes.
@@ -20,39 +24,51 @@ static SEEN_MAP_GRAPHICS: [ char; 4 ] = [ ' ', 'x', '-', '=' ];
 
 pub struct Window
 {
+    term: crossterm::Crossterm,
     buffers: [Multidim<char>; 2],
     back_buffer_index: usize,
 }
 
 impl Window
 {
-    pub fn init()
+    /* pub fn init()
     {
-        ncurses::initscr();
+        /* ncurses::initscr();
         ncurses::keypad(ncurses::stdscr(), true);
         // ncurses::raw();
         ncurses::curs_set(ncurses::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
         ncurses::nonl();
         ncurses::cbreak();
-        ncurses::noecho();
+        ncurses::noecho(); */
     }
 
     pub fn close()
     {
-        ncurses::endwin();
-    }
+        // ncurses::endwin();
+    } */
 
     pub fn new() -> Self
     {
+        let term = crossterm::Crossterm::new();
+        match term.terminal().clear( crossterm::ClearType::All )
+        {
+            Ok(_v) => (),
+            _ => panic!( "Could not clear screen." )            
+        }
+        match term.cursor().hide()
+        {
+            Ok(_v) => (),            
+            _ => (), // Not panic-worthy...
+        }
         let mut output =
             Self {
+                term: term,
                 buffers: [
                     Multidim::new( 40, 80 ),
                     Multidim::new( 40, 80 )
                 ],
                 back_buffer_index: 0,
             };
-        
         let front_buffer_index = output.front_buffer_index();
         let buffers = &mut output.buffers;
         let ( buffer_height, buffer_width ) = buffers[ output.back_buffer_index ].bounds();
@@ -68,14 +84,21 @@ impl Window
         output
     }
 
-    pub fn get_char(&self) -> char
+    pub fn get_char( &self ) -> char
     {
-        match
-            std::char::from_u32( ncurses::getch() as u32 )
+        match self.term.input().read_char()
         {
-            None => ' ',
-            Some(v) => v,
-        } 
+            Ok(ch) => ch,
+            _ => ' ',
+        }
+        /* if let Some(Ok(key)) = self.term.input().read_async().bytes().next()
+        {
+            key as char
+        }
+        else
+        {
+            ' '
+        } */
     }
 
     pub fn present(&mut self)
@@ -106,7 +129,7 @@ impl Window
                         repeat_count += 1;
                         if repeat_count >= 5
                         {
-                            ncurses::refresh();
+                            // ncurses::refresh();
                             repeat_count = 0;
                         }
                         continue;
@@ -123,7 +146,7 @@ impl Window
                     
                     if repeat_count >= 5
                     {
-                        ncurses::refresh();
+                        // ncurses::refresh();
                         repeat_count = 0;
                     }
                     lastch = front_ch;
@@ -132,7 +155,7 @@ impl Window
                 }
             }
         }
-        ncurses::refresh();
+        // ncurses::refresh();
 
         {
             let front_buffer_index = self.front_buffer_index();
@@ -213,6 +236,24 @@ impl Window
 
     fn put_char(&self, x: i32, y: i32, ch: char)
     {
-        ncurses::mvaddch(y, x, ch as u64);
+        match self.term.cursor().goto( x as u16, y as u16 ) {
+            Ok(_v) => println!( "{}", ch ),
+            _ => panic!( "Could not move cursor to ( {}, {} )", x, y )
+        }
+        // ncurses::mvaddch(y, x, ch as u64);
+    }
+}
+
+impl Drop for Window
+{
+    fn drop( &mut self )
+    {
+        match self.term.terminal().clear( crossterm::ClearType::All )
+        {
+            Ok(_v) => (),
+            // We should not panic here.
+            // Fear is the shutdown-killer that brings total confusion.
+            _ => (),
+        }
     }
 }
