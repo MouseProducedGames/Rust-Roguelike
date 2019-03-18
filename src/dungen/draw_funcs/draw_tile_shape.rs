@@ -9,23 +9,25 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::tiled_shapes_2d::{ TiledShape2DCircumferenceIterator };
+use crate::dungen::DungeonGenerator;
 use crate::world::TiledArea;
 
-pub trait DrawTileShape
-{ 
-    fn draw_tile_shape(
-        mut self,
-        tile_type: u32
-    ) -> Box<dyn TiledArea>;
+pub struct DrawTileShape
+{
+    tile_type: u32,
 }
 
-impl DrawTileShape for Box<dyn TiledArea>
+impl DrawTileShape
 {
-    fn draw_tile_shape(
-        mut self,
-        tile_type: u32
-    ) -> Box<dyn TiledArea>
+    pub fn new( tile_type: u32 ) -> Self
+    {
+        Self { tile_type }
+    }
+}
+
+impl DungeonGenerator for DrawTileShape
+{
+    fn apply( &mut self, area: &mut dyn TiledArea )
     {
         // let temp: &mut TiledShape2D = self;
         // for ( x, y ) in TiledShape2DCircumferenceIterator::new( self )
@@ -34,13 +36,11 @@ impl DrawTileShape for Box<dyn TiledArea>
         while keep_going
         {
             let ( x, y );
-            match self.iter_circumference( &mut iter_index ) {
+            match area.iter_circumference( &mut iter_index ) {
                 Some( ( it_x, it_y ) ) => { x = it_x; y = it_y },
                 _ => { keep_going = false; continue; }
             }
-            *self.tile_type_mut( x, y ) = tile_type;
+            *area.tile_type_mut( x, y ) = self.tile_type;
         }
-
-        self
     }
 }

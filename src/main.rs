@@ -33,12 +33,11 @@ use creature::{
     SightRange,
     Visibility
 };
-use dungen::{ DungenCommon, SplitDungeon, /* RandomlyTileDungeon, */ SplitType };
+use dungen::{ DungenCommon, DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType };
 use faction::Faction;
 use game_state::GameState;
 use io::Window;
 use rrl_math::{ Bounds,  Position };
-use tiled_shapes_2d::TiledRect;
 use world::{ TiledArea, Tilemap };
 
 fn main() {
@@ -47,16 +46,15 @@ fn main() {
     let mut game_state = GameState::new();
     
     let temp_map: Tilemap = Tilemap::new( 40, 30 );
-    let boxed_map: Box<dyn TiledArea> = Box::new( temp_map );
-    let map =
-        boxed_map
-    // .randomly_tile_dungeon( 1, 3, &mut game_state.rng() )
-        .split_dungeon(
-            SplitType::LongestDimension,
-            Bounds { width: 6, height: 6 },
-            3, 2, 1,
-            &mut game_state.rng() )
-        .finish();
+    let mut boxed_map: Box<dyn TiledArea> = Box::new( temp_map );
+    SplitDungeon::new(
+        SplitType::LongestDimension,
+        Bounds { width: 6, height: 6 },
+        3, 2, 1,
+        &mut game_state.rng()
+    ).apply( &mut boxed_map );
+
+    let map = boxed_map.finish();
 
     let mut world = World::new();
     world.add_resource( game_state );

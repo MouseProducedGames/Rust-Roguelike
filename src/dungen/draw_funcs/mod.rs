@@ -10,10 +10,10 @@ Documentation:
 
 // Internal includes.
 pub mod draw_tile_shape;
-pub mod fill_tile;
+// pub mod fill_tile;
 pub mod fill_tile_shape;
 pub mod fill_tile_shape_rand_range;
 pub use draw_tile_shape::DrawTileShape;
-pub use fill_tile::FillTile;
+// pub use fill_tile::FillTile;
 pub use fill_tile_shape::FillTileShape;
 pub use fill_tile_shape_rand_range::FillTileShapeRandRange;

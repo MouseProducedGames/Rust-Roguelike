@@ -13,28 +13,28 @@ use crate::dungen::DungenCommon;
 use crate::tiled_shapes_2d::TiledShape2D;
 use super::{ Mapping, Tilemap };
 
-pub struct TiledAreaFilter
+pub struct TiledAreaFilter<'a>
 {
-    area: Box<dyn TiledArea>,
     shape_filter: Box<dyn TiledShape2D>,
+    area: &'a mut dyn TiledArea,
 }
 
-impl TiledAreaFilter
+impl<'a> TiledAreaFilter<'a>
 {
-    pub fn new( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Self
+    pub fn new( area: &'a mut dyn TiledArea, shape_filter: Box<dyn TiledShape2D> ) -> Self
     {
         Self { area: area, shape_filter: shape_filter }
     }
 
-    pub fn new_boxed( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Box<dyn TiledArea>
+/*     pub fn new_boxed( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Box<dyn TiledArea>
     {
         let output: Box<dyn TiledArea> =
             Box::new( Self { area: area, shape_filter: shape_filter } );
         output
-    }
+    } */
 }
 
-impl DungenCommon for TiledAreaFilter
+impl<'a> DungenCommon for TiledAreaFilter<'a>
 {
     fn finish( &mut self ) -> Tilemap
     {
@@ -127,7 +127,7 @@ impl TiledArea for Tilemap
         }
         else if index < ( width + height )
         {
-            let temp = ( index - width );
+            let temp = index - width;
             Some( ( width - 1,  temp ) )
         }
         else if index < ( width + height + width )
@@ -194,7 +194,7 @@ impl TiledArea for Tilemap
     }
 }
 
-impl TiledArea for TiledAreaFilter
+impl<'a> TiledArea for TiledAreaFilter<'a>
 {
     fn bottom( &self ) -> u32
     {

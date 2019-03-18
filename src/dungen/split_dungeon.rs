@@ -12,7 +12,8 @@ use rand::Rng;
 use rand::rngs::ThreadRng;
 
 // Internal includes.
-use crate::dungen::draw_funcs::{ DrawTileShape, FillTileShape };
+use crate::dungen::DungeonGenerator;
+use crate::dungen::draw_funcs::{ FillTileShape, DrawTileShape };
 use crate::rrl_math::Bounds;
 use crate::tiled_shapes_2d::TiledRect;
 use crate::world::{ TiledArea, TiledAreaFilter };
@@ -24,43 +25,58 @@ pub enum SplitType
     _Random
 }
 
-pub trait SplitDungeon
+pub struct SplitDungeon<'a>
 {
-    fn split_dungeon(
-        mut self,
-        split_type: SplitType,
-        min_bounds: Bounds,
-        door_tile_type: u32, floor_tile_type: u32, wall_tile_type: u32,
-        rnd: &mut ThreadRng
-    ) -> Box<dyn TiledArea>;
+    split_type: SplitType,
+    min_bounds: Bounds,
+    door_tile_type: u32,
+    floor_tile_type: u32,
+    wall_tile_type: u32,
+    rnd: &'a mut ThreadRng
 }
 
-impl SplitDungeon for Box<dyn TiledArea>
+impl<'a> SplitDungeon<'a>
 {
-    fn split_dungeon(
-        mut self,
+    pub fn new(
         split_type: SplitType,
         min_bounds: Bounds,
-        door_tile_type: u32, floor_tile_type: u32, wall_tile_type: u32,
-        rnd: &mut ThreadRng
-    ) -> Box<dyn TiledArea>
+        door_tile_type: u32,
+        floor_tile_type: u32,
+        wall_tile_type: u32,
+        rnd: &'a mut ThreadRng
+    ) -> Self
+    {
+        Self {
+            split_type: split_type,
+            min_bounds: min_bounds,
+            door_tile_type: door_tile_type,
+            floor_tile_type: floor_tile_type,
+            wall_tile_type: wall_tile_type,
+            rnd: rnd
+        }
+    }
+}
+
+impl<'a> DungeonGenerator for SplitDungeon<'a>
+{
+    fn apply( &mut self, area: &mut Box<dyn TiledArea> )
     {
         let ( left, top, right, bottom ) =
-            ( self.left(), self.top(), self.right(), self.bottom() );
-        let ( width, height ) = ( self.width(), self.height() );
+            ( area.left(), area.top(), area.right(), area.bottom() );
+        let ( width, height ) = ( area.width(), area.height() );
 
-        if ( ( width > min_bounds.width ) && ( height > min_bounds.height ) ) ||
+        if ( ( width > self.min_bounds.width ) && ( height > self.min_bounds.height ) ) ||
             (
-                ( split_type == SplitType::LongestDimension ) &&
-                    ( ( width > min_bounds.width ) || ( height > min_bounds.height ) )
+                ( self.split_type == SplitType::LongestDimension ) &&
+                    ( ( width > self.min_bounds.width ) || ( height > self.min_bounds.height ) )
             )
         {
-        } else { return self; }
+        } else { return; }
 
         
         let split_width;
         // let split_on;
-        match split_type {
+        match self.split_type {
             SplitType::LongestDimension => {
                 if width > height
                 {
@@ -72,11 +88,11 @@ impl SplitDungeon for Box<dyn TiledArea>
                 }
                 else
                 {
-                    split_width = rnd.gen_bool( 0.5 );
+                    split_width = self.rnd.gen_bool( 0.5 );
                 }
             },
             SplitType::_Random => {
-                split_width = rnd.gen_bool( 0.5 );
+                split_width = self.rnd.gen_bool( 0.5 );
             }
         }
 
@@ -85,13 +101,13 @@ impl SplitDungeon for Box<dyn TiledArea>
         let ( put_door_x, put_door_y );
         if split_width
         {
-            split_min = min_bounds.width;
-            split_max = width - min_bounds.width;
+            split_min = self.min_bounds.width;
+            split_max = width - self.min_bounds.width;
         }
         else
         {
-            split_min = min_bounds.height;
-            split_max = height - min_bounds.height;
+            split_min = self.min_bounds.height;
+            split_max = height - self.min_bounds.height;
         }
 
         
@@ -102,11 +118,11 @@ impl SplitDungeon for Box<dyn TiledArea>
         }
         else if split_max < split_min
         {
-            return self;
+            return;
         }
         else
         {
-            split_on = rnd.gen_range( split_min, split_max );
+            split_on = self.rnd.gen_range( split_min, split_max );
         }
 
         let split_line;
@@ -120,7 +136,7 @@ impl SplitDungeon for Box<dyn TiledArea>
                     left + split_on, bottom
                 );
             put_door_x = left + split_on;
-            put_door_y = rnd.gen_range( top + 1, bottom - 1 );
+            put_door_y = self.rnd.gen_range( top + 1, bottom - 1 );
             room_left0 = left; room_top0 = top;
             room_right0 = left + split_on; room_bottom0 = bottom;
             room_left1 = left + split_on; room_top1 = top;
@@ -133,7 +149,7 @@ impl SplitDungeon for Box<dyn TiledArea>
                     left, top + split_on,
                     right, top + split_on
                 );
-            put_door_x = rnd.gen_range( left + 1, right - 1 );
+            put_door_x = self.rnd.gen_range( left + 1, right - 1 );
             put_door_y = top + split_on;
             room_left0 = left; room_top0 = top;
             room_right0 = right; room_bottom0 = top + split_on;
@@ -142,44 +158,47 @@ impl SplitDungeon for Box<dyn TiledArea>
         }
 
 	{
+            FillTileShape::new( self.floor_tile_type ).apply( area );
+            DrawTileShape::new( self.wall_tile_type ).apply( area );
 
-            self = self
-                .fill_tile_shape( floor_tile_type )
-                .draw_tile_shape( wall_tile_type );
-            
-            let draw_split_line_box =
-                TiledAreaFilter::new_boxed( self, Box::new( split_line ) );
-            self = draw_split_line_box.fill_tile_shape( wall_tile_type );
-        }
-        let split_type0 = split_type;
-        let split_type1 = split_type;
-        {
-            self = TiledAreaFilter::new_boxed(
-                self,
-                Box::new( TiledRect::with_absolute_bounds( room_left0, room_top0, room_right0, room_bottom0 )
-                )
-            )
-                .split_dungeon(
-                    split_type0,
-                    min_bounds,
-                    door_tile_type, floor_tile_type, wall_tile_type,
-                    rnd
+            let mut temp_area: Box<dyn TiledArea>;
+            temp_area =
+                Box::new(
+                    TiledAreaFilter::new(
+                        area,
+                        Box::new( split_line )
+                    )
                 );
+            FillTileShape::new( self.wall_tile_type ).apply( &mut temp_area );
         }
         {
-            self = TiledAreaFilter::new_boxed(
-                self,
-                Box::new( TiledRect::with_absolute_bounds( room_left1, room_top1, room_right1, room_bottom1 )
-                )
-            )
-                .split_dungeon(
-                    split_type1,
-                    min_bounds,
-                    door_tile_type, floor_tile_type, wall_tile_type,
-                    rnd
-                );
+            let rect =
+                Box::new( TiledRect::with_absolute_bounds( room_left0, room_top0, room_right0, room_bottom0 ) );
+            let mut temp_area: Box<dyn TiledArea>;
+            temp_area = Box::new( TiledAreaFilter::new( area, rect ) );
+            SplitDungeon::new(
+                self.split_type,
+                self.min_bounds,
+                self.door_tile_type,
+                self.floor_tile_type,
+                self.wall_tile_type,
+                self.rnd
+            ).apply( &mut temp_area );
         }
-        *self.tile_type_mut( put_door_x, put_door_y ) = door_tile_type;
-        self
+        {
+            let rect =
+                Box::new( TiledRect::with_absolute_bounds( room_left1, room_top1, room_right1, room_bottom1 ) );
+            let mut temp_area: Box<dyn TiledArea>;
+            temp_area = Box::new( TiledAreaFilter::new( area, rect ) );
+            SplitDungeon::new(
+                self.split_type,
+                self.min_bounds,
+                self.door_tile_type,
+                self.floor_tile_type,
+                self.wall_tile_type,
+                self.rnd
+            ).apply( &mut temp_area );
+        }
+        *area.tile_type_mut( put_door_x, put_door_y ) = self.door_tile_type;
     }
 }

@@ -1,4 +1,4 @@
-/** Copyright (C) 2019 MouseProducedGames
+/*/** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
 
@@ -24,3 +24,4 @@ impl FillTile for Box<dyn TiledArea>
         self.fill_tile_shape( tile_type )
     }
 }
+*/
