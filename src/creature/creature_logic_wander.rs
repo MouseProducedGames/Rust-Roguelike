@@ -7,11 +7,21 @@ Documentation:
 **/
 
 // External dependencies.
-use specs::{ Component, NullStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage };
+use specs::{
+    Component,
+    Entities,
+    NullStorage,
+    ReadExpect,
+    ReadStorage,
+    System,
+    WriteExpect,
+    WriteStorage
+};
 use rand::Rng;
 
 // Internal dependencies.
 use super::super::game_state::GameState;
+use crate::creature::CreatureTracker;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -25,23 +35,30 @@ impl Component for CreatureLogicWander
 
 pub struct CreatureLogicWanderSystem;
 
+#[derive(SystemData)]
+pub struct SystemDataT< 'a >
+{
+    creature_tracker: ReadExpect< 'a, CreatureTracker >,
+    entities: Entities< 'a >,
+    map: ReadExpect< 'a, Tilemap >,
+    logic: ReadStorage< 'a, CreatureLogicWander >,
+    game_state: WriteExpect< 'a, GameState >,
+    pos: WriteStorage< 'a, Position >,    
+}
+
 impl<'a> System<'a> for CreatureLogicWanderSystem
 {
-    type SystemData = (
-        ReadExpect< 'a, Tilemap >,
-        ReadStorage< 'a, CreatureLogicWander >,
-        WriteExpect< 'a, GameState >,
-        WriteStorage< 'a, Position >,
-    );
+    type SystemData = SystemDataT< 'a >;
     
-    fn run( &mut self, ( map, creature_logic_wander, game_state, mut pos ): Self::SystemData )
+    fn run( &mut self, mut data: Self::SystemData )
     {
         use specs::join::Join;
-        
-        let mut game_state = game_state;
-        let map = map;
 
-        for ( _, pos ) in ( &creature_logic_wander, &mut pos ).join()
+        let creature_tracker = data.creature_tracker;
+        let mut game_state = data.game_state;
+        let map = data.map;
+
+        for ( entity, _, pos ) in ( &data.entities, &data.logic, &mut data.pos ).join()
         {
             let command = game_state.rng().gen_range(1, 10);
             let target_move;
@@ -61,7 +78,8 @@ impl<'a> System<'a> for CreatureLogicWanderSystem
 
             let new_pos = *pos + target_move;
 
-            if map.passable_pos( new_pos )
+            if map.passable_pos( new_pos ) &&
+                creature_tracker.check_collision( entity, new_pos ) == None
             {
                 *pos = new_pos;
             }

@@ -7,6 +7,9 @@ Documentation:
  **/
 
 // External dependencies
+extern crate shred;
+#[macro_use]
+extern crate shred_derive;
 use specs::{ Builder, /* System, */ World, RunNow };
 
 // Internal dependencies.
@@ -24,6 +27,7 @@ use creature::{
     CreatureDisplaySystem,
     CreatureLogicPlayer,
     CreatureLogicPlayerSystem,
+    CreatureTracker,
     CreatureLogicWander,
     CreatureLogicWanderSystem,
     CreatureVisibilitySystem,
@@ -60,6 +64,7 @@ fn main() {
     }
 
     let mut world = World::new();
+    world.add_resource( CreatureTracker::new() );
     world.add_resource( game_state );
     world.add_resource( map );
     world.add_resource( Window::new() );

@@ -7,12 +7,22 @@ Documentation:
 **/
 
 // External includes
-use specs::{ Component, DenseVecStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage };
+use specs::{
+    Component,
+    DenseVecStorage,
+    Entities,
+    ReadExpect,
+    ReadStorage,
+    System,
+    WriteExpect,
+    WriteStorage
+};
+use specs::prelude::*;
 
 // Internal includes
 use super::super::game_state::GameState;
 use super::super::io::Window;
-use crate::creature::{ PlayerMarker, PlayerPosition };
+use crate::creature::{ CreatureTracker, PlayerMarker, PlayerPosition };
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -25,28 +35,36 @@ impl Component for CreatureLogicPlayer
 
 pub struct CreatureLogicPlayerSystem;
 
+#[derive(SystemData)]
+pub struct SystemDataT< 'a >
+{
+    entities: Entities< 'a >,
+    creature_tracker: ReadExpect< 'a, CreatureTracker >,
+    map: ReadExpect< 'a, Tilemap >,
+    window: ReadExpect< 'a, Window >,
+    game_state: WriteExpect< 'a, GameState >,
+    player_pos: WriteExpect< 'a, PlayerPosition >,
+    player_marker: ReadStorage< 'a, PlayerMarker >,
+    logic: WriteStorage< 'a, CreatureLogicPlayer >,
+    pos: WriteStorage< 'a, Position >,
+}
+
 impl<'a> System<'a> for CreatureLogicPlayerSystem
 {
-    type SystemData = (
-        ReadExpect< 'a, Tilemap >,
-        ReadExpect< 'a, Window >,
-        WriteExpect< 'a, GameState >,
-        WriteExpect< 'a, PlayerPosition >,
-        ReadStorage< 'a, PlayerMarker >,
-        WriteStorage< 'a, CreatureLogicPlayer >,
-        WriteStorage< 'a, Position >,
-    );
+    type SystemData = SystemDataT< 'a >;
 
-    fn run( &mut self, ( map, window, game_state, player_pos, player_marker, mut logic, mut pos ): Self::SystemData)
+    fn run( &mut self, mut data: SystemDataT )
     {
         use specs::Join;
 
-        let mut game_state = game_state;
-        let map = map;
-        let mut player_pos = player_pos;
-        let window = window;
+        let creature_tracker = data.creature_tracker;
+        let mut game_state = data.game_state;
+        let map = data.map;
+        let mut player_pos = data.player_pos;
+        let window = data.window;
 
-        for ( _logic, pos, _ ) in ( &mut logic, &mut pos, &player_marker ).join()
+        for ( entity, _logic, pos, _ ) in
+            ( &data.entities, &mut data.logic, &mut data.pos, &data.player_marker ).join()
         { 
             let command = window.get_char();
                 
@@ -68,9 +86,10 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
             let target_pos = *pos;
             let target_new_pos = target_pos + target_move;
 
-            if map.passable_pos( target_new_pos )
+            if map.passable_pos( target_new_pos ) &&
+                creature_tracker.check_collision( entity, target_new_pos ) == None
             {
-                *pos = *pos + target_move;
+                *pos = target_new_pos;
             }
 
             player_pos.0 = *pos;
