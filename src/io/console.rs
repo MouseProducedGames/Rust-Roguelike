@@ -17,7 +17,7 @@ extern crate crossterm_screen;
 // Internal includes.
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::{ Tilemap, VisibilityMap, VisibilityType };
-use super::multidim::Multidim;
+use super::super::multidim::Multidim;
 
 static MAP_GRAPHICS: [ char; 4 ] = [ ' ', '#', '.', '+' ];
 static SEEN_MAP_GRAPHICS: [ char; 4 ] = [ ' ', 'x', '-', '=' ];
