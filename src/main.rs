@@ -21,6 +21,7 @@ mod io;
 mod rrl_math;
 mod multidim;
 mod multimap;
+mod stats;
 mod tiled_shapes_2d;
 mod world;
 use creature::{
@@ -29,9 +30,10 @@ use creature::{
     CreatureDisplaySystem,
     CreatureLogicPlayer,
     CreatureLogicPlayerSystem,
-    CreatureTracker,
     CreatureLogicWander,
     CreatureLogicWanderSystem,
+    CreatureStats,
+    CreatureTracker,
     CreatureVisibilitySystem,
     PlayerDisplaySystem,
     PlayerMarker,
@@ -75,6 +77,7 @@ fn main() {
     world.register::< Command >();
     world.register::< CreatureLogicPlayer >();
     world.register::< CreatureLogicWander >();
+    world.register::< CreatureStats >();
     world.register::< Faction >();
     world.register::< PlayerMarker >();
     world.register::< Position >();
@@ -87,6 +90,7 @@ fn main() {
         .with( Command::None )
         .with( CreatureLogicPlayer {} )
         .with( Faction::new( 0 ) )
+        .with( CreatureStats::default() )
         .with( Position::new( 8, 5 ) )
         .with( PlayerMarker )
         .with( SightRange::new( 5 ) )
@@ -97,12 +101,23 @@ fn main() {
         *(&mut *world.write_resource::< Tilemap >()).tile_type_mut( 8, 5 ) = 2;
     }
     
-    world.
+    /* world.
         create_entity()
         .with( Command::None )
         .with( CreatureLogicWander )
         .with( Faction::new( 0 ) )
         .with( Position::new( 12, 8 ) )
+        .with( SightRange::new( 5 ) )
+        .with( Visibility::new() )
+    .build(); */
+
+    world.
+        create_entity()
+        .with( Command::None )
+        .with( CreatureLogicWander )
+        .with( Faction::new( 0 ) )
+        .with( CreatureStats::default() )
+        .with( Position::new( 8, 12 ) )
         .with( SightRange::new( 5 ) )
         .with( Visibility::new() )
         .build();
