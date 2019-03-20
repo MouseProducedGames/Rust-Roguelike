@@ -21,6 +21,7 @@ mod io;
 mod rrl_math;
 mod multidim;
 mod multimap;
+mod stats;
 mod tiled_shapes_2d;
 mod world;
 use creature::{
@@ -45,6 +46,7 @@ use faction::Faction;
 use game_state::GameState;
 use io::Window;
 use rrl_math::{ Bounds,  Position };
+use stats::Health;
 use world::Tilemap;
 
 fn main() {
@@ -76,6 +78,7 @@ fn main() {
     world.register::< CreatureLogicPlayer >();
     world.register::< CreatureLogicWander >();
     world.register::< Faction >();
+    world.register::< Health >();
     world.register::< PlayerMarker >();
     world.register::< Position >();
     world.register::< SightRange >();
@@ -87,6 +90,7 @@ fn main() {
         .with( Command::None )
         .with( CreatureLogicPlayer {} )
         .with( Faction::new( 0 ) )
+        .with( Health::new( 10 ) )
         .with( Position::new( 8, 5 ) )
         .with( PlayerMarker )
         .with( SightRange::new( 5 ) )
@@ -97,12 +101,23 @@ fn main() {
         *(&mut *world.write_resource::< Tilemap >()).tile_type_mut( 8, 5 ) = 2;
     }
     
-    world.
+    /* world.
         create_entity()
         .with( Command::None )
         .with( CreatureLogicWander )
         .with( Faction::new( 0 ) )
         .with( Position::new( 12, 8 ) )
+        .with( SightRange::new( 5 ) )
+        .with( Visibility::new() )
+    .build(); */
+
+    world.
+        create_entity()
+        .with( Command::None )
+        .with( CreatureLogicWander )
+        .with( Faction::new( 0 ) )
+        .with( Health::new( 10 ) )
+        .with( Position::new( 8, 12 ) )
         .with( SightRange::new( 5 ) )
         .with( Visibility::new() )
         .build();
