@@ -25,7 +25,7 @@ pub struct SystemDataT< 'a >
     player_markers: ReadStorage< 'a, PlayerMarker >,
     positions: ReadStorage< 'a, Position >,
     visibilities: ReadStorage< 'a, Visibility >,
-    window: WriteExpect< 'a, Arc< Mutex< Display > > >,
+    display: WriteExpect< 'a, Arc< Mutex< Display > > >,
 }
 
 impl< 'a > System< 'a > for PlayerDisplaySystem
@@ -38,7 +38,7 @@ impl< 'a > System< 'a > for PlayerDisplaySystem
 
         let map = data.map;
         let map_hash = calculate_hash( &*map );
-        let mut window = data.window.lock().unwrap();
+        let mut display = data.display.lock().unwrap();
 
         for ( _, player_pos, visibility ) in ( &data.player_markers, &data.positions, &data.visibilities ).join()
         {
@@ -51,7 +51,7 @@ impl< 'a > System< 'a > for PlayerDisplaySystem
                 _ => continue,
             }
             
-            window.write_map( *player_pos, &map, &visibility );
+            display.write_map( *player_pos, &map, &visibility );
         }
     }
 }

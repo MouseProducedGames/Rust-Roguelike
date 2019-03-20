@@ -98,15 +98,12 @@ fn impassable_movement<'a>(
                 _ => return,
             }
 
-            match Combat::one_attack(
+            if let CombatResult::DefenderDead = Combat::one_attack(
                 &mut *game_state,
                 &attacker_stats,
                 defender_stats
             ) {
-                CombatResult::DefenderDead => {
-                    (*defender_stats.health_mut().value_mut()).min( -100 );
-                },
-                _ => (),
+                (*defender_stats.health_mut().value_mut()).min( -100 );
             }
         }
         None => *pos = new_pos,

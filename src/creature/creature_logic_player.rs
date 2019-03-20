@@ -45,7 +45,7 @@ pub struct SystemDataT< 'a >
     _entities: Entities< 'a >,
     _creature_tracker: ReadExpect< 'a, CreatureTracker >,
     _map: ReadExpect< 'a, Tilemap >,
-    window: ReadExpect< 'a, Arc< Mutex < Display > > >,
+    display: ReadExpect< 'a, Arc< Mutex < Display > > >,
     game_state: WriteExpect< 'a, GameState >,
     player_marker: ReadStorage< 'a, PlayerMarker >,
     commands: WriteStorage< 'a, Command >,
@@ -64,12 +64,12 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
         let _creature_tracker = data._creature_tracker;
         let mut game_state = data.game_state;
         let _map = data._map;
-        let window = data.window.lock().unwrap();
+        let display = data.display.lock().unwrap();
 
         for ( _entity, _logic, command,  _pos, _ ) in
             ( &data._entities, &mut data.logic, &mut data.commands,  &mut data.pos, &data.player_marker ).join()
         { 
-            let key_command = window.get_char();
+            let key_command = display.get_char();
             
             let target_move;
             match key_command
@@ -87,15 +87,6 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
             }
 
             *command = Command::Move( target_move );
-
-            /* let target_pos = *pos;
-            let target_new_pos = target_pos + target_move;
-
-            if map.passable_pos( target_new_pos ) &&
-                creature_tracker.check_collision( entity, target_new_pos ) == None
-            {
-                *pos = target_new_pos;
-            } */
         }
     }
 }

@@ -4,7 +4,7 @@ See license in the LICENSE file
 
 Documentation:
 
-**/
+ **/
 
 // External includes
 use specs::{ ReadExpect, ReadStorage, System, WriteExpect };
@@ -17,22 +17,26 @@ pub use crate::io::Display;
 
 pub struct CreatureDisplaySystem;
 
-impl<'a> System<'a> for CreatureDisplaySystem
+#[derive(SystemData)]
+pub struct SystemDataT< 'a >
 {
-    type SystemData = (
-        ReadExpect< 'a, PlayerPosition >,
-        ReadStorage< 'a, Position >,
-        WriteExpect< 'a, Arc< Mutex< Display > > >
-    );
+    player_pos: ReadExpect< 'a, PlayerPosition >,
+    positions: ReadStorage< 'a, Position >,
+    display: WriteExpect< 'a, Arc< Mutex< Display > > >
+}
 
-    fn run( &mut self, ( view_pos, pos, window ): Self::SystemData )
+impl< 'a > System< 'a > for CreatureDisplaySystem
+{
+    type SystemData = SystemDataT< 'a >;
+
+    fn run( &mut self, data: Self::SystemData )
     {
         use specs::join::Join;
 
-        let view_pos = view_pos.0;
-        let mut window = ( window ).lock().unwrap();
+        let view_pos = data.player_pos.0;
+        let mut window = data.display.lock().unwrap();
 
-        for pos in pos.join()
+        for pos in data.positions.join()
         {
             window.write_creature( *pos, view_pos );
         }
