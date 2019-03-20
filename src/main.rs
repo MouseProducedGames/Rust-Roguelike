@@ -17,7 +17,6 @@ mod creature;
 mod dungen;
 mod faction;
 mod game;
-mod game_state;
 mod io;
 mod rrl_math;
 mod multidim;
@@ -45,7 +44,7 @@ use creature::{
 };
 use dungen::{ DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType };
 use faction::Faction;
-use game_state::GameState;
+use game::GameState;
 use io::Window;
 use rrl_math::{ Bounds,  Position };
 use world::Tilemap;

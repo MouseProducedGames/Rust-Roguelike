@@ -20,8 +20,8 @@ use specs::{
 use rand::Rng;
 
 // Internal dependencies.
-use super::super::game_state::GameState;
 use crate::creature::{ Command, CreatureTracker, };
+use crate::game::GameState;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 

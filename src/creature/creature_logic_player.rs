@@ -19,13 +19,13 @@ use specs::{
 };
 
 // Internal includes
-use super::super::game_state::GameState;
 use super::super::io::Window;
 use crate::creature::{
     Command,
     CreatureTracker,
     PlayerMarker,
 };
+use crate::game::GameState;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
