@@ -47,6 +47,7 @@ use faction::Faction;
 use game_state::GameState;
 use io::Window;
 use rrl_math::{ Bounds,  Position };
+use stats::Health;
 use world::Tilemap;
 
 fn main() {
@@ -79,6 +80,7 @@ fn main() {
     world.register::< CreatureLogicWander >();
     world.register::< CreatureStats >();
     world.register::< Faction >();
+    world.register::< Health >();
     world.register::< PlayerMarker >();
     world.register::< Position >();
     world.register::< SightRange >();
