@@ -11,6 +11,7 @@ extern crate shred;
 #[macro_use]
 extern crate shred_derive;
 use specs::{ Builder, /* System, */ World, RunNow };
+use std::sync::{ Arc, Mutex };
 
 // Internal dependencies.
 mod creature;
@@ -46,11 +47,13 @@ use creature::{
 use dungen::{ DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType };
 use faction::Faction;
 use game::GameState;
-use io::Window;
+use io::Display;
 use rrl_math::{ Bounds,  Position };
 use world::Tilemap;
 
 fn main() {
+
+    let display: Arc< Mutex< dyn Display > > = Arc::new( Mutex::new( io::console::ConsoleDisplay::new() ) );
 
     // Window::init();
     let mut game_state = GameState::new();
@@ -73,7 +76,7 @@ fn main() {
     world.add_resource( CreatureTracker::new() );
     world.add_resource( game_state );
     world.add_resource( map );
-    world.add_resource( Window::new() );
+    world.add_resource( display );
     world.add_resource( PlayerPosition( Position::new( 8, 5 ) ) );
     world.register::< Command >();
     world.register::< CreatureLogicPlayer >();
@@ -141,7 +144,11 @@ fn main() {
 
         world.maintain();
 
-        world.write_resource::< Window >().present();
+        {
+            let mutex_display = world.write_resource::< Arc< Mutex< Display > > >();
+            let mut display = mutex_display.lock().unwrap();
+            display.present();
+        }
         
         creature_player_logic.run_now( &world.res );
 

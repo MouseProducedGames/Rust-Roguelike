@@ -8,11 +8,12 @@ Documentation:
 
 // External includes
 use specs::{ ReadExpect, ReadStorage, System, WriteExpect };
+use std::sync::{ Arc, Mutex };
 
 // Internal includes
 pub use crate::creature::PlayerPosition;
 pub use crate::rrl_math::Position;
-pub use super::super::io::Window;
+pub use crate::io::Display;
 
 pub struct CreatureDisplaySystem;
 
@@ -21,7 +22,7 @@ impl<'a> System<'a> for CreatureDisplaySystem
     type SystemData = (
         ReadExpect< 'a, PlayerPosition >,
         ReadStorage< 'a, Position >,
-        WriteExpect< 'a, Window >
+        WriteExpect< 'a, Arc< Mutex< Display > > >
     );
 
     fn run( &mut self, ( view_pos, pos, window ): Self::SystemData )
@@ -29,7 +30,7 @@ impl<'a> System<'a> for CreatureDisplaySystem
         use specs::join::Join;
 
         let view_pos = view_pos.0;
-        let mut window = window;
+        let mut window = ( window ).lock().unwrap();
 
         for pos in pos.join()
         {

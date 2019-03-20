@@ -17,15 +17,16 @@ use specs::{
     WriteExpect,
     WriteStorage
 };
+use std::sync::{ Arc, Mutex };
 
 // Internal includes
-use super::super::io::Window;
 use crate::creature::{
     Command,
     CreatureTracker,
     PlayerMarker,
 };
 use crate::game::GameState;
+use crate::io::Display;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -44,7 +45,7 @@ pub struct SystemDataT< 'a >
     _entities: Entities< 'a >,
     _creature_tracker: ReadExpect< 'a, CreatureTracker >,
     _map: ReadExpect< 'a, Tilemap >,
-    window: ReadExpect< 'a, Window >,
+    window: ReadExpect< 'a, Arc< Mutex < Display > > >,
     game_state: WriteExpect< 'a, GameState >,
     player_marker: ReadStorage< 'a, PlayerMarker >,
     commands: WriteStorage< 'a, Command >,
@@ -63,7 +64,7 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
         let _creature_tracker = data._creature_tracker;
         let mut game_state = data.game_state;
         let _map = data._map;
-        let window = data.window;
+        let window = data.window.lock().unwrap();
 
         for ( _entity, _logic, command,  _pos, _ ) in
             ( &data._entities, &mut data.logic, &mut data.commands,  &mut data.pos, &data.player_marker ).join()

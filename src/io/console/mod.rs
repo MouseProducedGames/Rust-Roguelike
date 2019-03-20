@@ -9,6 +9,5 @@ Documentation:
 // External includes
 
 // internal includes
-pub mod display;
-pub mod console;
-pub use display::Display;
+pub mod console_display;
+pub use console_display::ConsoleDisplay;

@@ -15,38 +15,23 @@ extern crate crossterm_screen;
 // use std::iter::Iterator;
 
 // Internal includes.
+use crate::io::Display;
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::{ Tilemap, VisibilityMap, VisibilityType };
-use super::super::multidim::Multidim;
+use super::super::super::multidim::Multidim;
 
 static MAP_GRAPHICS: [ char; 4 ] = [ ' ', '#', '.', '+' ];
 static SEEN_MAP_GRAPHICS: [ char; 4 ] = [ ' ', 'x', '-', '=' ];
 
-pub struct Window
+pub struct ConsoleDisplay
 {
     term: crossterm::Crossterm,
     buffers: [Multidim<char>; 2],
     back_buffer_index: usize,
 }
 
-impl Window
+impl ConsoleDisplay
 {
-    /* pub fn init()
-    {
-    /* ncurses::initscr();
-    ncurses::keypad(ncurses::stdscr(), true);
-    // ncurses::raw();
-    ncurses::curs_set(ncurses::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
-    ncurses::nonl();
-    ncurses::cbreak();
-    ncurses::noecho(); */
-}
-
-    pub fn close()
-    {
-    // ncurses::endwin();
-} */
-
     pub fn new() -> Self
     {
         let term = crossterm::Crossterm::new();
@@ -81,7 +66,35 @@ impl Window
         output
     }
 
-    pub fn get_char( &self ) -> char
+    fn front_buffer_index(&self) -> usize
+    {
+        1 - self.back_buffer_index
+    }
+
+    fn move_cursor( &self, x: i32, y: i32)
+    {
+        match self.term.cursor().goto( x as u16, y as u16 ) {
+            Ok(_v) => (),
+            _ => panic!( "Could not move cursor to ( {}, {} )", x, y )
+        }
+    }
+
+    fn write_char(&self, ch: char)
+    {
+        println!( "{}", ch );
+    }
+
+    fn put_char(&self, x: i32, y: i32, ch: char)
+    {
+        self.move_cursor( x, y );
+        self.write_char( ch );
+        // ncurses::mvaddch(y, x, ch as u64);
+    }
+}
+
+impl Display for ConsoleDisplay
+{
+    fn get_char( &self ) -> char
     {
         self.move_cursor( 0, 0 );
         let ch;
@@ -93,18 +106,9 @@ impl Window
         self.move_cursor( 0, 0 );
         println!(" ");
         ch
-            
-        /* if let Some(Ok(key)) = self.term.input().read_async().bytes().next()
-        {
-            key as char
-    }
-        else
-        {
-            ' '
-    } */
     }
 
-    pub fn present(&mut self)
+    fn present(&mut self)
     {
         {
             self.back_buffer_index = 1 - self.back_buffer_index;
@@ -173,13 +177,8 @@ impl Window
             }
         }
     }
-
-    /* pub fn write_line(s: &str)
-    {
-    ncurses::printw(s);
-} */
-
-    pub fn write_creature( &mut self, creature_pos: Position, view_pos: Position )
+    
+    fn write_creature( &mut self, creature_pos: Position, view_pos: Position )
     {
         let disp = creature_pos - view_pos;
         if ( disp.x < -17 ) || ( disp.x > 17 ) ||
@@ -192,7 +191,7 @@ impl Window
         // self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
     }
 
-    pub fn write_map( &mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap )
+    fn write_map( &mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap )
     {
         let back_buffer = &mut self.buffers[ self.back_buffer_index ];
         for view_addend_y in -17..18_i32
@@ -221,33 +220,9 @@ impl Window
         }    
     }
 
-    fn front_buffer_index(&self) -> usize
-    {
-        1 - self.back_buffer_index
-    }
-
-    fn move_cursor( &self, x: i32, y: i32)
-    {
-        match self.term.cursor().goto( x as u16, y as u16 ) {
-            Ok(_v) => (),
-            _ => panic!( "Could not move cursor to ( {}, {} )", x, y )
-        }
-    }
-
-    fn write_char(&self, ch: char)
-    {
-        println!( "{}", ch );
-    }
-
-    fn put_char(&self, x: i32, y: i32, ch: char)
-    {
-        self.move_cursor( x, y );
-        self.write_char( ch );
-        // ncurses::mvaddch(y, x, ch as u64);
-    }
 }
 
-impl Drop for Window
+impl Drop for ConsoleDisplay
 {
     fn drop( &mut self )
     {
