@@ -21,7 +21,7 @@ use rand::Rng;
 
 // Internal dependencies.
 use super::super::game_state::GameState;
-use crate::creature::CreatureTracker;
+use crate::creature::{ Command, CreatureTracker, };
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -38,12 +38,13 @@ pub struct CreatureLogicWanderSystem;
 #[derive(SystemData)]
 pub struct SystemDataT< 'a >
 {
-    creature_tracker: ReadExpect< 'a, CreatureTracker >,
-    entities: Entities< 'a >,
-    map: ReadExpect< 'a, Tilemap >,
+    _creature_tracker: ReadExpect< 'a, CreatureTracker >,
+    _entities: Entities< 'a >,
+    _map: ReadExpect< 'a, Tilemap >,
     logic: ReadStorage< 'a, CreatureLogicWander >,
     game_state: WriteExpect< 'a, GameState >,
-    pos: WriteStorage< 'a, Position >,    
+    commands: WriteStorage< 'a, Command >,
+    _pos: WriteStorage< 'a, Position >,    
 }
 
 impl<'a> System<'a> for CreatureLogicWanderSystem
@@ -54,15 +55,16 @@ impl<'a> System<'a> for CreatureLogicWanderSystem
     {
         use specs::join::Join;
 
-        let creature_tracker = data.creature_tracker;
+        let _creature_tracker = data._creature_tracker;
         let mut game_state = data.game_state;
-        let map = data.map;
+        let _map = data._map;
 
-        for ( entity, _, pos ) in ( &data.entities, &data.logic, &mut data.pos ).join()
+        for ( _entity, _, command, _pos ) in
+            ( &data._entities, &data.logic, &mut data.commands, &mut data._pos ).join()
         {
-            let command = game_state.rng().gen_range(1, 10);
+            let key_command = game_state.rng().gen_range(1, 10);
             let target_move;
-            match command
+            match key_command
             {
                 1 =>   target_move = Displacement::new(-1,  1),
                 2 =>   target_move = Displacement::new( 0,  1),
@@ -75,14 +77,16 @@ impl<'a> System<'a> for CreatureLogicWanderSystem
                 9 =>   target_move = Displacement::new( 1, -1),
                 _ =>   target_move = Displacement::new( 0,  0),
             }
+            
+            *command = Command::Move( target_move );
 
-            let new_pos = *pos + target_move;
+            /* let new_pos = *pos + target_move;
 
             if map.passable_pos( new_pos ) &&
                 creature_tracker.check_collision( entity, new_pos ) == None
             {
                 *pos = new_pos;
-            }
+            } */
         }
     }
 }

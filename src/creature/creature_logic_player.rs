@@ -17,12 +17,15 @@ use specs::{
     WriteExpect,
     WriteStorage
 };
-use specs::prelude::*;
 
 // Internal includes
 use super::super::game_state::GameState;
 use super::super::io::Window;
-use crate::creature::{ CreatureTracker, PlayerMarker, PlayerPosition };
+use crate::creature::{
+    Command,
+    CreatureTracker,
+    PlayerMarker,
+};
 use crate::rrl_math::{ Displacement, Position };
 use crate::world::Tilemap;
 
@@ -38,13 +41,13 @@ pub struct CreatureLogicPlayerSystem;
 #[derive(SystemData)]
 pub struct SystemDataT< 'a >
 {
-    entities: Entities< 'a >,
-    creature_tracker: ReadExpect< 'a, CreatureTracker >,
-    map: ReadExpect< 'a, Tilemap >,
+    _entities: Entities< 'a >,
+    _creature_tracker: ReadExpect< 'a, CreatureTracker >,
+    _map: ReadExpect< 'a, Tilemap >,
     window: ReadExpect< 'a, Window >,
     game_state: WriteExpect< 'a, GameState >,
-    player_pos: WriteExpect< 'a, PlayerPosition >,
     player_marker: ReadStorage< 'a, PlayerMarker >,
+    commands: WriteStorage< 'a, Command >,
     logic: WriteStorage< 'a, CreatureLogicPlayer >,
     pos: WriteStorage< 'a, Position >,
 }
@@ -57,19 +60,18 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
     {
         use specs::Join;
 
-        let creature_tracker = data.creature_tracker;
+        let _creature_tracker = data._creature_tracker;
         let mut game_state = data.game_state;
-        let map = data.map;
-        let mut player_pos = data.player_pos;
+        let _map = data._map;
         let window = data.window;
 
-        for ( entity, _logic, pos, _ ) in
-            ( &data.entities, &mut data.logic, &mut data.pos, &data.player_marker ).join()
+        for ( _entity, _logic, command,  _pos, _ ) in
+            ( &data._entities, &mut data.logic, &mut data.commands,  &mut data.pos, &data.player_marker ).join()
         { 
-            let command = window.get_char();
-                
+            let key_command = window.get_char();
+            
             let target_move;
-            match command
+            match key_command
             {
                 '1' =>   target_move = Displacement::new(-1,  1),
                 '2' =>   target_move = Displacement::new( 0,  1),
@@ -83,16 +85,16 @@ impl<'a> System<'a> for CreatureLogicPlayerSystem
                 _ =>     target_move = Displacement::new( 0,  0),
             }
 
-            let target_pos = *pos;
+            *command = Command::Move( target_move );
+
+            /* let target_pos = *pos;
             let target_new_pos = target_pos + target_move;
 
             if map.passable_pos( target_new_pos ) &&
                 creature_tracker.check_collision( entity, target_new_pos ) == None
             {
                 *pos = target_new_pos;
-            }
-
-            player_pos.0 = *pos;
+            } */
         }
     }
 }

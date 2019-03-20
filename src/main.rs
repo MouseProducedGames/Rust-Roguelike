@@ -24,6 +24,8 @@ mod multimap;
 mod tiled_shapes_2d;
 mod world;
 use creature::{
+    Command,
+    CreatureCommandSystem,
     CreatureDisplaySystem,
     CreatureLogicPlayer,
     CreatureLogicPlayerSystem,
@@ -35,6 +37,7 @@ use creature::{
     PlayerMarker,
     PlayerPosition,
     SightRange,
+    ViewpointMarker,
     Visibility
 };
 use dungen::{ DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType };
@@ -69,21 +72,25 @@ fn main() {
     world.add_resource( map );
     world.add_resource( Window::new() );
     world.add_resource( PlayerPosition( Position::new( 8, 5 ) ) );
+    world.register::< Command >();
     world.register::< CreatureLogicPlayer >();
     world.register::< CreatureLogicWander >();
     world.register::< Faction >();
     world.register::< PlayerMarker >();
     world.register::< Position >();
     world.register::< SightRange >();
+    world.register::< ViewpointMarker >();
     world.register::< Visibility >();
 
     world
         .create_entity()
+        .with( Command::None )
         .with( CreatureLogicPlayer {} )
         .with( Faction::new( 0 ) )
         .with( Position::new( 8, 5 ) )
         .with( PlayerMarker )
         .with( SightRange::new( 5 ) )
+        .with( ViewpointMarker )
         .with( Visibility::new() )
         .build();
     {
@@ -92,6 +99,7 @@ fn main() {
     
     world.
         create_entity()
+        .with( Command::None )
         .with( CreatureLogicWander )
         .with( Faction::new( 0 ) )
         .with( Position::new( 12, 8 ) )
@@ -99,6 +107,7 @@ fn main() {
         .with( Visibility::new() )
         .build();
 
+    let mut creature_command_system = CreatureCommandSystem;
     let mut creature_display_system = CreatureDisplaySystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
     let mut creature_wander_logic = CreatureLogicWanderSystem;
@@ -123,6 +132,10 @@ fn main() {
 
         creature_wander_logic.run_now( &world.res );
 
+        world.maintain();
+
+        creature_command_system.run_now( &world.res );
+        
         world.maintain();
     }
 
