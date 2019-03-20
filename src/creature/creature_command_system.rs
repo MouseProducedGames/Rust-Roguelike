@@ -22,11 +22,10 @@ use crate::creature::{
     Command,
     CreatureStats,
     CreatureTracker,
-    PlayerPosition,
-    ViewpointMarker,
 };
 use crate::game::{ Combat, CombatResult };
 use crate::rrl_math::Position;
+use crate::stats::Stat;
 use crate::world::Tilemap;
 
 pub struct CreatureCommandSystem;
@@ -37,10 +36,8 @@ pub struct SystemDataT< 'a >
     creature_tracker: ReadExpect< 'a, CreatureTracker >,
     entities: Entities< 'a >,
     map: ReadExpect< 'a, Tilemap >,
-    player_pos: WriteExpect< 'a, PlayerPosition >,
     game_state: WriteExpect< 'a, GameState >,
     command: ReadStorage< 'a, Command >,
-    viewpoint: ReadStorage< 'a, ViewpointMarker >,
     stats: WriteStorage< 'a, CreatureStats >,
     pos: WriteStorage< 'a, Position >,
 }
@@ -87,11 +84,7 @@ impl<'a> System<'a> for CreatureCommandSystem
                                     defender_stats
                                 ) {
                                     CombatResult::DefenderDead => {
-                                        match data.entities.delete( other_entity ) {
-                                            Ok( _ ) => (),
-                                            _ => panic!( " Could not delete entity which has to exist!" ),
-                                        }
-                                        
+                                        (*defender_stats.health_mut().value_mut()).min( -100 );
                                     },
                                     _ => (),
                                 }
@@ -102,11 +95,6 @@ impl<'a> System<'a> for CreatureCommandSystem
                 }
                 _ => (),
             }
-        }
-
-        for ( pos, _ ) in ( &data.pos, &data.viewpoint ).join()
-        {
-            data.player_pos.0 = *pos;
         }
     }
 }

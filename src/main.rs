@@ -28,6 +28,7 @@ use creature::{
     Command,
     CreatureCommandSystem,
     CreatureDisplaySystem,
+    CreatureLastUpdateSystem,
     CreatureLogicPlayer,
     CreatureLogicPlayerSystem,
     CreatureLogicWander,
@@ -124,6 +125,7 @@ fn main() {
 
     let mut creature_command_system = CreatureCommandSystem;
     let mut creature_display_system = CreatureDisplaySystem;
+    let mut creaature_last_update_system = CreatureLastUpdateSystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
     let mut creature_wander_logic = CreatureLogicWanderSystem;
     let mut creature_visibility_system = CreatureVisibilitySystem;
@@ -150,6 +152,10 @@ fn main() {
         world.maintain();
 
         creature_command_system.run_now( &world.res );
+        
+        world.maintain();
+
+        creaature_last_update_system.run_now( &world.res );
         
         world.maintain();
     }

@@ -51,4 +51,9 @@ impl CreatureTracker
     {
         self.lookup.insert( entity, pos );
     }
+
+    pub fn remove_entity( &mut self, entity: Entity )
+    {
+        self.lookup.remove( &entity );
+    }
 }
