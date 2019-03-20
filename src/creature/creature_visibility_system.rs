@@ -16,28 +16,31 @@ use crate::world::{ calculate_visibility, Mapping, Tilemap, VisibilityMap };
 
 pub struct CreatureVisibilitySystem;
 
+#[derive(SystemData)]
+pub struct SystemDataT<'a>
+{
+    entities: Entities< 'a >,
+    map: ReadExpect< 'a, Tilemap >,
+    creature_tracker: WriteExpect< 'a, CreatureTracker >,
+    positions: ReadStorage< 'a, Position >,
+    sight_ranges: ReadStorage< 'a, SightRange >,
+    visibilities: WriteStorage< 'a, Visibility >
+}
+
 impl<'a> System<'a> for CreatureVisibilitySystem
 {
-    type SystemData = (
-        Entities< 'a >,
-        ReadExpect< 'a, Tilemap >,
-        WriteExpect< 'a, CreatureTracker >,
-        ReadStorage< 'a, Position >,
-        ReadStorage< 'a, SightRange >,
-        WriteStorage< 'a, Visibility >
-    );
+    type SystemData = SystemDataT<'a>;
 
-    fn run( &mut self, ( entities, map, mut creature_tracker, pos, sight_range, mut visibility_comp ): Self::SystemData )
+    fn run( &mut self, mut data: Self::SystemData )
     {
         use specs::join::Join;
 
-        let creature_tracker = &mut creature_tracker;
-        let entities = entities;
-        let map = map;
+        let creature_tracker = &mut data.creature_tracker;
+        let map = data.map;
         let map_hash = calculate_hash( &*map );
 
         for ( entity, pos, sight_range, visibility_comp ) in
-            ( &entities, &pos, &sight_range, &mut visibility_comp ).join()
+            ( &data.entities, &data.positions, &data.sight_ranges, &mut data.visibilities ).join()
         {
             creature_tracker.set_position( entity, *pos );
             

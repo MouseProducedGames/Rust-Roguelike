@@ -19,7 +19,7 @@ pub struct CreatureStats
     strength: Attribute,
     agility: Attribute,
     coordination: Attribute,
-    endurance: Attribute,
+    _endurance: Attribute,
     health: Attribute,
 }
 
@@ -30,7 +30,7 @@ impl CreatureStats
         self.strength
     }
 
-    pub fn strength_mut( &mut self ) -> &mut Attribute
+    pub fn _strength_mut( &mut self ) -> &mut Attribute
     {
         &mut self.strength
     }
@@ -40,7 +40,7 @@ impl CreatureStats
         self.agility
     }
 
-    pub fn agility_mut( &mut self ) -> &mut Attribute
+    pub fn _agility_mut( &mut self ) -> &mut Attribute
     {
         &mut self.agility
     }
@@ -50,19 +50,19 @@ impl CreatureStats
         self.coordination
     }
 
-    pub fn coordination_mut( &mut self ) -> &mut Attribute
+    pub fn _coordination_mut( &mut self ) -> &mut Attribute
     {
         &mut self.coordination
     }
 
-    pub fn endurance( &self ) -> Attribute
+    pub fn _endurance( &self ) -> Attribute
     {
-        self.endurance
+        self._endurance
     }
 
-    pub fn endurance_mut( &mut self ) -> &mut Attribute
+    pub fn _endurance_mut( &mut self ) -> &mut Attribute
     {
-        &mut self.endurance
+        &mut self._endurance
     }
 
     pub fn health( &self ) -> Attribute
@@ -90,7 +90,7 @@ impl Default for CreatureStats
             strength: ten,
             agility: ten,
             coordination: ten,
-            endurance: ten,
+            _endurance: ten,
             health: ten,
         }
     }

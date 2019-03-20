@@ -47,12 +47,12 @@ impl<'a> SplitDungeon<'a>
     ) -> Self
     {
         Self {
-            split_type: split_type,
-            min_bounds: min_bounds,
-            door_tile_type: door_tile_type,
-            floor_tile_type: floor_tile_type,
-            wall_tile_type: wall_tile_type,
-            rnd: rnd
+            split_type,
+            min_bounds,
+            door_tile_type,
+            floor_tile_type,
+            wall_tile_type,
+            rnd
         }
     }
 }
@@ -85,9 +85,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
                 else if height > width
                 {
                     split_width = false;
-                }
-                else
-                {
+                } else {
                     split_width = self.rnd.gen_bool( 0.5 );
                 }
             },
@@ -103,9 +101,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
         {
             split_min = self.min_bounds.width;
             split_max = width - self.min_bounds.width;
-        }
-        else
-        {
+        } else {
             split_min = self.min_bounds.height;
             split_max = height - self.min_bounds.height;
         }
@@ -119,9 +115,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
         else if split_max < split_min
         {
             return;
-        }
-        else
-        {
+        } else {
             split_on = self.rnd.gen_range( split_min, split_max );
         }
 
@@ -141,9 +135,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
             room_right0 = left + split_on; room_bottom0 = bottom;
             room_left1 = left + split_on; room_top1 = top;
             room_right1 = right; room_bottom1 = bottom;
-        }
-        else
-        {
+        } else {
             split_line =
                 TiledRect::with_absolute_bounds(
                     left, top + split_on,
@@ -169,6 +161,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
                 );
             FillTileShape::new( self.wall_tile_type ).apply( &mut temp_area );
         }
+        
         {
             let rect =
                 Box::new( TiledRect::with_absolute_bounds( room_left0, room_top0, room_right0, room_bottom0 ) );
@@ -183,6 +176,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a>
                 self.rnd
             ).apply( &mut temp_area );
         }
+        
         {
             let rect =
                 Box::new( TiledRect::with_absolute_bounds( room_left1, room_top1, room_right1, room_bottom1 ) );

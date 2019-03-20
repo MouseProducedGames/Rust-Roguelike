@@ -26,7 +26,7 @@ impl<'a> FillTileShapeRandRange<'a>
 {
     pub fn new( start_range: u32, end_range: u32, rnd: &'a mut ThreadRng ) -> Self
     {
-        Self { start_range: start_range, end_range: end_range, rnd: rnd }
+        Self { start_range, end_range, rnd }
     }
 }
 

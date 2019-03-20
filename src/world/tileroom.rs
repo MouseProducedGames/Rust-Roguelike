@@ -23,7 +23,7 @@ impl<'a> TiledAreaFilter<'a>
 {
     pub fn new( area: &'a mut dyn TiledArea, shape_filter: Box<dyn TiledShape2D> ) -> Self
     {
-        Self { area: area, shape_filter: shape_filter }
+        Self { area, shape_filter }
     }
 
 /*     pub fn new_boxed( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Box<dyn TiledArea>

@@ -23,7 +23,7 @@ impl Attribute
 {
     pub fn new( value: i32 ) -> Self
     {
-        Self { value: value }
+        Self { value }
     }
 }
 

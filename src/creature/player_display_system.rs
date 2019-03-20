@@ -17,25 +17,29 @@ pub use super::super::io::Window;
 
 pub struct PlayerDisplaySystem;
 
-impl<'a> System<'a> for PlayerDisplaySystem
+#[derive(SystemData)]
+pub struct SystemDataT< 'a >
 {
-    type SystemData = (
-        ReadExpect< 'a, Tilemap >,
-        ReadStorage< 'a, PlayerMarker >,
-        ReadStorage< 'a, Position >,
-        ReadStorage< 'a, Visibility >,
-        WriteExpect< 'a, Window >,
-    );
+    map: ReadExpect< 'a, Tilemap >,
+    player_markers: ReadStorage< 'a, PlayerMarker >,
+    positions: ReadStorage< 'a, Position >,
+    visibilities: ReadStorage< 'a, Visibility >,
+    window: WriteExpect< 'a, Window >,
+}
 
-    fn run( &mut self, ( map, player_marker, player_pos, visibility, window ): Self::SystemData )
+impl< 'a > System< 'a > for PlayerDisplaySystem
+{
+    type SystemData = SystemDataT< 'a >;
+
+    fn run( &mut self, data: Self::SystemData )
     {
         use specs::join::Join;
 
-        let map = map;
+        let map = data.map;
         let map_hash = calculate_hash( &*map );
-        let mut window = window;
+        let mut window = data.window;
 
-        for ( _, player_pos, visibility ) in ( &player_marker, &player_pos, &visibility ).join()
+        for ( _, player_pos, visibility ) in ( &data.player_markers, &data.positions, &data.visibilities ).join()
         {
             let visibility_lookup = visibility.visibility_lookup();
             

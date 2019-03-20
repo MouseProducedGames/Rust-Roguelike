@@ -44,12 +44,7 @@ impl CreatureTracker
             }
         }
 
-        return output;
-    }
-
-    pub fn get_position( &self, entity: Entity ) -> Option< &Position >
-    {
-        self.lookup.get( &entity )
+        output
     }
 
     pub fn set_position( &mut self, entity: Entity, pos: Position )

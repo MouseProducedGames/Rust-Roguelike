@@ -4,7 +4,7 @@ See license in the LICENSE file
 
 Documentation:
 
-**/
+ **/
 
 // External includes.
 extern crate crossterm;
@@ -33,19 +33,19 @@ impl Window
 {
     /* pub fn init()
     {
-        /* ncurses::initscr();
-        ncurses::keypad(ncurses::stdscr(), true);
-        // ncurses::raw();
-        ncurses::curs_set(ncurses::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
-        ncurses::nonl();
-        ncurses::cbreak();
-        ncurses::noecho(); */
-    }
+    /* ncurses::initscr();
+    ncurses::keypad(ncurses::stdscr(), true);
+    // ncurses::raw();
+    ncurses::curs_set(ncurses::CURSOR_VISIBILITY::CURSOR_INVISIBLE);
+    ncurses::nonl();
+    ncurses::cbreak();
+    ncurses::noecho(); */
+}
 
     pub fn close()
     {
-        // ncurses::endwin();
-    } */
+    // ncurses::endwin();
+} */
 
     pub fn new() -> Self
     {
@@ -55,14 +55,11 @@ impl Window
             Ok(_v) => (),
             _ => panic!( "Could not clear screen." )            
         }
-        match term.cursor().hide()
-        {
-            Ok(_v) => (),            
-            _ => (), // Not panic-worthy...
-        }
+        // Not panic-worthy if it doesn't work...
+        if let Ok(_v) = term.cursor().hide() {}
         let mut output =
             Self {
-                term: term,
+                term,
                 buffers: [
                     Multidim::new( 40, 80 ),
                     Multidim::new( 40, 80 )
@@ -96,15 +93,15 @@ impl Window
         self.move_cursor( 0, 0 );
         println!(" ");
         ch
-        
+            
         /* if let Some(Ok(key)) = self.term.input().read_async().bytes().next()
         {
             key as char
-        }
+    }
         else
         {
             ' '
-        } */
+    } */
     }
 
     pub fn present(&mut self)
@@ -140,13 +137,11 @@ impl Window
                         }
                         continue;
                     }
-        
+                    
                     if lastch == front_ch
                     {
                         repeat_count += 1;
-                    }
-                    else
-                    {
+                    } else {
                         repeat_count = 1;
                     }
                     
@@ -155,8 +150,9 @@ impl Window
                         // ncurses::refresh();
                         repeat_count = 0;
                     }
+                    
                     lastch = front_ch;
-    
+                    
                     self.put_char(xi, yi, front_ch);
                 }
             }
@@ -180,7 +176,7 @@ impl Window
 
     /* pub fn write_line(s: &str)
     {
-        ncurses::printw(s);
+    ncurses::printw(s);
 } */
 
     pub fn write_creature( &mut self, creature_pos: Position, view_pos: Position )
@@ -260,11 +256,8 @@ impl Drop for Window
             // We shouldn't panic; but we should inform the user.
             _ => println!( "Could not restore cursor visibility!" ),
         }
-        match self.term.terminal().clear( crossterm::ClearType::All ) {
-            Ok(_v) => (),
-            // We should not panic here.
-            // Fear is the shutdown-killer that brings total confusion.
-            _ => (),
-        }
+        // If it doesn't work here, we should not panic.
+        // Fear is the shutdown-killer that brings total confusion.
+        if let Ok(_v) = self.term.terminal().clear( crossterm::ClearType::All ) {}
     }
 }
