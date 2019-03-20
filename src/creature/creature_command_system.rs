@@ -15,7 +15,6 @@ use specs::{
     WriteExpect,
     WriteStorage
 };
-use rand::Rng;
 
 // Internal dependencies.
 use super::super::GameState;
@@ -26,8 +25,8 @@ use crate::creature::{
     PlayerPosition,
     ViewpointMarker,
 };
+use crate::game::{ Combat, CombatResult };
 use crate::rrl_math::Position;
-use crate::stats::{ Stat, StatModifier };
 use crate::world::Tilemap;
 
 pub struct CreatureCommandSystem;
@@ -81,33 +80,20 @@ impl<'a> System<'a> for CreatureCommandSystem
                                     Some( stats ) => defender_stats = stats,
                                     _ => continue,
                                 }
-                                
-                                let attack_mod = attacker_stats.coordination().modifier();
-                                let defence_mod = defender_stats.agility().modifier();
 
-                                let attack_roll =
-                                    game_state.rng().gen_range( 1, 7 ) +
-                                    game_state.rng().gen_range( 1, 7 ) +
-                                    game_state.rng().gen_range( 1, 7 ) +
-                                    attack_mod;
-                                let defence_total = 10 + defence_mod;
-
-                                if attack_roll > defence_total
-                                {
-                                    let damage_mod = 5 + defender_stats.strength().modifier();
-                                    let new_defender_health = defender_stats.health() - damage_mod;
-                                    *defender_stats.health_mut() = new_defender_health;
-                                    /* match data.health.get_mut( other_entity ) {
-                                        Some( tmut_health ) => *tmut_health = new_defender_health,
-                                        _ => panic!( " Could not access component which has to exist!" ),
-                                    } */
-                                    if defender_stats.health().value() <= 0
-                                    {
+                                match Combat::one_attack(
+                                    &mut *game_state,
+                                    &attacker_stats,
+                                    defender_stats
+                                ) {
+                                    CombatResult::DefenderDead => {
                                         match data.entities.delete( other_entity ) {
                                             Ok( _ ) => (),
                                             _ => panic!( " Could not delete entity which has to exist!" ),
                                         }
-                                    }
+                                        
+                                    },
+                                    _ => (),
                                 }
                             }
                             None => *pos = new_pos,

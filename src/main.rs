@@ -16,6 +16,7 @@ use specs::{ Builder, /* System, */ World, RunNow };
 mod creature;
 mod dungen;
 mod faction;
+mod game;
 mod game_state;
 mod io;
 mod rrl_math;
