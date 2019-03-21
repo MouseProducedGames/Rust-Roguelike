@@ -27,8 +27,9 @@ mod world;
 use creature::{
     Command, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
     CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderSystem,
-    CreatureStats, CreatureTracker, CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker,
-    PlayerPosition, SightRange, ViewpointMarker, Visibility,
+    CreatureLogicWanderAttack, CreatureLogicWanderAttackSystem, CreatureStats, CreatureTracker,
+    CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition, SightRange,
+    ViewpointMarker, Visibility,
 };
 use creature::background::{ Species, SpeciesType };
 use dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
@@ -73,6 +74,7 @@ fn main() {
     world.register::<Command>();
     world.register::<CreatureLogicPlayer>();
     world.register::<CreatureLogicWander>();
+    world.register::<CreatureLogicWanderAttack>();
     world.register::<CreatureStats>();
     world.register::<Faction>();
     world.register::<PlayerMarker>();
@@ -117,21 +119,22 @@ fn main() {
         }
     }
 
-    /* world.
+    world.
         create_entity()
         .with( Command::None )
-        .with( CreatureLogicWander )
+        .with( CreatureLogicWanderAttack )
         .with( Faction::new( 0 ) )
+        .with( CreatureStats::default() )
         .with( Position::new( 12, 8 ) )
         .with( SightRange::new( 5 ) )
         .with( Visibility::new() )
-    .build(); */
+    .build();
 
     world
         .create_entity()
         .with(Command::None)
-        .with(CreatureLogicWander)
-        .with(Faction::new(0))
+        .with(CreatureLogicWanderAttack)
+        .with(Faction::new(1))
         .with(CreatureStats::default())
         .with(Position::new(8, 12))
         .with(SightRange::new(5))
@@ -143,6 +146,7 @@ fn main() {
     let mut creaature_last_update_system = CreatureLastUpdateSystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
     let mut creature_wander_logic = CreatureLogicWanderSystem;
+    let mut creature_wander_attack_logic = CreatureLogicWanderAttackSystem;
     let mut creature_visibility_system = CreatureVisibilitySystem;
     let mut player_display_system = PlayerDisplaySystem;
 
@@ -166,6 +170,10 @@ fn main() {
         world.maintain();
 
         creature_wander_logic.run_now(&world.res);
+
+        world.maintain();
+
+        creature_wander_attack_logic.run_now(&world.res);
 
         world.maintain();
 

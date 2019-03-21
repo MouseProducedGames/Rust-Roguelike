@@ -11,6 +11,7 @@ use specs::{Component, VecStorage};
 // Internal includes
 use std::cmp::{Eq, PartialEq};
 
+#[derive(Copy, Clone, Default)]
 pub struct Faction {
     id: u32,
 }

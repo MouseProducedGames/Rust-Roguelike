@@ -6,11 +6,13 @@ Documentation:
 
 **/
 // External includes.
-use specs::Entity;
+use specs::{ Entity, ReadStorage };
 use std::collections::HashMap;
 
 // Internal includes.
+use crate::faction::Faction;
 use crate::rrl_math::Position;
+use crate::world::{ VisibilityMap, VisibilityType };
 
 pub struct _CreatureData {
     pos: Position,
@@ -36,6 +38,31 @@ impl CreatureTracker {
         }
 
         output
+    }
+
+    pub fn get_nearest_enemy< 'a >(
+        &self,
+        faction: Faction,
+        factions: &ReadStorage< 'a, Faction >,
+        visibility_map: &VisibilityMap
+    ) -> Option< ( Entity, Position ) >
+    {
+        for ( other, other_pos ) in self.lookup.iter() {
+            if let Some( other_faction ) = factions.get( *other ) {
+                // println!("Aah! 1");
+                if faction != *other_faction
+                {
+                    // println!("Aah! 2");
+                    if visibility_map.value_pos( *other_pos ) == VisibilityType::Visible
+                    {
+                        // println!("Aah! 3");
+                        return Some( ( *other, *other_pos ) );
+                    }
+                }
+            }
+        }
+
+        None
     }
 
     pub fn set_position(&mut self, entity: Entity, pos: Position) {

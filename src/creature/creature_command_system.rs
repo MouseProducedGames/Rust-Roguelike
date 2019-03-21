@@ -11,6 +11,7 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 // Internal dependencies.
 use super::super::GameState;
 use crate::creature::{Command, CreatureStats, CreatureTracker};
+use crate::faction::Faction;
 use crate::game::{Combat, CombatResult};
 use crate::rrl_math::Position;
 use crate::stats::Stat;
@@ -25,6 +26,7 @@ pub struct SystemDataT<'a> {
     map: ReadExpect<'a, Tilemap>,
     game_state: WriteExpect<'a, GameState>,
     command: ReadStorage<'a, Command>,
+    factions: ReadStorage<'a, Faction>,
     stats: WriteStorage<'a, CreatureStats>,
     pos: WriteStorage<'a, Position>,
 }
@@ -36,6 +38,7 @@ impl<'a> System<'a> for CreatureCommandSystem {
         use specs::join::Join;
 
         let creature_tracker = &*data.creature_tracker;
+        let factions = data.factions;
         let game_state = &mut data.game_state;
         let map = data.map;
         let stats = &mut data.stats;
@@ -54,6 +57,7 @@ impl<'a> System<'a> for CreatureCommandSystem {
                             pos,
                             creature_tracker,
                             game_state,
+                            &factions,
                             stats,
                         );
                     }
@@ -70,10 +74,21 @@ fn impassable_movement<'a>(
     pos: &mut Position,
     creature_tracker: &CreatureTracker,
     game_state: &mut WriteExpect<'a, GameState>,
+    factions: &ReadStorage<'a, Faction>,
     stats: &mut WriteStorage<'a, CreatureStats>,
 ) {
     match creature_tracker.check_collision(entity, new_pos) {
         Some(other_entity) => {
+
+            if let Some( faction_a ) = factions.get( entity ) {
+                if let Some ( faction_b ) = factions.get( other_entity ) {
+                    if faction_a == faction_b
+                    {
+                        return;
+                    }
+                }
+            }
+            
             let attacker_stats;
             let defender_stats;
             match stats.get(entity) {

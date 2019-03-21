@@ -1,4 +1,3 @@
-use rand::Rng;
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -7,6 +6,7 @@ Documentation:
 
 **/
 // External dependencies.
+use rand::Rng;
 use specs::{
     Component, Entities, NullStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage,
 };
