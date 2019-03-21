@@ -26,7 +26,7 @@ mod tiled_shapes_2d;
 mod world;
 use creature::{
     Command, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
-    CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderSystem,
+    CreatureLogicFaction, CreatureLogicFactionSystem, CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderSystem,
     CreatureLogicWanderAttack, CreatureLogicWanderAttackSystem, CreatureStats, CreatureTracker,
     CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition, SightRange,
     ViewpointMarker, Visibility,
@@ -72,6 +72,7 @@ fn main() {
     world.add_resource(display);
     world.add_resource(PlayerPosition(Position::new(8, 5)));
     world.register::<Command>();
+    world.register::<CreatureLogicFaction>();
     world.register::<CreatureLogicPlayer>();
     world.register::<CreatureLogicWander>();
     world.register::<CreatureLogicWanderAttack>();
@@ -122,7 +123,7 @@ fn main() {
     world.
         create_entity()
         .with( Command::None )
-        .with( CreatureLogicWanderAttack )
+        .with( CreatureLogicFaction )
         .with( Faction::new( 0 ) )
         .with( CreatureStats::default() )
         .with( Position::new( 12, 8 ) )
@@ -133,7 +134,7 @@ fn main() {
     world
         .create_entity()
         .with(Command::None)
-        .with(CreatureLogicWanderAttack)
+        .with(CreatureLogicFaction)
         .with(Faction::new(1))
         .with(CreatureStats::default())
         .with(Position::new(8, 12))
@@ -144,6 +145,7 @@ fn main() {
     let mut creature_command_system = CreatureCommandSystem;
     let mut creature_display_system = CreatureDisplaySystem;
     let mut creaature_last_update_system = CreatureLastUpdateSystem;
+    let mut creature_faction_logic = CreatureLogicFactionSystem;
     let mut creature_player_logic = CreatureLogicPlayerSystem;
     let mut creature_wander_logic = CreatureLogicWanderSystem;
     let mut creature_wander_attack_logic = CreatureLogicWanderAttackSystem;
@@ -174,6 +176,10 @@ fn main() {
         world.maintain();
 
         creature_wander_attack_logic.run_now(&world.res);
+
+        world.maintain();
+
+        creature_faction_logic.run_now(&world.res);
 
         world.maintain();
 

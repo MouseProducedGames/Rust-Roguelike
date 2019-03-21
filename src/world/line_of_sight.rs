@@ -47,7 +47,9 @@ pub fn calculate_visibility(
                 }
                 *visibility.value_mut(check_pos.x as u32, check_pos.y as u32) =
                     VisibilityType::Visible;
-                if map.transparent_pos(check_pos) == false {
+                if map.transparent_pos(check_pos) == false &&
+                    ( ( check_pos.x != pos.x ) || ( check_pos.y != pos.y ) )
+                {
                     break;
                 }
 

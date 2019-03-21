@@ -10,15 +10,17 @@ use specs::{ReadExpect, ReadStorage, System, WriteExpect};
 use std::sync::{Arc, Mutex};
 
 // Internal includes
-pub use crate::creature::PlayerPosition;
-pub use crate::io::Display;
-pub use crate::rrl_math::Position;
+use crate::creature::PlayerPosition;
+use crate::faction::Faction;
+use crate::io::Display;
+use crate::rrl_math::Position;
 
 pub struct CreatureDisplaySystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
     player_pos: ReadExpect<'a, PlayerPosition>,
+    factions: ReadStorage<'a, Faction>,
     positions: ReadStorage<'a, Position>,
     display: WriteExpect<'a, Arc<Mutex<Display>>>,
 }
@@ -32,8 +34,8 @@ impl<'a> System<'a> for CreatureDisplaySystem {
         let view_pos = data.player_pos.0;
         let mut window = data.display.lock().unwrap();
 
-        for pos in data.positions.join() {
-            window.write_creature(*pos, view_pos);
+        for ( faction,  pos ) in ( &data.factions, &data.positions ).join() {
+            window.write_creature(*faction, *pos, view_pos);
         }
     }
 }

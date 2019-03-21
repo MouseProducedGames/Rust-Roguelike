@@ -65,6 +65,36 @@ impl CreatureTracker {
         None
     }
 
+    pub fn get_nearest_friend< 'a >(
+        &self,
+        entity: Entity,
+        faction: Faction,
+        factions: &ReadStorage< 'a, Faction >,
+        visibility_map: &VisibilityMap
+    ) -> Option< ( Entity, Position ) >
+    {
+        for ( other, other_pos ) in self.lookup.iter() {
+            if *other == entity {
+                continue;
+            }
+            
+            if let Some( other_faction ) = factions.get( *other ) {
+                // println!("Aah! 1");
+                if faction == *other_faction
+                {
+                    // println!("Aah! 2");
+                    if visibility_map.value_pos( *other_pos ) == VisibilityType::Visible
+                    {
+                        // println!("Aah! 3");
+                        return Some( ( *other, *other_pos ) );
+                    }
+                }
+            }
+        }
+
+        None
+    }
+
     pub fn set_position(&mut self, entity: Entity, pos: Position) {
         self.lookup.insert(entity, pos);
     }

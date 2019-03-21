@@ -18,6 +18,7 @@ use super::super::super::multidim::Multidim;
 use crate::creature::CreatureStats;
 use crate::creature::background::SpeciesType;
 use crate::io::Display;
+use crate::faction::Faction;
 use crate::rrl_math::{Displacement, Position};
 use crate::stats::{ Stat, StatModifier };
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
@@ -225,16 +226,24 @@ impl Display for ConsoleDisplay
         }
     }
 
-    fn write_creature(&mut self, creature_pos: Position, view_pos: Position)
+    fn write_creature(&mut self, faction: Faction, creature_pos: Position, view_pos: Position)
     {
         let disp = creature_pos - view_pos;
         if (disp.x < -17) || (disp.x > 17) || (disp.y < -17) || (disp.y > 17) {
             return;
         }
         let (display_pos_x, display_pos_y) = (18 + disp.x, 18 + disp.y);
+        let ch;
+        if faction == Faction::new(0)
+        {
+            ch = ConsoleChar::new( '@', Color::Grey, Color::Black );
+        }
+        else
+        {
+            ch = ConsoleChar::new( 'C', Color::Grey, Color::Black );
+        }
         *self.buffers[self.back_buffer_index]
-            .value_mut(display_pos_y as usize, display_pos_x as usize) =
-            ConsoleChar::new( 'C', Color::Grey, Color::Black );
+            .value_mut(display_pos_y as usize, display_pos_x as usize) = ch;
         // self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
     }
 
