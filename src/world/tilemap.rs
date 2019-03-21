@@ -13,7 +13,7 @@ use std::hash::{Hash, Hasher};
 // Internal includes
 use super::super::multimap::Multimap;
 use super::mapping::Mapping;
-use super::tiletype::{TileTypeData, TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID};
+use super::tile_type::{TileTypeData, TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID};
 use crate::rrl_math::Position;
 
 type TileType = u32;
