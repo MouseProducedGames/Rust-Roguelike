@@ -5,7 +5,6 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes
 
 // Internal includes
@@ -17,4 +16,3 @@ pub use bounds::Bounds;
 pub use calculate_hash::calculate_hash;
 pub use displacement::Displacement;
 pub use position::Position;
-

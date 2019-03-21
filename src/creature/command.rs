@@ -5,22 +5,19 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External dependencies.
-use specs::{ Component, VecStorage };
+use specs::{Component, VecStorage};
 
 // Internal dependencies.
 use crate::rrl_math::Displacement;
 
 #[derive(Copy, Clone)]
-pub enum Command
-{
+pub enum Command {
     None,
-    Move( Displacement ),
+    Move(Displacement),
 }
 
-impl Component for Command
-{
+impl Component for Command {
     type Storage = VecStorage<Self>;
 }
 

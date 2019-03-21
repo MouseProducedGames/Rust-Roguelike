@@ -9,6 +9,6 @@ pub mod tiletype;
 pub mod visibility_map;
 pub use line_of_sight::calculate_visibility;
 pub use mapping::Mapping;
-pub use tileroom::{ TiledArea, TiledAreaFilter };
 pub use tilemap::Tilemap;
-pub use visibility_map::{ VisibilityMap, VisibilityType };
+pub use tileroom::{TiledArea, TiledAreaFilter};
+pub use visibility_map::{VisibilityMap, VisibilityType};

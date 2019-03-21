@@ -5,11 +5,10 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes
 
 // internal include
-pub mod attribute; 
+pub mod attribute;
 pub mod stat;
 pub mod stat_modifier;
 pub use attribute::Attribute;

@@ -5,24 +5,20 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 extern crate rand;
-use rand::thread_rng;
 use rand::rngs::ThreadRng;
+use rand::thread_rng;
 // use super::faction::FactionLookup;
 // use super::io::Window;
 
-pub struct GameState
-{
+pub struct GameState {
     alive: bool,
     // window: Window,
     // factions: FactionLookup,
 }
 
-impl GameState
-{
-    pub fn new() -> Self
-    {
+impl GameState {
+    pub fn new() -> Self {
         Self {
             alive: true,
             // window: Window::new(),
@@ -30,8 +26,7 @@ impl GameState
         }
     }
 
-    pub fn alive(&self) -> bool
-    {
+    pub fn alive(&self) -> bool {
         self.alive
     }
 
@@ -44,14 +39,12 @@ impl GameState
     {
         &mut self.factions
     } */
-    
-    pub fn kill(&mut self)
-    {
+
+    pub fn kill(&mut self) {
         self.alive = false;
     }
 
-    pub fn rng(&mut self) -> ThreadRng
-    {
+    pub fn rng(&mut self) -> ThreadRng {
         thread_rng()
     }
 

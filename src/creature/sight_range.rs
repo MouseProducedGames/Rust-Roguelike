@@ -5,31 +5,25 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes
-use specs::{ Component, VecStorage };
+use specs::{Component, VecStorage};
 
 // internal includes
 
-pub struct SightRange
-{
+pub struct SightRange {
     value: i32,
 }
 
-impl SightRange
-{
-    pub fn new( value: i32 ) -> Self
-    {
+impl SightRange {
+    pub fn new(value: i32) -> Self {
         Self { value }
     }
-    
-    pub fn sight_range( &self ) -> i32
-    {
+
+    pub fn sight_range(&self) -> i32 {
         self.value
     }
 }
 
-impl Component for SightRange
-{
+impl Component for SightRange {
     type Storage = VecStorage<Self>;
 }

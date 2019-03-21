@@ -5,7 +5,6 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes
 
 // internal includes
@@ -25,14 +24,15 @@ pub mod player_display_system;
 pub mod player_marker;
 pub mod player_position;
 pub mod sight_range;
+pub mod background;
 pub mod viewpoint_marker;
 pub mod visibility;
 pub use command::Command;
 pub use creature_command_system::CreatureCommandSystem;
 pub use creature_display_system::CreatureDisplaySystem;
 pub use creature_last_update_system::CreatureLastUpdateSystem;
-pub use creature_logic_player::{ CreatureLogicPlayer, CreatureLogicPlayerSystem };
-pub use creature_logic_wander::{ CreatureLogicWander, CreatureLogicWanderSystem };
+pub use creature_logic_player::{CreatureLogicPlayer, CreatureLogicPlayerSystem};
+pub use creature_logic_wander::{CreatureLogicWander, CreatureLogicWanderSystem};
 pub use creature_stats::CreatureStats;
 pub use creature_tracker::CreatureTracker;
 pub use creature_visibility_system::CreatureVisibilitySystem;

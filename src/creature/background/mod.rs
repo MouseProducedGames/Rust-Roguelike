@@ -8,5 +8,5 @@ Documentation:
 // External includes
 
 // internal includes
-pub mod console_display;
-pub use console_display::ConsoleDisplay;
+pub mod species;
+pub use species::{ Species, SpeciesType };

@@ -5,130 +5,107 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes
 use std::any::TypeId;
-use std::cmp::{ Eq, PartialEq };
-use std::hash::{ Hash, Hasher };
+use std::cmp::{Eq, PartialEq};
+use std::hash::{Hash, Hasher};
 
 // Internal includes
-use crate::rrl_math::Position;
 use super::super::multimap::Multimap;
 use super::mapping::Mapping;
-use super::tiletype::{ TILE_TYPE_INDEX_VOID, TILE_TYPE_DATA, TileTypeData };
+use super::tiletype::{TileTypeData, TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID};
+use crate::rrl_math::Position;
 
 type TileType = u32;
 type Width = u32;
 type Height = u32;
 
-pub struct Tilemap
-{
+pub struct Tilemap {
     id: TypeId,
     tiles: Multimap<TileType>,
 }
 
-impl Tilemap
-{
-    pub fn new(width: Width, height: Height) -> Self
-    {
+impl Tilemap {
+    pub fn new(width: Width, height: Height) -> Self {
         Self {
             id: TypeId::of::<Tilemap>(),
-            tiles: Multimap::new( width, height )
+            tiles: Multimap::new(width, height),
         }
     }
 
-    pub fn height(&self) -> Height
-    {
+    pub fn height(&self) -> Height {
         self.tiles.height()
     }
-    
-    pub fn width(&self) -> Width
-    {
+
+    pub fn width(&self) -> Width {
         self.tiles.width()
     }
-    
-    pub fn _passable(&self, pos_x: Width, pos_y: Height) -> bool
-    {
-        self._tile( pos_x, pos_y ).passable()
+
+    pub fn _passable(&self, pos_x: Width, pos_y: Height) -> bool {
+        self._tile(pos_x, pos_y).passable()
     }
 
-    pub fn passable_pos(&self, pos: Position) -> bool
-    {
-        self.tile_pos( pos ).passable()
+    pub fn passable_pos(&self, pos: Position) -> bool {
+        self.tile_pos(pos).passable()
     }
 
-    pub fn _tile(&self, pos_x: Width, pos_y: Height) -> TileTypeData
-    {
-        TILE_TYPE_DATA[ self.tile_type( pos_x, pos_y ) as usize ]
+    pub fn _tile(&self, pos_x: Width, pos_y: Height) -> TileTypeData {
+        TILE_TYPE_DATA[self.tile_type(pos_x, pos_y) as usize]
     }
 
-    pub fn tile_pos(&self, pos: Position) -> TileTypeData
-    {
-        TILE_TYPE_DATA[ self.tile_type_pos( pos ) as usize ]
+    pub fn tile_pos(&self, pos: Position) -> TileTypeData {
+        TILE_TYPE_DATA[self.tile_type_pos(pos) as usize]
     }
-    
-    pub fn tile_type(&self, pos_x: Width, pos_y: Height) -> TileType
-    {
-        if self.is_in_bounds( pos_x, pos_y )
-        {
-            *self.tiles.value( pos_x, pos_y )
+
+    pub fn tile_type(&self, pos_x: Width, pos_y: Height) -> TileType {
+        if self.is_in_bounds(pos_x, pos_y) {
+            *self.tiles.value(pos_x, pos_y)
+        } else {
+            TILE_TYPE_INDEX_VOID
         }
-        else { TILE_TYPE_INDEX_VOID }
     }
 
-    pub fn tile_type_mut(&mut self, pos_x: Width, pos_y: Height) -> &mut TileType
-    {
-        self.tiles.value_mut( pos_x, pos_y )
+    pub fn tile_type_mut(&mut self, pos_x: Width, pos_y: Height) -> &mut TileType {
+        self.tiles.value_mut(pos_x, pos_y)
     }
-    
-    pub fn tile_type_pos(&self, pos: Position) -> TileType
-    {
-        if self.is_pos_in_bounds( pos )
-        {
-            self.tile_type( pos.x as u32, pos.y as u32 )
+
+    pub fn tile_type_pos(&self, pos: Position) -> TileType {
+        if self.is_pos_in_bounds(pos) {
+            self.tile_type(pos.x as u32, pos.y as u32)
+        } else {
+            TILE_TYPE_INDEX_VOID
         }
-        else { TILE_TYPE_INDEX_VOID }
     }
 
-    pub fn _transparent(&self, pos_x: Width, pos_y: Height) -> bool
-    {
-        self._tile( pos_x, pos_y ).transparent()
+    pub fn _transparent(&self, pos_x: Width, pos_y: Height) -> bool {
+        self._tile(pos_x, pos_y).transparent()
     }
 
-    pub fn transparent_pos(&self, pos: Position) -> bool
-    {
-        self.tile_pos( pos ).transparent()
-    }
-
-}
-
-impl Hash for Tilemap
-{
-  fn hash<H: Hasher>(&self, state: &mut H)
-  {
-      self.id.hash(state);
-  }
-}
-
-impl Mapping for Tilemap
-{
-    fn height( &self ) -> Height
-    {
-        Tilemap::height ( self )
-    }
-
-    fn width( &self ) -> Width
-    {
-        Tilemap::width ( self )
+    pub fn transparent_pos(&self, pos: Position) -> bool {
+        self.tile_pos(pos).transparent()
     }
 }
 
-impl PartialEq for Tilemap
-{
-  fn eq(&self, other: &Tilemap) -> bool
-  {
-      self.id == other.id
-  }
+impl Hash for Tilemap {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.id.hash(state);
+    }
+}
+
+impl Mapping for Tilemap {
+    fn height(&self) -> Height {
+        Tilemap::height(self)
+    }
+
+    fn width(&self) -> Width {
+        Tilemap::width(self)
+    }
+}
+
+impl PartialEq for Tilemap {
+    fn eq(&self, other: &Tilemap) -> bool {
+        self.id == other.id
+    }
 }
 
 impl Eq for Tilemap {}

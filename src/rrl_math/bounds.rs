@@ -10,9 +10,8 @@ Documentation:
 
 // Internal includes
 
-#[ derive( Copy, Clone, Eq, PartialEq ) ]
-pub struct Bounds
-{
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub struct Bounds {
     pub width: u32,
-    pub height: u32
+    pub height: u32,
 }

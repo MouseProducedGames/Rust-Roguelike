@@ -10,11 +10,10 @@ Documentation:
 
 // internal include
 
-pub trait Stat
-{
-    fn value( &self ) -> i32;
+pub trait Stat {
+    fn value(&self) -> i32;
 
-    fn value_mut( &mut self ) -> &mut i32;
+    fn value_mut(&mut self) -> &mut i32;
 }
 
 /* impl Sub for Stat

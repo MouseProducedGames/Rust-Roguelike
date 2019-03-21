@@ -19,57 +19,55 @@ As such, it is composed ( Width, Height ) and accessed in the order ( x, y ).
 Multimap is implemented as a thin wrapper over Multidim.
 
 **/
-
 // External includes
 
 // Internal includes
 use super::multidim::Multidim;
 use super::world::Mapping;
 
-pub struct Multimap<T> where T: Copy + Clone + Default
+pub struct Multimap<T>
+where
+    T: Copy + Clone + Default,
 {
     values: Multidim<T>,
 }
 
-impl<T> Multimap<T> where T: Copy + Clone + Default
+impl<T> Multimap<T>
+where
+    T: Copy + Clone + Default,
 {
-    pub fn new(width: u32, height: u32) -> Self
-    {
+    pub fn new(width: u32, height: u32) -> Self {
         Self {
-            values: Multidim::new( height as usize, width as usize )
+            values: Multidim::new(height as usize, width as usize),
         }
     }
 
-    pub fn height(&self) -> u32
-    {
+    pub fn height(&self) -> u32 {
         self.values.len0() as u32
     }
-    
-    pub fn width(&self) -> u32
-    {
+
+    pub fn width(&self) -> u32 {
         self.values.len1() as u32
     }
-    
-    pub fn value(&self, pos_x: u32, pos_y: u32) -> &T
-    {
-        self.values.value( pos_y as usize, pos_x as usize )
+
+    pub fn value(&self, pos_x: u32, pos_y: u32) -> &T {
+        self.values.value(pos_y as usize, pos_x as usize)
     }
 
-    pub fn value_mut(&mut self, pos_x: u32, pos_y: u32) -> &mut T
-    {
-        self.values.value_mut( pos_y as usize, pos_x as usize )
+    pub fn value_mut(&mut self, pos_x: u32, pos_y: u32) -> &mut T {
+        self.values.value_mut(pos_y as usize, pos_x as usize)
     }
 }
 
-impl<T> Mapping for Multimap<T> where T: Copy + Clone + Default
+impl<T> Mapping for Multimap<T>
+where
+    T: Copy + Clone + Default,
 {
-    fn height( &self ) -> u32
-    {
-        Multimap::height ( self )
+    fn height(&self) -> u32 {
+        Multimap::height(self)
     }
 
-    fn width( &self ) -> u32
-    {
-        Multimap::width ( self )
+    fn width(&self) -> u32 {
+        Multimap::width(self)
     }
 }
