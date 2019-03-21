@@ -8,5 +8,10 @@ Documentation:
 // External includes
 
 // internal includes
+mod console_char;
+mod console_colour;
 pub mod console_display;
+mod darker;
+use console_char::ConsoleChar;
 pub use console_display::ConsoleDisplay;
+use darker::Darker;

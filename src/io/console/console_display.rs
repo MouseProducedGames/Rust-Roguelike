@@ -10,8 +10,8 @@ extern crate crossterm;
 extern crate crossterm_cursor;
 extern crate crossterm_input;
 extern crate crossterm_screen;
-// extern crate ncurses;
-// use std::iter::Iterator;
+extern crate crossterm_style;
+use crossterm_style::{ Color, Colored };
 
 // Internal includes.
 use super::super::super::multidim::Multidim;
@@ -21,14 +21,13 @@ use crate::io::Display;
 use crate::rrl_math::{Displacement, Position};
 use crate::stats::{ Stat, StatModifier };
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
-
-static MAP_GRAPHICS: [char; 4] = [' ', '#', '.', '+'];
-static SEEN_MAP_GRAPHICS: [char; 4] = [' ', 'x', '-', '='];
+use super::{ ConsoleChar, Darker };
 
 pub struct ConsoleDisplay {
     term: crossterm::Crossterm,
-    buffers: [Multidim<char>; 2],
+    buffers: [Multidim<ConsoleChar>; 2],
     back_buffer_index: usize,
+    map_graphics: [ConsoleChar; 4],
 }
 
 impl ConsoleDisplay {
@@ -44,14 +43,20 @@ impl ConsoleDisplay {
             term,
             buffers: [Multidim::new(40, 80), Multidim::new(40, 80)],
             back_buffer_index: 0,
+            map_graphics: [
+                ConsoleChar::new( ' ', Color::Black, Color::Black ),
+                ConsoleChar::new( '#', Color::Grey, Color::Black ),
+                ConsoleChar::new( '.', Color::Grey, Color::Black ),
+                ConsoleChar::new( '+', Color::Grey, Color::Red ),
+            ],
         };
         let front_buffer_index = output.front_buffer_index();
         let buffers = &mut output.buffers;
         let (buffer_height, buffer_width) = buffers[output.back_buffer_index].bounds();
         for y in 0..buffer_height {
             for x in 0..buffer_width {
-                *buffers[front_buffer_index].value_mut(y, x) = ' ';
-                *buffers[output.back_buffer_index].value_mut(y, x) = ' ';
+                *buffers[front_buffer_index].value_mut(y, x) = output.map_graphics[ 0 ];
+                *buffers[output.back_buffer_index].value_mut(y, x) = output.map_graphics[ 0 ];
             }
         }
 
@@ -69,8 +74,13 @@ impl ConsoleDisplay {
         }
     }
 
-    fn write_char(&self, ch: char) {
-        println!("{}", ch);
+    fn write_console_char( &self, ch: ConsoleChar ) {
+        println!(
+            "{}{}{}",
+            Colored::Fg( ch.foreground() ),
+            Colored::Bg( ch.background() ),
+            ch.graphic()
+        );
     }
 
     fn _write_string( &self, s: String )
@@ -78,10 +88,9 @@ impl ConsoleDisplay {
         println!( "{}", s );
     }
 
-    fn put_char(&self, x: i32, y: i32, ch: char) {
+    fn put_console_char( &self, x: i32, y: i32, ch: ConsoleChar ) {
         self.move_cursor(x, y);
-        self.write_char(ch);
-        // ncurses::mvaddch(y, x, ch as u64);
+        self.write_console_char(ch);
     }
 }
 
@@ -89,6 +98,8 @@ impl Display for ConsoleDisplay
 {
     fn choose_species( &self, options: &Vec<SpeciesType> ) -> SpeciesType
     {
+        println!("{}{}", Colored::Fg( Color::Grey ), Colored::Bg( Color::Black ));
+        
         let mut keep_going = true;
         let mut option = SpeciesType::Human;
 
@@ -126,6 +137,8 @@ impl Display for ConsoleDisplay
 
     fn display_stats( &mut self, stats: CreatureStats )
     {
+        println!("{}{}", Colored::Fg( Color::Grey ), Colored::Bg( Color::Black ));
+        
         self.move_cursor( 42, 2 );
         println!("Strength.....: {:>2} : {:+>2}", stats.strength().value(), stats.strength().modifier() );
         self.move_cursor( 42, 3 );
@@ -150,7 +163,8 @@ impl Display for ConsoleDisplay
         ch
     }
 
-    fn present(&mut self) {
+    fn present(&mut self)
+    {
         {
             self.back_buffer_index = 1 - self.back_buffer_index;
             let buffers = &self.buffers;
@@ -164,12 +178,12 @@ impl Display for ConsoleDisplay
                 // Without the repeat_count check, repeated characters (5 or more)
                 // are placed in the same spot.
                 let mut repeat_count = 1;
-                let mut lastch = ' ';
+                let mut lastch = self.map_graphics[ 0 ];
                 for x in 0..buffer_width {
                     xi += 1;
                     let back_ch = *back_buffer.value(y, x);
                     let front_ch = *front_buffer.value(y, x);
-                    if front_ch == back_ch {
+                    if ConsoleChar::any_equality( &front_ch, &back_ch ) {
                         // lastch = front_ch;
                         repeat_count += 1;
                         if repeat_count >= 5 {
@@ -179,7 +193,7 @@ impl Display for ConsoleDisplay
                         continue;
                     }
 
-                    if lastch == front_ch {
+                    if ConsoleChar::any_equality( &lastch, &front_ch ) {
                         repeat_count += 1;
                     } else {
                         repeat_count = 1;
@@ -192,7 +206,7 @@ impl Display for ConsoleDisplay
 
                     lastch = front_ch;
 
-                    self.put_char(xi, yi, front_ch);
+                    self.put_console_char(xi, yi, front_ch);
                 }
             }
         }
@@ -211,18 +225,21 @@ impl Display for ConsoleDisplay
         }
     }
 
-    fn write_creature(&mut self, creature_pos: Position, view_pos: Position) {
+    fn write_creature(&mut self, creature_pos: Position, view_pos: Position)
+    {
         let disp = creature_pos - view_pos;
         if (disp.x < -17) || (disp.x > 17) || (disp.y < -17) || (disp.y > 17) {
             return;
         }
         let (display_pos_x, display_pos_y) = (18 + disp.x, 18 + disp.y);
         *self.buffers[self.back_buffer_index]
-            .value_mut(display_pos_y as usize, display_pos_x as usize) = 'C';
+            .value_mut(display_pos_y as usize, display_pos_x as usize) =
+            ConsoleChar::new( 'C', Color::Grey, Color::Black );
         // self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
     }
 
-    fn write_map(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap) {
+    fn write_map(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap)
+    {
         let back_buffer = &mut self.buffers[self.back_buffer_index];
         for view_addend_y in -17..18_i32 {
             let display_pos_y = (18 + view_addend_y) as usize;
@@ -231,14 +248,14 @@ impl Display for ConsoleDisplay
                 let map_pos = view_pos + Displacement::new(view_addend_x, view_addend_y);
                 let ch;
                 match vis.value_pos(map_pos) {
-                    VisibilityType::None => ch = ' ',
+                    VisibilityType::None => ch = self.map_graphics[ 0 ],
                     VisibilityType::Seen => {
                         let tile_type = map.tile_type_pos(map_pos);
-                        ch = SEEN_MAP_GRAPHICS[tile_type as usize];
+                        ch = self.map_graphics[tile_type as usize].darker();
                     }
                     VisibilityType::Visible => {
                         let tile_type = map.tile_type_pos(map_pos);
-                        ch = MAP_GRAPHICS[tile_type as usize];
+                        ch = self.map_graphics[tile_type as usize];
                     }
                 }
 
