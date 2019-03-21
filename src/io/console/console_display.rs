@@ -28,7 +28,7 @@ pub struct ConsoleDisplay {
     term: crossterm::Crossterm,
     buffers: [Multidim<ConsoleChar>; 2],
     back_buffer_index: usize,
-    map_graphics: [ConsoleChar; 4],
+    map_graphics: [ConsoleChar; 5],
 }
 
 impl ConsoleDisplay {
@@ -49,6 +49,7 @@ impl ConsoleDisplay {
                 ConsoleChar::new( '#', Color::Grey, Color::Black ),
                 ConsoleChar::new( '.', Color::Grey, Color::Black ),
                 ConsoleChar::new( '+', Color::Grey, Color::Red ),
+                ConsoleChar::new( '/', Color::Grey, Color::Red ),
             ],
         };
         let front_buffer_index = output.front_buffer_index();

@@ -23,7 +23,7 @@ pub struct CreatureCommandSystem;
 pub struct SystemDataT<'a> {
     creature_tracker: ReadExpect<'a, CreatureTracker>,
     entities: Entities<'a>,
-    map: ReadExpect<'a, Tilemap>,
+    map: WriteExpect<'a, Tilemap>,
     game_state: WriteExpect<'a, GameState>,
     command: ReadStorage<'a, Command>,
     factions: ReadStorage<'a, Faction>,
@@ -40,7 +40,7 @@ impl<'a> System<'a> for CreatureCommandSystem {
         let creature_tracker = &*data.creature_tracker;
         let factions = data.factions;
         let game_state = &mut data.game_state;
-        let map = data.map;
+        let mut map = data.map;
         let stats = &mut data.stats;
 
         for (entity, command, pos) in (&data.entities, &data.command, &mut data.pos).join() {
@@ -61,6 +61,11 @@ impl<'a> System<'a> for CreatureCommandSystem {
                             stats,
                         );
                     }
+
+                    if map.tile_type_pos(new_pos) == 3 {
+                        *map.tile_type_mut(new_pos.x as u32, new_pos.y as u32) = 4;
+                    }
+
                 }
                 _ => (),
             }

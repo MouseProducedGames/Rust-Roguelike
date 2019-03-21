@@ -13,7 +13,7 @@ pub struct TileTypeData {
 }
 
 pub const TILE_TYPE_INDEX_VOID: u32 = 0;
-pub static TILE_TYPE_DATA: [TileTypeData; 4] = [
+pub static TILE_TYPE_DATA: [TileTypeData; 5] = [
     // The void.
     TileTypeData {
         passable: false,
@@ -34,6 +34,11 @@ pub static TILE_TYPE_DATA: [TileTypeData; 4] = [
         passable: true,
         transparent: false,
     },
+
+    TileTypeData {
+        passable: true,
+        transparent: true,
+    }
 ];
 
 impl TileTypeData {
