@@ -65,6 +65,10 @@ pub trait TiledArea {
 
     fn surface_area(&self) -> u32;
 
+    fn tile_func_type(&self, x: u32, y: u32) -> u32;
+
+    fn tile_func_type_mut(&mut self, x: u32, y: u32) -> &mut u32;
+
     fn tile_type(&self, x: u32, y: u32) -> u32;
 
     fn tile_type_mut(&mut self, x: u32, y: u32) -> &mut u32;
@@ -144,6 +148,14 @@ impl TiledArea for Tilemap {
         (self.height() * self.width()) as u32
     }
 
+    fn tile_func_type(&self, x: u32, y: u32) -> u32 {
+        self.tile_func_type(x, y)
+    }
+
+    fn tile_func_type_mut(&mut self, x: u32, y: u32) -> &mut u32 {
+        self.tile_func_type_mut(x, y)
+    }
+
     fn tile_type(&self, x: u32, y: u32) -> u32 {
         self.tile_type(x, y)
     }
@@ -204,6 +216,14 @@ impl<'a> TiledArea for TiledAreaFilter<'a> {
 
     fn surface_area(&self) -> u32 {
         self.shape_filter.surface_area()
+    }
+
+    fn tile_func_type(&self, x: u32, y: u32) -> u32 {
+        self.area.tile_func_type(x, y)
+    }
+
+    fn tile_func_type_mut(&mut self, x: u32, y: u32) -> &mut u32 {
+        self.area.tile_func_type_mut(x, y)
     }
 
     fn tile_type(&self, x: u32, y: u32) -> u32 {

@@ -15,7 +15,7 @@ use crate::faction::Faction;
 use crate::game::{Combat, CombatResult};
 use crate::rrl_math::Position;
 use crate::stats::Stat;
-use crate::world::Tilemap;
+use crate::world::{TileFunc, TileFuncOp, Tilemap };
 
 pub struct CreatureCommandSystem;
 
@@ -62,8 +62,15 @@ impl<'a> System<'a> for CreatureCommandSystem {
                         );
                     }
 
-                    if map.tile_type_pos(new_pos) == 3 {
-                        *map.tile_type_mut(new_pos.x as u32, new_pos.y as u32) = 4;
+                    match map.tile_func_pos(new_pos) {
+                        TileFunc::None => (),
+                        TileFunc::OnEnterTile(tile_func_op) => {
+                            match tile_func_op {
+                                TileFuncOp::ChangeTileType(new_tile_type) => {
+                                    *map.tile_type_mut(new_pos.x as u32, new_pos.y as u32) = new_tile_type;
+                                }
+                            }
+                        }
                     }
 
                 }

@@ -15,7 +15,7 @@ use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
 use crate::dungen::DungeonGenerator;
 use crate::rrl_math::Bounds;
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{TiledArea, TiledAreaFilter};
+use crate::world::{TiledArea, TiledAreaFilter, TILE_FUNC_INDEX_DOOR};
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum SplitType {
@@ -182,5 +182,6 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
             .apply(&mut temp_area);
         }
         *area.tile_type_mut(put_door_x, put_door_y) = self.door_tile_type;
+        *area.tile_func_type_mut(put_door_x, put_door_y) = TILE_FUNC_INDEX_DOOR;
     }
 }
