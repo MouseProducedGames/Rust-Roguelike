@@ -28,7 +28,7 @@ pub struct ConsoleDisplay {
     term: crossterm::Crossterm,
     buffers: [Multidim<ConsoleChar>; 2],
     back_buffer_index: usize,
-    map_graphics: [ConsoleChar; 7],
+    map_graphics: [ConsoleChar; 8],
 }
 
 impl ConsoleDisplay {
@@ -57,8 +57,10 @@ impl ConsoleDisplay {
                 ConsoleChar::new( '/', Color::Grey, Color::Red ),
                 // Secret door.
                 ConsoleChar::new( '#', Color::Grey, Color::Black ),
+                // Discovered secret door.
+                ConsoleChar::new( '+', Color::Grey, Color::White ),
                 // Open secret door.
-                ConsoleChar::new( '/', Color::Grey, Color::Red ),
+                ConsoleChar::new( '/', Color::Grey, Color::White ),
             ],
         };
         let front_buffer_index = output.front_buffer_index();
