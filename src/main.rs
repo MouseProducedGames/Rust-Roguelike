@@ -6,6 +6,9 @@ Documentation:
 
  **/
 // External dependencies
+extern crate rand;
+use rand::rngs::ThreadRng;
+use rand::Rng;
 extern crate shred;
 #[macro_use]
 extern crate shred_derive;
@@ -37,7 +40,7 @@ use faction::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
-use world::Tilemap;
+use world::{ Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
 fn main() {
     let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(io::console::ConsoleDisplay::new()));
@@ -55,7 +58,14 @@ fn main() {
                 width: 6,
                 height: 6,
             },
-            3,
+            |rnd: &mut ThreadRng| -> ( u32, u32 ) {
+                if rnd.gen_bool(0.1)
+                {
+                    ( 5, TILE_FUNC_INDEX_SECRET_DOOR )
+                } else {
+                    ( 3, TILE_FUNC_INDEX_DOOR )
+                }
+            },
             2,
             1,
             &mut game_state.rng(),
