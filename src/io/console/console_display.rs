@@ -28,7 +28,7 @@ pub struct ConsoleDisplay {
     term: crossterm::Crossterm,
     buffers: [Multidim<ConsoleChar>; 2],
     back_buffer_index: usize,
-    map_graphics: [ConsoleChar; 5],
+    map_graphics: [ConsoleChar; 7],
 }
 
 impl ConsoleDisplay {
@@ -45,10 +45,19 @@ impl ConsoleDisplay {
             buffers: [Multidim::new(40, 80), Multidim::new(40, 80)],
             back_buffer_index: 0,
             map_graphics: [
+                // Void.
                 ConsoleChar::new( ' ', Color::Black, Color::Black ),
+                // Wall.
                 ConsoleChar::new( '#', Color::Grey, Color::Black ),
+                // Floor.
                 ConsoleChar::new( '.', Color::Grey, Color::Black ),
+                // Door.
                 ConsoleChar::new( '+', Color::Grey, Color::Red ),
+                // Open door.
+                ConsoleChar::new( '/', Color::Grey, Color::Red ),
+                // Secret door.
+                ConsoleChar::new( '#', Color::Grey, Color::Black ),
+                // Open secret door.
                 ConsoleChar::new( '/', Color::Grey, Color::Red ),
             ],
         };

@@ -10,13 +10,15 @@ Documentation:
 
 // Internal includes
 
-pub static TILE_FUNC_DATA: [TileFunc; 2] = [
+pub static TILE_FUNC_DATA: [TileFunc; 3] = [
     TileFunc::None,
-    TileFunc::OnEnterTile(TileFuncOp::ChangeTileType(4))
+    TileFunc::OnEnterTile(TileFuncOp::ChangeTileType(4)),
+    TileFunc::OnEnterTile(TileFuncOp::ChangeTileType(6))
 ];
 
 pub static TILE_FUNC_INDEX_VOID: u32 = 0;
 pub static TILE_FUNC_INDEX_DOOR: u32 = 1;
+pub static TILE_FUNC_INDEX_SECRET_DOOR: u32 = 2;
 
 /* pub struct TileFunc
 {
