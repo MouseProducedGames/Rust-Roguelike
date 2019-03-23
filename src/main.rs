@@ -47,6 +47,9 @@ use faction::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
+use skills::{
+    SkillActivation, SkillActiveOp, SkillPassiveOp, SkillLookup, SkillRange, SkillTag, SkillType
+};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
 use world::{Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
@@ -67,7 +70,7 @@ fn main() {
                 height: 6,
             },
             |rnd: &mut ThreadRng| -> (u32, u32) {
-                if rnd.gen_bool(0.1) {
+                if rnd.gen_bool(0.9) {
                     (5, TILE_FUNC_INDEX_SECRET_DOOR)
                 } else {
                     (3, TILE_FUNC_INDEX_DOOR)
@@ -98,6 +101,7 @@ fn main() {
     world.register::<PlayerMarker>();
     world.register::<Position>();
     world.register::<SightRange>();
+    world.register::<SkillLookup>();
     world.register::<TalentLookup>();
     world.register::<ViewpointMarker>();
     world.register::<Visibility>();
@@ -115,11 +119,20 @@ fn main() {
     }
 
     {
+        let mut skills = SkillLookup::new();
+
+        skills.insert(
+            SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound),
+            SkillType::Skill(12),
+        );
+        
         let mut talents = TalentLookup::new();
+        
         talents.insert(
             TalentActivation::Passive(TalentActivationOp::EveryRound),
-            TalentType::ScanForSecrets(50, TalentRange::Radius(1)),
+            TalentType::ScanForSecrets(-2, TalentRange::Radius(1)),
         );
+
         let species = Species::create(species_type);
         world
             .create_entity()
@@ -130,6 +143,7 @@ fn main() {
             .with(Position::new(8, 5))
             .with(PlayerMarker)
             .with(SightRange::new(5))
+            .with(skills)
             .with(talents)
             .with(ViewpointMarker)
             .with(Visibility::new())
@@ -140,7 +154,7 @@ fn main() {
         }
     }
 
-    world
+    /* world
         .create_entity()
         .with(Command::None)
         .with(CreatureLogicFaction)
@@ -162,7 +176,7 @@ fn main() {
         .with(SightRange::new(5))
         .with(TalentLookup::new())
         .with(Visibility::new())
-        .build();
+        .build(); */
 
     let mut creature_command_system = CreatureCommandSystem;
     let mut creature_display_system = CreatureDisplaySystem;

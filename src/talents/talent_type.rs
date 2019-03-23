@@ -22,7 +22,7 @@ pub enum TalentActivationOp {
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum TalentType {
-    ScanForSecrets(u8, TalentRange),
+    ScanForSecrets(i32, TalentRange),
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
