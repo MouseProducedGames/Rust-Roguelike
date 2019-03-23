@@ -35,9 +35,9 @@ mod tiled_shapes_2d;
 mod world;
 use creature::background::{Species, SpeciesType};
 use creature::{
-    Command, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
-    CreatureLogicFaction, CreatureLogicFactionSystem, CreatureLogicPlayer,
-    CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderAttack,
+    Command, CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem,
+    CreatureLastUpdateSystem, CreatureLogicFaction, CreatureLogicFactionSystem,
+    CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderAttack,
     CreatureLogicWanderAttackSystem, CreatureLogicWanderSystem, CreatureStats, CreatureTracker,
     CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition, SightRange,
     ViewpointMarker, Visibility,
@@ -48,7 +48,7 @@ use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
 use skills::{
-    SkillActivation, SkillActiveOp, SkillPassiveOp, SkillLookup, SkillRange, SkillTag, SkillType
+    SkillActivation, SkillPassiveOp, SkillLookup, SkillTag, SkillType
 };
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
 use world::{Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
@@ -178,6 +178,7 @@ fn main() {
         .with(Visibility::new())
         .build(); */
 
+    let mut creature_ability_system = CreatureAbilitySystem;
     let mut creature_command_system = CreatureCommandSystem;
     let mut creature_display_system = CreatureDisplaySystem;
     let mut creaature_last_update_system = CreatureLastUpdateSystem;
@@ -220,6 +221,10 @@ fn main() {
         world.maintain();
 
         creature_command_system.run_now(&world.res);
+
+        world.maintain();
+
+        creature_ability_system.run_now(&world.res);
 
         world.maintain();
 

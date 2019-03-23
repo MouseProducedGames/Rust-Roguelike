@@ -11,6 +11,7 @@ Documentation:
 pub mod command;
 // pub mod creature;
 pub mod background;
+pub mod creature_ability_system;
 pub mod creature_command_system;
 pub mod creature_display_system;
 pub mod creature_last_update_system;
@@ -30,6 +31,7 @@ pub mod sight_range;
 pub mod viewpoint_marker;
 pub mod visibility;
 pub use command::Command;
+pub use creature_ability_system::CreatureAbilitySystem;
 pub use creature_command_system::CreatureCommandSystem;
 pub use creature_display_system::CreatureDisplaySystem;
 pub use creature_last_update_system::CreatureLastUpdateSystem;
