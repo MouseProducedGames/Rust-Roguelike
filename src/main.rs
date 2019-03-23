@@ -21,6 +21,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal dependencies.
 mod creature;
+mod dice;
 mod dungen;
 mod faction;
 mod game;
@@ -123,7 +124,7 @@ fn main() {
 
         skills.insert(
             SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound),
-            SkillType::Skill(12),
+            SkillType::Skill(2),
         );
         
         let mut talents = TalentLookup::new();

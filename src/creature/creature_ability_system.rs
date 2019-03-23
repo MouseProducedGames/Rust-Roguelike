@@ -6,9 +6,6 @@ Documentation:
 
  **/
 // External dependencies.
-
-extern crate rust_dice;
-
 use specs::{ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal dependencies.
@@ -18,7 +15,7 @@ use crate::skills::{
     SkillActivation, SkillPassiveOp, SkillLookup, SkillTag, SkillType
 };
 use crate::talents::{
-    TalentActivation, TalentActivationOp, TalentLookup, TalentRange, talent_range_func,
+    TalentActivation, TalentActivationOp, TalentLookup, talent_range_func,
     TalentType
 };
 use crate::world::{execute_tile_func, Tilemap, VisibilityMap, VisibilityType};
@@ -59,18 +56,18 @@ impl<'a> System<'a> for CreatureAbilitySystem {
                                 SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound)
                             );
 
-                            let mut skill_total = *talent_bonus as i64;
+                            let mut skill_bonus = *talent_bonus as i64;
                             for skill in set
                             {
                                 match skill {
-                                    SkillType::Skill(v) => skill_total += *v as i64,
+                                    SkillType::Skill(v) => skill_bonus += *v as i64,
                                     _ => (),
                                 };
                             }
 
                             talent_range_func(
                                 talent_range,
-                                &( pos, maybe_visibility_map, skill_total),
+                                &( pos, maybe_visibility_map, skill_bonus),
                                 &mut *map,
                                 |
                                 disp: Displacement,
@@ -78,7 +75,7 @@ impl<'a> System<'a> for CreatureAbilitySystem {
                                 data_mut: &mut Tilemap,
                                 |
                                 {
-                                    let ( pos, maybe_visibility_map, skill_total ) = data;
+                                    let ( pos, maybe_visibility_map, skill_bonus ) = data;
                                     let mut map = data_mut;
                                     
                                     let scan_pos = *pos + disp;
@@ -92,7 +89,7 @@ impl<'a> System<'a> for CreatureAbilitySystem {
 
                                     execute_tile_func(
                                         true,
-                                        *skill_total,
+                                        *skill_bonus,
                                         &mut map,
                                         visibility_type,
                                         scan_pos,
