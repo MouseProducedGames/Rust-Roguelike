@@ -6,10 +6,9 @@ Documentation:
 
  **/
 // External includes
-use rand::Rng;
 
 // internal include
-use super::super::GameState;
+use crate::dice::roll_success;
 use crate::creature::CreatureStats;
 use crate::stats::{Stat, StatModifier};
 
@@ -23,22 +22,21 @@ pub struct Combat;
 
 impl Combat {
     pub fn one_attack(
-        game_state: &mut GameState,
         attacker_stats: &CreatureStats,
         defender_stats: &mut CreatureStats,
     ) -> CombatResult {
         let mut result = CombatResult::Miss;
 
-        let attack_mod = attacker_stats.coordination().modifier();
-        let defence_mod = defender_stats.agility().modifier();
+        let attack_mod = attacker_stats.coordination().modifier() as i64;
+        let defence_mod = defender_stats.agility().modifier() as i64;
 
-        let attack_roll = game_state.rng().gen_range(1, 7)
+        /* let attack_roll = game_state.rng().gen_range(1, 7)
             + game_state.rng().gen_range(1, 7)
             + game_state.rng().gen_range(1, 7)
-            + attack_mod;
-        let defence_total = 10 + defence_mod;
+            + attack_mod; */
+        // let defence_total = 10 + defence_mod;
 
-        if attack_roll > defence_total {
+        if roll_success(attack_mod - defence_mod) {
             result = CombatResult::Hit;
 
             let damage_mod = 5 + defender_stats.strength().modifier();

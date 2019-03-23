@@ -11,7 +11,7 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 // Internal dependencies.
 use crate::creature::{Command, CreatureStats, CreatureTracker, Visibility};
 use crate::faction::Faction;
-use crate::game::{Combat, CombatResult, GameState};
+use crate::game::{Combat, CombatResult};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::Stat;
 use crate::world::{execute_tile_func, Tilemap, VisibilityType};
@@ -23,7 +23,6 @@ pub struct SystemDataT<'a> {
     creature_tracker: ReadExpect<'a, CreatureTracker>,
     entities: Entities<'a>,
     map: WriteExpect<'a, Tilemap>,
-    game_state: WriteExpect<'a, GameState>,
     command: ReadStorage<'a, Command>,
     factions: ReadStorage<'a, Faction>,
     visibility: ReadStorage<'a, Visibility>,
@@ -39,7 +38,6 @@ impl<'a> System<'a> for CreatureCommandSystem {
 
         let creature_tracker = &*data.creature_tracker;
         let factions = data.factions;
-        let mut game_state = data.game_state;
         let mut map = data.map;
         let map_hash = calculate_hash(&*map);
         let stats = &mut data.stats;
@@ -64,7 +62,6 @@ impl<'a> System<'a> for CreatureCommandSystem {
                             new_pos,
                             pos,
                             creature_tracker,
-                            &mut game_state,
                             &factions,
                             stats,
                         );
@@ -90,7 +87,6 @@ fn impassable_movement<'a>(
     new_pos: Position,
     pos: &mut Position,
     creature_tracker: &CreatureTracker,
-    game_state: &mut WriteExpect<'a, GameState>,
     factions: &ReadStorage<'a, Faction>,
     stats: &mut WriteStorage<'a, CreatureStats>,
 ) {
@@ -116,7 +112,7 @@ fn impassable_movement<'a>(
             }
 
             if let CombatResult::DefenderDead =
-                Combat::one_attack(&mut *game_state, &attacker_stats, defender_stats)
+                Combat::one_attack(&attacker_stats, defender_stats)
             {
                 (*defender_stats.health_mut().value_mut()).min(-100);
             }
