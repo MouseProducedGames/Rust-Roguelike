@@ -17,8 +17,11 @@ use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::skills::{
     SkillActivation, SkillPassiveOp, SkillLookup, SkillTag, SkillType
 };
-use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
-use crate::world::{execute_tile_func, Tilemap, VisibilityType};
+use crate::talents::{
+    TalentActivation, TalentActivationOp, TalentLookup, TalentRange, talent_range_func,
+    TalentType
+};
+use crate::world::{execute_tile_func, Tilemap, VisibilityMap, VisibilityType};
 
 pub struct CreatureAbilitySystem;
 
@@ -42,6 +45,8 @@ impl<'a> System<'a> for CreatureAbilitySystem {
 
         for (pos, skills, talent, visibility) in
             (&data.pos, &mut data.skills, &mut data.talents, &data.visibility).join() {
+
+                let pos = *pos;
                 
                 let maybe_visibility_map = visibility.visibility_lookup().get(&map_hash);
 
@@ -54,41 +59,46 @@ impl<'a> System<'a> for CreatureAbilitySystem {
                                 SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound)
                             );
 
-                                let mut skill_total = *talent_bonus as i64;
-                                for skill in set
+                            let mut skill_total = *talent_bonus as i64;
+                            for skill in set
+                            {
+                                match skill {
+                                    SkillType::Skill(v) => skill_total += *v as i64,
+                                    _ => (),
+                                };
+                            }
+
+                            talent_range_func(
+                                talent_range,
+                                &( pos, maybe_visibility_map, skill_total),
+                                &mut *map,
+                                |
+                                disp: Displacement,
+                                data: &(Position, Option<&VisibilityMap>, i64),
+                                data_mut: &mut Tilemap,
+                                |
                                 {
-                                    match skill {
-                                        SkillType::Skill(v) => skill_total += *v as i64,
-                                        _ => (),
-                                    };
-                                }
-                                
-                                match talent_range {
-                                    TalentRange::Radius(radius) => {
-                                        let iradius = *radius as i32;
-                                        for yd in -iradius..=iradius {
-                                            for xd in -iradius..=iradius {
-                                                let scan_pos = *pos + Displacement::new(xd, yd);
+                                    let ( pos, maybe_visibility_map, skill_total ) = data;
+                                    let mut map = data_mut;
+                                    
+                                    let scan_pos = *pos + disp;
 
-                                                let visibility_type;
-                                                if let Some(visibility_map) = maybe_visibility_map {
-                                                    visibility_type = visibility_map.value_pos(scan_pos);
-                                                } else {
-                                                    visibility_type = VisibilityType::None;
-                                                }
+                                    let visibility_type;
+                                    if let Some(visibility_map) = maybe_visibility_map {
+                                        visibility_type = visibility_map.value_pos(scan_pos);
+                                    } else {
+                                        visibility_type = VisibilityType::None;
+                                    }
 
-                                                execute_tile_func(
-                                                    true,
-                                                    skill_total,
-                                                    &mut map,
-                                                    visibility_type,
-                                                    scan_pos,
-                                                );
-                                            }
-                                        }
-                                    },
+                                    execute_tile_func(
+                                        true,
+                                        *skill_total,
+                                        &mut map,
+                                        visibility_type,
+                                        scan_pos,
+                                    );
                                 }
-                            
+                            );
                         },
                     }
                 }
