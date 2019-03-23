@@ -5,7 +5,6 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes
 
 // Internal includes
@@ -63,9 +62,7 @@ pub fn execute_tile_func<'a>(
                 }
             }
             TileFuncOp::DiscoverTileType(new_tile_type, new_tile_func_type) => {
-                if visibility_type == VisibilityType::Visible &&
-                    roll_success(skill_bonus)
-                {
+                if visibility_type == VisibilityType::Visible && roll_success(skill_bonus) {
                     *map.tile_type_mut(pos.x as u32, pos.y as u32) = new_tile_type;
                     *map.tile_func_type_mut(pos.x as u32, pos.y as u32) = new_tile_func_type;
                 }

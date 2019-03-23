@@ -6,16 +6,12 @@ Documentation:
 
  **/
 // External dependencies.
-
-extern crate rust_dice;
-
 use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal dependencies.
-use super::super::GameState;
 use crate::creature::{Command, CreatureStats, CreatureTracker, Visibility};
 use crate::faction::Faction;
-use crate::game::{Combat, CombatResult};
+use crate::game::{Combat, CombatResult, GameState};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::Stat;
 use crate::world::{execute_tile_func, Tilemap, VisibilityType};
@@ -81,13 +77,7 @@ impl<'a> System<'a> for CreatureCommandSystem {
                         visibility_type = VisibilityType::None;
                     }
 
-                    execute_tile_func(
-                        false,
-                        100,
-                        &mut map,
-                        visibility_type,
-                        new_pos,
-                    );
+                    execute_tile_func(false, 100, &mut map, visibility_type, new_pos);
                 }
                 _ => (),
             }
@@ -134,4 +124,3 @@ fn impassable_movement<'a>(
         None => *pos = new_pos,
     }
 }
-

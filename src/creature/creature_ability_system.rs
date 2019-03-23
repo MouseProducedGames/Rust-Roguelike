@@ -11,12 +11,9 @@ use specs::{ReadStorage, System, WriteExpect, WriteStorage};
 // Internal dependencies.
 use crate::creature::Visibility;
 use crate::rrl_math::{calculate_hash, Displacement, Position};
-use crate::skills::{
-    SkillActivation, SkillPassiveOp, SkillLookup, SkillTag, SkillType
-};
+use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::talents::{
-    TalentActivation, TalentActivationOp, TalentLookup, talent_range_func,
-    TalentType
+    talent_range_func, TalentActivation, TalentActivationOp, TalentLookup, TalentType,
 };
 use crate::world::{execute_tile_func, Tilemap, VisibilityMap, VisibilityType};
 
@@ -40,65 +37,67 @@ impl<'a> System<'a> for CreatureAbilitySystem {
         let mut map = data.map;
         let map_hash = calculate_hash(&*map);
 
-        for (pos, skills, talent, visibility) in
-            (&data.pos, &mut data.skills, &mut data.talents, &data.visibility).join() {
+        for (pos, skills, talent, visibility) in (
+            &data.pos,
+            &mut data.skills,
+            &mut data.talents,
+            &data.visibility,
+        )
+            .join()
+        {
+            let pos = *pos;
 
-                let pos = *pos;
-                
-                let maybe_visibility_map = visibility.visibility_lookup().get(&map_hash);
+            let maybe_visibility_map = visibility.visibility_lookup().get(&map_hash);
 
-                for talent_type in
-                    talent.get_set(TalentActivation::Passive(TalentActivationOp::EveryRound))
-                {
-                    match talent_type {
-                        TalentType::ScanForSecrets(talent_bonus, talent_range) => {
-                            let set = skills.get_set(
-                                SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound)
-                            );
+            for talent_type in
+                talent.get_set(TalentActivation::Passive(TalentActivationOp::EveryRound))
+            {
+                match talent_type {
+                    TalentType::ScanForSecrets(talent_bonus, talent_range) => {
+                        let set = skills.get_set(SkillActivation::Passive(
+                            SkillTag::Perception,
+                            SkillPassiveOp::EveryRound,
+                        ));
 
-                            let mut skill_bonus = *talent_bonus as i64;
-                            for skill in set
-                            {
-                                match skill {
-                                    SkillType::Skill(v) => skill_bonus += *v as i64,
-                                    _ => (),
-                                };
-                            }
+                        let mut skill_bonus = *talent_bonus as i64;
+                        for skill in set {
+                            match skill {
+                                SkillType::Skill(v) => skill_bonus += *v as i64,
+                                _ => (),
+                            };
+                        }
 
-                            talent_range_func(
-                                talent_range,
-                                &( pos, maybe_visibility_map, skill_bonus),
-                                &mut *map,
-                                |
-                                disp: Displacement,
-                                data: &(Position, Option<&VisibilityMap>, i64),
-                                data_mut: &mut Tilemap,
-                                |
-                                {
-                                    let ( pos, maybe_visibility_map, skill_bonus ) = data;
-                                    let mut map = data_mut;
-                                    
-                                    let scan_pos = *pos + disp;
+                        talent_range_func(
+                            talent_range,
+                            &(pos, maybe_visibility_map, skill_bonus),
+                            &mut *map,
+                            |disp: Displacement,
+                             data: &(Position, Option<&VisibilityMap>, i64),
+                             data_mut: &mut Tilemap| {
+                                let (pos, maybe_visibility_map, skill_bonus) = data;
+                                let mut map = data_mut;
 
-                                    let visibility_type;
-                                    if let Some(visibility_map) = maybe_visibility_map {
-                                        visibility_type = visibility_map.value_pos(scan_pos);
-                                    } else {
-                                        visibility_type = VisibilityType::None;
-                                    }
+                                let scan_pos = *pos + disp;
 
-                                    execute_tile_func(
-                                        true,
-                                        *skill_bonus,
-                                        &mut map,
-                                        visibility_type,
-                                        scan_pos,
-                                    );
+                                let visibility_type;
+                                if let Some(visibility_map) = maybe_visibility_map {
+                                    visibility_type = visibility_map.value_pos(scan_pos);
+                                } else {
+                                    visibility_type = VisibilityType::None;
                                 }
-                            );
-                        },
+
+                                execute_tile_func(
+                                    true,
+                                    *skill_bonus,
+                                    &mut map,
+                                    visibility_type,
+                                    scan_pos,
+                                );
+                            },
+                        );
                     }
                 }
             }
+        }
     }
 }

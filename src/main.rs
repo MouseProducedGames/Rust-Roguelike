@@ -48,9 +48,7 @@ use faction::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
-use skills::{
-    SkillActivation, SkillPassiveOp, SkillLookup, SkillTag, SkillType
-};
+use skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
 use world::{Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
@@ -126,9 +124,9 @@ fn main() {
             SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound),
             SkillType::Skill(2),
         );
-        
+
         let mut talents = TalentLookup::new();
-        
+
         talents.insert(
             TalentActivation::Passive(TalentActivationOp::EveryRound),
             TalentType::ScanForSecrets(-2, TalentRange::Radius(1)),

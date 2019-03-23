@@ -12,7 +12,6 @@ use rust_dice::{Die, Roll, RollSet};
 
 type SuccessRoll = RollSet<u32, Die<u32>, i32>;
 
-pub fn roll_success( skill_bonus: i64 ) -> bool
-{
-    SuccessRoll::new( 3, Die::new(6), 0).roll().total() + skill_bonus > 10
+pub fn roll_success(skill_bonus: i64) -> bool {
+    SuccessRoll::new(3, Die::new(6), 0).roll().total() + skill_bonus > 10
 }
