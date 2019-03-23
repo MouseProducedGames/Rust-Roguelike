@@ -69,7 +69,7 @@ fn main() {
                 height: 6,
             },
             |rnd: &mut ThreadRng| -> (u32, u32) {
-                if rnd.gen_bool(0.9) {
+                if rnd.gen_bool(0.1) {
                     (5, TILE_FUNC_INDEX_SECRET_DOOR)
                 } else {
                     (3, TILE_FUNC_INDEX_DOOR)
@@ -153,7 +153,7 @@ fn main() {
         }
     }
 
-    /* world
+    world
         .create_entity()
         .with(Command::None)
         .with(CreatureLogicFaction)
@@ -175,7 +175,7 @@ fn main() {
         .with(SightRange::new(5))
         .with(TalentLookup::new())
         .with(Visibility::new())
-        .build(); */
+        .build();
 
     let mut creature_ability_system = CreatureAbilitySystem;
     let mut creature_command_system = CreatureCommandSystem;
