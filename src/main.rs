@@ -9,8 +9,12 @@ Documentation:
 extern crate rand;
 use rand::rngs::ThreadRng;
 use rand::Rng;
+
+extern crate rust_dice;
+
 extern crate shred;
 #[macro_use]
+
 extern crate shred_derive;
 use specs::{Builder, RunNow, /* System, */ World};
 use std::sync::{Arc, Mutex};

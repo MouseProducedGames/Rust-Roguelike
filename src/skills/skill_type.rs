@@ -14,7 +14,7 @@ Documentation:
 pub enum SkillActivation
 {
     Active(SkillActiveOp),
-    _Passive(SkillPassiveOp),
+    _Passive(_SkillPassiveOp),
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]

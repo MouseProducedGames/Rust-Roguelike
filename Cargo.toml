@@ -11,6 +11,7 @@ crossterm_input = "0.1.0"
 crossterm_screen = "0.1.0"
 crossterm_style = "0.2.0"
 rand = "0.6"
+rust_dice = { path = "./src/crates/rust_dice" }
 shred = "0.7.1"
 shred-derive = "0.5.1"
 specs = "0.14.3"

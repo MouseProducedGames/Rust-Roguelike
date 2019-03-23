@@ -12,4 +12,4 @@ Documentation:
 pub mod skill_lookup;
 pub mod skill_type;
 pub use skill_lookup::SkillLookup;
-pub use skill_type::{SkillActivation, SkillActiveOp, SkillPassiveOp, SkillType, SkillRange};
+pub use skill_type::{SkillActivation, SkillActiveOp, _SkillPassiveOp, SkillType, SkillRange};
