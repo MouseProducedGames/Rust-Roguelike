@@ -24,6 +24,7 @@ mod io;
 mod multidim;
 mod multimap;
 mod rrl_math;
+mod skills;
 mod stats;
 mod talents;
 mod tiled_shapes_2d;
