@@ -26,7 +26,7 @@ pub enum SplitType {
 pub struct SplitDungeon<'a> {
     split_type: SplitType,
     min_bounds: Bounds,
-    door_tile_type: fn(&mut ThreadRng) -> ( u32, u32 ),
+    door_tile_type: fn(&mut ThreadRng) -> (u32, u32),
     floor_tile_type: u32,
     wall_tile_type: u32,
     rnd: &'a mut ThreadRng,
@@ -36,7 +36,7 @@ impl<'a> SplitDungeon<'a> {
     pub fn new(
         split_type: SplitType,
         min_bounds: Bounds,
-        door_tile_type: fn(&mut ThreadRng) -> ( u32, u32 ),
+        door_tile_type: fn(&mut ThreadRng) -> (u32, u32),
         floor_tile_type: u32,
         wall_tile_type: u32,
         rnd: &'a mut ThreadRng,
@@ -182,11 +182,11 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
             .apply(&mut temp_area);
         }
         /* if self.rnd.gen_bool(0.1) {
-            *area.tile_type_mut(put_door_x, put_door_y) = 5;
-            *area.tile_func_type_mut(put_door_x, put_door_y) = TILE_FUNC_INDEX_SECRET_DOOR;
-    } else { */
+                *area.tile_type_mut(put_door_x, put_door_y) = 5;
+                *area.tile_func_type_mut(put_door_x, put_door_y) = TILE_FUNC_INDEX_SECRET_DOOR;
+        } else { */
         {
-            let ( door_tile_type, door_tile_func_type ) = (self.door_tile_type)(self.rnd);
+            let (door_tile_type, door_tile_func_type) = (self.door_tile_type)(self.rnd);
             *area.tile_type_mut(put_door_x, put_door_y) = door_tile_type;
             *area.tile_func_type_mut(put_door_x, put_door_y) = door_tile_func_type;
         }

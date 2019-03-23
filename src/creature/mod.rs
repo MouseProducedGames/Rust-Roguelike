@@ -10,6 +10,7 @@ Documentation:
 // internal includes
 pub mod command;
 // pub mod creature;
+pub mod background;
 pub mod creature_command_system;
 pub mod creature_display_system;
 pub mod creature_last_update_system;
@@ -26,7 +27,6 @@ pub mod player_display_system;
 pub mod player_marker;
 pub mod player_position;
 pub mod sight_range;
-pub mod background;
 pub mod viewpoint_marker;
 pub mod visibility;
 pub use command::Command;
@@ -36,7 +36,9 @@ pub use creature_last_update_system::CreatureLastUpdateSystem;
 pub use creature_logic_faction::{CreatureLogicFaction, CreatureLogicFactionSystem};
 pub use creature_logic_player::{CreatureLogicPlayer, CreatureLogicPlayerSystem};
 pub use creature_logic_wander::{CreatureLogicWander, CreatureLogicWanderSystem};
-pub use creature_logic_wander_attack::{CreatureLogicWanderAttack, CreatureLogicWanderAttackSystem};
+pub use creature_logic_wander_attack::{
+    CreatureLogicWanderAttack, CreatureLogicWanderAttackSystem,
+};
 pub use creature_stats::CreatureStats;
 pub use creature_tracker::CreatureTracker;
 pub use creature_visibility_system::CreatureVisibilitySystem;

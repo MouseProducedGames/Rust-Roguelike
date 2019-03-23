@@ -12,47 +12,39 @@ use std::default::Default;
 use crate::creature::CreatureStats;
 
 #[derive(Copy, Clone)]
-pub enum SpeciesType
-{
+pub enum SpeciesType {
     Dwarf,
     Elf,
     Halfling,
     Human,
 }
 
-impl SpeciesType
-{
-    pub fn to_string( &self ) -> String
-    {
+impl SpeciesType {
+    pub fn to_string(&self) -> String {
         match self {
-            SpeciesType::Dwarf => String::from( "Dwarf" ),
-            SpeciesType::Elf => String::from( "Elf" ),
-            SpeciesType::Halfling => String::from( "Halfling" ),
-            SpeciesType::Human => String::from( "Human" ),
+            SpeciesType::Dwarf => String::from("Dwarf"),
+            SpeciesType::Elf => String::from("Elf"),
+            SpeciesType::Halfling => String::from("Halfling"),
+            SpeciesType::Human => String::from("Human"),
         }
     }
 }
 
 #[derive(Copy, Clone)]
-pub struct Species
-{
+pub struct Species {
     stats: CreatureStats,
 }
 
-impl Species
-{
-    pub fn new( stats: CreatureStats ) -> Self
-    {
+impl Species {
+    pub fn new(stats: CreatureStats) -> Self {
         Self { stats: stats }
     }
 
-    pub fn default() -> Self
-    {
-        Self::new( CreatureStats::default() )
+    pub fn default() -> Self {
+        Self::new(CreatureStats::default())
     }
 
-    pub fn create( species: SpeciesType ) -> Self
-    {
+    pub fn create(species: SpeciesType) -> Self {
         match species {
             SpeciesType::Dwarf => Self::create_dwarf(),
             SpeciesType::Elf => Self::create_elf(),
@@ -61,61 +53,51 @@ impl Species
         }
     }
 
-    pub fn create_dwarf() -> Self
-    {
+    pub fn create_dwarf() -> Self {
         let mut output = Self::default();
         output.stats += Self::create_dwarf_stat_changes();
         output
     }
-    
-    pub fn create_dwarf_stat_changes() -> CreatureStats
-    {
-        CreatureStats::new( 0, -2, 0, 2, 2 )
+
+    pub fn create_dwarf_stat_changes() -> CreatureStats {
+        CreatureStats::new(0, -2, 0, 2, 2)
     }
-    
-    pub fn create_elf() -> Self
-    {
+
+    pub fn create_elf() -> Self {
         let mut output = Self::default();
         output.stats += Self::create_elf_stat_changes();
         output
     }
-    
-    pub fn create_elf_stat_changes() -> CreatureStats
-    {
-        CreatureStats::new( 0, 2, 0, -2, -2 )
+
+    pub fn create_elf_stat_changes() -> CreatureStats {
+        CreatureStats::new(0, 2, 0, -2, -2)
     }
-    
-    pub fn create_halfling() -> Self
-    {
+
+    pub fn create_halfling() -> Self {
         let mut output = Self::default();
         output.stats += Self::create_halfling_stat_changes();
         output
     }
-    
-    pub fn create_halfling_stat_changes() -> CreatureStats
-    {
-        CreatureStats::new( -2, 0, 4, -2, -2 )
+
+    pub fn create_halfling_stat_changes() -> CreatureStats {
+        CreatureStats::new(-2, 0, 4, -2, -2)
     }
-    
-    pub fn create_human() -> Self
-    {
+
+    pub fn create_human() -> Self {
         let mut output = Self::default();
         output.stats += Self::create_human_stat_changes();
         output
     }
-    
-    pub fn create_human_stat_changes() -> CreatureStats
-    {
-        CreatureStats::new( 0, 0, 0, 0, 0 )
+
+    pub fn create_human_stat_changes() -> CreatureStats {
+        CreatureStats::new(0, 0, 0, 0, 0)
     }
 
-    pub fn stats( &self ) -> CreatureStats
-    {
+    pub fn stats(&self) -> CreatureStats {
         self.stats
     }
-    
-    pub fn _stats_mut( &mut self ) -> &mut CreatureStats
-    {
+
+    pub fn _stats_mut(&mut self) -> &mut CreatureStats {
         &mut self.stats
     }
 }

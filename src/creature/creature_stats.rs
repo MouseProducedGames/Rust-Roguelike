@@ -8,10 +8,10 @@ Documentation:
 // External includes
 use specs::{Component, VecStorage};
 use std::default::Default;
-use std::ops::{ Add, AddAssign };
+use std::ops::{Add, AddAssign};
 
 // internal include
-use crate::stats::{ Attribute, Stat };
+use crate::stats::{Attribute, Stat};
 
 #[derive(Copy, Clone)]
 pub struct CreatureStats {
@@ -29,17 +29,16 @@ impl CreatureStats {
         coordination: i32,
         endurance: i32,
         health: i32,
-    ) -> Self
-    {
+    ) -> Self {
         Self {
-            strength: Attribute::new( strength ),
-            agility: Attribute::new( agility ),
-            coordination: Attribute::new( coordination ),
-            endurance: Attribute::new( endurance ),
-            health: Attribute::new( health ),
+            strength: Attribute::new(strength),
+            agility: Attribute::new(agility),
+            coordination: Attribute::new(coordination),
+            endurance: Attribute::new(endurance),
+            health: Attribute::new(health),
         }
     }
-    
+
     pub fn strength(&self) -> Attribute {
         self.strength
     }
@@ -84,8 +83,7 @@ impl CreatureStats {
 impl Add<CreatureStats> for CreatureStats {
     type Output = Self;
 
-    fn add( self, other: Self ) -> Self
-    {
+    fn add(self, other: Self) -> Self {
         Self::new(
             self.strength().value() + other.strength().value(),
             self.agility().value() + other.agility().value(),
@@ -97,8 +95,7 @@ impl Add<CreatureStats> for CreatureStats {
 }
 
 impl AddAssign<CreatureStats> for CreatureStats {
-    fn add_assign( &mut self, other: Self )
-    {
+    fn add_assign(&mut self, other: Self) {
         *self = *self + other;
     }
 }

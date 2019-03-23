@@ -9,16 +9,16 @@ Documentation:
 use std::marker::{Send, Sync};
 
 // internal includes
-use crate::creature::CreatureStats;
 use crate::creature::background::SpeciesType;
+use crate::creature::CreatureStats;
 use crate::faction::Faction;
 use crate::rrl_math::Position;
 use crate::world::{Tilemap, VisibilityMap};
 
 pub trait Display: Drop + Send + Sync {
-    fn choose_species( &self, options: &Vec<SpeciesType> ) -> SpeciesType;
+    fn choose_species(&self, options: &Vec<SpeciesType>) -> SpeciesType;
 
-    fn display_stats( &mut self, stats: CreatureStats );
+    fn display_stats(&mut self, stats: CreatureStats);
 
     fn get_char(&self) -> char;
 

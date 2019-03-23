@@ -34,7 +34,7 @@ impl<'a> System<'a> for CreatureDisplaySystem {
         let view_pos = data.player_pos.0;
         let mut window = data.display.lock().unwrap();
 
-        for ( faction,  pos ) in ( &data.factions, &data.positions ).join() {
+        for (faction, pos) in (&data.factions, &data.positions).join() {
             window.write_creature(*faction, *pos, view_pos);
         }
     }

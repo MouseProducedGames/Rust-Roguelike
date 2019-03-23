@@ -9,7 +9,7 @@ Documentation:
 pub use specs::{ReadExpect, ReadStorage, System, WriteExpect};
 
 // Internal includes
-pub use crate::creature::{ CreatureStats, PlayerMarker, Visibility };
+pub use crate::creature::{CreatureStats, PlayerMarker, Visibility};
 pub use crate::io::Display;
 pub use crate::rrl_math::{calculate_hash, Position};
 pub use crate::world::Tilemap;
@@ -23,7 +23,7 @@ pub struct SystemDataT<'a> {
     player_markers: ReadStorage<'a, PlayerMarker>,
     positions: ReadStorage<'a, Position>,
     visibilities: ReadStorage<'a, Visibility>,
-    stats: ReadStorage< 'a, CreatureStats >,
+    stats: ReadStorage<'a, CreatureStats>,
     display: WriteExpect<'a, Arc<Mutex<Display>>>,
 }
 
@@ -37,8 +37,13 @@ impl<'a> System<'a> for PlayerDisplaySystem {
         let map_hash = calculate_hash(&*map);
         let mut display = data.display.lock().unwrap();
 
-        for (_, player_pos, visibility, stats) in
-            (&data.player_markers, &data.positions, &data.visibilities, &data.stats).join()
+        for (_, player_pos, visibility, stats) in (
+            &data.player_markers,
+            &data.positions,
+            &data.visibilities,
+            &data.stats,
+        )
+            .join()
         {
             let visibility_lookup = visibility.visibility_lookup();
 
@@ -49,7 +54,7 @@ impl<'a> System<'a> for PlayerDisplaySystem {
             }
 
             display.write_map(*player_pos, &map, &visibility);
-            display.display_stats( *stats );
+            display.display_stats(*stats);
         }
     }
 }

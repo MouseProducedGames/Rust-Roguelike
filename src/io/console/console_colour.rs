@@ -15,10 +15,8 @@ use super::Darker;
 
 // pub enum ConsoleColour { Color }
 
-impl Darker for Color
-{
-    fn darker( self ) -> Self
-    {
+impl Darker for Color {
+    fn darker(self) -> Self {
         match self {
             Color::Black => Color::Black,
 
@@ -44,9 +42,13 @@ impl Darker for Color
             Color::White => Color::Black,
             Color::Grey => Color::White,
 
-            Color::Rgb { r, g, b } => Color::Rgb { r: r / 2, g: g / 2, b: b / 2 },
+            Color::Rgb { r, g, b } => Color::Rgb {
+                r: r / 2,
+                g: g / 2,
+                b: b / 2,
+            },
 
-            Color::AnsiValue( v ) => Color::AnsiValue( v ),
+            Color::AnsiValue(v) => Color::AnsiValue(v),
         }
     }
 }

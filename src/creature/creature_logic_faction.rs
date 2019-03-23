@@ -50,78 +50,62 @@ impl<'a> System<'a> for CreatureLogicFactionSystem {
         let factions = data.factions;
         let mut game_state = data.game_state;
         let map = data.map;
-        let map_hash = calculate_hash( &*map );
+        let map_hash = calculate_hash(&*map);
         let visibility = data.visibility;
 
-        for ( entity, _, command, pos, visibility ) in (
+        for (entity, _, command, pos, visibility) in (
             &data.entities,
             &data.logic,
             &mut data.commands,
             &mut data.pos,
-            &visibility
+            &visibility,
         )
             .join()
         {
             let target_move;
-            if let Some( faction ) = factions.get( entity )
-            {
+            if let Some(faction) = factions.get(entity) {
                 // println!("Boo! 1");
-                if let Some( visibility_map ) = visibility.visibility_lookup().get( &map_hash )
-                {
+                if let Some(visibility_map) = visibility.visibility_lookup().get(&map_hash) {
                     // println!("Boo! 2");
-                    if let Some( ( _enemy, enemy_pos ) ) =
-                        creature_tracker.get_nearest_enemy(
-                            *faction,
-                            &factions,
-                            visibility_map
-                        )
+                    if let Some((_enemy, enemy_pos)) =
+                        creature_tracker.get_nearest_enemy(*faction, &factions, visibility_map)
                     {
                         // println!("Boo! 3");
                         let disp = enemy_pos - *pos;
-                        target_move = Displacement::new( disp.x.signum(), disp.y.signum() );
-                    }
-                    else if let Some( ( _friend, friend_pos ) ) =
-                        creature_tracker.get_nearest_friend(
-                            entity,
-                            *faction,
-                            &factions,
-                            visibility_map
-                        )
-                    {
+                        target_move = Displacement::new(disp.x.signum(), disp.y.signum());
+                    } else if let Some((_friend, friend_pos)) = creature_tracker.get_nearest_friend(
+                        entity,
+                        *faction,
+                        &factions,
+                        visibility_map,
+                    ) {
                         // println!("Boo! 3");
                         let disp = friend_pos - *pos;
-                        target_move = Displacement::new( disp.x.signum(), disp.y.signum() );
+                        target_move = Displacement::new(disp.x.signum(), disp.y.signum());
+                    } else {
+                        target_move = get_random_move(&mut game_state);
                     }
-                    else
-                    {
-                        target_move = get_random_move( &mut game_state );
-                    }
+                } else {
+                    target_move = get_random_move(&mut game_state);
                 }
-                else
-                {
-                    target_move = get_random_move( &mut game_state );
-                }
+            } else {
+                target_move = get_random_move(&mut game_state);
             }
-            else
-            {
-                target_move = get_random_move( &mut game_state );
-            }
-            
+
             *command = Command::Move(target_move);
 
             /* let new_pos = *pos + target_move;
 
-            if map.passable_pos( new_pos ) &&
-            creature_tracker.check_collision( entity, new_pos ) == None
-            {
-             *pos = new_pos;
-        } */
+                if map.passable_pos( new_pos ) &&
+                creature_tracker.check_collision( entity, new_pos ) == None
+                {
+                 *pos = new_pos;
+            } */
         }
     }
 }
 
-fn get_random_move<'a>( game_state: &mut WriteExpect<'a, GameState> ) -> Displacement
-{
+fn get_random_move<'a>(game_state: &mut WriteExpect<'a, GameState>) -> Displacement {
     let key_command = game_state.rng().gen_range(1, 10);
     let target_move;
     match key_command {

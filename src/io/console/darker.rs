@@ -11,7 +11,6 @@ extern crate crossterm_style;
 
 // Internal includes.
 
-pub trait Darker
-{
-    fn darker( self ) -> Self;
+pub trait Darker {
+    fn darker(self) -> Self;
 }

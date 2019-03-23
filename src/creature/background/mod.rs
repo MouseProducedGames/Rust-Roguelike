@@ -9,4 +9,4 @@ Documentation:
 
 // internal includes
 pub mod species;
-pub use species::{ Species, SpeciesType };
+pub use species::{Species, SpeciesType};

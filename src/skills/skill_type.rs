@@ -11,32 +11,33 @@ Documentation:
 // Internal includes.
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum SkillActivation
-{
-    Active(SkillActiveOp),
-    _Passive(_SkillPassiveOp),
+pub enum SkillActivation {
+    Active(SkillTag, SkillActiveOp),
+    Passive(SkillTag, SkillPassiveOp),
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum SkillActiveOp
-{
+pub enum SkillActiveOp {
     OnUse,
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum _SkillPassiveOp
-{
+pub enum SkillPassiveOp {
     EveryRound,
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum SkillType
-{
-    Attack(SkillRange, i32, i32),
+pub enum SkillTag {
+    Perception,
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum SkillRange
-{
+pub enum SkillType {
+    Attack(SkillRange, i32, i32),
+    Skill(i32),
+}
+
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+pub enum SkillRange {
     Radius(u32),
 }

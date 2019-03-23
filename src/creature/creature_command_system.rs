@@ -16,8 +16,8 @@ use crate::faction::Faction;
 use crate::game::{Combat, CombatResult};
 use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::stats::Stat;
-use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentType, TalentRange};
-use crate::world::{TileFunc, TileFuncOp, Tilemap, VisibilityType };
+use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
+use crate::world::{TileFunc, TileFuncOp, Tilemap, VisibilityType};
 
 pub struct CreatureCommandSystem;
 
@@ -48,7 +48,14 @@ impl<'a> System<'a> for CreatureCommandSystem {
         let map_hash = calculate_hash(&*map);
         let stats = &mut data.stats;
 
-        for (entity, command, pos, visibility) in (&data.entities, &data.command, &mut data.pos, &data.visibility).join() {
+        for (entity, command, pos, visibility) in (
+            &data.entities,
+            &data.command,
+            &mut data.pos,
+            &data.visibility,
+        )
+            .join()
+        {
             let command = command;
 
             match *command {
@@ -66,14 +73,11 @@ impl<'a> System<'a> for CreatureCommandSystem {
                             stats,
                         );
                     }
-                    
+
                     let visibility_type;
-                    if let Some(visibility_map) = visibility.visibility_lookup().get(&map_hash)
-                    {
+                    if let Some(visibility_map) = visibility.visibility_lookup().get(&map_hash) {
                         visibility_type = visibility_map.value_pos(new_pos);
-                    }
-                    else
-                    {
+                    } else {
                         visibility_type = VisibilityType::None;
                     }
 
@@ -83,49 +87,46 @@ impl<'a> System<'a> for CreatureCommandSystem {
                         &mut game_state,
                         &mut map,
                         visibility_type,
-                        new_pos
+                        new_pos,
                     );
                 }
                 _ => (),
             }
         }
-        
+
         for (pos, talent, visibility) in (&data.pos, &mut data.talents, &data.visibility).join() {
             let maybe_visibility_map = visibility.visibility_lookup().get(&map_hash);
-            
-            for talent_type in talent.get_set(TalentActivation::Passive(TalentActivationOp::EveryRound)) {
-                match talent_type {
-                    TalentType::ScanForSecrets(percent, talent_range) => {
-                        match talent_range {
-                            TalentRange::Radius(radius) => {
-                                let iradius = *radius as i32;
-                                for yd in -iradius..=iradius {
-                                    for xd in -iradius..=iradius {
-                                        let scan_pos = *pos + Displacement::new(xd, yd);
 
-                                        let visibility_type;
-                                        if let Some(visibility_map) = maybe_visibility_map
-                                        {
-                                            visibility_type = visibility_map.value_pos(scan_pos);
-                                        }
-                                        else
-                                        {
-                                            visibility_type = VisibilityType::None;
-                                        }
-                                        
-                                        execute_tile_func(
-                                            true,
-                                            *percent,
-                                            &mut game_state,
-                                            &mut map,
-                                            visibility_type,
-                                            scan_pos
-                                        );
+            for talent_type in
+                talent.get_set(TalentActivation::Passive(TalentActivationOp::EveryRound))
+            {
+                match talent_type {
+                    TalentType::ScanForSecrets(percent, talent_range) => match talent_range {
+                        TalentRange::Radius(radius) => {
+                            let iradius = *radius as i32;
+                            for yd in -iradius..=iradius {
+                                for xd in -iradius..=iradius {
+                                    let scan_pos = *pos + Displacement::new(xd, yd);
+
+                                    let visibility_type;
+                                    if let Some(visibility_map) = maybe_visibility_map {
+                                        visibility_type = visibility_map.value_pos(scan_pos);
+                                    } else {
+                                        visibility_type = VisibilityType::None;
                                     }
+
+                                    execute_tile_func(
+                                        true,
+                                        *percent,
+                                        &mut game_state,
+                                        &mut map,
+                                        visibility_type,
+                                        scan_pos,
+                                    );
                                 }
                             }
                         }
-                    }
+                    },
                 }
             }
         }
@@ -143,16 +144,14 @@ fn impassable_movement<'a>(
 ) {
     match creature_tracker.check_collision(entity, new_pos) {
         Some(other_entity) => {
-
-            if let Some( faction_a ) = factions.get( entity ) {
-                if let Some ( faction_b ) = factions.get( other_entity ) {
-                    if faction_a == faction_b
-                    {
+            if let Some(faction_a) = factions.get(entity) {
+                if let Some(faction_b) = factions.get(other_entity) {
+                    if faction_a == faction_b {
                         return;
                     }
                 }
             }
-            
+
             let attacker_stats;
             let defender_stats;
             match stats.get(entity) {
@@ -181,26 +180,24 @@ fn execute_tile_func<'a>(
     map: &mut WriteExpect<'a, Tilemap>,
     visibility_type: VisibilityType,
     pos: Position,
-)
-{
+) {
     match map.tile_func_pos(pos) {
         TileFunc::None => (),
-        TileFunc::OnEnterTile(tile_func_op) => {
-            match tile_func_op {
-                TileFuncOp::ChangeTileType(new_tile_type, new_tile_func_type) => {
-                    if harmless == false && game_state.rng().gen_range(1, 101) <= percent {
-                        *map.tile_type_mut(pos.x as u32, pos.y as u32) = new_tile_type;
-                        *map.tile_func_type_mut(pos.x as u32, pos.y as u32) = new_tile_func_type;
-                    }
-                }
-                TileFuncOp::DiscoverTileType(new_tile_type, new_tile_func_type) => {
-                    if visibility_type == VisibilityType::Visible &&
-                        game_state.rng().gen_range(1, 101) <= percent {
-                            *map.tile_type_mut(pos.x as u32, pos.y as u32) = new_tile_type;
-                            *map.tile_func_type_mut(pos.x as u32, pos.y as u32) = new_tile_func_type;
-                        }
+        TileFunc::OnEnterTile(tile_func_op) => match tile_func_op {
+            TileFuncOp::ChangeTileType(new_tile_type, new_tile_func_type) => {
+                if harmless == false && game_state.rng().gen_range(1, 101) <= percent {
+                    *map.tile_type_mut(pos.x as u32, pos.y as u32) = new_tile_type;
+                    *map.tile_func_type_mut(pos.x as u32, pos.y as u32) = new_tile_func_type;
                 }
             }
-        }
+            TileFuncOp::DiscoverTileType(new_tile_type, new_tile_func_type) => {
+                if visibility_type == VisibilityType::Visible
+                    && game_state.rng().gen_range(1, 101) <= percent
+                {
+                    *map.tile_type_mut(pos.x as u32, pos.y as u32) = new_tile_type;
+                    *map.tile_func_type_mut(pos.x as u32, pos.y as u32) = new_tile_func_type;
+                }
+            }
+        },
     }
 }

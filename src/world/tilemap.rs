@@ -13,10 +13,11 @@ use std::hash::{Hash, Hasher};
 // Internal includes
 use super::super::multimap::Multimap;
 use super::mapping::Mapping;
-use crate::world::{
-    TileFunc, TILE_FUNC_DATA, TILE_FUNC_INDEX_VOID, TileTypeData, TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID
-};
 use crate::rrl_math::Position;
+use crate::world::{
+    TileFunc, TileTypeData, TILE_FUNC_DATA, TILE_FUNC_INDEX_VOID, TILE_TYPE_DATA,
+    TILE_TYPE_INDEX_VOID,
+};
 
 type TileType = u32;
 type Width = u32;
@@ -73,8 +74,7 @@ impl Tilemap {
         self.tile_funcs.value_mut(pos_x, pos_y)
     }
 
-    pub fn tile_func_type_pos(&self, pos: Position) -> TileType
-    {
+    pub fn tile_func_type_pos(&self, pos: Position) -> TileType {
         if self.is_pos_in_bounds(pos) {
             self.tile_func_type(pos.x as u32, pos.y as u32)
         } else {

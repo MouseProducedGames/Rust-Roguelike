@@ -33,21 +33,22 @@ mod stats;
 mod talents;
 mod tiled_shapes_2d;
 mod world;
+use creature::background::{Species, SpeciesType};
 use creature::{
     Command, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
-    CreatureLogicFaction, CreatureLogicFactionSystem, CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderSystem,
-    CreatureLogicWanderAttack, CreatureLogicWanderAttackSystem, CreatureStats, CreatureTracker,
+    CreatureLogicFaction, CreatureLogicFactionSystem, CreatureLogicPlayer,
+    CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderAttack,
+    CreatureLogicWanderAttackSystem, CreatureLogicWanderSystem, CreatureStats, CreatureTracker,
     CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition, SightRange,
     ViewpointMarker, Visibility,
 };
-use creature::background::{ Species, SpeciesType };
 use dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use faction::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
-use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentType, TalentRange};
-use world::{ Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
+use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
+use world::{Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
 fn main() {
     let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(io::console::ConsoleDisplay::new()));
@@ -65,19 +66,18 @@ fn main() {
                 width: 6,
                 height: 6,
             },
-            |rnd: &mut ThreadRng| -> ( u32, u32 ) {
-                if rnd.gen_bool(0.1)
-                {
-                    ( 5, TILE_FUNC_INDEX_SECRET_DOOR )
+            |rnd: &mut ThreadRng| -> (u32, u32) {
+                if rnd.gen_bool(0.1) {
+                    (5, TILE_FUNC_INDEX_SECRET_DOOR)
                 } else {
-                    ( 3, TILE_FUNC_INDEX_DOOR )
+                    (3, TILE_FUNC_INDEX_DOOR)
                 }
             },
             2,
             1,
             &mut game_state.rng(),
         )
-            .apply(&mut temp_map);
+        .apply(&mut temp_map);
 
         map = temp_map;
     }
@@ -106,66 +106,62 @@ fn main() {
     {
         let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
         let display = mutex_display.lock().unwrap();
-        species_type =
-            display.choose_species(
-                &vec![
-                    SpeciesType::Dwarf,
-                    SpeciesType::Elf,
-                    SpeciesType::Halfling,
-                    SpeciesType::Human,
-                ]
-            );
-
+        species_type = display.choose_species(&vec![
+            SpeciesType::Dwarf,
+            SpeciesType::Elf,
+            SpeciesType::Halfling,
+            SpeciesType::Human,
+        ]);
     }
-    
+
     {
         let mut talents = TalentLookup::new();
         talents.insert(
             TalentActivation::Passive(TalentActivationOp::EveryRound),
-            TalentType::ScanForSecrets(50, TalentRange::Radius(1))
+            TalentType::ScanForSecrets(50, TalentRange::Radius(1)),
         );
-        let species = Species::create( species_type );
+        let species = Species::create(species_type);
         world
             .create_entity()
-            .with( Command::None )
-            .with( CreatureLogicPlayer {} )
-            .with( Faction::new(0) )
-            .with( species.stats() )
-            .with( Position::new(8, 5) )
-            .with( PlayerMarker )
-            .with( SightRange::new(5) )
-            .with( talents )
-            .with( ViewpointMarker )
-            .with( Visibility::new() )
+            .with(Command::None)
+            .with(CreatureLogicPlayer {})
+            .with(Faction::new(0))
+            .with(species.stats())
+            .with(Position::new(8, 5))
+            .with(PlayerMarker)
+            .with(SightRange::new(5))
+            .with(talents)
+            .with(ViewpointMarker)
+            .with(Visibility::new())
             .build();
-        
+
         {
             *(&mut *world.write_resource::<Tilemap>()).tile_type_mut(8, 5) = 2;
         }
     }
 
-    world.
-        create_entity()
-        .with( Command::None )
-        .with( CreatureLogicFaction )
-        .with( Faction::new( 0 ) )
-        .with( CreatureStats::default() )
-        .with( Position::new( 12, 8 ) )
-        .with( SightRange::new( 5 ) )
-        .with( TalentLookup::new() )
-        .with( Visibility::new() )
-    .build();
+    world
+        .create_entity()
+        .with(Command::None)
+        .with(CreatureLogicFaction)
+        .with(Faction::new(0))
+        .with(CreatureStats::default())
+        .with(Position::new(12, 8))
+        .with(SightRange::new(5))
+        .with(TalentLookup::new())
+        .with(Visibility::new())
+        .build();
 
     world
         .create_entity()
-        .with( Command::None )
-        .with( CreatureLogicFaction )
-        .with( Faction::new(1) )
-        .with( CreatureStats::default() )
-        .with( Position::new(8, 12) )
-        .with( SightRange::new(5) )
-        .with( TalentLookup::new() )
-        .with( Visibility::new() )
+        .with(Command::None)
+        .with(CreatureLogicFaction)
+        .with(Faction::new(1))
+        .with(CreatureStats::default())
+        .with(Position::new(8, 12))
+        .with(SightRange::new(5))
+        .with(TalentLookup::new())
+        .with(Visibility::new())
         .build();
 
     let mut creature_command_system = CreatureCommandSystem;

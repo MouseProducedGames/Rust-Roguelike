@@ -11,25 +11,21 @@ Documentation:
 // Internal includes.
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum TalentActivation
-{
+pub enum TalentActivation {
     Passive(TalentActivationOp),
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum TalentActivationOp
-{
+pub enum TalentActivationOp {
     EveryRound,
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum TalentType
-{
+pub enum TalentType {
     ScanForSecrets(u8, TalentRange),
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
-pub enum TalentRange
-{
+pub enum TalentRange {
     Radius(u32),
 }
