@@ -42,24 +42,13 @@ impl Display for ConsoleDisplay {
             println!();
             println!(" Select your character's species: ");
 
-            match self.get_char() {
-                '1' => {
-                    option = options[0];
+            if let Some(index) = self.get_char().to_digit(10) {
+                let index = index as usize;
+                let index = match index { 0 => 10, _ => index };
+                if index < options.len() {
+                    option = options[index - 1];
                     keep_going = false;
                 }
-                '2' => {
-                    option = options[1];
-                    keep_going = false;
-                }
-                '3' => {
-                    option = options[2];
-                    keep_going = false;
-                }
-                '4' => {
-                    option = options[3];
-                    keep_going = false;
-                }
-                _ => (),
             }
         }
 
@@ -73,7 +62,7 @@ impl Display for ConsoleDisplay {
         self.put_stat(42, 3, "Agility", stats.agility());
         self.put_stat(42, 4, "Coordination", stats.coordination());
         self.put_stat(42, 5, "Endurance", stats.endurance());
-        self.put_health(42, 6, "Health", stats.endurance().value(), stats.strength());
+        self.put_health(42, 6, "Health", stats.endurance().value(), stats.health());
         
         // println!("{}{}", Colored::Fg(Color::Grey), Colored::Bg(Color::Black));
 
