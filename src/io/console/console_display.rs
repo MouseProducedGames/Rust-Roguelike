@@ -31,7 +31,7 @@ pub struct ConsoleDisplay {
 impl ConsoleDisplay {
     pub fn new() -> Self {
         let term = crossterm::Crossterm::new();
-        
+
         // Not panic-worthy if it doesn't work...
         if let Ok(_v) = term.cursor().hide() {}
         let mut output = Self {
@@ -59,7 +59,7 @@ impl ConsoleDisplay {
         };
 
         output.clear();
-        
+
         /* let front_buffer_index = output.front_buffer_index();
         let buffers = &mut output.buffers;
         let (buffer_height, buffer_width) = buffers[output.back_buffer_index].bounds();
@@ -73,8 +73,7 @@ impl ConsoleDisplay {
         output
     }
 
-    pub(crate) fn clear(&mut self)
-    {
+    pub(crate) fn clear(&mut self) {
         let front_buffer_index = self.front_buffer_index();
         let buffers = &mut self.buffers;
         let (buffer_height, buffer_width) = buffers[self.back_buffer_index].bounds();
@@ -84,7 +83,7 @@ impl ConsoleDisplay {
                 *self.buffers[self.back_buffer_index].value_mut(y, x) = self.map_graphics[0];
             }
         }
-        
+
         match self.term.terminal().clear(crossterm::ClearType::All) {
             Ok(_v) => (),
             _ => panic!("Could not clear screen."),
@@ -200,35 +199,32 @@ impl ConsoleDisplay {
     }
 
     pub(crate) fn put_health(&mut self, x: i32, y: i32, name: &str, max: i32, stat: Attribute) {
-        let formatted =
-            format!(
-                "{:.>13} {:>2}/{:+>2}",
-                name,
-                stat.value(),
-                max
-            );
+        let formatted = format!("{:.>13} {:>2}/{:+>2}", name, stat.value(), max);
         self.put_string(x, y, &formatted, Color::Grey, Color::Black);
     }
 
     pub(crate) fn put_stat(&mut self, x: i32, y: i32, name: &str, stat: Attribute) {
-        let formatted =
-            format!(
-                "{:.>13} {:>2} : {:+>2}",
-                name,
-                stat.value(),
-                stat.modifier()
-            );
+        let formatted = format!(
+            "{:.>13} {:>2} : {:+>2}",
+            name,
+            stat.value(),
+            stat.modifier()
+        );
         self.put_string(x, y, &formatted, Color::Grey, Color::Black);
     }
 
     pub(crate) fn put_string(&mut self, x: i32, y: i32, s: &str, fg: Color, bg: Color) {
-        for ( i, ch ) in s.chars().enumerate()
-        {
+        for (i, ch) in s.chars().enumerate() {
             self.put_console_char(x + i as i32, y, ConsoleChar::new(ch, fg, bg));
         }
     }
 
-    pub(crate) fn write_map_impl(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap) {
+    pub(crate) fn write_map_impl(
+        &mut self,
+        view_pos: Position,
+        map: &Tilemap,
+        vis: &VisibilityMap,
+    ) {
         let back_buffer = &mut self.buffers[self.back_buffer_index];
         for view_addend_y in -17..18_i32 {
             let display_pos_y = (18 + view_addend_y) as usize;
@@ -253,7 +249,6 @@ impl ConsoleDisplay {
         }
     }
 }
-
 
 impl Drop for ConsoleDisplay {
     fn drop(&mut self) {

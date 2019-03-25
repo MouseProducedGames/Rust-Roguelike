@@ -111,8 +111,7 @@ fn impassable_movement<'a>(
                 _ => return,
             }
 
-            if let CombatResult::DefenderDead =
-                Combat::one_attack(&attacker_stats, defender_stats)
+            if let CombatResult::DefenderDead = Combat::one_attack(&attacker_stats, defender_stats)
             {
                 (*defender_stats.health_mut().value_mut()).min(-100);
             }

@@ -18,22 +18,27 @@ use super::ConsoleChar;
 use crate::creature::background::SpeciesType;
 use crate::creature::CreatureStats;
 use crate::faction::Faction;
-use crate::io::Display;
 use crate::io::console::ConsoleDisplay;
+use crate::io::Display;
 use crate::rrl_math::Position;
 use crate::stats::Stat;
 use crate::world::{Tilemap, VisibilityMap};
 
 impl Display for ConsoleDisplay {
     fn choose_species(&mut self, options: &Vec<SpeciesType>) -> SpeciesType {
-
         let mut keep_going = true;
         let mut option = SpeciesType::Human;
 
         while keep_going {
             self.clear();
 
-            self.put_string(1, 1, "Select your character's species:", Color::Grey, Color::Black );
+            self.put_string(
+                1,
+                1,
+                "Select your character's species:",
+                Color::Grey,
+                Color::Black,
+            );
 
             for (i, species_type) in options.iter().enumerate() {
                 let formatted = format!("{}) {}", (1 + i), species_type.to_string());
@@ -44,7 +49,10 @@ impl Display for ConsoleDisplay {
 
             if let Some(index) = self.get_char().to_digit(10) {
                 let index = index as usize;
-                let index = match index { 0 => 10, _ => index - 1 };
+                let index = match index {
+                    0 => 10,
+                    _ => index - 1,
+                };
                 if index < options.len() {
                     option = options[index];
                     keep_going = false;

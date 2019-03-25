@@ -1,3 +1,4 @@
+use crate::creature::CreatureStats;
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -9,7 +10,6 @@ Documentation:
 
 // internal include
 use crate::dice::roll_success;
-use crate::creature::CreatureStats;
 use crate::stats::{Stat, StatModifier};
 
 pub enum CombatResult {
@@ -31,9 +31,9 @@ impl Combat {
         let defence_mod = defender_stats.agility().modifier() as i64;
 
         /* let attack_roll = game_state.rng().gen_range(1, 7)
-            + game_state.rng().gen_range(1, 7)
-            + game_state.rng().gen_range(1, 7)
-            + attack_mod; */
+        + game_state.rng().gen_range(1, 7)
+        + game_state.rng().gen_range(1, 7)
+        + attack_mod; */
         // let defence_total = 10 + defence_mod;
 
         if roll_success(attack_mod - defence_mod) {
