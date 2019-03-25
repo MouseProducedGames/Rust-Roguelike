@@ -12,15 +12,11 @@ extern crate crossterm_input;
 extern crate crossterm_screen;
 extern crate crossterm_style;
 use crossterm_style::{Color, Colored};
-use std::iter::{ Enumerate, Iterator };
+use std::iter::Iterator;
 
 // Internal includes.
 use super::super::super::multidim::Multidim;
 use super::{ConsoleChar, Darker};
-use crate::creature::background::SpeciesType;
-use crate::creature::CreatureStats;
-use crate::faction::Faction;
-use crate::io::Display;
 use crate::rrl_math::{Displacement, Position};
 use crate::stats::{Attribute, Stat, StatModifier};
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};

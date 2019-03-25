@@ -11,23 +11,21 @@ extern crate crossterm_cursor;
 extern crate crossterm_input;
 extern crate crossterm_screen;
 extern crate crossterm_style;
-use crossterm_style::{Color, Colored};
+use crossterm_style::Color;
 
 // Internal includes.
-use super::super::super::multidim::Multidim;
-use super::{ConsoleChar, Darker};
+use super::ConsoleChar;
 use crate::creature::background::SpeciesType;
 use crate::creature::CreatureStats;
 use crate::faction::Faction;
 use crate::io::Display;
 use crate::io::console::ConsoleDisplay;
-use crate::rrl_math::{Displacement, Position};
-use crate::stats::{Stat, StatModifier};
-use crate::world::{Tilemap, VisibilityMap, VisibilityType};
+use crate::rrl_math::Position;
+use crate::stats::Stat;
+use crate::world::{Tilemap, VisibilityMap};
 
 impl Display for ConsoleDisplay {
     fn choose_species(&mut self, options: &Vec<SpeciesType>) -> SpeciesType {
-        println!("{}{}", Colored::Fg(Color::Grey), Colored::Bg(Color::Black));
 
         let mut keep_going = true;
         let mut option = SpeciesType::Human;
@@ -41,9 +39,6 @@ impl Display for ConsoleDisplay {
                 let formatted = format!("{}) {}", (1 + i), species_type.to_string());
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
-
-            // println!();
-            // println!(" Select your character's species: ");
 
             self.present();
 
@@ -68,39 +63,6 @@ impl Display for ConsoleDisplay {
         self.put_stat(42, 4, "Coordination", stats.coordination());
         self.put_stat(42, 5, "Endurance", stats.endurance());
         self.put_health(42, 6, "Health", stats.endurance().value(), stats.health());
-        
-        // println!("{}{}", Colored::Fg(Color::Grey), Colored::Bg(Color::Black));
-
-        /* self.move_cursor(42, 2);
-        println!(
-            "Strength.....: {:>2} : {:+>2}",
-            stats.strength().value(),
-            stats.strength().modifier()
-        );
-        self.move_cursor(42, 3);
-        println!(
-            "Agility......: {:>2} : {:+>2}",
-            stats.agility().value(),
-            stats.agility().modifier()
-        );
-        self.move_cursor(42, 4);
-        println!(
-            "Coordination.: {:>2} : {:+>2}",
-            stats.coordination().value(),
-            stats.strength().modifier()
-        );
-        self.move_cursor(42, 5);
-        println!(
-            "Endurance....: {:>2} : {:+>2}",
-            stats.endurance().value(),
-            stats.endurance().modifier()
-        );
-        self.move_cursor(42, 7);
-        println!(
-            "Health.......: {:>2}/{:>2}",
-            stats.health().value(),
-            stats.endurance().value()
-        ); */
     }
 
     fn get_char(&self) -> char {
@@ -124,9 +86,6 @@ impl Display for ConsoleDisplay {
             ch = ConsoleChar::new('C', Color::Grey, Color::Black);
         }
         self.put_console_char(display_pos_x, display_pos_y, ch);
-        /* *self.buffers[self.back_buffer_index]
-            .value_mut(display_pos_y as usize, display_pos_x as usize) = ch; */
-        // self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
     }
 
     fn write_map(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap) {
