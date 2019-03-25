@@ -35,18 +35,23 @@ impl Display for ConsoleDisplay {
         while keep_going {
             self.clear();
 
+            self.put_string(1, 1, "Select your character's species:", Color::Grey, Color::Black );
+
             for (i, species_type) in options.iter().enumerate() {
-                println!("{}) {}", (1 + i), species_type.to_string());
+                let formatted = format!("{}) {}", (1 + i), species_type.to_string());
+                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
 
-            println!();
-            println!(" Select your character's species: ");
+            // println!();
+            // println!(" Select your character's species: ");
+
+            self.present();
 
             if let Some(index) = self.get_char().to_digit(10) {
                 let index = index as usize;
-                let index = match index { 0 => 10, _ => index };
+                let index = match index { 0 => 10, _ => index - 1 };
                 if index < options.len() {
-                    option = options[index - 1];
+                    option = options[index];
                     keep_going = false;
                 }
             }
