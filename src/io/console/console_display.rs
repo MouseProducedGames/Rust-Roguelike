@@ -12,6 +12,7 @@ extern crate crossterm_input;
 extern crate crossterm_screen;
 extern crate crossterm_style;
 use crossterm_style::{Color, Colored};
+use std::iter::{ Enumerate, Iterator };
 
 // Internal includes.
 use super::super::super::multidim::Multidim;
@@ -21,7 +22,7 @@ use crate::creature::CreatureStats;
 use crate::faction::Faction;
 use crate::io::Display;
 use crate::rrl_math::{Displacement, Position};
-use crate::stats::{Stat, StatModifier};
+use crate::stats::{Attribute, Stat, StatModifier};
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 pub struct ConsoleDisplay {
@@ -34,10 +35,7 @@ pub struct ConsoleDisplay {
 impl ConsoleDisplay {
     pub fn new() -> Self {
         let term = crossterm::Crossterm::new();
-        match term.terminal().clear(crossterm::ClearType::All) {
-            Ok(_v) => (),
-            _ => panic!("Could not clear screen."),
-        }
+        
         // Not panic-worthy if it doesn't work...
         if let Ok(_v) = term.cursor().hide() {}
         let mut output = Self {
@@ -63,7 +61,10 @@ impl ConsoleDisplay {
                 ConsoleChar::new('/', Color::Grey, Color::White),
             ],
         };
-        let front_buffer_index = output.front_buffer_index();
+
+        output.clear();
+        
+        /* let front_buffer_index = output.front_buffer_index();
         let buffers = &mut output.buffers;
         let (buffer_height, buffer_width) = buffers[output.back_buffer_index].bounds();
         for y in 0..buffer_height {
@@ -71,126 +72,34 @@ impl ConsoleDisplay {
                 *buffers[front_buffer_index].value_mut(y, x) = output.map_graphics[0];
                 *buffers[output.back_buffer_index].value_mut(y, x) = output.map_graphics[0];
             }
-        }
+        } */
 
         output
+    }
+
+    pub(crate) fn clear(&mut self)
+    {
+        let front_buffer_index = self.front_buffer_index();
+        let buffers = &mut self.buffers;
+        let (buffer_height, buffer_width) = buffers[self.back_buffer_index].bounds();
+        for y in 0..buffer_height {
+            for x in 0..buffer_width {
+                *self.buffers[front_buffer_index].value_mut(y, x) = self.map_graphics[0];
+                *self.buffers[self.back_buffer_index].value_mut(y, x) = self.map_graphics[0];
+            }
+        }
+        
+        match self.term.terminal().clear(crossterm::ClearType::All) {
+            Ok(_v) => (),
+            _ => panic!("Could not clear screen."),
+        }
     }
 
     fn front_buffer_index(&self) -> usize {
         1 - self.back_buffer_index
     }
 
-    fn move_cursor(&self, x: i32, y: i32) {
-        match self.term.cursor().goto(x as u16, y as u16) {
-            Ok(_v) => (),
-            _ => panic!("Could not move cursor to ( {}, {} )", x, y),
-        }
-    }
-
-    fn write_console_char(&self, ch: ConsoleChar) {
-        println!(
-            "{}{}{}",
-            Colored::Fg(ch.foreground()),
-            Colored::Bg(ch.background()),
-            ch.graphic()
-        );
-    }
-
-    fn _write_string(&self, s: String) {
-        println!("{}", s);
-    }
-
-    fn put_console_char(&self, x: i32, y: i32, ch: ConsoleChar) {
-        self.move_cursor(x, y);
-        self.write_console_char(ch);
-    }
-}
-
-impl Display for ConsoleDisplay {
-    fn choose_species(&self, options: &Vec<SpeciesType>) -> SpeciesType {
-        println!("{}{}", Colored::Fg(Color::Grey), Colored::Bg(Color::Black));
-
-        let mut keep_going = true;
-        let mut option = SpeciesType::Human;
-
-        while keep_going {
-            match self.term.terminal().clear(crossterm::ClearType::All) {
-                Ok(_v) => (),
-                _ => panic!("Could not clear screen."),
-            }
-
-            for (i, species_type) in options.iter().enumerate() {
-                println!("{}) {}", (1 + i), species_type.to_string());
-            }
-
-            println!();
-            println!(" Select your character's species: ");
-
-            match self.get_char() {
-                '1' => {
-                    option = options[0];
-                    keep_going = false;
-                }
-                '2' => {
-                    option = options[1];
-                    keep_going = false;
-                }
-                '3' => {
-                    option = options[2];
-                    keep_going = false;
-                }
-                '4' => {
-                    option = options[3];
-                    keep_going = false;
-                }
-                _ => (),
-            }
-        }
-
-        match self.term.terminal().clear(crossterm::ClearType::All) {
-            Ok(_v) => (),
-            _ => panic!("Could not clear screen."),
-        }
-
-        option
-    }
-
-    fn display_stats(&mut self, stats: CreatureStats) {
-        println!("{}{}", Colored::Fg(Color::Grey), Colored::Bg(Color::Black));
-
-        self.move_cursor(42, 2);
-        println!(
-            "Strength.....: {:>2} : {:+>2}",
-            stats.strength().value(),
-            stats.strength().modifier()
-        );
-        self.move_cursor(42, 3);
-        println!(
-            "Agility......: {:>2} : {:+>2}",
-            stats.agility().value(),
-            stats.agility().modifier()
-        );
-        self.move_cursor(42, 4);
-        println!(
-            "Coordination.: {:>2} : {:+>2}",
-            stats.coordination().value(),
-            stats.strength().modifier()
-        );
-        self.move_cursor(42, 5);
-        println!(
-            "Endurance....: {:>2} : {:+>2}",
-            stats.endurance().value(),
-            stats.endurance().modifier()
-        );
-        self.move_cursor(42, 7);
-        println!(
-            "Health.......: {:>2}/{:>2}",
-            stats.health().value(),
-            stats.endurance().value()
-        );
-    }
-
-    fn get_char(&self) -> char {
+    pub(crate) fn get_char_impl(&self) -> char {
         self.move_cursor(0, 0);
         let ch;
         match self.term.input().read_char() {
@@ -199,10 +108,18 @@ impl Display for ConsoleDisplay {
         }
         self.move_cursor(0, 0);
         println!(" ");
+        self.move_cursor(0, 0);
         ch
     }
 
-    fn present(&mut self) {
+    pub(crate) fn move_cursor(&self, x: i32, y: i32) {
+        match self.term.cursor().goto(x as u16, y as u16) {
+            Ok(_v) => (),
+            _ => panic!("Could not move cursor to ( {}, {} )", x, y),
+        }
+    }
+
+    pub(crate) fn present_impl(&mut self) {
         {
             self.back_buffer_index = 1 - self.back_buffer_index;
             let buffers = &self.buffers;
@@ -244,7 +161,8 @@ impl Display for ConsoleDisplay {
 
                     lastch = front_ch;
 
-                    self.put_console_char(xi, yi, front_ch);
+                    self.present_console_char(xi, yi, front_ch);
+                    // self.put_console_char(xi, yi, front_ch);
                 }
             }
         }
@@ -263,24 +181,58 @@ impl Display for ConsoleDisplay {
         }
     }
 
-    fn write_creature(&mut self, faction: Faction, creature_pos: Position, view_pos: Position) {
-        let disp = creature_pos - view_pos;
-        if (disp.x < -17) || (disp.x > 17) || (disp.y < -17) || (disp.y > 17) {
-            return;
-        }
-        let (display_pos_x, display_pos_y) = (18 + disp.x, 18 + disp.y);
-        let ch;
-        if faction == Faction::new(0) {
-            ch = ConsoleChar::new('@', Color::Grey, Color::Black);
-        } else {
-            ch = ConsoleChar::new('C', Color::Grey, Color::Black);
-        }
-        *self.buffers[self.back_buffer_index]
-            .value_mut(display_pos_y as usize, display_pos_x as usize) = ch;
-        // self.put_char( 18 + disp.x, 18 + disp.y, 'C' );
+    fn write_console_char(&self, ch: ConsoleChar) {
+        println!(
+            "{}{}{}",
+            Colored::Fg(ch.foreground()),
+            Colored::Bg(ch.background()),
+            ch.graphic()
+        );
     }
 
-    fn write_map(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap) {
+    fn _write_string(&self, s: String) {
+        println!("{}", s);
+    }
+
+    fn present_console_char(&self, x: i32, y: i32, ch: ConsoleChar) {
+        self.move_cursor(x, y);
+        self.write_console_char(ch);
+    }
+
+    pub(crate) fn put_console_char(&mut self, x: i32, y: i32, ch: ConsoleChar) {
+        *self.buffers[self.back_buffer_index].value_mut(y as usize, x as usize) = ch;
+    }
+
+    pub(crate) fn put_health(&mut self, x: i32, y: i32, name: &str, max: i32, stat: Attribute) {
+        let formatted =
+            format!(
+                "{:.>13} {:>2}/{:+>2}",
+                name,
+                stat.value(),
+                max
+            );
+        self.put_string(x, y, &formatted, Color::Grey, Color::Black);
+    }
+
+    pub(crate) fn put_stat(&mut self, x: i32, y: i32, name: &str, stat: Attribute) {
+        let formatted =
+            format!(
+                "{:.>13} {:>2} : {:+>2}",
+                name,
+                stat.value(),
+                stat.modifier()
+            );
+        self.put_string(x, y, &formatted, Color::Grey, Color::Black);
+    }
+
+    pub(crate) fn put_string(&mut self, x: i32, y: i32, s: &str, fg: Color, bg: Color) {
+        for ( i, ch ) in s.chars().enumerate()
+        {
+            self.put_console_char(x + i as i32, y, ConsoleChar::new(ch, fg, bg));
+        }
+    }
+
+    pub(crate) fn write_map_impl(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap) {
         let back_buffer = &mut self.buffers[self.back_buffer_index];
         for view_addend_y in -17..18_i32 {
             let display_pos_y = (18 + view_addend_y) as usize;
@@ -305,6 +257,7 @@ impl Display for ConsoleDisplay {
         }
     }
 }
+
 
 impl Drop for ConsoleDisplay {
     fn drop(&mut self) {
