@@ -16,7 +16,7 @@ use std::iter::Iterator;
 
 // Internal includes.
 use super::super::super::multidim::Multidim;
-use super::{ConsoleChar};
+use super::ConsoleChar;
 use crate::stats::{Attribute, Stat, StatModifier};
 
 pub struct ConsoleDisplay {
@@ -58,16 +58,6 @@ impl ConsoleDisplay {
         };
 
         output.clear();
-
-        /* let front_buffer_index = output.front_buffer_index();
-        let buffers = &mut output.buffers;
-        let (buffer_height, buffer_width) = buffers[output.back_buffer_index].bounds();
-        for y in 0..buffer_height {
-            for x in 0..buffer_width {
-                *buffers[front_buffer_index].value_mut(y, x) = output.map_graphics[0];
-                *buffers[output.back_buffer_index].value_mut(y, x) = output.map_graphics[0];
-            }
-        } */
 
         output
     }
@@ -218,40 +208,12 @@ impl ConsoleDisplay {
         }
     }
 
-    /* pub(crate) fn get_map_graphics(&self, tile_type: u32, vis_type: VisibilityType) -> ConsoleChar
-    {
-        match vis_type {
-            VisibilityType::None => self.map_graphics[0],
-            VisibilityType::Seen => self.map_graphics[tile_type as usize].darker(),
-            VisibilityType::Visible =>  self.map_graphics[tile_type as usize],
-        }
-} */
-
-    pub(crate) fn get_draw_info(&mut self) -> ( &Vec<ConsoleChar>, &mut Multidim<ConsoleChar>) {
-        ( &self.map_graphics, &mut self.buffers[self.back_buffer_index])
+    pub(crate) fn get_draw_info(&mut self) -> (&Vec<ConsoleChar>, &mut Multidim<ConsoleChar>) {
+        (
+            &self.map_graphics,
+            &mut self.buffers[self.back_buffer_index],
+        )
     }
-
-    /* pub(crate) fn get_map_graphics(&self) -> &Vec<ConsoleChar>
-    {
-        &self.map_graphics
-    }
-    
-    pub(crate) fn get_back_buffer(&mut self) -> &mut Multidim<ConsoleChar>
-    {
-        &mut self.buffers[self.back_buffer_index]
-    } */
-    
-    /* pub(crate) fn write_map_impl(
-        &mut self,
-        view_pos: Position,
-        map: &Tilemap,
-        vis: &VisibilityMap,
-    ) {
-        // let back_buffer = &mut self.buffers[self.back_buffer_index];
-        // let map_graphics = self.get_map_graphics();
-        // let back_buffer = self.get_back_buffer();
-
-    } */
 }
 
 impl Drop for ConsoleDisplay {
