@@ -25,7 +25,8 @@ pub struct ConsoleDisplay {
     term: crossterm::Crossterm,
     buffers: [Multidim<ConsoleChar>; 2],
     back_buffer_index: usize,
-    map_graphics: [ConsoleChar; 8],
+    // map_graphics: [ConsoleChar; 8],
+    map_graphics: Vec<ConsoleChar>,
 }
 
 impl ConsoleDisplay {
@@ -38,7 +39,7 @@ impl ConsoleDisplay {
             term,
             buffers: [Multidim::new(40, 80), Multidim::new(40, 80)],
             back_buffer_index: 0,
-            map_graphics: [
+            map_graphics: vec![
                 // Void.
                 ConsoleChar::new(' ', Color::Black, Color::Black),
                 // Wall.
@@ -219,13 +220,39 @@ impl ConsoleDisplay {
         }
     }
 
+    /* pub(crate) fn get_map_graphics(&self, tile_type: u32, vis_type: VisibilityType) -> ConsoleChar
+    {
+        match vis_type {
+            VisibilityType::None => self.map_graphics[0],
+            VisibilityType::Seen => self.map_graphics[tile_type as usize].darker(),
+            VisibilityType::Visible =>  self.map_graphics[tile_type as usize],
+        }
+} */
+
+    pub(crate) fn get_draw_info(&mut self) -> ( &Vec<ConsoleChar>, &mut Multidim<ConsoleChar>) {
+        ( &self.map_graphics, &mut self.buffers[self.back_buffer_index])
+    }
+
+    /* pub(crate) fn get_map_graphics(&self) -> &Vec<ConsoleChar>
+    {
+        &self.map_graphics
+    }
+    
+    pub(crate) fn get_back_buffer(&mut self) -> &mut Multidim<ConsoleChar>
+    {
+        &mut self.buffers[self.back_buffer_index]
+    } */
+    
     pub(crate) fn write_map_impl(
         &mut self,
         view_pos: Position,
         map: &Tilemap,
         vis: &VisibilityMap,
     ) {
-        let back_buffer = &mut self.buffers[self.back_buffer_index];
+        // let back_buffer = &mut self.buffers[self.back_buffer_index];
+        // let map_graphics = self.get_map_graphics();
+        // let back_buffer = self.get_back_buffer();
+        let (map_graphics, back_buffer) = self.get_draw_info();
         for view_addend_y in -17..18_i32 {
             let display_pos_y = (18 + view_addend_y) as usize;
             for view_addend_x in -17..18_i32 {
@@ -233,14 +260,14 @@ impl ConsoleDisplay {
                 let map_pos = view_pos + Displacement::new(view_addend_x, view_addend_y);
                 let ch;
                 match vis.value_pos(map_pos) {
-                    VisibilityType::None => ch = self.map_graphics[0],
+                    VisibilityType::None => ch = map_graphics[0],
                     VisibilityType::Seen => {
                         let tile_type = map.tile_type_pos(map_pos);
-                        ch = self.map_graphics[tile_type as usize].darker();
+                        ch = map_graphics[tile_type as usize].darker();
                     }
                     VisibilityType::Visible => {
                         let tile_type = map.tile_type_pos(map_pos);
-                        ch = self.map_graphics[tile_type as usize];
+                        ch = map_graphics[tile_type as usize];
                     }
                 }
 
