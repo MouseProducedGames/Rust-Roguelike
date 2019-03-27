@@ -18,11 +18,11 @@ use super::ConsoleChar;
 use crate::creature::background::SpeciesType;
 use crate::creature::CreatureStats;
 use crate::faction::Faction;
-use crate::io::console::ConsoleDisplay;
+use crate::io::console::{ConsoleDisplay, Darker};
 use crate::io::Display;
-use crate::rrl_math::Position;
+use crate::rrl_math::{Displacement, Position};
 use crate::stats::Stat;
-use crate::world::{Tilemap, VisibilityMap};
+use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {
     fn choose_species(&mut self, options: &Vec<SpeciesType>) -> SpeciesType {
@@ -97,6 +97,27 @@ impl Display for ConsoleDisplay {
     }
 
     fn write_map(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap) {
-        self.write_map_impl(view_pos, map, vis);
+        let (map_graphics, back_buffer) = self.get_draw_info();
+        for view_addend_y in -17..18_i32 {
+            let display_pos_y = (18 + view_addend_y) as usize;
+            for view_addend_x in -17..18_i32 {
+                let display_pos_x = (18 + view_addend_x) as usize;
+                let map_pos = view_pos + Displacement::new(view_addend_x, view_addend_y);
+                let ch;
+                match vis.value_pos(map_pos) {
+                    VisibilityType::None => ch = map_graphics[0],
+                    VisibilityType::Seen => {
+                        let tile_type = map.tile_type_pos(map_pos);
+                        ch = map_graphics[tile_type as usize].darker();
+                    }
+                    VisibilityType::Visible => {
+                        let tile_type = map.tile_type_pos(map_pos);
+                        ch = map_graphics[tile_type as usize];
+                    }
+                }
+
+                *back_buffer.value_mut(display_pos_y, display_pos_x) = ch;
+            }
+        }
     }
 }

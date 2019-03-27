@@ -16,10 +16,8 @@ use std::iter::Iterator;
 
 // Internal includes.
 use super::super::super::multidim::Multidim;
-use super::{ConsoleChar, Darker};
-use crate::rrl_math::{Displacement, Position};
+use super::{ConsoleChar};
 use crate::stats::{Attribute, Stat, StatModifier};
-use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 pub struct ConsoleDisplay {
     term: crossterm::Crossterm,
@@ -243,7 +241,7 @@ impl ConsoleDisplay {
         &mut self.buffers[self.back_buffer_index]
     } */
     
-    pub(crate) fn write_map_impl(
+    /* pub(crate) fn write_map_impl(
         &mut self,
         view_pos: Position,
         map: &Tilemap,
@@ -252,29 +250,8 @@ impl ConsoleDisplay {
         // let back_buffer = &mut self.buffers[self.back_buffer_index];
         // let map_graphics = self.get_map_graphics();
         // let back_buffer = self.get_back_buffer();
-        let (map_graphics, back_buffer) = self.get_draw_info();
-        for view_addend_y in -17..18_i32 {
-            let display_pos_y = (18 + view_addend_y) as usize;
-            for view_addend_x in -17..18_i32 {
-                let display_pos_x = (18 + view_addend_x) as usize;
-                let map_pos = view_pos + Displacement::new(view_addend_x, view_addend_y);
-                let ch;
-                match vis.value_pos(map_pos) {
-                    VisibilityType::None => ch = map_graphics[0],
-                    VisibilityType::Seen => {
-                        let tile_type = map.tile_type_pos(map_pos);
-                        ch = map_graphics[tile_type as usize].darker();
-                    }
-                    VisibilityType::Visible => {
-                        let tile_type = map.tile_type_pos(map_pos);
-                        ch = map_graphics[tile_type as usize];
-                    }
-                }
 
-                *back_buffer.value_mut(display_pos_y, display_pos_x) = ch;
-            }
-        }
-    }
+    } */
 }
 
 impl Drop for ConsoleDisplay {
