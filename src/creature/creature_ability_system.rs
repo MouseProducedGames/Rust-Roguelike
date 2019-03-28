@@ -61,7 +61,9 @@ impl<'a> System<'a> for CreatureAbilitySystem {
 
                         let mut skill_bonus = i64::from(*talent_bonus);
                         for skill in set {
-                            if let SkillType::Skill(v) = skill { skill_bonus += i64::from(*v) }
+                            if let SkillType::Skill(v) = skill {
+                                skill_bonus += i64::from(*v)
+                            }
                         }
 
                         talent_range_func(

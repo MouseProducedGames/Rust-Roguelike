@@ -87,12 +87,11 @@ impl Display for ConsoleDisplay {
             return;
         }
         let (display_pos_x, display_pos_y) = (18 + disp.x, 18 + disp.y);
-        let ch =
-            if faction == Faction::new(0) {
-                ConsoleChar::new('@', Color::Grey, Color::Black)
-            } else {
-                ConsoleChar::new('C', Color::Grey, Color::Black)
-            };
+        let ch = if faction == Faction::new(0) {
+            ConsoleChar::new('@', Color::Grey, Color::Black)
+        } else {
+            ConsoleChar::new('C', Color::Grey, Color::Black)
+        };
         self.put_console_char(display_pos_x, display_pos_y, ch);
     }
 
