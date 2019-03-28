@@ -19,6 +19,7 @@ pub struct CreatureStats {
     agility: Attribute,
     coordination: Attribute,
     endurance: Attribute,
+    perception: Attribute,
     health: Attribute,
 }
 
@@ -28,6 +29,7 @@ impl CreatureStats {
         agility: i32,
         coordination: i32,
         endurance: i32,
+	perception: i32,
         health: i32,
     ) -> Self {
         Self {
@@ -35,6 +37,7 @@ impl CreatureStats {
             agility: Attribute::new(agility),
             coordination: Attribute::new(coordination),
             endurance: Attribute::new(endurance),
+	    perception: Attribute::new(perception),
             health: Attribute::new(health),
         }
     }
@@ -71,6 +74,14 @@ impl CreatureStats {
         &mut self.endurance
     }
 
+    pub fn perception(&self) -> Attribute {
+        self.perception
+    }
+
+    pub fn _perception_mut(&mut self) -> &mut Attribute {
+        &mut self.perception
+    }
+
     pub fn health(&self) -> Attribute {
         self.health
     }
@@ -89,6 +100,7 @@ impl Add<CreatureStats> for CreatureStats {
             self.agility().value() + other.agility().value(),
             self.coordination().value() + other.coordination().value(),
             self.endurance().value() + other.endurance().value(),
+	    self.perception().value() + other.perception().value(),
             self.health().value() + other.health().value(),
         )
     }
@@ -112,6 +124,7 @@ impl Default for CreatureStats {
             agility: ten,
             coordination: ten,
             endurance: ten,
+	    perception: ten,
             health: ten,
         }
     }

@@ -9,8 +9,9 @@ Documentation:
 pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal includescarc
-use crate::creature::{CreatureTracker, SightRange, Visibility};
+use crate::creature::{CreatureStats, CreatureTracker, SightRange, Visibility};
 use crate::rrl_math::{calculate_hash, Position};
+use crate::stats::StatModifier;
 use crate::world::{calculate_visibility, Mapping, Tilemap, VisibilityMap};
 
 pub struct CreatureVisibilitySystem;
@@ -20,6 +21,7 @@ pub struct SystemDataT<'a> {
     entities: Entities<'a>,
     map: ReadExpect<'a, Tilemap>,
     creature_tracker: WriteExpect<'a, CreatureTracker>,
+    stats: ReadStorage<'a, CreatureStats>,
     positions: ReadStorage<'a, Position>,
     sight_ranges: ReadStorage<'a, SightRange>,
     visibilities: WriteStorage<'a, Visibility>,
@@ -35,8 +37,9 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
         let map = data.map;
         let map_hash = calculate_hash(&*map);
 
-        for (entity, pos, sight_range, visibility_comp) in (
+        for (entity, stats, pos, sight_range, visibility_comp) in (
             &data.entities,
+	    &data.stats,
             &data.positions,
             &data.sight_ranges,
             &mut data.visibilities,
@@ -58,7 +61,8 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
                 _ => panic!("We no longer have the visibility map we just added!"),
             }
 
-            let sight_range = sight_range.sight_range();
+            let sight_range = sight_range.sight_range() +
+	    	stats.perception().modifier();
 
             calculate_visibility(visibility, *pos, sight_range, &map);
         }

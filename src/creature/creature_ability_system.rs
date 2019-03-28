@@ -9,9 +9,10 @@ Documentation:
 use specs::{ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal dependencies.
-use crate::creature::Visibility;
+use crate::creature::{CreatureStats, Visibility};
 use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use crate::stats::StatModifier;
 use crate::talents::{
     talent_range_func, TalentActivation, TalentActivationOp, TalentLookup, TalentType,
 };
@@ -22,6 +23,7 @@ pub struct CreatureAbilitySystem;
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
     map: WriteExpect<'a, Tilemap>,
+    stats: ReadStorage<'a, CreatureStats>,
     visibility: ReadStorage<'a, Visibility>,
     pos: WriteStorage<'a, Position>,
     skills: WriteStorage<'a, SkillLookup>,
@@ -37,10 +39,11 @@ impl<'a> System<'a> for CreatureAbilitySystem {
         let mut map = data.map;
         let map_hash = calculate_hash(&*map);
 
-        for (pos, skills, talent, visibility) in (
+        for (pos, skills, talent, stats, visibility) in (
             &data.pos,
             &mut data.skills,
             &mut data.talents,
+	    &data.stats,
             &data.visibility,
         )
             .join()
@@ -65,7 +68,10 @@ impl<'a> System<'a> for CreatureAbilitySystem {
                                 skill_bonus += i64::from(*v)
                             }
                         }
-
+			
+			let skill_bonus = skill_bonus +
+			    i64::from(stats.perception().modifier());
+			
                         talent_range_func(
                             *talent_range,
                             &(pos, maybe_visibility_map, skill_bonus),

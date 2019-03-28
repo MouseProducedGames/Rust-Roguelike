@@ -60,7 +60,7 @@ impl Species {
     }
 
     pub fn create_dwarf_stat_changes() -> CreatureStats {
-        CreatureStats::new(0, -2, 0, 2, 2)
+        CreatureStats::new(0, -2, 0, 2, 0, 2)
     }
 
     pub fn create_elf() -> Self {
@@ -70,7 +70,7 @@ impl Species {
     }
 
     pub fn create_elf_stat_changes() -> CreatureStats {
-        CreatureStats::new(0, 2, 0, -2, -2)
+        CreatureStats::new(-2, 2, 0, -2, 2, -2)
     }
 
     pub fn create_halfling() -> Self {
@@ -80,7 +80,7 @@ impl Species {
     }
 
     pub fn create_halfling_stat_changes() -> CreatureStats {
-        CreatureStats::new(-2, 0, 4, -2, -2)
+        CreatureStats::new(-2, 0, 4, -2, 0, -2)
     }
 
     pub fn create_human() -> Self {
@@ -90,7 +90,7 @@ impl Species {
     }
 
     pub fn create_human_stat_changes() -> CreatureStats {
-        CreatureStats::new(0, 0, 0, 0, 0)
+        CreatureStats::new(0, 0, 0, 0, 0, 0)
     }
 
     pub fn stats(&self) -> CreatureStats {
