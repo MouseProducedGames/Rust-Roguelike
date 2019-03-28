@@ -25,7 +25,7 @@ use crate::stats::Stat;
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {
-    fn choose_species(&mut self, options: &Vec<SpeciesType>) -> SpeciesType {
+    fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType {
         let mut keep_going = true;
         let mut option = SpeciesType::Human;
 
@@ -87,12 +87,12 @@ impl Display for ConsoleDisplay {
             return;
         }
         let (display_pos_x, display_pos_y) = (18 + disp.x, 18 + disp.y);
-        let ch;
-        if faction == Faction::new(0) {
-            ch = ConsoleChar::new('@', Color::Grey, Color::Black);
-        } else {
-            ch = ConsoleChar::new('C', Color::Grey, Color::Black);
-        }
+        let ch =
+            if faction == Faction::new(0) {
+                ConsoleChar::new('@', Color::Grey, Color::Black)
+            } else {
+                ConsoleChar::new('C', Color::Grey, Color::Black)
+            };
         self.put_console_char(display_pos_x, display_pos_y, ch);
     }
 

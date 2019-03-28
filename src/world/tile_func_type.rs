@@ -45,7 +45,7 @@ pub enum TileFuncOp {
     DiscoverTileType(u32, u32),
 }
 
-pub fn execute_tile_func<'a>(
+pub fn execute_tile_func(
     harmless: bool,
     skill_bonus: i64,
     map: &mut Tilemap,

@@ -24,11 +24,11 @@ impl TalentLookup {
     }
 
     pub fn get_set(&mut self, key: TalentActivation) -> &Vec<TalentType> {
-        self.values.entry(key).or_insert(vec![])
+        self.values.entry(key).or_insert_with(|| vec![])
     }
 
     pub fn get_set_mut(&mut self, key: TalentActivation) -> &mut Vec<TalentType> {
-        self.values.entry(key).or_insert(vec![])
+        self.values.entry(key).or_insert_with(|| vec![])
     }
 
     pub fn insert(&mut self, key: TalentActivation, value: TalentType) {

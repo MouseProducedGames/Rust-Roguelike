@@ -44,13 +44,13 @@ impl ConsoleChar {
 
     pub fn any_equality(&self, other: &ConsoleChar) -> bool {
         self.graphic == other.graphic
-            && Self::color_equality(&self.foreground, &other.foreground)
-            && Self::color_equality(&self.background, &other.background)
+            && Self::color_equality(self.foreground, other.foreground)
+            && Self::color_equality(self.background, other.background)
     }
 
-    fn color_equality(a: &Color, b: &Color) -> bool {
-        let a_val = Self::any_equality_helper(a);
-        let b_val = Self::any_equality_helper(b);
+    fn color_equality(a: Color, b: Color) -> bool {
+        let a_val = Self::any_equality_helper(&a);
+        let b_val = Self::any_equality_helper(&b);
         if a_val == 65535 && b_val == 65535 {
             let (r0, g0, b0);
             let (r1, g1, b1);
@@ -104,9 +104,9 @@ impl ConsoleChar {
             Color::Grey => 14,
 
             // Since other values are u8, this isn't used.
-            Color::Rgb { r: _, g: _, b: _ } => 65535,
+            Color::Rgb { .. } => 65535,
 
-            Color::AnsiValue(v) => *v as u16,
+            Color::AnsiValue(v) => u16::from(*v),
         }
     }
 }

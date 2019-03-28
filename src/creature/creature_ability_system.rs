@@ -59,16 +59,13 @@ impl<'a> System<'a> for CreatureAbilitySystem {
                             SkillPassiveOp::EveryRound,
                         ));
 
-                        let mut skill_bonus = *talent_bonus as i64;
+                        let mut skill_bonus = i64::from(*talent_bonus);
                         for skill in set {
-                            match skill {
-                                SkillType::Skill(v) => skill_bonus += *v as i64,
-                                _ => (),
-                            };
+                            if let SkillType::Skill(v) = skill { skill_bonus += i64::from(*v) }
                         }
 
                         talent_range_func(
-                            talent_range,
+                            *talent_range,
                             &(pos, maybe_visibility_map, skill_bonus),
                             &mut *map,
                             |disp: Displacement,

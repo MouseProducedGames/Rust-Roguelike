@@ -20,7 +20,7 @@ pub enum SpeciesType {
 }
 
 impl SpeciesType {
-    pub fn to_string(&self) -> String {
+    pub fn to_string(self) -> String {
         match self {
             SpeciesType::Dwarf => String::from("Dwarf"),
             SpeciesType::Elf => String::from("Elf"),
@@ -37,7 +37,7 @@ pub struct Species {
 
 impl Species {
     pub fn new(stats: CreatureStats) -> Self {
-        Self { stats: stats }
+        Self { stats }
     }
 
     pub fn default() -> Self {

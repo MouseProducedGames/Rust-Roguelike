@@ -24,11 +24,11 @@ impl SkillLookup {
     }
 
     pub fn get_set(&mut self, key: SkillActivation) -> &Vec<SkillType> {
-        self.values.entry(key).or_insert(vec![])
+        self.values.entry(key).or_insert_with(|| vec![])
     }
 
     pub fn get_set_mut(&mut self, key: SkillActivation) -> &mut Vec<SkillType> {
-        self.values.entry(key).or_insert(vec![])
+        self.values.entry(key).or_insert_with(|| vec![])
     }
 
     pub fn insert(&mut self, key: SkillActivation, value: SkillType) {

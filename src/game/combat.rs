@@ -27,8 +27,8 @@ impl Combat {
     ) -> CombatResult {
         let mut result = CombatResult::Miss;
 
-        let attack_mod = attacker_stats.coordination().modifier() as i64;
-        let defence_mod = defender_stats.agility().modifier() as i64;
+        let attack_mod = i64::from(attacker_stats.coordination().modifier());
+        let defence_mod = i64::from(defender_stats.agility().modifier());
 
         /* let attack_roll = game_state.rng().gen_range(1, 7)
         + game_state.rng().gen_range(1, 7)
