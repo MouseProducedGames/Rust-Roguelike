@@ -23,7 +23,7 @@ use std::sync::{Arc, Mutex};
 mod creature;
 mod dice;
 mod dungen;
-mod faction;
+mod factions;
 mod game;
 mod io;
 mod multidim;
@@ -44,7 +44,7 @@ use creature::{
     ViewpointMarker, Visibility,
 };
 use dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
-use faction::Faction;
+use factions::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};

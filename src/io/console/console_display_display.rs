@@ -17,7 +17,7 @@ use crossterm_style::Color;
 use super::ConsoleChar;
 use crate::creature::background::SpeciesType;
 use crate::creature::CreatureStats;
-use crate::faction::Faction;
+use crate::factions::Faction;
 use crate::io::console::{ConsoleDisplay, Darker};
 use crate::io::Display;
 use crate::rrl_math::{Displacement, Position};

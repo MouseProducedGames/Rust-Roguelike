@@ -10,7 +10,7 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 
 // Internal dependencies.
 use crate::creature::{Command, CreatureStats, CreatureTracker, Visibility};
-use crate::faction::Faction;
+use crate::factions::Faction;
 use crate::game::{Combat, CombatResult};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::Stat;

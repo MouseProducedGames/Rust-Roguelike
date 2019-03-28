@@ -10,7 +10,7 @@ use specs::{Entity, ReadStorage};
 use std::collections::HashMap;
 
 // Internal includes.
-use crate::faction::Faction;
+use crate::factions::Faction;
 use crate::rrl_math::Position;
 use crate::world::{VisibilityMap, VisibilityType};
 

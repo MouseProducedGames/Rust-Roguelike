@@ -11,7 +11,7 @@ use std::marker::{Send, Sync};
 // internal includes
 use crate::creature::background::SpeciesType;
 use crate::creature::CreatureStats;
-use crate::faction::Faction;
+use crate::factions::Faction;
 use crate::rrl_math::Position;
 use crate::world::{Tilemap, VisibilityMap};
 
