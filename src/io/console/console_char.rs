@@ -49,8 +49,8 @@ impl ConsoleChar {
     }
 
     fn color_equality(a: Color, b: Color) -> bool {
-        let a_val = Self::any_equality_helper(&a);
-        let b_val = Self::any_equality_helper(&b);
+        let a_val = Self::any_equality_helper(a);
+        let b_val = Self::any_equality_helper(b);
         if a_val == 65535 && b_val == 65535 {
             let (r0, g0, b0);
             let (r1, g1, b1);
@@ -78,7 +78,7 @@ impl ConsoleChar {
         }
     }
 
-    fn any_equality_helper(a: &Color) -> u16 {
+    fn any_equality_helper(a: Color) -> u16 {
         match a {
             Color::Black => 0,
 
@@ -106,7 +106,7 @@ impl ConsoleChar {
             // Since other values are u8, this isn't used.
             Color::Rgb { .. } => 65535,
 
-            Color::AnsiValue(v) => u16::from(*v),
+            Color::AnsiValue(v) => u16::from(v),
         }
     }
 }

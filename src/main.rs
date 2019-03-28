@@ -109,7 +109,7 @@ fn main() {
     {
         let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
         let mut display = mutex_display.lock().unwrap();
-        species_type = display.choose_species(&vec![
+        species_type = display.choose_species(&[
             SpeciesType::Dwarf,
             SpeciesType::Elf,
             SpeciesType::Halfling,
