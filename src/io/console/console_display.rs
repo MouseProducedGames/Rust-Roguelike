@@ -116,34 +116,13 @@ impl ConsoleDisplay {
                 let mut xi = -1_i32;
                 // Without the repeat_count check, repeated characters (5 or more)
                 // are placed in the same spot.
-                let mut repeat_count = 1;
-                let mut lastch = self.map_graphics[0];
                 for x in 0..buffer_width {
                     xi += 1;
                     let back_ch = *back_buffer.value(y, x);
                     let front_ch = *front_buffer.value(y, x);
                     if ConsoleChar::any_equality(&front_ch, &back_ch) {
-                        // lastch = front_ch;
-                        repeat_count += 1;
-                        if repeat_count >= 5 {
-                            // ncurses::refresh();
-                            repeat_count = 0;
-                        }
                         continue;
                     }
-
-                    if ConsoleChar::any_equality(&lastch, &front_ch) {
-                        repeat_count += 1;
-                    } else {
-                        repeat_count = 1;
-                    }
-
-                    if repeat_count >= 5 {
-                        // ncurses::refresh();
-                        repeat_count = 0;
-                    }
-
-                    lastch = front_ch;
 
                     self.present_console_char(xi, yi, front_ch);
                     // self.put_console_char(xi, yi, front_ch);
