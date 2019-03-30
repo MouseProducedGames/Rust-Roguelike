@@ -79,10 +79,6 @@ impl ConsoleDisplay {
         }
     }
 
-    fn front_buffer_index(&self) -> usize {
-        1 - self.back_buffer_index
-    }
-
     pub(crate) fn get_char_impl(&self) -> char {
         self.move_cursor(0, 0);
         let ch;
@@ -96,6 +92,13 @@ impl ConsoleDisplay {
         ch
     }
 
+    pub(crate) fn get_draw_info(&mut self) -> (&Vec<ConsoleChar>, &mut Multidim<ConsoleChar>) {
+        (
+            &self.map_graphics,
+            &mut self.buffers[self.back_buffer_index],
+        )
+    }
+    
     pub(crate) fn move_cursor(&self, x: i32, y: i32) {
         match self.term.cursor().goto(x as u16, y as u16) {
             Ok(_v) => (),
@@ -144,24 +147,6 @@ impl ConsoleDisplay {
         }
     }
 
-    fn write_console_char(&self, ch: ConsoleChar) {
-        println!(
-            "{}{}{}",
-            Colored::Fg(ch.foreground()),
-            Colored::Bg(ch.background()),
-            ch.graphic()
-        );
-    }
-
-    fn _write_string(&self, s: String) {
-        println!("{}", s);
-    }
-
-    fn present_console_char(&self, x: i32, y: i32, ch: ConsoleChar) {
-        self.move_cursor(x, y);
-        self.write_console_char(ch);
-    }
-
     pub(crate) fn put_console_char(&mut self, x: i32, y: i32, ch: ConsoleChar) {
         *self.buffers[self.back_buffer_index].value_mut(y as usize, x as usize) = ch;
     }
@@ -187,11 +172,26 @@ impl ConsoleDisplay {
         }
     }
 
-    pub(crate) fn get_draw_info(&mut self) -> (&Vec<ConsoleChar>, &mut Multidim<ConsoleChar>) {
-        (
-            &self.map_graphics,
-            &mut self.buffers[self.back_buffer_index],
-        )
+    fn front_buffer_index(&self) -> usize {
+        1 - self.back_buffer_index
+    }
+
+    fn present_console_char(&self, x: i32, y: i32, ch: ConsoleChar) {
+        self.move_cursor(x, y);
+        self.write_console_char(ch);
+    }
+
+    fn write_console_char(&self, ch: ConsoleChar) {
+        println!(
+            "{}{}{}",
+            Colored::Fg(ch.foreground()),
+            Colored::Bg(ch.background()),
+            ch.graphic()
+        );
+    }
+
+    fn _write_string(&self, s: String) {
+        println!("{}", s);
     }
 }
 

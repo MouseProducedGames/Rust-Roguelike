@@ -115,6 +115,16 @@ match expr {
 
 // Code here.
 
+## Structs
+
+Constructor functions come first.
+Destructor functions follow constructor functions.
+
+pub(super) fn first.
+pub(crate) fn second.
+pub(module_name) fn third.
+[private] fn fourth.
+
 ## Templates
 
 ### Function Templates
