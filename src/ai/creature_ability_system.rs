@@ -9,10 +9,10 @@ Documentation:
 use specs::{ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal dependencies.
-use crate::creature::{CreatureStats, Visibility};
+use crate::ai::Visibility;
 use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
-use crate::stats::StatModifier;
+use crate::stats::{CreatureStats, StatModifier};
 use crate::talents::{
     talent_range_func, TalentActivation, TalentActivationOp, TalentLookup, TalentType,
 };

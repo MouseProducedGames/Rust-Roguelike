@@ -9,7 +9,7 @@ Documentation:
 use std::default::Default;
 
 // internal includes
-use crate::creature::CreatureStats;
+use crate::stats::CreatureStats;
 
 #[derive(Copy, Clone)]
 pub enum SpeciesType {

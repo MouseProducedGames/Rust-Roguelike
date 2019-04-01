@@ -1,4 +1,3 @@
-use crate::creature::CreatureStats;
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -10,7 +9,7 @@ Documentation:
 
 // internal include
 use crate::dice::roll_success;
-use crate::stats::{Stat, StatModifier};
+use crate::stats::{CreatureStats, Stat, StatModifier};
 
 pub enum CombatResult {
     Miss,

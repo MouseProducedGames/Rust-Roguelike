@@ -13,7 +13,7 @@ use specs::{
 use std::sync::{Arc, Mutex};
 
 // Internal includes
-use crate::creature::{Command, CreatureTracker, PlayerMarker};
+use crate::ai::{Command, CreatureTracker, PlayerMarker};
 use crate::game::GameState;
 use crate::io::Display;
 use crate::rrl_math::{Displacement, Position};

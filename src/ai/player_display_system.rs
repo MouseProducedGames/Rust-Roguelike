@@ -9,9 +9,10 @@ Documentation:
 pub use specs::{ReadExpect, ReadStorage, System, WriteExpect};
 
 // Internal includes
-pub use crate::creature::{CreatureStats, PlayerMarker, Visibility};
+pub use crate::ai::{PlayerMarker, Visibility};
 pub use crate::io::Display;
 pub use crate::rrl_math::{calculate_hash, Position};
+pub use crate::stats::CreatureStats;
 pub use crate::world::Tilemap;
 use std::sync::{Arc, Mutex};
 

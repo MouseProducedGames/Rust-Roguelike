@@ -9,9 +9,9 @@ Documentation:
 pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal includescarc
-use crate::creature::{CreatureStats, CreatureTracker, SightRange, Visibility};
+use crate::ai::{CreatureTracker, Visibility};
 use crate::rrl_math::{calculate_hash, Position};
-use crate::stats::StatModifier;
+use crate::stats::{CreatureStats, SightRange, StatModifier};
 use crate::world::{calculate_visibility, Mapping, Tilemap, VisibilityMap};
 
 pub struct CreatureVisibilitySystem;

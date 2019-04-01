@@ -20,7 +20,8 @@ use specs::{Builder, RunNow, /* System, */ World};
 use std::sync::{Arc, Mutex};
 
 // Internal dependencies.
-mod creature;
+mod ai;
+mod background;
 mod dice;
 mod dungen;
 mod factions;
@@ -34,13 +35,13 @@ mod stats;
 mod talents;
 mod tiled_shapes_2d;
 mod world;
-use creature::background::{Species, SpeciesType};
-use creature::{
+use background::{Species, SpeciesType};
+use ai::{
     Command, CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem,
     CreatureLastUpdateSystem, CreatureLogicFaction, CreatureLogicFactionSystem,
     CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderAttack,
-    CreatureLogicWanderAttackSystem, CreatureLogicWanderSystem, CreatureStats, CreatureTracker,
-    CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition, SightRange,
+    CreatureLogicWanderAttackSystem, CreatureLogicWanderSystem, CreatureTracker,
+    CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition,
     ViewpointMarker, Visibility,
 };
 use dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
@@ -48,6 +49,7 @@ use factions::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
+use stats::{CreatureStats, SightRange};
 use skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
 use world::{Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};

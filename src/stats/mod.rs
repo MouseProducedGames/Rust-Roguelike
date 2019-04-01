@@ -9,8 +9,12 @@ Documentation:
 
 // internal include
 pub mod attribute;
+pub mod creature_stats;
+pub mod sight_range;
 pub mod stat;
 pub mod stat_modifier;
 pub use attribute::Attribute;
+pub use creature_stats::CreatureStats;
+pub use sight_range::SightRange;
 pub use stat::Stat;
 pub use stat_modifier::StatModifier;

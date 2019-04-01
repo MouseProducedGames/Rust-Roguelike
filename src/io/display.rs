@@ -9,10 +9,10 @@ Documentation:
 use std::marker::{Send, Sync};
 
 // internal includes
-use crate::creature::background::SpeciesType;
-use crate::creature::CreatureStats;
+use crate::background::SpeciesType;
 use crate::factions::Faction;
 use crate::rrl_math::Position;
+use crate::stats::CreatureStats;
 use crate::world::{Tilemap, VisibilityMap};
 
 pub trait Display: Drop + Send + Sync {

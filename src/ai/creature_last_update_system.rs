@@ -9,9 +9,9 @@ Documentation:
 use specs::{Entities, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal dependencies.
-use crate::creature::{CreatureStats, CreatureTracker, PlayerPosition, ViewpointMarker};
+use crate::ai::{CreatureTracker, PlayerPosition, ViewpointMarker};
 use crate::rrl_math::Position;
-use crate::stats::Stat;
+use crate::stats::{CreatureStats, Stat};
 
 pub struct CreatureLastUpdateSystem;
 

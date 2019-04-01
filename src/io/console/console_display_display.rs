@@ -15,13 +15,12 @@ use crossterm_style::Color;
 
 // Internal includes.
 use super::ConsoleChar;
-use crate::creature::background::SpeciesType;
-use crate::creature::CreatureStats;
+use crate::background::SpeciesType;
 use crate::factions::Faction;
 use crate::io::console::{ConsoleDisplay, Darker};
 use crate::io::Display;
 use crate::rrl_math::{Displacement, Position};
-use crate::stats::Stat;
+use crate::stats::{CreatureStats, Stat};
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {

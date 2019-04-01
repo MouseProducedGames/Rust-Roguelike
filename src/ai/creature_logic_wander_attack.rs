@@ -12,7 +12,7 @@ use specs::{
 };
 
 // Internal dependencies.
-use crate::creature::{Command, CreatureTracker, Visibility};
+use crate::ai::{Command, CreatureTracker, Visibility};
 use crate::factions::Faction;
 use crate::game::GameState;
 use crate::rrl_math::{calculate_hash, Displacement, Position};

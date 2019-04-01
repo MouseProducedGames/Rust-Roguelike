@@ -11,7 +11,7 @@ use rand::rngs::ThreadRng;
 use rand::Rng;
 
 // Internal includes
-use crate::creature::_LoveFearHate;
+use crate::ai::_LoveFearHate;
 
 pub fn _make_decision_attack(emotion: _LoveFearHate, rel_str: f32, rnd: &mut ThreadRng) -> bool {
     if emotion._calc_love(rel_str) < 0.0 {

@@ -12,7 +12,7 @@ use specs::{
 };
 
 // Internal dependencies.
-use crate::creature::{Command, CreatureTracker};
+use crate::ai::{Command, CreatureTracker};
 use crate::game::GameState;
 use crate::rrl_math::{Displacement, Position};
 use crate::world::Tilemap;

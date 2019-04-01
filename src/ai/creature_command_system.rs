@@ -9,11 +9,11 @@ Documentation:
 use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal dependencies.
-use crate::creature::{Command, CreatureStats, CreatureTracker, Visibility};
+use crate::ai::{Command, CreatureTracker, Visibility};
 use crate::factions::Faction;
 use crate::game::{Combat, CombatResult};
 use crate::rrl_math::{calculate_hash, Position};
-use crate::stats::Stat;
+use crate::stats::{CreatureStats, Stat};
 use crate::world::{execute_tile_func, Tilemap, VisibilityType};
 
 pub struct CreatureCommandSystem;
