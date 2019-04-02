@@ -100,7 +100,7 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
             
             // let sight_range = sight_range.sight_range() + stats.perception().modifier();
 
-            calculate_visibility(lightmap, *pos, &map, visibility);
+            calculate_visibility(lightmap, *pos, stats, &map, visibility);
         }
     }
 }

@@ -9,6 +9,7 @@ Documentation:
 
 // internal includes
 use crate::rrl_math::Position;
+use crate::stats::{CreatureStats, StatModifier};
 use crate::world::{Lightmap, Mapping, Tilemap, VisibilityMap, VisibilityType};
 
 fn inner_iter(
@@ -18,8 +19,8 @@ fn inner_iter(
     check_pos_y: f64,
     visibility: &mut VisibilityMap,
     lightmap: &Lightmap,
+    perception_mult: f64,
     pos: Position,
-    // sight_range: i32,
     map: &Tilemap,
 )
 {
@@ -45,7 +46,7 @@ fn inner_iter(
             break;
         }
         
-        if lightmap.value(check_pos_ux, check_pos_uy) >= 1.0 {
+        if (lightmap.value(check_pos_ux, check_pos_uy) * perception_mult) >= 1.0 {
             *visibility.value_mut(check_pos_ux, check_pos_uy) = VisibilityType::Visible;
         }
         
@@ -66,6 +67,7 @@ pub fn calculate_visibility(
     lightmap: &Lightmap,
     pos: Position,
     // sight_range: i32,
+    stats: &CreatureStats,
     map: &Tilemap,
     visibility: &mut VisibilityMap,
 ) {
@@ -73,21 +75,62 @@ pub fn calculate_visibility(
 
     visibility.clear();
 
+    let mut perception_mult: f64;
+    if stats.perception().modifier() > 0 {
+        perception_mult = 1.0 + (f64::from(stats.perception().modifier()) / 10.0);
+    } else {
+        perception_mult = 1.0 / (1.0 + (f64::from(stats.perception().modifier()) / 10.0));
+    }
+    // Square it, so it notably affects lighting.
+    perception_mult = perception_mult * perception_mult;
+    // Cube it, since lighting is squared.
+    perception_mult = perception_mult * perception_mult;
+    let perception_mult = perception_mult;
     let check_pos_x = f64::from(pos.x) + 0.5;
     let check_pos_y = f64::from(pos.y) + 0.5;
     for to_y in 0..map.height() {
         for to_x in (0..map.width()).step_by((map.width() - 1) as usize) {
-            inner_iter(to_x, to_y, check_pos_x, check_pos_y, visibility, lightmap, pos, /* sight_range */ map);
+            inner_iter(
+                to_x,
+                to_y,
+                check_pos_x,
+                check_pos_y,
+                visibility,
+                lightmap,
+                perception_mult,
+                pos,
+                map
+            );
         }
     }
 
     for to_x in 0..map.width() {
         let to_y = 0;
-        inner_iter(to_x, to_y, check_pos_x, check_pos_y, visibility, lightmap, pos, /* sight_range */ map);
+        inner_iter(
+            to_x,
+            to_y,
+            check_pos_x,
+            check_pos_y,
+            visibility,
+            lightmap,
+            perception_mult,
+            pos,
+            map
+        );
     }
 
     for to_x in 0..map.width() {
         let to_y = map.height() - 1;
-        inner_iter(to_x, to_y, check_pos_x, check_pos_y, visibility, lightmap, pos, /* sight_range */ map);
+        inner_iter(
+            to_x,
+            to_y,
+            check_pos_x,
+            check_pos_y,
+            visibility,
+            lightmap,
+            perception_mult,
+            pos,
+            map
+        );
     }
 }
