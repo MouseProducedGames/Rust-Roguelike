@@ -98,7 +98,7 @@ impl ConsoleDisplay {
             &mut self.buffers[self.back_buffer_index],
         )
     }
-    
+
     pub(crate) fn move_cursor(&self, x: i32, y: i32) {
         match self.term.cursor().goto(x as u16, y as u16) {
             Ok(_v) => (),

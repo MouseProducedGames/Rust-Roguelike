@@ -29,7 +29,7 @@ impl CreatureStats {
         agility: i32,
         coordination: i32,
         endurance: i32,
-	perception: i32,
+        perception: i32,
         health: i32,
     ) -> Self {
         Self {
@@ -37,7 +37,7 @@ impl CreatureStats {
             agility: Attribute::new(agility),
             coordination: Attribute::new(coordination),
             endurance: Attribute::new(endurance),
-	    perception: Attribute::new(perception),
+            perception: Attribute::new(perception),
             health: Attribute::new(health),
         }
     }
@@ -100,7 +100,7 @@ impl Add<CreatureStats> for CreatureStats {
             self.agility().value() + other.agility().value(),
             self.coordination().value() + other.coordination().value(),
             self.endurance().value() + other.endurance().value(),
-	    self.perception().value() + other.perception().value(),
+            self.perception().value() + other.perception().value(),
             self.health().value() + other.health().value(),
         )
     }
@@ -124,7 +124,7 @@ impl Default for CreatureStats {
             agility: ten,
             coordination: ten,
             endurance: ten,
-	    perception: ten,
+            perception: ten,
             health: ten,
         }
     }

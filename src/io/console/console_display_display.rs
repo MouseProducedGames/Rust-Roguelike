@@ -69,7 +69,7 @@ impl Display for ConsoleDisplay {
         self.put_stat(42, 3, "Agility", stats.agility());
         self.put_stat(42, 4, "Coordination", stats.coordination());
         self.put_stat(42, 5, "Endurance", stats.endurance());
-	self.put_stat(42, 6, "Perception", stats.perception());
+        self.put_stat(42, 6, "Perception", stats.perception());
         self.put_health(42, 8, "Health", stats.endurance().value(), stats.health());
     }
 

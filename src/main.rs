@@ -6,6 +6,8 @@ Documentation:
 
  **/
 // External dependencies
+#[macro_use]
+extern crate derive_more;
 extern crate rand;
 use rand::rngs::ThreadRng;
 use rand::Rng;
@@ -20,8 +22,10 @@ use specs::{Builder, RunNow, /* System, */ World};
 use std::sync::{Arc, Mutex};
 
 // Internal dependencies.
+mod abilities;
 mod ai;
 mod background;
+mod data_types;
 mod dice;
 mod dungen;
 mod factions;
@@ -35,22 +39,22 @@ mod stats;
 mod talents;
 mod tiled_shapes_2d;
 mod world;
-use background::{Species, SpeciesType};
 use ai::{
     Command, CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem,
     CreatureLastUpdateSystem, CreatureLogicFaction, CreatureLogicFactionSystem,
     CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderAttack,
     CreatureLogicWanderAttackSystem, CreatureLogicWanderSystem, CreatureTracker,
-    CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition,
-    ViewpointMarker, Visibility,
+    CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition, ViewpointMarker,
+    Visibility,
 };
+use background::{Species, SpeciesType};
 use dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use factions::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
-use stats::{CreatureStats, SightRange};
 use skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use stats::{CreatureStats, SightRange};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
 use world::{Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 

@@ -43,7 +43,7 @@ impl<'a> System<'a> for CreatureAbilitySystem {
             &data.pos,
             &mut data.skills,
             &mut data.talents,
-	    &data.stats,
+            &data.stats,
             &data.visibility,
         )
             .join()
@@ -68,10 +68,9 @@ impl<'a> System<'a> for CreatureAbilitySystem {
                                 skill_bonus += i64::from(*v)
                             }
                         }
-			
-			let skill_bonus = skill_bonus +
-			    i64::from(stats.perception().modifier());
-			
+
+                        let skill_bonus = skill_bonus + i64::from(stats.perception().modifier());
+
                         talent_range_func(
                             *talent_range,
                             &(pos, maybe_visibility_map, skill_bonus),

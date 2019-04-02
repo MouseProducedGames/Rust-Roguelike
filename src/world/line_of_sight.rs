@@ -82,8 +82,7 @@ pub fn calculate_visibility(
             if map.is_pos_in_bounds(check_pos) == false {
                 break;
             }
-            *visibility.value_mut(check_pos.x as u32, check_pos.y as u32) =
-                VisibilityType::Visible;
+            *visibility.value_mut(check_pos.x as u32, check_pos.y as u32) = VisibilityType::Visible;
             if map.transparent_pos(check_pos) == false
                 && ((check_pos.x != pos.x) || (check_pos.y != pos.y))
             {
@@ -118,8 +117,7 @@ pub fn calculate_visibility(
             if map.is_pos_in_bounds(check_pos) == false {
                 break;
             }
-            *visibility.value_mut(check_pos.x as u32, check_pos.y as u32) =
-                VisibilityType::Visible;
+            *visibility.value_mut(check_pos.x as u32, check_pos.y as u32) = VisibilityType::Visible;
             if map.transparent_pos(check_pos) == false
                 && ((check_pos.x != pos.x) || (check_pos.y != pos.y))
             {
