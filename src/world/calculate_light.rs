@@ -9,17 +9,16 @@ Documentation:
 
 // internal includes
 use crate::rrl_math::Position;
-use crate::world::{Lightmap, Mapping, Tilemap, VisibilityMap, VisibilityType};
+use crate::world::{Mapping, Lightmap, Tilemap};
 
 fn inner_iter(
     to_x: u32,
     to_y: u32,
     check_pos_x: f64,
     check_pos_y: f64,
-    visibility: &mut VisibilityMap,
-    lightmap: &Lightmap,
+    lightmap: &mut Lightmap,
     pos: Position,
-    // sight_range: i32,
+    light_value: f64,
     map: &Tilemap,
 )
 {
@@ -45,8 +44,10 @@ fn inner_iter(
             break;
         }
         
-        if lightmap.value(check_pos_ux, check_pos_uy) >= 1.0 {
-            *visibility.value_mut(check_pos_ux, check_pos_uy) = VisibilityType::Visible;
+        {
+            let current_dist_sqr = (move_pos_x * move_pos_x) + (move_pos_y * move_pos_y);
+            *lightmap.value_mut(check_pos_ux, check_pos_uy) =
+                lightmap.value(check_pos_ux, check_pos_uy).max(light_value / current_dist_sqr);
         }
         
         if map.transparent(check_pos_ux, check_pos_uy) == false
@@ -62,32 +63,29 @@ fn inner_iter(
     }
 }
 
-pub fn calculate_visibility(
-    lightmap: &Lightmap,
+pub fn calculate_light_level(
+    lightmap: &mut Lightmap,
     pos: Position,
-    // sight_range: i32,
+    light_value: f64,
     map: &Tilemap,
-    visibility: &mut VisibilityMap,
 ) {
-    // let sight_range_sqr = f64::from(sight_range * sight_range);
-
-    visibility.clear();
-
+    let light_value = light_value * light_value;
+    
     let check_pos_x = f64::from(pos.x) + 0.5;
     let check_pos_y = f64::from(pos.y) + 0.5;
-    for to_y in 0..map.height() {
-        for to_x in (0..map.width()).step_by((map.width() - 1) as usize) {
-            inner_iter(to_x, to_y, check_pos_x, check_pos_y, visibility, lightmap, pos, /* sight_range */ map);
+    for to_y in 0..lightmap.height() {
+        for to_x in (0..lightmap.width()).step_by((lightmap.width() - 1) as usize) {
+            inner_iter(to_x, to_y, check_pos_x, check_pos_y, lightmap, pos, light_value, map);
         }
     }
 
-    for to_x in 0..map.width() {
+    for to_x in 0..lightmap.width() {
         let to_y = 0;
-        inner_iter(to_x, to_y, check_pos_x, check_pos_y, visibility, lightmap, pos, /* sight_range */ map);
+        inner_iter(to_x, to_y, check_pos_x, check_pos_y, lightmap, pos, light_value, map);
     }
 
-    for to_x in 0..map.width() {
-        let to_y = map.height() - 1;
-        inner_iter(to_x, to_y, check_pos_x, check_pos_y, visibility, lightmap, pos, /* sight_range */ map);
+    for to_x in 0..lightmap.width() {
+        let to_y = lightmap.height() - 1;
+        inner_iter(to_x, to_y, check_pos_x, check_pos_y, lightmap, pos, light_value, map);
     }
 }

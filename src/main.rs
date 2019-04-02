@@ -31,6 +31,7 @@ mod dungen;
 mod factions;
 mod game;
 mod io;
+mod items;
 mod multidim;
 mod multimap;
 mod rrl_math;
@@ -56,7 +57,7 @@ use rrl_math::{Bounds, Position};
 use skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use stats::{CreatureStats, SightRange};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
-use world::{Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
+use world::{Lightmap, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
 fn main() {
     let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(io::console::ConsoleDisplay::new()));
@@ -89,10 +90,13 @@ fn main() {
 
         map = temp_map;
     }
+    
+    let mut lightmap = Lightmap::new(map.width(), map.height());
 
     let mut world = World::new();
     world.add_resource(CreatureTracker::new());
     world.add_resource(game_state);
+    world.add_resource(lightmap);
     world.add_resource(map);
     world.add_resource(display);
     world.add_resource(PlayerPosition(Position::new(8, 5)));
@@ -147,7 +151,7 @@ fn main() {
             .with(species.stats())
             .with(Position::new(8, 5))
             .with(PlayerMarker)
-            .with(SightRange::new(5))
+            .with(SightRange::new(5.0))
             .with(skills)
             .with(talents)
             .with(ViewpointMarker)
@@ -166,7 +170,7 @@ fn main() {
         .with(Faction::new(0))
         .with(CreatureStats::default())
         .with(Position::new(12, 8))
-        .with(SightRange::new(5))
+        .with(SightRange::new(5.0))
         .with(TalentLookup::new())
         .with(Visibility::new())
         .build();
@@ -178,7 +182,7 @@ fn main() {
         .with(Faction::new(1))
         .with(CreatureStats::default())
         .with(Position::new(8, 12))
-        .with(SightRange::new(5))
+        .with(SightRange::new(5.0))
         .with(TalentLookup::new())
         .with(Visibility::new())
         .build();
@@ -195,6 +199,10 @@ fn main() {
     let mut player_display_system = PlayerDisplaySystem;
 
     while world.read_resource::<GameState>().alive() {
+        /* if let Some(Ok(lightmap)) = world.write_resource::<Lightmap>() {
+            lightmap.clear();
+        } */
+        
         creature_visibility_system.run_now(&world.res);
 
         player_display_system.run_now(&world.res);
@@ -229,6 +237,7 @@ fn main() {
 
         world.maintain();
 
+        world.write_resource::<Lightmap>().clear();
         creature_ability_system.run_now(&world.res);
 
         world.maintain();

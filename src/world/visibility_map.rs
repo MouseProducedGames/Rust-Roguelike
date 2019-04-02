@@ -29,6 +29,18 @@ impl VisibilityMap {
             values: Multimap::new(width, height),
         }
     }
+    
+    pub fn clear(&mut self) {
+        for y in 0..self.values.height() {
+            for x in 0..self.values.width() {
+                if self.values.is_in_bounds(x, y)
+                    && *self.values.value(x, y) == VisibilityType::Visible
+                {
+                    *self.values.value_mut(x, y) = VisibilityType::Seen;
+                }
+            }
+        }
+    }
 
     pub fn height(&self) -> u32 {
         self.values.height()

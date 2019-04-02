@@ -110,7 +110,7 @@ impl Tilemap {
         }
     }
 
-    pub fn _transparent(&self, pos_x: Width, pos_y: Height) -> bool {
+    pub fn transparent(&self, pos_x: Width, pos_y: Height) -> bool {
         self._tile(pos_x, pos_y).transparent()
     }
 

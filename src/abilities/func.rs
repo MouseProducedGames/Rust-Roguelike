@@ -10,21 +10,21 @@ Documentation:
 // internal includes
 use crate::abilities::Ability;
 use crate::rrl_math::Position;
-use crate::stats::{CreatureStats, StatModifier};
-use crate::world::{calculate_visibility, Tilemap, VisibilityMap};
+use crate::stats::CreatureStats;
+use crate::world::{calculate_light_level, Lightmap, Tilemap, VisibilityMap};
 
 pub fn ability_func(
     ability: Ability,
     stats: &mut CreatureStats,
+    lightmap: &mut Lightmap,
     pos: &mut Position,
     map: &mut Tilemap,
     vis: &mut VisibilityMap,
 )
 {
     match ability {
-        Ability::Light(range) => {
-            let range = i32::from(range) + stats.perception().modifier();
-            calculate_visibility(vis, *pos, range, map);
+        Ability::Light(value) => {
+            calculate_light_level(lightmap, *pos, value, map);
         },
     }
 }
