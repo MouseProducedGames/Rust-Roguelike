@@ -71,12 +71,12 @@ pub fn calculate_visibility(
 
     visibility.clear();
 
-    let mut perception_mult: f64;
-    if stats.perception().modifier() > 0 {
-        perception_mult = 1.0 + (f64::from(stats.perception().modifier()) / 10.0);
-    } else {
-        perception_mult = 1.0 / (1.0 + (f64::from(stats.perception().modifier()) / 10.0));
-    }
+    let mut perception_mult: f64 =
+        if stats.perception().modifier() > 0 {
+            1.0 + (f64::from(stats.perception().modifier()) / 10.0)
+        } else {
+            1.0 / (1.0 + (f64::from(stats.perception().modifier()) / 10.0))
+        };
     // Square it, so it notably affects lighting.
     perception_mult = perception_mult * perception_mult;
     // Cube it, since lighting is squared.
