@@ -57,7 +57,7 @@ use rrl_math::{Bounds, Position};
 use skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use stats::{CreatureStats, SightRange};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
-use world::{Lightmap, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
+use world::{Lightmap, Mapping, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
 fn main() {
     let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(io::console::ConsoleDisplay::new()));
@@ -155,9 +155,10 @@ fn main() {
             .with(ViewpointMarker)
             .with(Visibility::new())
             .build();
-
+        
         {
-            *(&mut *world.write_resource::<Tilemap>()).tile_type_mut(8, 5) = 2;
+            let map_pos = world.read_resource::<Tilemap>().get_position(8, 5);
+            *world.write_resource::<Tilemap>().tile_type_mut(map_pos) = 2;
         }
     }
 

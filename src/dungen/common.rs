@@ -8,10 +8,10 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::world::Tilemap;
+use crate::world::{Mapping, Tilemap};
 
 pub trait DungenCommon {
-    fn create_new(width: u32, height: u32) -> Tilemap {
+    fn create_new(width: u16, height: u16) -> Tilemap {
         Tilemap::new(width, height)
     }
 
@@ -21,10 +21,8 @@ pub trait DungenCommon {
 impl DungenCommon for Tilemap {
     fn finish(&mut self) -> Tilemap {
         let mut output = Tilemap::new(self.width(), self.height());
-        for y in 0..self.height() {
-            for x in 0..self.width() {
-                *output.tile_type_mut(x, y) = self.tile_type(x, y);
-            }
+        for pos in self.get_position(0, 0) {
+            *output.tile_type_mut(pos) = self.tile_type(pos);
         }
 
         output

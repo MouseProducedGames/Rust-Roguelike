@@ -24,6 +24,7 @@ Multimap is implemented as a thin wrapper over Multidim.
 // Internal includes
 use super::multidim::Multidim;
 use super::world::Mapping;
+use crate::rrl_math::MapPosition;
 
 pub struct Multimap<T>
 where
@@ -36,26 +37,26 @@ impl<T> Multimap<T>
 where
     T: Copy + Clone + Default,
 {
-    pub fn new(width: u32, height: u32) -> Self {
+    pub fn new(width: u16, height: u16) -> Self {
         Self {
             values: Multidim::new(height as usize, width as usize),
         }
     }
 
-    pub fn height(&self) -> u32 {
-        self.values.len0() as u32
+    pub fn height(&self) -> u16 {
+        self.values.len0() as u16
     }
 
-    pub fn width(&self) -> u32 {
-        self.values.len1() as u32
+    pub fn width(&self) -> u16 {
+        self.values.len1() as u16
     }
 
-    pub fn value(&self, pos_x: u32, pos_y: u32) -> &T {
-        self.values.value(pos_y as usize, pos_x as usize)
+    pub fn value(&self, pos: MapPosition) -> &T {
+        self.values.value(pos.y as usize, pos.x as usize)
     }
 
-    pub fn value_mut(&mut self, pos_x: u32, pos_y: u32) -> &mut T {
-        self.values.value_mut(pos_y as usize, pos_x as usize)
+    pub fn value_mut(&mut self, pos: MapPosition) -> &mut T {
+        self.values.value_mut(pos.y as usize, pos.x as usize)
     }
 }
 
@@ -63,11 +64,11 @@ impl<T> Mapping for Multimap<T>
 where
     T: Copy + Clone + Default,
 {
-    fn height(&self) -> u32 {
+    fn height(&self) -> u16 {
         Multimap::height(self)
     }
 
-    fn width(&self) -> u32 {
+    fn width(&self) -> u16 {
         Multimap::width(self)
     }
 }

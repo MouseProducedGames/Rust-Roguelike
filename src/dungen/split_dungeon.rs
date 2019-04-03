@@ -13,9 +13,9 @@ use rand::Rng;
 // Internal includes.
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
 use crate::dungen::DungeonGenerator;
-use crate::rrl_math::Bounds;
+use crate::rrl_math::{MapPosition, Bounds};
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{TiledArea, TiledAreaFilter};
+use crate::world::{Mapping, TiledArea, TiledAreaFilter};
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum SplitType {
@@ -84,7 +84,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
 
         let split_min;
         let split_max;
-        let (put_door_x, put_door_y);
+        let put_door: MapPosition;
         if split_width {
             split_min = self.min_bounds.width;
             split_max = width - self.min_bounds.width;
@@ -108,8 +108,11 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
         if split_width {
             split_line =
                 TiledRect::with_absolute_bounds(left + split_on, top, left + split_on, bottom);
-            put_door_x = left + split_on;
-            put_door_y = self.rnd.gen_range(top + 1, bottom - 1);
+            put_door =
+                self.min_bounds.get_position(
+                    left + split_on,
+                    self.rnd.gen_range(top + 1, bottom - 1)
+                );
             room_left0 = left;
             room_top0 = top;
             room_right0 = left + split_on;
@@ -121,8 +124,11 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
         } else {
             split_line =
                 TiledRect::with_absolute_bounds(left, top + split_on, right, top + split_on);
-            put_door_x = self.rnd.gen_range(left + 1, right - 1);
-            put_door_y = top + split_on;
+            put_door =
+                self.min_bounds.get_position(
+                    self.rnd.gen_range(left + 1, right - 1),
+                    top + split_on
+                );
             room_left0 = left;
             room_top0 = top;
             room_right0 = right;
@@ -182,13 +188,13 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
             .apply(&mut temp_area);
         }
         /* if self.rnd.gen_bool(0.1) {
-                *area.tile_type_mut(put_door_x, put_door_y) = 5;
-                *area.tile_func_type_mut(put_door_x, put_door_y) = TILE_FUNC_INDEX_SECRET_DOOR;
+                *area.tile_type_mut(put_door) = 5;
+                *area.tile_func_type_mut(put_door) = TILE_FUNC_INDEX_SECRET_DOOR;
         } else { */
         {
             let (door_tile_type, door_tile_func_type) = (self.door_tile_type)(self.rnd);
-            *area.tile_type_mut(put_door_x, put_door_y) = door_tile_type;
-            *area.tile_func_type_mut(put_door_x, put_door_y) = door_tile_func_type;
+            *area.tile_type_mut(put_door) = door_tile_type;
+            *area.tile_func_type_mut(put_door) = door_tile_func_type;
         }
         // }
     }

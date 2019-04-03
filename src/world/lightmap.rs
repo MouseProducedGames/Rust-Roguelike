@@ -13,11 +13,11 @@ use std::hash::{Hash, Hasher};
 // Internal includes
 use super::super::multimap::Multimap;
 use super::mapping::Mapping;
-use crate::rrl_math::Position;
+use crate::rrl_math::{MapPosition, Position};
 
 type LightLevel = f64;
-type Width = u32;
-type Height = u32;
+type Width = u16;
+type Height = u16;
 
 pub struct Lightmap {
     id: TypeId,
@@ -33,10 +33,8 @@ impl Lightmap {
     }
 
     pub fn clear(&mut self) {
-        for y in 0..self.values.height() {
-            for x in 0..self.values.width() {
-                *self.values.value_mut(x, y) = 0.0;
-            }
+        for pos in self.get_position(0, 0) {
+            *self.values.value_mut(pos) = 0.0;
         }
     }
 
@@ -48,21 +46,21 @@ impl Lightmap {
         self.values.width()
     }
 
-    pub fn value(&self, pos_x: Width, pos_y: Height) -> LightLevel {
-        if self.is_in_bounds(pos_x, pos_y) {
-            *self.values.value(pos_x, pos_y)
+    pub fn value(&self, pos: MapPosition) -> LightLevel {
+        if self.is_in_bounds(pos.x, pos.y) {
+            *self.values.value(pos)
         } else {
             0.0
         }
     }
 
-    pub fn value_mut(&mut self, pos_x: Width, pos_y: Height) -> &mut LightLevel {
-        self.values.value_mut(pos_x, pos_y)
+    pub fn value_mut(&mut self, pos: MapPosition) -> &mut LightLevel {
+        self.values.value_mut(pos)
     }
 
     pub fn _value_pos(&self, pos: Position) -> LightLevel {
         if self.is_pos_in_bounds(pos) {
-            self.value(pos.x as u32, pos.y as u32)
+            self.value(self.get_position(pos.x as u16, pos.y as u16))
         } else {
             0.0
         }

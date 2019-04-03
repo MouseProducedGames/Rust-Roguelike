@@ -10,7 +10,7 @@ Documentation:
 // Internal includes
 use crate::dice::roll_success;
 use crate::rrl_math::Position;
-use crate::world::{Tilemap, VisibilityType};
+use crate::world::{Mapping, Tilemap, VisibilityType};
 
 pub static TILE_FUNC_DATA: [TileFunc; 4] = [
     TileFunc::None,
@@ -52,19 +52,20 @@ pub fn execute_tile_func(
     visibility_type: VisibilityType,
     pos: Position,
 ) {
+    let map_pos = map.get_position(pos.x as u16, pos.y as u16);
     match map.tile_func_pos(pos) {
         TileFunc::None => (),
         TileFunc::OnEnterTile(tile_func_op) => match tile_func_op {
             TileFuncOp::ChangeTileType(new_tile_type, new_tile_func_type) => {
                 if harmless == false && roll_success(skill_bonus) {
-                    *map.tile_type_mut(pos.x as u32, pos.y as u32) = new_tile_type;
-                    *map.tile_func_type_mut(pos.x as u32, pos.y as u32) = new_tile_func_type;
+                    *map.tile_type_mut(map_pos) = new_tile_type;
+                    *map.tile_func_type_mut(map_pos) = new_tile_func_type;
                 }
             }
             TileFuncOp::DiscoverTileType(new_tile_type, new_tile_func_type) => {
                 if visibility_type == VisibilityType::Visible && roll_success(skill_bonus) {
-                    *map.tile_type_mut(pos.x as u32, pos.y as u32) = new_tile_type;
-                    *map.tile_func_type_mut(pos.x as u32, pos.y as u32) = new_tile_func_type;
+                    *map.tile_type_mut(map_pos) = new_tile_type;
+                    *map.tile_func_type_mut(map_pos) = new_tile_func_type;
                 }
             }
         },

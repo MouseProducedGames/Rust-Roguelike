@@ -26,18 +26,15 @@ impl DungeonGenerator for FillTileShape {
         let mut iter_index: u32 = 0;
         let mut keep_going: bool = true;
         while keep_going {
-            let (x, y);
             match area.iter_surface_area(&mut iter_index) {
-                Some((it_x, it_y)) => {
-                    x = it_x;
-                    y = it_y
+                Some(pos) => {
+                    *area.tile_type_mut(pos) = self.tile_type;
                 }
                 _ => {
                     keep_going = false;
                     continue;
                 }
             }
-            *area.tile_type_mut(x, y) = self.tile_type;
         }
     }
 }
