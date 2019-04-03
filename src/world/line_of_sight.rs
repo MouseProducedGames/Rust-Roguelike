@@ -32,8 +32,6 @@ fn inner_iter(
     let disp_norm_y = disp_y / dist;
     let disp_move_x = disp_norm_x / 2.0;
     let disp_move_y = disp_norm_y / 2.0;
-    let mut move_pos_x: f64 = 0.0;
-    let mut move_pos_y: f64 = 0.0;
     let mut check_pos_x = check_pos_x;
     let mut check_pos_y = check_pos_y;
     let fwidth = f64::from(lightmap.width() - 1);
@@ -58,8 +56,6 @@ fn inner_iter(
 
         check_pos_x += disp_move_x;
         check_pos_y += disp_move_y;
-        move_pos_x += disp_move_x;
-        move_pos_y += disp_move_y;
     }
 }
 

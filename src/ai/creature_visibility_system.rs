@@ -74,11 +74,10 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
             );
         }
 
-        for (entity, stats, pos, sight_range, visibility_comp) in (
+        for (entity, stats, pos, visibility_comp) in (
             &data.entities,
             &mut data.stats,
             &mut data.positions,
-            &data.sight_ranges,
             &mut data.visibilities,
         )
             .join()
@@ -97,8 +96,6 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
                 Some(vis_map) => visibility = vis_map,
                 _ => panic!("We no longer have the visibility map we just added!"),
             }
-
-            // let sight_range = sight_range.sight_range() + stats.perception().modifier();
 
             calculate_visibility(lightmap, *pos, stats, &map, visibility);
         }

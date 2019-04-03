@@ -10,7 +10,6 @@ use specs::{Component, VecStorage};
 
 // internal includes
 use crate::abilities::Ability;
-use crate::data_types::Range;
 
 pub struct SightRange {
     value: Ability,

@@ -60,7 +60,7 @@ impl Lightmap {
         self.values.value_mut(pos_x, pos_y)
     }
 
-    pub fn value_pos(&self, pos: Position) -> LightLevel {
+    pub fn _value_pos(&self, pos: Position) -> LightLevel {
         if self.is_pos_in_bounds(pos) {
             self.value(pos.x as u32, pos.y as u32)
         } else {

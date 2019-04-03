@@ -15,11 +15,11 @@ use crate::world::{calculate_light_level, Lightmap, Tilemap, VisibilityMap};
 
 pub fn ability_func(
     ability: Ability,
-    stats: &mut CreatureStats,
+    _stats: &mut CreatureStats,
     lightmap: &mut Lightmap,
     pos: &mut Position,
     map: &mut Tilemap,
-    vis: &mut VisibilityMap,
+    _vis: &mut VisibilityMap,
 ) {
     match ability {
         Ability::Light(value) => {

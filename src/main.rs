@@ -91,12 +91,10 @@ fn main() {
         map = temp_map;
     }
 
-    let mut lightmap = Lightmap::new(map.width(), map.height());
-
     let mut world = World::new();
     world.add_resource(CreatureTracker::new());
     world.add_resource(game_state);
-    world.add_resource(lightmap);
+    world.add_resource(Lightmap::new(map.width(), map.height()));
     world.add_resource(map);
     world.add_resource(display);
     world.add_resource(PlayerPosition(Position::new(8, 5)));
