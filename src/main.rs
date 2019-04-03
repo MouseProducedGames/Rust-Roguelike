@@ -90,7 +90,7 @@ fn main() {
 
         map = temp_map;
     }
-    
+
     let mut lightmap = Lightmap::new(map.width(), map.height());
 
     let mut world = World::new();
@@ -202,7 +202,7 @@ fn main() {
         /* if let Some(Ok(lightmap)) = world.write_resource::<Lightmap>() {
             lightmap.clear();
         } */
-        
+
         creature_visibility_system.run_now(&world.res);
 
         player_display_system.run_now(&world.res);

@@ -18,7 +18,9 @@ pub struct SightRange {
 
 impl SightRange {
     pub fn new(value: f64) -> Self {
-        Self { value: Ability::Light(value) }
+        Self {
+            value: Ability::Light(value),
+        }
     }
 
     pub fn sight_range(&self) -> Ability {

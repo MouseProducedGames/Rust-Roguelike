@@ -63,14 +63,14 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
                 Some(vis_map) => visibility = vis_map,
                 _ => panic!("We no longer have the visibility map we just added!"),
             }
-            
+
             ability_func(
                 sight_range.sight_range(),
                 stats,
                 lightmap,
                 pos,
                 map,
-                visibility
+                visibility,
             );
         }
 
@@ -97,7 +97,7 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
                 Some(vis_map) => visibility = vis_map,
                 _ => panic!("We no longer have the visibility map we just added!"),
             }
-            
+
             // let sight_range = sight_range.sight_range() + stats.perception().modifier();
 
             calculate_visibility(lightmap, *pos, stats, &map, visibility);

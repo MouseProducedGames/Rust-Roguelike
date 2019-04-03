@@ -29,7 +29,7 @@ impl VisibilityMap {
             values: Multimap::new(width, height),
         }
     }
-    
+
     pub fn clear(&mut self) {
         for y in 0..self.values.height() {
             for x in 0..self.values.width() {

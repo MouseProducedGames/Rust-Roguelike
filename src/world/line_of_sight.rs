@@ -22,9 +22,8 @@ fn inner_iter(
     perception_mult: f64,
     pos: Position,
     map: &Tilemap,
-)
-{
-    let ( pos_ux, pos_uy ) = ( pos.x as u32, pos.y as u32 );
+) {
+    let (pos_ux, pos_uy) = (pos.x as u32, pos.y as u32);
     let to_pos = Position::new(to_x as i32, to_y as i32);
     let disp_x = f64::from(to_pos.x - pos.x);
     let disp_y = f64::from(to_pos.y - pos.y);
@@ -39,17 +38,18 @@ fn inner_iter(
     let mut check_pos_y = check_pos_y;
     let fwidth = f64::from(lightmap.width() - 1);
     let fheight = f64::from(lightmap.height() - 1);
-    while ((check_pos_x >= 0.0) && (check_pos_x <= fwidth)) &&
-        ((check_pos_y >= 0.0) && (check_pos_y <= fheight)) {
-        let ( check_pos_ux, check_pos_uy ) = (check_pos_x as u32, check_pos_y as u32);
+    while ((check_pos_x >= 0.0) && (check_pos_x <= fwidth))
+        && ((check_pos_y >= 0.0) && (check_pos_y <= fheight))
+    {
+        let (check_pos_ux, check_pos_uy) = (check_pos_x as u32, check_pos_y as u32);
         if map.is_in_bounds(check_pos_ux, check_pos_uy) == false {
             break;
         }
-        
+
         if (lightmap.value(check_pos_ux, check_pos_uy) * perception_mult) >= 1.0 {
             *visibility.value_mut(check_pos_ux, check_pos_uy) = VisibilityType::Visible;
         }
-        
+
         if map.transparent(check_pos_ux, check_pos_uy) == false
             && ((check_pos_ux != pos_ux) || (check_pos_uy != pos_uy))
         {
@@ -99,7 +99,7 @@ pub fn calculate_visibility(
                 lightmap,
                 perception_mult,
                 pos,
-                map
+                map,
             );
         }
     }
@@ -115,7 +115,7 @@ pub fn calculate_visibility(
             lightmap,
             perception_mult,
             pos,
-            map
+            map,
         );
     }
 
@@ -130,7 +130,7 @@ pub fn calculate_visibility(
             lightmap,
             perception_mult,
             pos,
-            map
+            map,
         );
     }
 }

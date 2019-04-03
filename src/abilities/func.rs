@@ -20,11 +20,10 @@ pub fn ability_func(
     pos: &mut Position,
     map: &mut Tilemap,
     vis: &mut VisibilityMap,
-)
-{
+) {
     match ability {
         Ability::Light(value) => {
             calculate_light_level(lightmap, *pos, value, map);
-        },
+        }
     }
 }

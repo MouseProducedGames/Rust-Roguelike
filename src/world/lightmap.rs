@@ -31,7 +31,7 @@ impl Lightmap {
             values: Multimap::new(width, height),
         }
     }
-    
+
     pub fn clear(&mut self) {
         for y in 0..self.values.height() {
             for x in 0..self.values.width() {
@@ -57,7 +57,7 @@ impl Lightmap {
     }
 
     pub fn value_mut(&mut self, pos_x: Width, pos_y: Height) -> &mut LightLevel {
-        self.values.value_mut(pos_x , pos_y)
+        self.values.value_mut(pos_x, pos_y)
     }
 
     pub fn value_pos(&self, pos: Position) -> LightLevel {
