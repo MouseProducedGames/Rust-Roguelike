@@ -12,7 +12,7 @@ use rand::Rng;
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
-use crate::world::TiledArea;
+use crate::world::{Mapping, TiledArea};
 
 pub struct FillTileShapeRandRange<'a> {
     start_range: u32,
@@ -31,7 +31,10 @@ impl<'a> FillTileShapeRandRange<'a> {
 }
 
 impl<'a> DungeonGenerator for FillTileShapeRandRange<'a> {
-    fn apply(&mut self, area: &mut dyn TiledArea) {
+    fn apply<TArea>(&mut self, area: &mut TArea)
+    where
+        TArea: TiledArea + Mapping,
+    {
         let mut iter_index: u32 = 0;
         let mut keep_going: bool = true;
         while keep_going {

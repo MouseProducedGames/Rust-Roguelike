@@ -23,7 +23,7 @@ Multimap is implemented as a thin wrapper over Multidim.
 
 // Internal includes
 use super::multidim::Multidim;
-use super::world::{Mapping, MapPosition};
+use super::world::{MapPosition, Mapping};
 
 pub struct Multimap<T>
 where
@@ -51,11 +51,11 @@ where
     }
 
     pub fn value(&self, pos: MapPosition) -> &T {
-        self.values.value(pos.y as usize, pos.x as usize)
+        self.values.value(pos.y() as usize, pos.x() as usize)
     }
 
     pub fn value_mut(&mut self, pos: MapPosition) -> &mut T {
-        self.values.value_mut(pos.y as usize, pos.x as usize)
+        self.values.value_mut(pos.y() as usize, pos.x() as usize)
     }
 }
 

@@ -9,7 +9,7 @@ Documentation:
 
 // Internal dependencies.
 use crate::tiled_shapes_2d::TiledShape2D;
-use crate::world::MapPosition;
+use crate::world::{MapPosition, Mapping};
 
 pub struct TiledRect {
     left: u16,
@@ -70,6 +70,16 @@ impl TiledRect {
     }
 }
 
+impl Mapping for TiledRect {
+    fn height(&self) -> u16 {
+        TiledRect::height(self)
+    }
+
+    fn width(&self) -> u16 {
+        TiledRect::width(self)
+    }
+}
+
 impl TiledShape2D for TiledRect {
     fn bottom(&self) -> u16 {
         self.bottom()
@@ -86,36 +96,16 @@ impl TiledShape2D for TiledRect {
         let index = *iter_index;
         *iter_index += 1;
         if index < width {
-            Some(MapPosition::new(
-                self.left + (index as u16),
-                self.top,
-                self.width(),
-                self.height(),
-            ))
+            Some(self.get_position(index as u16, 0).unwrap())
         } else if index < (width + height) {
             let temp = (index - width) as u16;
-            Some(MapPosition::new(
-                self.right,
-                self.top + temp,
-                self.width(),
-                self.height(),
-            ))
+            Some(self.get_position(self.width() - 1, temp).unwrap())
         } else if index < (width + height + width) {
             let temp = (index - (width + height)) as u16;
-            Some(MapPosition::new(
-                self.left + temp,
-                self.bottom,
-                self.width(),
-                self.height(),
-            ))
+            Some(self.get_position(temp, self.height() - 1).unwrap())
         } else if index < (width + height + width + height) {
             let temp = (index - (width + height + width)) as u16;
-            Some(MapPosition::new(
-                self.left,
-                self.top + temp,
-                self.width(),
-                self.height(),
-            ))
+            Some(self.get_position(0, temp).unwrap())
         } else {
             None
         }
@@ -131,12 +121,7 @@ impl TiledShape2D for TiledRect {
             return None;
         }
 
-        Some(MapPosition::new(
-            self.left + x,
-            self.top + y,
-            self.width(),
-            self.height(),
-        ))
+        Some(self.get_position(x, y).unwrap())
     }
 
     fn left(&self) -> u16 {

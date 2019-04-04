@@ -157,7 +157,7 @@ fn main() {
             .build();
 
         {
-            let map_pos = world.read_resource::<Tilemap>().get_position(8, 5);
+            let map_pos = world.read_resource::<Tilemap>().get_position(8, 5).unwrap();
             *world.write_resource::<Tilemap>().tile_type_mut(map_pos) = 2;
         }
     }

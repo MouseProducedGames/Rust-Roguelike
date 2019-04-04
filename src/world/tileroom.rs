@@ -1,4 +1,3 @@
-use super::{Mapping, Tilemap};
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -11,7 +10,7 @@ Documentation:
 // Internal includes
 use crate::dungen::DungenCommon;
 use crate::tiled_shapes_2d::TiledShape2D;
-use crate::world::MapPosition;
+use crate::world::{MapPosition, Mapping, Tilemap};
 
 pub struct TiledAreaFilter<'a> {
     shape_filter: Box<dyn TiledShape2D>,
@@ -29,6 +28,14 @@ impl<'a> TiledAreaFilter<'a> {
             Box::new( Self { area: area, shape_filter: shape_filter } );
         output
     } */
+
+    /* pub fn height(&self) -> u16 {
+        self.shape_filter.height()
+    }
+
+    pub fn width(&self) -> u16 {
+        self.shape_filter.width()
+    } */
 }
 
 impl<'a> DungenCommon for TiledAreaFilter<'a> {
@@ -37,13 +44,13 @@ impl<'a> DungenCommon for TiledAreaFilter<'a> {
     }
 }
 
-impl Mapping for TiledArea {
+impl<'a> Mapping for TiledAreaFilter<'a> {
     fn height(&self) -> u16 {
-        TiledArea::height(self) as u16
+        (self.shape_filter.bottom() - self.shape_filter.top()) + 1
     }
 
     fn width(&self) -> u16 {
-        TiledArea::width(self) as u16
+        (self.shape_filter.right() - self.shape_filter.left()) + 1
     }
 }
 
@@ -54,7 +61,7 @@ pub trait TiledArea {
 
     fn finish(&mut self) -> Tilemap;
 
-    fn height(&self) -> u16;
+    // fn height(&self) -> u16;
 
     fn iter_circumference(&self, iter_index: &mut u32) -> Option<MapPosition>;
 
@@ -76,7 +83,17 @@ pub trait TiledArea {
 
     fn top(&self) -> u16;
 
-    fn width(&self) -> u16;
+    // fn width(&self) -> u16;
+}
+
+impl Mapping for TiledArea {
+    fn height(&self) -> u16 {
+        (self.bottom() - self.top()) + 1
+    }
+
+    fn width(&self) -> u16 {
+        (self.right() - self.left()) + 1
+    }
 }
 
 impl DungenCommon for TiledArea {
@@ -100,45 +117,25 @@ impl TiledArea for Tilemap {
         DungenCommon::finish(self)
     }
 
-    fn height(&self) -> u16 {
+    /* fn height(&self) -> u16 {
         self.height() as u16
-    }
+    } */
 
     fn iter_circumference(&self, iter_index: &mut u32) -> Option<MapPosition> {
         let (width, height) = (self.width() as u32, self.height() as u32);
         let index = *iter_index;
         *iter_index += 1;
         if index < width {
-            Some(MapPosition::new(
-                self.left() + (index as u16),
-                self.top(),
-                self.width(),
-                self.height(),
-            ))
+            Some(MapPosition::new(index as u16, 0))
         } else if index < (width + height) {
             let temp = (index - width) as u16;
-            Some(MapPosition::new(
-                self.right(),
-                self.top() + temp,
-                self.width(),
-                self.height(),
-            ))
+            Some(MapPosition::new(self.width() - 1, temp))
         } else if index < (width + height + width) {
             let temp = (index - (width + height)) as u16;
-            Some(MapPosition::new(
-                self.left() + temp,
-                self.bottom(),
-                self.width(),
-                self.height(),
-            ))
+            Some(MapPosition::new(temp, self.height() - 1))
         } else if index < (width + height + width + height) {
             let temp = (index - (width + height + width)) as u16;
-            Some(MapPosition::new(
-                self.left(),
-                self.top() + temp,
-                self.width(),
-                self.height(),
-            ))
+            Some(MapPosition::new(0, temp))
         } else {
             None
         }
@@ -150,16 +147,11 @@ impl TiledArea for Tilemap {
         *iter_index += 1;
         let x = (index % width) as u16;
         let y = (index / width) as u16;
-        if y == (height as u16) {
+        if y >= (height as u16) {
             return None;
         }
 
-        Some(MapPosition::new(
-            self.left() + x,
-            self.top() + y,
-            self.width(),
-            self.height(),
-        ))
+        Some(MapPosition::new(x, y))
     }
 
     fn left(&self) -> u16 {
@@ -194,15 +186,16 @@ impl TiledArea for Tilemap {
         0
     }
 
-    fn width(&self) -> u16 {
+    /* fn width(&self) -> u16 {
         self.width()
-    }
+    } */
 }
 
 impl<'a> TiledArea for TiledAreaFilter<'a> {
     fn bottom(&self) -> u16 {
         // self.area.bottom().min( self.shape_filter.bottom() )
-        self.shape_filter.bottom()
+        // self.shape_filter.bottom()
+        self.shape_filter.bottom() - self.shape_filter.top()
     }
 
     fn circumference(&self) -> u16 {
@@ -213,11 +206,11 @@ impl<'a> TiledArea for TiledAreaFilter<'a> {
         self.area.finish()
     }
 
-    fn height(&self) -> u16 {
+    /* fn height(&self) -> u16 {
         // ( ( self.bottom() - self.top() ) + 1 ).min( self.area.height() )
         // self.shape_filter.height()
         (self.bottom() - self.top()) + 1
-    }
+    } */
 
     fn iter_circumference(&self, iter_index: &mut u32) -> Option<MapPosition> {
         //         let adjuxt_x = self.shape_filter.left() - self.area.left();
@@ -232,12 +225,13 @@ impl<'a> TiledArea for TiledAreaFilter<'a> {
 
     fn left(&self) -> u16 {
         // self.area.left().max( self.shape_filter.left() )
-        self.shape_filter.left()
+        // self.shape_filter.left()
+        0
     }
 
     fn right(&self) -> u16 {
         // self.area.right().min( self.shape_filter.right() )
-        self.shape_filter.right()
+        self.shape_filter.right() - self.shape_filter.left()
     }
 
     fn surface_area(&self) -> u16 {
@@ -245,31 +239,48 @@ impl<'a> TiledArea for TiledAreaFilter<'a> {
     }
 
     fn tile_func_type(&self, pos: MapPosition) -> u32 {
+        let pos = MapPosition::new(
+            self.shape_filter.left() + pos.x(),
+            self.shape_filter.top() + pos.y(),
+        );
         self.area.tile_func_type(pos)
     }
 
     fn tile_func_type_mut(&mut self, pos: MapPosition) -> &mut u32 {
+        let pos = MapPosition::new(
+            self.shape_filter.left() + pos.x(),
+            self.shape_filter.top() + pos.y(),
+        );
         self.area.tile_func_type_mut(pos)
     }
 
     fn tile_type(&self, pos: MapPosition) -> u32 {
+        let pos = MapPosition::new(
+            self.shape_filter.left() + pos.x(),
+            self.shape_filter.top() + pos.y(),
+        );
         self.area.tile_type(pos)
     }
 
     fn tile_type_mut(&mut self, pos: MapPosition) -> &mut u32 {
+        let pos = MapPosition::new(
+            self.shape_filter.left() + pos.x(),
+            self.shape_filter.top() + pos.y(),
+        );
         self.area.tile_type_mut(pos)
     }
 
     fn top(&self) -> u16 {
         // self.area.top().max( self.shape_filter.top() )
-        self.shape_filter.top()
+        // self.shape_filter.top()
+        0
     }
 
-    fn width(&self) -> u16 {
+    /* fn width(&self) -> u16 {
         // ( ( self.right() - self.left() ) + 1 ).min( self.area.width() )
         // self.shape_filter.width()
         (self.right() - self.left()) - 1
-    }
+    } */
 }
 
 impl TiledShape2D for TiledArea {
@@ -305,46 +316,3 @@ impl TiledShape2D for TiledArea {
         TiledArea::top(self)
     }
 }
-
-/* impl TiledShape2D for Box<dyn TiledArea>
-{
-    fn bottom( &self ) -> u16
-    {
-        self.bottom()
-    }
-
-    fn circumference( &self ) -> u16
-    {
-        self.circumference()
-    }
-
-    fn iter_circumference( &self, iter_index: &mut u16 ) -> Option< ( u16, u16 ) >
-    {
-        self.iter_circumference( iter_index )
-    }
-
-    fn iter_surface_area( &self, iter_index: &mut u16 ) -> Option< ( u16, u16 ) >
-    {
-        self.iter_surface_area( iter_index )
-    }
-
-    fn left( &self ) -> u16
-    {
-        self.left()
-    }
-
-    fn right( &self ) -> u16
-    {
-        self.right()
-    }
-
-    fn surface_area( &self ) -> u16
-    {
-        self.surface_area()
-    }
-
-    fn top( &self ) -> u16
-    {
-        self.top()
-    }
-} */

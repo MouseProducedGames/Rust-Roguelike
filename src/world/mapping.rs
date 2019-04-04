@@ -9,7 +9,7 @@ Documentation:
 
 // Internal includes
 use crate::rrl_math::Position;
-use crate::world::MapPosition;
+use crate::world::MapScanPosition;
 
 pub trait Mapping {
     fn height(&self) -> u16;
@@ -20,8 +20,8 @@ pub trait Mapping {
         (self.width(), self.height())
     }
 
-    fn get_position(&self, x: u16, y: u16) -> MapPosition {
-        MapPosition::new(x, y, self.width(), self.height())
+    fn get_position(&self, x: u16, y: u16) -> MapScanPosition {
+        MapScanPosition::new(x, y, self.width(), self.height())
     }
 
     fn is_i32_in_bounds(&self, pos_x: i32, pos_y: i32) -> bool {

@@ -12,7 +12,7 @@ use std::convert::From;
 use std::ops::{Add, Sub};
 
 // Internal includes
-use super::MapPosition;
+use super::MapScanPosition;
 
 #[derive(Copy, Clone, Debug)]
 pub struct MapDisplacement {
@@ -47,8 +47,8 @@ impl Add<MapDisplacement> for MapDisplacement {
 
 impl Eq for MapDisplacement {}
 
-impl From<MapPosition> for MapDisplacement {
-    fn from(item: MapPosition) -> MapDisplacement {
+impl From<MapScanPosition> for MapDisplacement {
+    fn from(item: MapScanPosition) -> MapDisplacement {
         MapDisplacement::new(item.x, item.y)
     }
 }

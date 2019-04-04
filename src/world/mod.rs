@@ -6,6 +6,7 @@ pub mod lightmap;
 pub mod line_of_sight;
 pub mod map_displacement;
 pub mod map_position;
+pub mod map_scan_position;
 pub mod mapping;
 pub mod tile_func_type;
 pub mod tile_type;
@@ -17,6 +18,7 @@ pub use lightmap::Lightmap;
 pub use line_of_sight::calculate_visibility;
 pub use map_displacement::MapDisplacement;
 pub use map_position::MapPosition;
+pub use map_scan_position::MapScanPosition;
 pub use mapping::Mapping;
 pub use tile_func_type::{
     execute_tile_func, TileFunc, TileFuncOp, TILE_FUNC_DATA, TILE_FUNC_INDEX_DOOR,

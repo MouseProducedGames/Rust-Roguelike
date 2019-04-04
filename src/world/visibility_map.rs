@@ -4,7 +4,7 @@ use std::default::Default;
 // Internal includes
 use super::super::multimap::Multimap;
 use crate::rrl_math::Position;
-use crate::world::{Mapping, MapPosition};
+use crate::world::{MapPosition, Mapping};
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum VisibilityType {
@@ -47,21 +47,12 @@ impl VisibilityMap {
     }
 
     pub fn value(&self, pos: MapPosition) -> VisibilityType {
-        if self.is_in_bounds(pos.x, pos.y) {
-            *self.values.value(pos)
-        } else {
-            VisibilityType::None
-        }
+        *self.values.value(pos)
     }
 
     pub fn value_pos(&self, pos: Position) -> VisibilityType {
         if self.is_pos_in_bounds(pos) {
-            self.value(MapPosition::new(
-                pos.x as u16,
-                pos.y as u16,
-                self.width(),
-                self.height(),
-            ))
+            self.value(MapPosition::new(pos.x as u16, pos.y as u16))
         } else {
             VisibilityType::None
         }

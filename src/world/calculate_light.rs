@@ -9,7 +9,7 @@ Documentation:
 
 // internal includes
 use crate::rrl_math::Position;
-use crate::world::{Lightmap, Mapping, MapPosition, TiledArea, Tilemap};
+use crate::world::{Lightmap, MapPosition, Mapping, TiledArea, Tilemap};
 
 fn inner_iter(
     to: MapPosition,
@@ -21,7 +21,7 @@ fn inner_iter(
     map: &Tilemap,
 ) {
     let (pos_ux, pos_uy) = (pos.x as u16, pos.y as u16);
-    let to_pos = Position::new(to.x as i32, to.y as i32);
+    let to_pos = Position::new(to.x() as i32, to.y() as i32);
     let disp_x = f64::from(to_pos.x - pos.x);
     let disp_y = f64::from(to_pos.y - pos.y);
     let dist = ((disp_x * disp_x) + (disp_y * disp_y)).sqrt();
@@ -42,6 +42,7 @@ fn inner_iter(
         if map_pos == false {
             break;
         }
+        let map_pos = map_pos.unwrap();
 
         {
             let current_dist_sqr = (move_pos_x * move_pos_x) + (move_pos_y * move_pos_y);
@@ -49,7 +50,8 @@ fn inner_iter(
                 lightmap.value(map_pos).max(light_value / current_dist_sqr);
         }
 
-        if map.transparent(map_pos) == false && ((map_pos.x != pos_ux) || (map_pos.y != pos_uy)) {
+        if map.transparent(map_pos) == false && ((map_pos.x() != pos_ux) || (map_pos.y() != pos_uy))
+        {
             break;
         }
 

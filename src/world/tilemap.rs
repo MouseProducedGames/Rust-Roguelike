@@ -15,8 +15,8 @@ use super::super::multimap::Multimap;
 use super::mapping::Mapping;
 use crate::rrl_math::Position;
 use crate::world::{
-    MapPosition, TileFunc, TileTypeData, TILE_FUNC_DATA, TILE_FUNC_INDEX_VOID,
-    TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID,
+    MapPosition, TileFunc, TileTypeData, TILE_FUNC_DATA, TILE_FUNC_INDEX_VOID, TILE_TYPE_DATA,
+    TILE_TYPE_INDEX_VOID,
 };
 
 type TileType = u32;
@@ -63,11 +63,7 @@ impl Tilemap {
     }
 
     pub fn tile_func_type(&self, pos: MapPosition) -> TileType {
-        if self.is_in_bounds(pos.x, pos.y) {
-            *self.tile_funcs.value(pos)
-        } else {
-            TILE_FUNC_INDEX_VOID
-        }
+        *self.tile_funcs.value(pos)
     }
 
     pub fn tile_func_type_mut(&mut self, pos: MapPosition) -> &mut TileType {
@@ -76,7 +72,7 @@ impl Tilemap {
 
     pub fn tile_func_type_pos(&self, pos: Position) -> TileType {
         if self.is_pos_in_bounds(pos) {
-            self.tile_func_type(self.get_position(pos.x as u16, pos.y as u16))
+            self.tile_func_type(self.get_position(pos.x as u16, pos.y as u16).unwrap())
         } else {
             TILE_FUNC_INDEX_VOID
         }
@@ -91,11 +87,7 @@ impl Tilemap {
     }
 
     pub fn tile_type(&self, pos: MapPosition) -> TileType {
-        if self.is_in_bounds(pos.x, pos.y) {
-            *self.tiles.value(pos)
-        } else {
-            TILE_TYPE_INDEX_VOID
-        }
+        *self.tiles.value(pos)
     }
 
     pub fn tile_type_mut(&mut self, pos: MapPosition) -> &mut TileType {
@@ -104,7 +96,7 @@ impl Tilemap {
 
     pub fn tile_type_pos(&self, pos: Position) -> TileType {
         if self.is_pos_in_bounds(pos) {
-            self.tile_type(self.get_position(pos.x as u16, pos.y as u16))
+            self.tile_type(self.get_position(pos.x as u16, pos.y as u16).unwrap())
         } else {
             TILE_TYPE_INDEX_VOID
         }

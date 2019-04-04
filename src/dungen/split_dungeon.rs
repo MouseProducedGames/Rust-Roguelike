@@ -15,7 +15,7 @@ use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
 use crate::dungen::DungeonGenerator;
 use crate::rrl_math::Bounds;
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{Mapping, MapPosition, TiledArea, TiledAreaFilter};
+use crate::world::{MapPosition, Mapping, TiledArea, TiledAreaFilter};
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum SplitType {
@@ -53,7 +53,10 @@ impl<'a> SplitDungeon<'a> {
 }
 
 impl<'a> DungeonGenerator for SplitDungeon<'a> {
-    fn apply(&mut self, area: &mut dyn TiledArea) {
+    fn apply<TArea>(&mut self, area: &mut TArea)
+    where
+        TArea: TiledArea + Mapping,
+    {
         let (left, top, right, bottom) = (area.left(), area.top(), area.right(), area.bottom());
         let (width, height) = (area.width(), area.height());
 
@@ -107,10 +110,10 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
         let (room_left1, room_top1, room_right1, room_bottom1);
         if split_width {
             split_line =
-                TiledRect::with_absolute_bounds(left + split_on, top, left + split_on, bottom);
-            put_door = self
-                .min_bounds
-                .get_position(left + split_on, self.rnd.gen_range(top + 1, bottom - 1));
+                TiledRect::with_absolute_bounds(left + split_on, top, left + split_on, height - 1);
+            put_door = area
+                .get_position(split_on, self.rnd.gen_range(1, height - 2))
+                .unwrap();
             room_left0 = left;
             room_top0 = top;
             room_right0 = left + split_on;
@@ -121,10 +124,10 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
             room_bottom1 = bottom;
         } else {
             split_line =
-                TiledRect::with_absolute_bounds(left, top + split_on, right, top + split_on);
-            put_door = self
-                .min_bounds
-                .get_position(self.rnd.gen_range(left + 1, right - 1), top + split_on);
+                TiledRect::with_absolute_bounds(left, top + split_on, width - 1, top + split_on);
+            put_door = area
+                .get_position(self.rnd.gen_range(1, width - 2), split_on)
+                .unwrap();
             room_left0 = left;
             room_top0 = top;
             room_right0 = right;

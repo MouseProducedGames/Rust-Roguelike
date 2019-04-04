@@ -15,6 +15,10 @@ pub trait TiledShape2D {
 
     fn circumference(&self) -> u16;
 
+    /* fn height(&self) -> u16 {
+        (bottom - top) + 1
+    } */
+
     fn iter_circumference(&self, iter_index: &mut u32) -> Option<(MapPosition)>;
 
     fn iter_surface_area(&self, iter_index: &mut u32) -> Option<(MapPosition)>;
@@ -26,12 +30,26 @@ pub trait TiledShape2D {
     fn surface_area(&self) -> u16;
 
     fn top(&self) -> u16;
+
+    /* fn width(&self) -> u16 {
+        (right - left) + 1
+    } */
 }
 
 /* pub struct TiledShape2DCircumferenceIterator<'a>
 {
     shape: &'a TiledShape2D,
     iter_index: u16,
+}
+
+impl Mapping for TiledShape2D {
+    fn height(&self) -> u16 {
+        (self.bottom - self.top) + 1
+    }
+
+    fn width(&self) -> u16 {
+        (self.right - self.left) + 1
+    }
 }
 
 impl<'a> TiledShape2DCircumferenceIterator<'a>

@@ -52,7 +52,7 @@ pub fn execute_tile_func(
     visibility_type: VisibilityType,
     pos: Position,
 ) {
-    let map_pos = map.get_position(pos.x as u16, pos.y as u16);
+    let map_pos = map.get_position(pos.x as u16, pos.y as u16).unwrap();
     match map.tile_func_pos(pos) {
         TileFunc::None => (),
         TileFunc::OnEnterTile(tile_func_op) => match tile_func_op {

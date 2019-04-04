@@ -13,7 +13,7 @@ use rand::rngs::ThreadRng;
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape, FillTileShapeRandRange};
 use crate::dungen::DungeonGenerator;
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{TiledArea, TiledAreaFilter};
+use crate::world::{Mapping, TiledArea, TiledAreaFilter};
 
 pub struct _RandomlyTileDungeon<'a> {
     start_range: u32,
@@ -32,7 +32,10 @@ impl<'a> _RandomlyTileDungeon<'a> {
 }
 
 impl<'a> DungeonGenerator for _RandomlyTileDungeon<'a> {
-    fn apply(&mut self, area: &mut dyn TiledArea) {
+    fn apply<TArea>(&mut self, area: &mut TArea)
+    where
+        TArea: TiledArea + Mapping,
+    {
         FillTileShape::new(2).apply(area);
         DrawTileShape::new(1).apply(area);
         let (width, height) = (area.width(), area.height());

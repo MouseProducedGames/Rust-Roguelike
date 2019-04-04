@@ -48,7 +48,7 @@ impl Lightmap {
     }
 
     pub fn value(&self, pos: MapPosition) -> LightLevel {
-        if self.is_in_bounds(pos.x, pos.y) {
+        if self.is_in_bounds(pos.x(), pos.y()) {
             *self.values.value(pos)
         } else {
             0.0
@@ -61,7 +61,7 @@ impl Lightmap {
 
     pub fn _value_pos(&self, pos: Position) -> LightLevel {
         if self.is_pos_in_bounds(pos) {
-            self.value(self.get_position(pos.x as u16, pos.y as u16))
+            self.value(self.get_position(pos.x as u16, pos.y as u16).unwrap())
         } else {
             0.0
         }

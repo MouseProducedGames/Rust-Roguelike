@@ -9,7 +9,7 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::world::TiledArea;
+use crate::world::{Mapping, TiledArea};
 
 pub struct FillTileShape {
     tile_type: u32,
@@ -22,7 +22,10 @@ impl FillTileShape {
 }
 
 impl DungeonGenerator for FillTileShape {
-    fn apply(&mut self, area: &mut dyn TiledArea) {
+    fn apply<TArea>(&mut self, area: &mut TArea)
+    where
+        TArea: TiledArea + Mapping,
+    {
         let mut iter_index: u32 = 0;
         let mut keep_going: bool = true;
         while keep_going {

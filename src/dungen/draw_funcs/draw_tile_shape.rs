@@ -9,7 +9,7 @@ Documentation:
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
-use crate::world::TiledArea;
+use crate::world::{Mapping, TiledArea};
 
 pub struct DrawTileShape {
     tile_type: u32,
@@ -22,7 +22,10 @@ impl DrawTileShape {
 }
 
 impl DungeonGenerator for DrawTileShape {
-    fn apply(&mut self, area: &mut dyn TiledArea) {
+    fn apply<TArea>(&mut self, area: &mut TArea)
+    where
+        TArea: TiledArea + Mapping,
+    {
         // let temp: &mut TiledShape2D = self;
         // for ( x, y ) in TiledShape2DCircumferenceIterator::new( self )
         let mut iter_index: u32 = 0;

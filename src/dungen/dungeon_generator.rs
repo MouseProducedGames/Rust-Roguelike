@@ -8,8 +8,10 @@ Documentation:
 // External dependencies
 
 // Internal dependencies.
-use crate::world::TiledArea;
+use crate::world::{Mapping, TiledArea};
 
 pub trait DungeonGenerator {
-    fn apply(&mut self, area: &mut dyn TiledArea);
+    fn apply<TArea>(&mut self, area: &mut TArea)
+    where
+        TArea: TiledArea + Mapping;
 }
