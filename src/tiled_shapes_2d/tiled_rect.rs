@@ -8,8 +8,8 @@ Documentation:
 // External dependencies
 
 // Internal dependencies.
-use crate::rrl_math::MapPosition;
 use crate::tiled_shapes_2d::TiledShape2D;
+use crate::world::MapPosition;
 
 pub struct TiledRect {
     left: u16,

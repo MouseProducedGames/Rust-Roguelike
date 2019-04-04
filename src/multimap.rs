@@ -23,8 +23,7 @@ Multimap is implemented as a thin wrapper over Multidim.
 
 // Internal includes
 use super::multidim::Multidim;
-use super::world::Mapping;
-use crate::rrl_math::MapPosition;
+use super::world::{Mapping, MapPosition};
 
 pub struct Multimap<T>
 where

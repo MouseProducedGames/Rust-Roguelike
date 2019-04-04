@@ -8,7 +8,7 @@ Documentation:
 // External dependencies
 
 // Internal dependencies.
-use crate::rrl_math::MapPosition;
+use crate::world::MapPosition;
 
 pub trait TiledShape2D {
     fn bottom(&self) -> u16;

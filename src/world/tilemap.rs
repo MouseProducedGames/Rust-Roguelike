@@ -13,10 +13,10 @@ use std::hash::{Hash, Hasher};
 // Internal includes
 use super::super::multimap::Multimap;
 use super::mapping::Mapping;
-use crate::rrl_math::{MapPosition, Position};
+use crate::rrl_math::Position;
 use crate::world::{
-    TileFunc, TileTypeData, TILE_FUNC_DATA, TILE_FUNC_INDEX_VOID, TILE_TYPE_DATA,
-    TILE_TYPE_INDEX_VOID,
+    MapPosition, TileFunc, TileTypeData, TILE_FUNC_DATA, TILE_FUNC_INDEX_VOID,
+    TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID,
 };
 
 type TileType = u32;

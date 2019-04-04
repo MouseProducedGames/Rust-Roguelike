@@ -13,7 +13,8 @@ use std::hash::{Hash, Hasher};
 // Internal includes
 use super::super::multimap::Multimap;
 use super::mapping::Mapping;
-use crate::rrl_math::{MapPosition, Position};
+use crate::rrl_math::Position;
+use crate::world::MapPosition;
 
 type LightLevel = f64;
 type Width = u16;

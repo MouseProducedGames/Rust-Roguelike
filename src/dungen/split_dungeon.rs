@@ -13,9 +13,9 @@ use rand::Rng;
 // Internal includes.
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
 use crate::dungen::DungeonGenerator;
-use crate::rrl_math::{Bounds, MapPosition};
+use crate::rrl_math::Bounds;
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{Mapping, TiledArea, TiledAreaFilter};
+use crate::world::{Mapping, MapPosition, TiledArea, TiledAreaFilter};
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum SplitType {

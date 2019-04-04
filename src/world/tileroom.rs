@@ -10,8 +10,8 @@ Documentation:
 
 // Internal includes
 use crate::dungen::DungenCommon;
-use crate::rrl_math::MapPosition;
 use crate::tiled_shapes_2d::TiledShape2D;
+use crate::world::MapPosition;
 
 pub struct TiledAreaFilter<'a> {
     shape_filter: Box<dyn TiledShape2D>,

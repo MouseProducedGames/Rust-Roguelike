@@ -8,9 +8,9 @@ Documentation:
 // External includes
 
 // internal includes
-use crate::rrl_math::{MapPosition, Position};
+use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, StatModifier};
-use crate::world::{Lightmap, Mapping, TiledArea, Tilemap, VisibilityMap, VisibilityType};
+use crate::world::{Lightmap, Mapping, MapPosition, TiledArea, Tilemap, VisibilityMap, VisibilityType};
 
 fn inner_iter(
     to: MapPosition,

@@ -8,7 +8,8 @@ Documentation:
 // External includes
 
 // Internal includes
-use crate::rrl_math::{MapPosition, Position};
+use crate::rrl_math::Position;
+use crate::world::MapPosition;
 
 pub trait Mapping {
     fn height(&self) -> u16;

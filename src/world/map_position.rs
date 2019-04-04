@@ -29,7 +29,7 @@ impl Component for MapPosition {
 }
 
 impl MapPosition {
-    pub fn new(x: u16, y: u16, x_bound: u16, y_bound: u16) -> Self {
+    pub(crate) fn new(x: u16, y: u16, x_bound: u16, y_bound: u16) -> Self {
         Self {
             x: x,
             y: y,

@@ -3,8 +3,8 @@ use std::default::Default;
 
 // Internal includes
 use super::super::multimap::Multimap;
-use crate::rrl_math::{MapPosition, Position};
-use crate::world::Mapping;
+use crate::rrl_math::Position;
+use crate::world::{Mapping, MapPosition};
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum VisibilityType {

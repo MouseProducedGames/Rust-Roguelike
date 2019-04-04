@@ -8,8 +8,8 @@ Documentation:
 // External includes
 
 // internal includes
-use crate::rrl_math::{MapPosition, Position};
-use crate::world::{Lightmap, Mapping, TiledArea, Tilemap};
+use crate::rrl_math::Position;
+use crate::world::{Lightmap, Mapping, MapPosition, TiledArea, Tilemap};
 
 fn inner_iter(
     to: MapPosition,
