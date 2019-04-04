@@ -45,12 +45,11 @@ fn inner_iter(
 
         {
             let current_dist_sqr = (move_pos_x * move_pos_x) + (move_pos_y * move_pos_y);
-            *lightmap.value_mut(map_pos) = lightmap.value(map_pos).max(light_value / current_dist_sqr);
+            *lightmap.value_mut(map_pos) =
+                lightmap.value(map_pos).max(light_value / current_dist_sqr);
         }
 
-        if map.transparent(map_pos) == false
-            && ((map_pos.x != pos_ux) || (map_pos.y != pos_uy))
-        {
+        if map.transparent(map_pos) == false && ((map_pos.x != pos_ux) || (map_pos.y != pos_uy)) {
             break;
         }
 

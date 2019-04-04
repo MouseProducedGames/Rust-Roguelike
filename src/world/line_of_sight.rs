@@ -47,9 +47,7 @@ fn inner_iter(
             *visibility.value_mut(map_pos) = VisibilityType::Visible;
         }
 
-        if map.transparent(map_pos) == false
-            && ((map_pos.x != pos_ux) || (map_pos.y != pos_uy))
-        {
+        if map.transparent(map_pos) == false && ((map_pos.x != pos_ux) || (map_pos.y != pos_uy)) {
             break;
         }
 
@@ -70,12 +68,11 @@ pub fn calculate_visibility(
 
     visibility.clear();
 
-    let mut perception_mult: f64 =
-        if stats.perception().modifier() > 0 {
-            1.0 + (f64::from(stats.perception().modifier()) / 10.0)
-        } else {
-            1.0 / (1.0 + (f64::from(stats.perception().modifier()) / 10.0))
-        };
+    let mut perception_mult: f64 = if stats.perception().modifier() > 0 {
+        1.0 + (f64::from(stats.perception().modifier()) / 10.0)
+    } else {
+        1.0 / (1.0 + (f64::from(stats.perception().modifier()) / 10.0))
+    };
     // Square it, so it notably affects lighting.
     perception_mult = perception_mult * perception_mult;
     // Cube it, since lighting is squared.

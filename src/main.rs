@@ -155,7 +155,7 @@ fn main() {
             .with(ViewpointMarker)
             .with(Visibility::new())
             .build();
-        
+
         {
             let map_pos = world.read_resource::<Tilemap>().get_position(8, 5);
             *world.write_resource::<Tilemap>().tile_type_mut(map_pos) = 2;

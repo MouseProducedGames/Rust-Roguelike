@@ -109,16 +109,36 @@ impl TiledArea for Tilemap {
         let index = *iter_index;
         *iter_index += 1;
         if index < width {
-            Some(MapPosition::new(self.left() + (index as u16), self.top(), self.width(), self.height()))
+            Some(MapPosition::new(
+                self.left() + (index as u16),
+                self.top(),
+                self.width(),
+                self.height(),
+            ))
         } else if index < (width + height) {
             let temp = (index - width) as u16;
-            Some(MapPosition::new(self.right(), self.top() + temp, self.width(), self.height()))
+            Some(MapPosition::new(
+                self.right(),
+                self.top() + temp,
+                self.width(),
+                self.height(),
+            ))
         } else if index < (width + height + width) {
             let temp = (index - (width + height)) as u16;
-            Some(MapPosition::new(self.left() + temp, self.bottom(), self.width(), self.height()))
+            Some(MapPosition::new(
+                self.left() + temp,
+                self.bottom(),
+                self.width(),
+                self.height(),
+            ))
         } else if index < (width + height + width + height) {
             let temp = (index - (width + height + width)) as u16;
-            Some(MapPosition::new(self.left(), self.top() + temp, self.width(), self.height()))
+            Some(MapPosition::new(
+                self.left(),
+                self.top() + temp,
+                self.width(),
+                self.height(),
+            ))
         } else {
             None
         }
@@ -134,7 +154,12 @@ impl TiledArea for Tilemap {
             return None;
         }
 
-        Some(MapPosition::new(self.left() + x, self.top() + y, self.width(), self.height()))
+        Some(MapPosition::new(
+            self.left() + x,
+            self.top() + y,
+            self.width(),
+            self.height(),
+        ))
     }
 
     fn left(&self) -> u16 {

@@ -5,7 +5,6 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes
 
 // Internal includes
@@ -18,6 +17,10 @@ pub struct Bounds {
 }
 
 impl Mapping for Bounds {
-    fn height(&self) -> u16 { self.height }
-    fn width(&self) -> u16 { self.width }
+    fn height(&self) -> u16 {
+        self.height
+    }
+    fn width(&self) -> u16 {
+        self.width
+    }
 }

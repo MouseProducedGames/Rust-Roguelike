@@ -32,8 +32,7 @@ impl VisibilityMap {
 
     pub fn clear(&mut self) {
         for pos in self.get_position(0, 0) {
-            if *self.values.value(pos) == VisibilityType::Visible
-            {
+            if *self.values.value(pos) == VisibilityType::Visible {
                 *self.values.value_mut(pos) = VisibilityType::Seen;
             }
         }
@@ -57,7 +56,12 @@ impl VisibilityMap {
 
     pub fn value_pos(&self, pos: Position) -> VisibilityType {
         if self.is_pos_in_bounds(pos) {
-            self.value(MapPosition::new(pos.x as u16, pos.y as u16, self.width(), self.height()))
+            self.value(MapPosition::new(
+                pos.x as u16,
+                pos.y as u16,
+                self.width(),
+                self.height(),
+            ))
         } else {
             VisibilityType::None
         }

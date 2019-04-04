@@ -13,7 +13,7 @@ use rand::Rng;
 // Internal includes.
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
 use crate::dungen::DungeonGenerator;
-use crate::rrl_math::{MapPosition, Bounds};
+use crate::rrl_math::{Bounds, MapPosition};
 use crate::tiled_shapes_2d::TiledRect;
 use crate::world::{Mapping, TiledArea, TiledAreaFilter};
 
@@ -108,11 +108,9 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
         if split_width {
             split_line =
                 TiledRect::with_absolute_bounds(left + split_on, top, left + split_on, bottom);
-            put_door =
-                self.min_bounds.get_position(
-                    left + split_on,
-                    self.rnd.gen_range(top + 1, bottom - 1)
-                );
+            put_door = self
+                .min_bounds
+                .get_position(left + split_on, self.rnd.gen_range(top + 1, bottom - 1));
             room_left0 = left;
             room_top0 = top;
             room_right0 = left + split_on;
@@ -124,11 +122,9 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
         } else {
             split_line =
                 TiledRect::with_absolute_bounds(left, top + split_on, right, top + split_on);
-            put_door =
-                self.min_bounds.get_position(
-                    self.rnd.gen_range(left + 1, right - 1),
-                    top + split_on
-                );
+            put_door = self
+                .min_bounds
+                .get_position(self.rnd.gen_range(left + 1, right - 1), top + split_on);
             room_left0 = left;
             room_top0 = top;
             room_right0 = right;

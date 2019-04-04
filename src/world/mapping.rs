@@ -5,6 +5,9 @@ See license in the LICENSE file
 Documentation:
 
 **/
+// External includes
+
+// Internal includes
 use crate::rrl_math::{MapPosition, Position};
 
 pub trait Mapping {
@@ -15,7 +18,7 @@ pub trait Mapping {
     fn bounds(&self) -> (u16, u16) {
         (self.width(), self.height())
     }
-    
+
     fn get_position(&self, x: u16, y: u16) -> MapPosition {
         MapPosition::new(x, y, self.width(), self.height())
     }
