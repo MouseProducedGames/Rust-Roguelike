@@ -42,6 +42,7 @@ mod items;
 mod multidim;
 mod multimap;
 mod rrl_math;
+mod screens;
 mod skills;
 mod stats;
 mod talents;
@@ -61,6 +62,7 @@ use factions::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
+use screens::ScreenManager;
 use skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use stats::{CreatureStats, SightRange};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
@@ -70,6 +72,8 @@ fn main() {
     let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(io::console::ConsoleDisplay::new()));
 
     // Window::init();
+
+    let mut screen_manager = ScreenManager::new();
 
     let map;
     {
@@ -206,6 +210,16 @@ fn main() {
         /* if let Some(Ok(lightmap)) = world.write_resource::<Lightmap>() {
             lightmap.clear();
         } */
+
+        {
+            screen_manager.update_start();
+            screen_manager.update();
+
+            let display = world.write_resource::<Arc<Mutex<Display>>>();
+            let display = &*display;
+
+            screen_manager.draw(display);
+        }
 
         creature_visibility_system.run_now(&world.res);
 

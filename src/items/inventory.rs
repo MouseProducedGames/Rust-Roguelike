@@ -20,15 +20,15 @@ impl Inventory {
     pub fn new() -> Self {
         Self { values: vec![] }
     }
-    
+
     fn iter(&mut self) -> Iter<Item> {
         self.values.iter()
     }
-    
+
     pub fn push(&mut self, item: Item) {
         self.values.push(item)
     }
-    
+
     pub fn remove(&mut self, index: usize) -> Item {
         self.values.remove(index)
     }
