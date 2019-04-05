@@ -11,4 +11,3 @@ Documentation:
 mod ability;
 mod func;
 pub use ability::Ability;
-pub use func::ability_func;

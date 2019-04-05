@@ -9,7 +9,6 @@ Documentation:
 pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Internal includescarc
-use crate::abilities::ability_func;
 use crate::ai::{CreatureTracker, Visibility};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::{CreatureStats, SightRange};
@@ -64,14 +63,9 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
                 _ => panic!("We no longer have the visibility map we just added!"),
             }
 
-            ability_func(
-                sight_range.sight_range(),
-                stats,
-                lightmap,
-                pos,
-                map,
-                visibility,
-            );
+            sight_range
+                .sight_range()
+                .apply(stats, lightmap, pos, map, visibility);
         }
 
         for (entity, stats, pos, visibility_comp) in (
