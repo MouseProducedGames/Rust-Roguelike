@@ -8,5 +8,7 @@ Documentation:
 // External includes
 
 // internal include
+mod inventory;
 mod item;
+pub use inventory::Inventory;
 pub use item::Item;
