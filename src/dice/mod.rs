@@ -33,7 +33,6 @@ pub fn get_random_move() -> Displacement {
     target_move
 }
 
-
 fn random_wander_command() -> u32 {
     thread_rng().gen_range(1, 10)
 }

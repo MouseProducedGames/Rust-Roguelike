@@ -122,7 +122,7 @@ impl TiledArea for Tilemap {
     } */
 
     fn iter_circumference(&self, iter_index: &mut u32) -> Option<MapPosition> {
-        let (width, height) = (self.width() as u32, self.height() as u32);
+        let (width, height) = (u32::from(self.width()), u32::from(self.height()));
         let index = *iter_index;
         *iter_index += 1;
         if index < width {
@@ -142,7 +142,7 @@ impl TiledArea for Tilemap {
     }
 
     fn iter_surface_area(&self, iter_index: &mut u32) -> Option<MapPosition> {
-        let (width, height) = (self.width() as u32, self.height() as u32);
+        let (width, height) = (u32::from(self.width()), u32::from(self.height()));
         let index = *iter_index;
         *iter_index += 1;
         let x = (index % width) as u16;

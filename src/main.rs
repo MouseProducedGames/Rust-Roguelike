@@ -1,3 +1,11 @@
+// Linting
+//
+// "if x == false" is clear and easily understandable.
+// "if !x" is only superficially good.
+// Consider "if !list_item".
+// Consider also the rate of spelling errors in code.
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::bool_comparison))]
+
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -81,7 +89,7 @@ fn main() {
                 }
             },
             2,
-            1
+            1,
         )
         .apply(&mut temp_map);
 

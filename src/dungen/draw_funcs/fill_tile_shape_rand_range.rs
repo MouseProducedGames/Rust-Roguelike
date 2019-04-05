@@ -36,7 +36,8 @@ impl DungeonGenerator for FillTileShapeRandRange {
         while keep_going {
             match area.iter_surface_area(&mut iter_index) {
                 Some(pos) => {
-                    *area.tile_type_mut(pos) = thread_rng().gen_range(self.start_range, self.end_range);
+                    *area.tile_type_mut(pos) =
+                        thread_rng().gen_range(self.start_range, self.end_range);
                 }
                 _ => {
                     keep_going = false;

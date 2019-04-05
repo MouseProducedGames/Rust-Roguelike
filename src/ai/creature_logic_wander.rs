@@ -6,9 +6,7 @@ Documentation:
 
 **/
 // External dependencies.
-use specs::{
-    Component, Entities, NullStorage, ReadExpect, ReadStorage, System, WriteStorage,
-};
+use specs::{Component, Entities, NullStorage, ReadExpect, ReadStorage, System, WriteStorage};
 
 // Internal dependencies.
 use crate::ai::{Command, CreatureTracker};

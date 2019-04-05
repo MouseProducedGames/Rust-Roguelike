@@ -32,16 +32,16 @@ impl Component for MapScanPosition {
 impl MapScanPosition {
     pub(crate) fn new(x: u16, y: u16, x_bound: u16, y_bound: u16) -> Self {
         Self {
-            x: x,
-            y: y,
-            x_bound: x_bound,
-            y_bound: y_bound,
+            x,
+            y,
+            x_bound,
+            y_bound,
         }
     }
 
     pub fn unwrap(self) -> MapPosition {
         if bool::from(self) {
-            return MapPosition::new(self.x, self.y);
+            MapPosition::new(self.x, self.y)
         } else {
             panic!("Tried to access an invalid map position!");
         }

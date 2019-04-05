@@ -21,7 +21,7 @@ fn inner_iter(
     map: &Tilemap,
 ) {
     let (pos_ux, pos_uy) = (pos.x as u16, pos.y as u16);
-    let to_pos = Position::new(to.x() as i32, to.y() as i32);
+    let to_pos = Position::new(i32::from(to.x()), i32::from(to.y()));
     let disp_x = f64::from(to_pos.x - pos.x);
     let disp_y = f64::from(to_pos.y - pos.y);
     let dist = ((disp_x * disp_x) + (disp_y * disp_y)).sqrt();
