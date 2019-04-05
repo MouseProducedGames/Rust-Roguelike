@@ -6,15 +6,14 @@ Documentation:
 
 **/
 // External dependencies.
-use rand::Rng;
 use specs::{
-    Component, Entities, NullStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage,
+    Component, Entities, NullStorage, ReadExpect, ReadStorage, System, WriteStorage,
 };
 
 // Internal dependencies.
 use crate::ai::{Command, CreatureTracker};
-use crate::game::GameState;
-use crate::rrl_math::{Displacement, Position};
+use crate::dice::get_random_move;
+use crate::rrl_math::Position;
 use crate::world::Tilemap;
 
 #[derive(Default)]
@@ -32,7 +31,6 @@ pub struct SystemDataT<'a> {
     _entities: Entities<'a>,
     _map: ReadExpect<'a, Tilemap>,
     logic: ReadStorage<'a, CreatureLogicWander>,
-    game_state: WriteExpect<'a, GameState>,
     commands: WriteStorage<'a, Command>,
     _pos: WriteStorage<'a, Position>,
 }
@@ -44,7 +42,6 @@ impl<'a> System<'a> for CreatureLogicWanderSystem {
         use specs::join::Join;
 
         let _creature_tracker = data._creature_tracker;
-        let mut game_state = data.game_state;
         let _map = data._map;
 
         for (_entity, _, command, _pos) in (
@@ -55,20 +52,7 @@ impl<'a> System<'a> for CreatureLogicWanderSystem {
         )
             .join()
         {
-            let key_command = game_state.rng().gen_range(1, 10);
-            let target_move;
-            match key_command {
-                1 => target_move = Displacement::new(-1, 1),
-                2 => target_move = Displacement::new(0, 1),
-                3 => target_move = Displacement::new(1, 1),
-                4 => target_move = Displacement::new(-1, 0),
-                5 => target_move = Displacement::new(0, 0),
-                6 => target_move = Displacement::new(1, 0),
-                7 => target_move = Displacement::new(-1, -1),
-                8 => target_move = Displacement::new(0, -1),
-                9 => target_move = Displacement::new(1, -1),
-                _ => target_move = Displacement::new(0, 0),
-            }
+            let target_move = get_random_move();
 
             *command = Command::Move(target_move);
 

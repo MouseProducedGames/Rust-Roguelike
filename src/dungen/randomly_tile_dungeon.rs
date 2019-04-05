@@ -6,8 +6,6 @@ Documentation:
 
  **/
 // External includes.
-extern crate rand;
-use rand::rngs::ThreadRng;
 
 // Internal includes.
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape, FillTileShapeRandRange};
@@ -15,23 +13,21 @@ use crate::dungen::DungeonGenerator;
 use crate::tiled_shapes_2d::TiledRect;
 use crate::world::{Mapping, TiledArea, TiledAreaFilter};
 
-pub struct _RandomlyTileDungeon<'a> {
+pub struct _RandomlyTileDungeon {
     start_range: u32,
     end_range: u32,
-    rnd: &'a mut ThreadRng,
 }
 
-impl<'a> _RandomlyTileDungeon<'a> {
-    pub fn _new(start_range: u32, end_range: u32, rnd: &'a mut ThreadRng) -> Self {
+impl _RandomlyTileDungeon {
+    pub fn _new(start_range: u32, end_range: u32) -> Self {
         Self {
             start_range,
             end_range,
-            rnd,
         }
     }
 }
 
-impl<'a> DungeonGenerator for _RandomlyTileDungeon<'a> {
+impl DungeonGenerator for _RandomlyTileDungeon {
     fn apply<TArea>(&mut self, area: &mut TArea)
     where
         TArea: TiledArea + Mapping,
@@ -43,7 +39,6 @@ impl<'a> DungeonGenerator for _RandomlyTileDungeon<'a> {
             area,
             Box::new(TiledRect::with_absolute_bounds(1, 1, width - 1, height - 1)),
         );
-        FillTileShapeRandRange::new(self.start_range, self.end_range, self.rnd)
-            .apply(&mut filter_area);
+        FillTileShapeRandRange::new(self.start_range, self.end_range).apply(&mut filter_area);
     }
 }

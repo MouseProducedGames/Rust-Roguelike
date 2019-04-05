@@ -6,15 +6,14 @@ Documentation:
 
  **/
 // External dependencies.
-use rand::Rng;
 use specs::{
-    Component, Entities, NullStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage,
+    Component, Entities, NullStorage, ReadExpect, ReadStorage, System, WriteStorage,
 };
 
 // Internal dependencies.
 use crate::ai::{Command, CreatureTracker, Visibility};
+use crate::dice::get_random_move;
 use crate::factions::Faction;
-use crate::game::GameState;
 use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::world::Tilemap;
 
@@ -35,7 +34,6 @@ pub struct SystemDataT<'a> {
     visibility: ReadStorage<'a, Visibility>,
     factions: ReadStorage<'a, Faction>,
     logic: ReadStorage<'a, CreatureLogicFaction>,
-    game_state: WriteExpect<'a, GameState>,
     commands: WriteStorage<'a, Command>,
     pos: WriteStorage<'a, Position>,
 }
@@ -48,7 +46,6 @@ impl<'a> System<'a> for CreatureLogicFactionSystem {
 
         let creature_tracker = data.creature_tracker;
         let factions = data.factions;
-        let mut game_state = data.game_state;
         let map = data.map;
         let map_hash = calculate_hash(&*map);
         let visibility = data.visibility;
@@ -83,13 +80,13 @@ impl<'a> System<'a> for CreatureLogicFactionSystem {
                         let disp = friend_pos - *pos;
                         target_move = Displacement::new(disp.x.signum(), disp.y.signum());
                     } else {
-                        target_move = get_random_move(&mut game_state);
+                        target_move = get_random_move();
                     }
                 } else {
-                    target_move = get_random_move(&mut game_state);
+                    target_move = get_random_move();
                 }
             } else {
-                target_move = get_random_move(&mut game_state);
+                target_move = get_random_move();
             }
 
             *command = Command::Move(target_move);
@@ -105,21 +102,3 @@ impl<'a> System<'a> for CreatureLogicFactionSystem {
     }
 }
 
-fn get_random_move<'a>(game_state: &mut WriteExpect<'a, GameState>) -> Displacement {
-    let key_command = game_state.rng().gen_range(1, 10);
-    let target_move;
-    match key_command {
-        1 => target_move = Displacement::new(-1, 1),
-        2 => target_move = Displacement::new(0, 1),
-        3 => target_move = Displacement::new(1, 1),
-        4 => target_move = Displacement::new(-1, 0),
-        5 => target_move = Displacement::new(0, 0),
-        6 => target_move = Displacement::new(1, 0),
-        7 => target_move = Displacement::new(-1, -1),
-        8 => target_move = Displacement::new(0, -1),
-        9 => target_move = Displacement::new(1, -1),
-        _ => target_move = Displacement::new(0, 0),
-    }
-
-    target_move
-}

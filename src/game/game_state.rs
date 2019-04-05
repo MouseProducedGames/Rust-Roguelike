@@ -5,9 +5,6 @@ See license in the LICENSE file
 Documentation:
 
 **/
-extern crate rand;
-use rand::rngs::ThreadRng;
-use rand::thread_rng;
 // use super::faction::FactionLookup;
 // use super::io::Window;
 
@@ -42,10 +39,6 @@ impl GameState {
 
     pub fn kill(&mut self) {
         self.alive = false;
-    }
-
-    pub fn rng(&mut self) -> ThreadRng {
-        thread_rng()
     }
 
     /* pub fn window(&self) -> &Window

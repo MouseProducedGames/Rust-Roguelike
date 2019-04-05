@@ -9,8 +9,7 @@ Documentation:
 #[macro_use]
 extern crate derive_more;
 extern crate rand;
-use rand::rngs::ThreadRng;
-use rand::Rng;
+use rand::{thread_rng, Rng};
 
 extern crate rust_dice;
 
@@ -63,7 +62,6 @@ fn main() {
     let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(io::console::ConsoleDisplay::new()));
 
     // Window::init();
-    let mut game_state = GameState::new();
 
     let map;
     {
@@ -75,16 +73,15 @@ fn main() {
                 width: 6,
                 height: 6,
             },
-            |rnd: &mut ThreadRng| -> (u32, u32) {
-                if rnd.gen_bool(0.1) {
+            || -> (u32, u32) {
+                if thread_rng().gen_bool(0.1) {
                     (5, TILE_FUNC_INDEX_SECRET_DOOR)
                 } else {
                     (3, TILE_FUNC_INDEX_DOOR)
                 }
             },
             2,
-            1,
-            &mut game_state.rng(),
+            1
         )
         .apply(&mut temp_map);
 
@@ -93,7 +90,7 @@ fn main() {
 
     let mut world = World::new();
     world.add_resource(CreatureTracker::new());
-    world.add_resource(game_state);
+    world.add_resource(GameState::new());
     world.add_resource(Lightmap::new(map.width(), map.height()));
     world.add_resource(map);
     world.add_resource(display);

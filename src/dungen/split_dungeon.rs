@@ -6,9 +6,7 @@ Documentation:
 
  **/
 // External includes.
-extern crate rand;
-use rand::rngs::ThreadRng;
-use rand::Rng;
+use rand::{thread_rng, Rng};
 
 // Internal includes.
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
@@ -23,23 +21,21 @@ pub enum SplitType {
     _Random,
 }
 
-pub struct SplitDungeon<'a> {
+pub struct SplitDungeon {
     split_type: SplitType,
     min_bounds: Bounds,
-    door_tile_type: fn(&mut ThreadRng) -> (u32, u32),
+    door_tile_type: fn() -> (u32, u32),
     floor_tile_type: u32,
     wall_tile_type: u32,
-    rnd: &'a mut ThreadRng,
 }
 
-impl<'a> SplitDungeon<'a> {
+impl SplitDungeon {
     pub fn new(
         split_type: SplitType,
         min_bounds: Bounds,
-        door_tile_type: fn(&mut ThreadRng) -> (u32, u32),
+        door_tile_type: fn() -> (u32, u32),
         floor_tile_type: u32,
         wall_tile_type: u32,
-        rnd: &'a mut ThreadRng,
     ) -> Self {
         Self {
             split_type,
@@ -47,12 +43,11 @@ impl<'a> SplitDungeon<'a> {
             door_tile_type,
             floor_tile_type,
             wall_tile_type,
-            rnd,
         }
     }
 }
 
-impl<'a> DungeonGenerator for SplitDungeon<'a> {
+impl DungeonGenerator for SplitDungeon {
     fn apply<TArea>(&mut self, area: &mut TArea)
     where
         TArea: TiledArea + Mapping,
@@ -77,11 +72,11 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
                 } else if height > width {
                     split_width = false;
                 } else {
-                    split_width = self.rnd.gen_bool(0.5);
+                    split_width = thread_rng().gen_bool(0.5);
                 }
             }
             SplitType::_Random => {
-                split_width = self.rnd.gen_bool(0.5);
+                split_width = thread_rng().gen_bool(0.5);
             }
         }
 
@@ -102,7 +97,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
         } else if split_max < split_min {
             return;
         } else {
-            split_on = self.rnd.gen_range(split_min, split_max);
+            split_on = thread_rng().gen_range(split_min, split_max);
         }
 
         let split_line;
@@ -112,7 +107,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
             split_line =
                 TiledRect::with_absolute_bounds(left + split_on, top, left + split_on, height - 1);
             put_door = area
-                .get_position(split_on, self.rnd.gen_range(1, height - 2))
+                .get_position(split_on, thread_rng().gen_range(1, height - 2))
                 .unwrap();
             room_left0 = left;
             room_top0 = top;
@@ -126,7 +121,7 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
             split_line =
                 TiledRect::with_absolute_bounds(left, top + split_on, width - 1, top + split_on);
             put_door = area
-                .get_position(self.rnd.gen_range(1, width - 2), split_on)
+                .get_position(thread_rng().gen_range(1, width - 2), split_on)
                 .unwrap();
             room_left0 = left;
             room_top0 = top;
@@ -162,7 +157,6 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
                 self.door_tile_type,
                 self.floor_tile_type,
                 self.wall_tile_type,
-                self.rnd,
             )
             .apply(&mut temp_area);
         }
@@ -182,16 +176,15 @@ impl<'a> DungeonGenerator for SplitDungeon<'a> {
                 self.door_tile_type,
                 self.floor_tile_type,
                 self.wall_tile_type,
-                self.rnd,
             )
             .apply(&mut temp_area);
         }
-        /* if self.rnd.gen_bool(0.1) {
+        /* if thread_rng().gen_bool(0.1) {
                 *area.tile_type_mut(put_door) = 5;
                 *area.tile_func_type_mut(put_door) = TILE_FUNC_INDEX_SECRET_DOOR;
         } else { */
         {
-            let (door_tile_type, door_tile_func_type) = (self.door_tile_type)(self.rnd);
+            let (door_tile_type, door_tile_func_type) = (self.door_tile_type)();
             *area.tile_type_mut(put_door) = door_tile_type;
             *area.tile_func_type_mut(put_door) = door_tile_func_type;
         }

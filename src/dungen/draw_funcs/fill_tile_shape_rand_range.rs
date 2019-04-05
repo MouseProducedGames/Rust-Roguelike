@@ -6,31 +6,27 @@ Documentation:
 
  **/
 // External includes.
-extern crate rand;
-use rand::rngs::ThreadRng;
-use rand::Rng;
+use rand::{thread_rng, Rng};
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
 use crate::world::{Mapping, TiledArea};
 
-pub struct FillTileShapeRandRange<'a> {
+pub struct FillTileShapeRandRange {
     start_range: u32,
     end_range: u32,
-    rnd: &'a mut ThreadRng,
 }
 
-impl<'a> FillTileShapeRandRange<'a> {
-    pub fn new(start_range: u32, end_range: u32, rnd: &'a mut ThreadRng) -> Self {
+impl FillTileShapeRandRange {
+    pub fn new(start_range: u32, end_range: u32) -> Self {
         Self {
             start_range,
             end_range,
-            rnd,
         }
     }
 }
 
-impl<'a> DungeonGenerator for FillTileShapeRandRange<'a> {
+impl DungeonGenerator for FillTileShapeRandRange {
     fn apply<TArea>(&mut self, area: &mut TArea)
     where
         TArea: TiledArea + Mapping,
@@ -40,7 +36,7 @@ impl<'a> DungeonGenerator for FillTileShapeRandRange<'a> {
         while keep_going {
             match area.iter_surface_area(&mut iter_index) {
                 Some(pos) => {
-                    *area.tile_type_mut(pos) = self.rnd.gen_range(self.start_range, self.end_range);
+                    *area.tile_type_mut(pos) = thread_rng().gen_range(self.start_range, self.end_range);
                 }
                 _ => {
                     keep_going = false;
