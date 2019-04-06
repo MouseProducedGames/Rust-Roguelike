@@ -8,5 +8,7 @@ Documentation:
 // External includes
 
 // internal include
+mod immut;
 mod range;
+pub use immut::Immut;
 pub use range::Range;
