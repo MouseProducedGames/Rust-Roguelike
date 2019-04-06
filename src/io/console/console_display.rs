@@ -11,30 +11,66 @@ extern crate crossterm_cursor;
 extern crate crossterm_input;
 extern crate crossterm_screen;
 extern crate crossterm_style;
+extern crate crossterm_terminal;
+use crossterm::{terminal, Terminal};
 use crossterm_style::{Color, Colored};
 use std::iter::Iterator;
 
 // Internal includes.
 use super::super::super::multidim::Multidim;
 use super::ConsoleChar;
+use crate::data_types::Immut;
+use crate::rrl_math::Bounds;
 use crate::stats::{Attribute, Stat, StatModifier};
 
 pub struct ConsoleDisplay {
     term: crossterm::Crossterm,
+    term_window: Terminal<'static>,
     buffers: [Multidim<ConsoleChar>; 2],
     back_buffer_index: usize,
     // map_graphics: [ConsoleChar; 8],
     map_graphics: Vec<ConsoleChar>,
+    // Ensure we get an unchanged value.
+    window_resized: Immut<bool>,
+    start_size: Immut<Bounds>,
 }
 
 impl ConsoleDisplay {
     pub fn new() -> Self {
         let term = crossterm::Crossterm::new();
 
+        let term_window = terminal();
+        let (width, height) = term_window.terminal_size();
+        // The values cannot change before we store them.
+        let start_size = Immut::new(Bounds::new(width, height));
+        let window_resized: bool;
+        {
+            // The values do not permanently change.
+            let (mut width, mut height) = (width, height);
+            let mut window_too_small = false;
+            if width < 80 {
+                width = 80;
+                window_too_small = true;
+            }
+            if height < 40 {
+                height = 40;
+                window_too_small = true;
+            }
+            if window_too_small {
+                match term_window.set_size(width as i16, height as i16) {
+                    Ok(_) => window_resized = true,
+                    _ => panic!("Could not set the size of the window."),
+                }
+            } else {
+                window_resized = false;
+            }
+        }
+
         // Not panic-worthy if it doesn't work...
         if let Ok(_v) = term.cursor().hide() {}
         let mut output = Self {
             term,
+            term_window,
             buffers: [Multidim::new(40, 80), Multidim::new(40, 80)],
             back_buffer_index: 0,
             map_graphics: vec![
@@ -55,6 +91,8 @@ impl ConsoleDisplay {
                 // Open secret door.
                 ConsoleChar::new('/', Color::Grey, Color::White),
             ],
+            window_resized: Immut::new(window_resized),
+            start_size,
         };
 
         output.clear();
@@ -205,5 +243,14 @@ impl Drop for ConsoleDisplay {
         // If it doesn't work here, we should not panic.
         // Fear is the shutdown-killer that brings total confusion.
         if let Ok(_v) = self.term.terminal().clear(crossterm::ClearType::All) {}
+
+        if *self.window_resized.read() {
+            let start_size = *self.start_size.read();
+            let (start_width, start_height) = (start_size.width as i16, start_size.height as i16);
+            match self.term_window.set_size(start_width, start_height) {
+                Ok(_) => (),
+                _ => println!("Could not resize window."),
+            }
+        }
     }
 }
