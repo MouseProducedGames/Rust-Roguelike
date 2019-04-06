@@ -48,7 +48,7 @@ impl ScreenManager {
         for screen in self.stack.iter_mut().rev() {
             let mut screen = screen.lock().unwrap();
             screen.update(world, &mut self.new_screens);
-            
+
             if screen.state() == ScreenState::Stopped {
                 screen.close();
             }
