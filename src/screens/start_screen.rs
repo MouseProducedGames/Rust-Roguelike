@@ -12,20 +12,17 @@ use std::sync::{Arc, Mutex};
 // Internal includes
 use super::screen::ScreenState;
 use super::screen_manager::ScreenPushWrapper;
-use super::{CharacterCreationScreen, GameScreen, MapInitScreen, Screen};
-use crate::ai::{
-    Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
-    CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, ViewpointMarker, Visibility,
-};
+use super::{CharacterCreationScreen, GameScreen, MapInitScreen, Screen, WorldInitScreen};
+use crate::ai::{Command, CreatureLogicFaction, Visibility};
 use crate::factions::Faction;
-use crate::game::GameState;
 use crate::io::Display;
 use crate::rrl_math::Position;
-use crate::skills::SkillLookup;
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::TalentLookup;
 
 enum StartState {
+    SetupDisplay,
+    InitializeWorld,
     CharacterCreation,
     MapCreation,
     MonsterCreation,
@@ -41,7 +38,7 @@ pub struct StartScreen {
 impl StartScreen {
     pub fn new() -> Self {
         Self {
-            start_state: StartState::CharacterCreation,
+            start_state: StartState::SetupDisplay,
             state: ScreenState::Started,
         }
     }
@@ -72,29 +69,13 @@ impl StartScreen {
             .build();
     }
 
-    fn setup(&mut self, world: &mut World) {
+    fn setup_display(&mut self, world: &mut World) {
         let display: Arc<Mutex<dyn Display>> =
             Arc::new(Mutex::new(crate::io::console::ConsoleDisplay::new()));
 
         // Window::init();
 
-        world.add_resource(CreatureTracker::new());
-        world.add_resource(GameState::new());
         world.add_resource(display);
-        world.register::<Command>();
-        world.register::<CreatureLogicFaction>();
-        world.register::<CreatureLogicPlayer>();
-        world.register::<CreatureLogicWander>();
-        world.register::<CreatureLogicWanderAttack>();
-        world.register::<CreatureStats>();
-        world.register::<Faction>();
-        world.register::<PlayerMarker>();
-        world.register::<Position>();
-        world.register::<SightRange>();
-        world.register::<SkillLookup>();
-        world.register::<TalentLookup>();
-        world.register::<ViewpointMarker>();
-        world.register::<Visibility>();
     }
 }
 
@@ -128,9 +109,18 @@ impl Screen for StartScreen {
     fn draw(&mut self, _world: &mut World) {}
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
-        self.setup(world);
-
         self.start_state = match self.start_state {
+            StartState::SetupDisplay => {
+                self.setup_display(world);
+
+                StartState::InitializeWorld
+            }
+            StartState::InitializeWorld => {
+                let world_init_screen = Arc::new(Mutex::new(WorldInitScreen::new()));
+                screen_push_wrapper.push(world_init_screen);
+
+                StartState::CharacterCreation
+            }
             StartState::CharacterCreation => {
                 let character_creation_screen =
                     Arc::new(Mutex::new(CharacterCreationScreen::new()));
