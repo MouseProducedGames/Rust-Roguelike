@@ -8,12 +8,11 @@ Documentation:
 // External includes
 use rand::{thread_rng, Rng};
 use specs::World;
-use std::sync::{Arc, Mutex};
 
 // Internal includes
 use super::screen::ScreenState;
 use super::screen_manager::ScreenPushWrapper;
-use super::{GameScreen, Screen};
+use super::Screen;
 use crate::dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::rrl_math::Bounds;
 use crate::world::{Lightmap, Mapping, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
@@ -59,7 +58,7 @@ impl Screen for MapInitScreen {
 
     fn draw(&mut self, _world: &mut World) {}
 
-    fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
+    fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         let map;
         {
             let mut temp_map: Tilemap = Tilemap::new(40, 30);
@@ -92,10 +91,6 @@ impl Screen for MapInitScreen {
             let map_pos = world.read_resource::<Tilemap>().get_position(8, 5).unwrap();
             *world.write_resource::<Tilemap>().tile_type_mut(map_pos) = 2;
         }
-
-        let game_screen = Arc::new(Mutex::new(GameScreen::new()));
-
-        screen_push_wrapper.push(game_screen);
 
         self.state = ScreenState::Stopped;
     }

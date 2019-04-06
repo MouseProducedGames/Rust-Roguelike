@@ -12,7 +12,7 @@ use std::sync::{Arc, Mutex};
 // Internal includes
 use super::screen::ScreenState;
 use super::screen_manager::ScreenPushWrapper;
-use super::{MapInitScreen, Screen};
+use super::Screen;
 use crate::ai::{
     Command, CreatureLogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker, Visibility,
 };
@@ -65,7 +65,7 @@ impl Screen for CharacterCreationScreen {
 
     fn draw(&mut self, _world: &mut World) {}
 
-    fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
+    fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         world.add_resource(PlayerPosition(Position::new(8, 5)));
 
         let species_type;
@@ -111,10 +111,6 @@ impl Screen for CharacterCreationScreen {
                 .with(Visibility::new())
                 .build();
         }
-
-        let map_init_screen = Arc::new(Mutex::new(MapInitScreen::new()));
-
-        screen_push_wrapper.push(map_init_screen);
 
         self.state = ScreenState::Stopped;
     }
