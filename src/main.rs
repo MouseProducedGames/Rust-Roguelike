@@ -48,7 +48,6 @@ mod talents;
 mod tiled_shapes_2d;
 mod world;
 use screens::{ScreenManager, StartScreen};
-use talents::TalentRange;
 
 fn main() {
     let mut world = World::new();

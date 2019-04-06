@@ -9,7 +9,7 @@ Documentation:
 // External includes.
 
 // Internal includes.
-use crate::TalentRange;
+use super::TalentRange;
 
 pub fn talent_range_func<TData, TDataMut>(
     talent_range: TalentRange,
