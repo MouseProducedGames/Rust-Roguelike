@@ -50,8 +50,8 @@ mod tiled_shapes_2d;
 mod world;
 use ai::{
     Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
-    CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, PlayerPosition,
-    ViewpointMarker, Visibility,
+    CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, PlayerPosition, ViewpointMarker,
+    Visibility,
 };
 use background::{Species, SpeciesType};
 use dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
@@ -193,7 +193,7 @@ fn main() {
         .build();
 
     let game_screen = Arc::new(Mutex::new(GameScreen::new()));
-    
+
     screen_manager.push(game_screen);
 
     while screen_manager.screen_count() > 0 {

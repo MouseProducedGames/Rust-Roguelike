@@ -25,16 +25,12 @@ pub trait Screen {
     fn close(&mut self);
 
     fn blocks_draw(&self) -> bool;
-    
+
     fn blocks_update(&self) -> bool;
 
     fn draw(&mut self, world: &mut World);
 
-    fn update(
-        &mut self,
-        world: &mut World,
-        screen_push_wrapper: &mut ScreenPushWrapper
-    );
+    fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper);
 
     fn state(&self) -> ScreenState;
 }

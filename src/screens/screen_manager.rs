@@ -39,7 +39,7 @@ impl ScreenManager {
     pub fn push(&mut self, screen: Arc<Mutex<dyn Screen>>) {
         self.new_screens.push(screen);
     }
-    
+
     pub fn screen_count(&self) -> usize {
         self.stack.len() + self.new_screens.len()
     }

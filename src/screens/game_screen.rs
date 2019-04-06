@@ -14,8 +14,8 @@ use super::screen::{Screen, ScreenState};
 use super::screen_manager::ScreenPushWrapper;
 use crate::ai::{
     CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
-    CreatureLogicFactionSystem, CreatureLogicPlayerSystem, CreatureLogicWanderSystem,
-    CreatureLogicWanderAttackSystem, CreatureVisibilitySystem, PlayerDisplaySystem
+    CreatureLogicFactionSystem, CreatureLogicPlayerSystem, CreatureLogicWanderAttackSystem,
+    CreatureLogicWanderSystem, CreatureVisibilitySystem, PlayerDisplaySystem,
 };
 use crate::game::GameState;
 use crate::io::Display;
@@ -55,37 +55,34 @@ impl GameScreen {
 
 impl Screen for GameScreen {
     fn init(&mut self) {
-        self.state =
-            match self.state {
-                ScreenState::Inactive => ScreenState::Inactive,
-                ScreenState::Started => ScreenState::Running,
-                ScreenState::Running => ScreenState::Running,
-                ScreenState::Stopped => ScreenState::Inactive,
-            }
+        self.state = match self.state {
+            ScreenState::Inactive => ScreenState::Inactive,
+            ScreenState::Started => ScreenState::Running,
+            ScreenState::Running => ScreenState::Running,
+            ScreenState::Stopped => ScreenState::Inactive,
+        }
     }
 
     fn close(&mut self) {
-        self.state =
-            match self.state {
-                ScreenState::Inactive => ScreenState::Inactive,
-                ScreenState::Started => ScreenState::Inactive,
-                ScreenState::Running => ScreenState::Inactive,
-                ScreenState::Stopped => ScreenState::Inactive,
-            }
-    }
-    
-    fn blocks_draw(&self) -> bool { true }
-
-    fn blocks_update(&self) -> bool { true }
-
-    fn draw(&mut self, _world: &mut World) {
+        self.state = match self.state {
+            ScreenState::Inactive => ScreenState::Inactive,
+            ScreenState::Started => ScreenState::Inactive,
+            ScreenState::Running => ScreenState::Inactive,
+            ScreenState::Stopped => ScreenState::Inactive,
+        }
     }
 
-    fn update(
-        &mut self,
-        world: &mut World,
-        _screen_push_wrapper: &mut ScreenPushWrapper
-    ) {
+    fn blocks_draw(&self) -> bool {
+        true
+    }
+
+    fn blocks_update(&self) -> bool {
+        true
+    }
+
+    fn draw(&mut self, _world: &mut World) {}
+
+    fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         self.creature_visibility_system.run_now(&world.res);
 
         self.player_display_system.run_now(&world.res);
@@ -128,14 +125,15 @@ impl Screen for GameScreen {
         self.creaature_last_update_system.run_now(&world.res);
 
         world.maintain();
-        
-        self.state =
-            if world.read_resource::<GameState>().alive() {
-                ScreenState::Running
-            } else {
-                ScreenState::Inactive
-            }
+
+        self.state = if world.read_resource::<GameState>().alive() {
+            ScreenState::Running
+        } else {
+            ScreenState::Inactive
+        }
     }
 
-    fn state(&self) -> ScreenState { self.state }
+    fn state(&self) -> ScreenState {
+        self.state
+    }
 }
