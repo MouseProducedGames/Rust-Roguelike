@@ -6,29 +6,26 @@ Documentation:
 
 **/
 // External includes
-use rand::{thread_rng, Rng};
 use specs::{Builder, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes
 use super::screen::ScreenState;
 use super::screen_manager::ScreenPushWrapper;
-use super::{GameScreen, Screen};
+use super::{MapInitScreen, Screen};
 use crate::ai::{
     Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
     CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, PlayerPosition, ViewpointMarker,
     Visibility,
 };
 use crate::background::{Species, SpeciesType};
-use crate::dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
 use crate::game::GameState;
 use crate::io::Display;
-use crate::rrl_math::{Bounds, Position};
+use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
-use crate::world::{Lightmap, Mapping, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
 pub struct StartScreen {
     state: ScreenState,
@@ -77,35 +74,8 @@ impl Screen for StartScreen {
 
         // Window::init();
 
-        let map;
-        {
-            let mut temp_map: Tilemap = Tilemap::new(40, 30);
-            //     let mut boxed_map: Box<dyn TiledArea> = Box::new( temp_map );
-            SplitDungeon::new(
-                SplitType::LongestDimension,
-                Bounds {
-                    width: 6,
-                    height: 6,
-                },
-                || -> (u32, u32) {
-                    if thread_rng().gen_bool(0.1) {
-                        (5, TILE_FUNC_INDEX_SECRET_DOOR)
-                    } else {
-                        (3, TILE_FUNC_INDEX_DOOR)
-                    }
-                },
-                2,
-                1,
-            )
-            .apply(&mut temp_map);
-
-            map = temp_map;
-        }
-
         world.add_resource(CreatureTracker::new());
         world.add_resource(GameState::new());
-        world.add_resource(Lightmap::new(map.width(), map.height()));
-        world.add_resource(map);
         world.add_resource(display);
         world.add_resource(PlayerPosition(Position::new(8, 5)));
         world.register::<Command>();
@@ -165,11 +135,6 @@ impl Screen for StartScreen {
                 .with(ViewpointMarker)
                 .with(Visibility::new())
                 .build();
-
-            {
-                let map_pos = world.read_resource::<Tilemap>().get_position(8, 5).unwrap();
-                *world.write_resource::<Tilemap>().tile_type_mut(map_pos) = 2;
-            }
         }
 
         world
@@ -196,9 +161,9 @@ impl Screen for StartScreen {
             .with(Visibility::new())
             .build();
 
-        let game_screen = Arc::new(Mutex::new(GameScreen::new()));
+        let map_init_screen = Arc::new(Mutex::new(MapInitScreen::new()));
 
-        screen_push_wrapper.push(game_screen);
+        screen_push_wrapper.push(map_init_screen);
 
         self.state = ScreenState::Stopped;
     }

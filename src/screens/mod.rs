@@ -9,10 +9,12 @@ Documentation:
 
 // Internal includes
 mod game_screen;
+mod map_init_screen;
 mod screen;
 mod screen_manager;
 mod start_screen;
 pub use game_screen::GameScreen;
+pub use map_init_screen::MapInitScreen;
 pub use screen::Screen;
 pub use screen_manager::ScreenManager;
 pub use start_screen::StartScreen;
