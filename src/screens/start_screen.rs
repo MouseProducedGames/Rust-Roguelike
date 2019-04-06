@@ -12,20 +12,18 @@ use std::sync::{Arc, Mutex};
 // Internal includes
 use super::screen::ScreenState;
 use super::screen_manager::ScreenPushWrapper;
-use super::{MapInitScreen, Screen};
+use super::{CharacterCreationScreen, Screen};
 use crate::ai::{
     Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
-    CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, PlayerPosition, ViewpointMarker,
-    Visibility,
+    CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, ViewpointMarker, Visibility,
 };
-use crate::background::{Species, SpeciesType};
 use crate::factions::Faction;
 use crate::game::GameState;
 use crate::io::Display;
 use crate::rrl_math::Position;
-use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use crate::skills::SkillLookup;
 use crate::stats::{CreatureStats, SightRange};
-use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
+use crate::talents::TalentLookup;
 
 pub struct StartScreen {
     state: ScreenState,
@@ -77,7 +75,6 @@ impl Screen for StartScreen {
         world.add_resource(CreatureTracker::new());
         world.add_resource(GameState::new());
         world.add_resource(display);
-        world.add_resource(PlayerPosition(Position::new(8, 5)));
         world.register::<Command>();
         world.register::<CreatureLogicFaction>();
         world.register::<CreatureLogicPlayer>();
@@ -92,50 +89,6 @@ impl Screen for StartScreen {
         world.register::<TalentLookup>();
         world.register::<ViewpointMarker>();
         world.register::<Visibility>();
-
-        let species_type;
-        {
-            let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
-            let mut display = mutex_display.lock().unwrap();
-            species_type = display.choose_species(&[
-                SpeciesType::Dwarf,
-                SpeciesType::Elf,
-                SpeciesType::Halfling,
-                SpeciesType::Human,
-            ]);
-        }
-
-        {
-            let mut skills = SkillLookup::new();
-
-            skills.insert(
-                SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound),
-                SkillType::Skill(2),
-            );
-
-            let mut talents = TalentLookup::new();
-
-            talents.insert(
-                TalentActivation::Passive(TalentActivationOp::EveryRound),
-                TalentType::ScanForSecrets(-2, TalentRange::Radius(1)),
-            );
-
-            let species = Species::create(species_type);
-            world
-                .create_entity()
-                .with(Command::None)
-                .with(CreatureLogicPlayer {})
-                .with(Faction::new(0))
-                .with(species.stats())
-                .with(Position::new(8, 5))
-                .with(PlayerMarker)
-                .with(SightRange::new(5.0))
-                .with(skills)
-                .with(talents)
-                .with(ViewpointMarker)
-                .with(Visibility::new())
-                .build();
-        }
 
         world
             .create_entity()
@@ -161,7 +114,7 @@ impl Screen for StartScreen {
             .with(Visibility::new())
             .build();
 
-        let map_init_screen = Arc::new(Mutex::new(MapInitScreen::new()));
+        let map_init_screen = Arc::new(Mutex::new(CharacterCreationScreen::new()));
 
         screen_push_wrapper.push(map_init_screen);
 
