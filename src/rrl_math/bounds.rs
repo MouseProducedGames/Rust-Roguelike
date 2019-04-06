@@ -16,6 +16,12 @@ pub struct Bounds {
     pub height: u16,
 }
 
+impl Bounds {
+    pub fn new(width: u16, height: u16) -> Self {
+        Self { width, height }
+    }
+}
+
 impl Mapping for Bounds {
     fn height(&self) -> u16 {
         self.height
