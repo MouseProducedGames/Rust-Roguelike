@@ -199,8 +199,8 @@ fn main() {
     while screen_manager.screen_count() > 0 {
         {
             screen_manager.update_start();
-            screen_manager.update(&mut world);
             screen_manager.draw(&mut world);
+            screen_manager.update(&mut world);
         }
     }
 
