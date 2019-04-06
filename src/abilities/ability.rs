@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal includes
+// Standard includes.
+
+// internal includes.
 use super::func::ability_func;
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;

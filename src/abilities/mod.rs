@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal include
+// Standard includes.
+
+// internal includes.
 mod ability;
 mod func;
 pub use ability::Ability;

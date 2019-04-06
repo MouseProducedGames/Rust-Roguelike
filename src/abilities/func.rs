@@ -7,8 +7,10 @@ Documentation:
 **/
 // External includes
 
-// internal includes
-use crate::abilities::Ability;
+// Standard includes.
+
+// Internal includes.
+use super::ability::Ability;
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
 use crate::world::{calculate_light_level, Lightmap, Tilemap, VisibilityMap};
