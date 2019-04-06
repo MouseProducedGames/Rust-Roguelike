@@ -83,25 +83,29 @@ See Contexts.
 Prefer referencing types directly rather than through an include_prefix::.
 Order includes alphabetically within their region.
 
-// External Includes
-// External crates first.
-use crate crate_name;
-// Then external modules.
+// External modules specified in main.rs or lib.rs.
 mod include_name;
-// Then included external modules and types.
-use include_name;
-use include_name::IncludeType;
-// Alphabetical ordering of included types.
-use include_name::{ AIncludeType, BIncludeType, CIncludeType, ... };
 
-// Internal Includes
-// External modules.
-mod include_name;
-// Then included external modules and types.
-use include_name;
-use include_name::IncludeType;
+// Included external modules and types.
+use crate::include_name;
+use crate::include_name::IncludeType;
 // Alphabetical ordering of included types.
-use include_name::{ AIncludeType, BIncludeType, CIncludeType, ... };
+use crate::include_name::{AIncludeType, BIncludeType, CIncludeType, ...};
+
+// Included standard modules and types.
+use crate::include_name;
+use crate::include_name::IncludeType;
+// Alphabetical ordering of included types.
+use crate::include_name::{AIncludeType, BIncludeType, CIncludeType, ...};
+
+// Included local modules and types.
+use super::include_name;
+use super::include_name::IncludeType;
+// Then included internal modules and types.
+use crate::include_name;
+use crate::include_name::IncludeType;
+// Alphabetical ordering of included types.
+use crate::include_name::{AIncludeType, BIncludeType, CIncludeType, ...};
 
 ## Match Expressions
 
