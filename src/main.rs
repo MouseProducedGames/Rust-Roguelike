@@ -13,21 +13,21 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External dependencies
+// External includess
 #[macro_use]
 extern crate derive_more;
 extern crate rand;
-
-extern crate rust_dice;
-
 extern crate shred;
 #[macro_use]
-
 extern crate shred_derive;
+
 use specs::World;
+
+// Standard includes.
 use std::sync::{Arc, Mutex};
 
-// Internal dependencies.
+// Internal includes.
+extern crate rust_dice;
 mod abilities;
 mod ai;
 mod background;
