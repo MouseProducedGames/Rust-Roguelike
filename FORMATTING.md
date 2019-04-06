@@ -83,7 +83,8 @@ See Contexts.
 Prefer referencing types directly rather than through an include_prefix::.
 Order includes alphabetically within their region.
 
-// External modules specified in main.rs or lib.rs.
+// Modules and crates.
+use extern crate::include name.
 mod include_name;
 
 // Included external modules and types.
