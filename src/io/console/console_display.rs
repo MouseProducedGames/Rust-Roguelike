@@ -47,23 +47,20 @@ impl ConsoleDisplay {
         {
             // The values do not permanently change.
             let (mut width, mut height) = (width, height);
-            let mut window_too_small = false;
-            if width < 80 {
-                width = 80;
-                window_too_small = true;
-            }
-            if height < 40 {
-                height = 40;
-                window_too_small = true;
-            }
-            if window_too_small {
-                match term_window.set_size(width as i16, height as i16) {
-                    Ok(_) => window_resized = true,
-                    _ => panic!("Could not set the size of the window."),
+            let window_too_small =
+                if height < 40 {
+                    height = 40; true
+                } else if width < 80 { width = 80; true } else { false };
+            
+            window_resized =
+                if window_too_small {
+                    match term_window.set_size(width as i16, height as i16) {
+                        Ok(_) => true,
+                        _ => panic!("Could not set the size of the window."),
+                    }
+                } else {
+                    false
                 }
-            } else {
-                window_resized = false;
-            }
         }
 
         // Not panic-worthy if it doesn't work...

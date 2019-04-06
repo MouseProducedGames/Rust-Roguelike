@@ -6,7 +6,6 @@ Documentation:
 
 **/
 // External includes
-use std::iter::Iterator;
 use std::slice::Iter;
 
 // internal include

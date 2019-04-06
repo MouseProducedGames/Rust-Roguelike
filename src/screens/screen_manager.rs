@@ -11,7 +11,6 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes
 use super::screen::{Screen, ScreenState};
-use crate::io::Display;
 
 pub struct ScreenManager {
     stack: Vec<Arc<Mutex<dyn Screen>>>,

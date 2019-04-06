@@ -7,11 +7,9 @@ Documentation:
 **/
 // External includes
 use specs::World;
-use std::sync::{Arc, Mutex};
 
 // Internal includes
 use super::screen_manager::ScreenPushWrapper;
-use crate::io::Display;
 
 #[derive(Copy, Clone)]
 pub enum ScreenState {
@@ -32,7 +30,11 @@ pub trait Screen {
 
     fn draw(&mut self, world: &mut World);
 
-    fn update(&mut self, world: &mut World, manager: &mut ScreenPushWrapper);
+    fn update(
+        &mut self,
+        world: &mut World,
+        screen_push_wrapper: &mut ScreenPushWrapper
+    );
 
     fn state(&self) -> ScreenState;
 }

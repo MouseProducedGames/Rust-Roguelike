@@ -6,7 +6,7 @@ Documentation:
 
 **/
 // External includes
-use specs::{Builder, RunNow, World};
+use specs::{RunNow, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes
@@ -78,10 +78,14 @@ impl Screen for GameScreen {
 
     fn blocks_update(&self) -> bool { true }
 
-    fn draw(&mut self, world: &mut World) {
+    fn draw(&mut self, _world: &mut World) {
     }
 
-    fn update(&mut self, world: &mut World, manager: &mut ScreenPushWrapper) {
+    fn update(
+        &mut self,
+        world: &mut World,
+        _screen_push_wrapper: &mut ScreenPushWrapper
+    ) {
         self.creature_visibility_system.run_now(&world.res);
 
         self.player_display_system.run_now(&world.res);

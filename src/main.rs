@@ -25,7 +25,7 @@ extern crate shred;
 #[macro_use]
 
 extern crate shred_derive;
-use specs::{Builder, RunNow, /* System, */ World};
+use specs::{Builder, World};
 use std::sync::{Arc, Mutex};
 
 // Internal dependencies.
@@ -49,12 +49,9 @@ mod talents;
 mod tiled_shapes_2d;
 mod world;
 use ai::{
-    Command, CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem,
-    CreatureLastUpdateSystem, CreatureLogicFaction, CreatureLogicFactionSystem,
-    CreatureLogicPlayer, CreatureLogicPlayerSystem, CreatureLogicWander, CreatureLogicWanderAttack,
-    CreatureLogicWanderAttackSystem, CreatureLogicWanderSystem, CreatureTracker,
-    CreatureVisibilitySystem, PlayerDisplaySystem, PlayerMarker, PlayerPosition, ViewpointMarker,
-    Visibility,
+    Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
+    CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, PlayerPosition,
+    ViewpointMarker, Visibility,
 };
 use background::{Species, SpeciesType};
 use dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
