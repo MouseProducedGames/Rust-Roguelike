@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes
+use specs::World;
 use std::sync::{Arc, Mutex};
 
 // Internal includes
@@ -25,11 +26,12 @@ impl ScreenManager {
         }
     }
 
-    pub fn draw(&mut self, display: &Arc<Mutex<Display>>) {
+    pub fn draw(&mut self, world: &mut World) {
         for screen in self.stack.iter_mut().rev() {
-            screen.lock().unwrap().draw(display);
+            let mut screen = screen.lock().unwrap();
+            screen.draw(world);
 
-            if screen.lock().unwrap().is_blocker() {
+            if screen.blocks_update() {
                 break;
             }
         }
@@ -38,12 +40,17 @@ impl ScreenManager {
     pub fn push(&mut self, screen: Arc<Mutex<dyn Screen>>) {
         self.new_screens.push(screen);
     }
+    
+    pub fn screen_count(&self) -> usize {
+        self.stack.len() + self.new_screens.len()
+    }
 
-    pub fn update(&mut self) {
+    pub fn update(&mut self, world: &mut World) {
         for screen in self.stack.iter_mut().rev() {
-            screen.lock().unwrap().update(&mut self.new_screens);
+            let mut screen = screen.lock().unwrap();
+            screen.update(world, &mut self.new_screens);
 
-            if screen.lock().unwrap().is_blocker() {
+            if screen.blocks_update() {
                 break;
             }
         }

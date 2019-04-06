@@ -62,7 +62,7 @@ use factions::Faction;
 use game::GameState;
 use io::Display;
 use rrl_math::{Bounds, Position};
-use screens::ScreenManager;
+use screens::{GameScreen, ScreenManager};
 use skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use stats::{CreatureStats, SightRange};
 use talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
@@ -195,74 +195,16 @@ fn main() {
         .with(Visibility::new())
         .build();
 
-    let mut creature_ability_system = CreatureAbilitySystem;
-    let mut creature_command_system = CreatureCommandSystem;
-    let mut creature_display_system = CreatureDisplaySystem;
-    let mut creaature_last_update_system = CreatureLastUpdateSystem;
-    let mut creature_faction_logic = CreatureLogicFactionSystem;
-    let mut creature_player_logic = CreatureLogicPlayerSystem;
-    let mut creature_wander_logic = CreatureLogicWanderSystem;
-    let mut creature_wander_attack_logic = CreatureLogicWanderAttackSystem;
-    let mut creature_visibility_system = CreatureVisibilitySystem;
-    let mut player_display_system = PlayerDisplaySystem;
+    let game_screen = Arc::new(Mutex::new(GameScreen::new()));
+    
+    screen_manager.push(game_screen);
 
-    while world.read_resource::<GameState>().alive() {
-        /* if let Some(Ok(lightmap)) = world.write_resource::<Lightmap>() {
-            lightmap.clear();
-        } */
-
+    while screen_manager.screen_count() > 0 {
         {
             screen_manager.update_start();
-            screen_manager.update();
-
-            let display = world.write_resource::<Arc<Mutex<Display>>>();
-            let display = &*display;
-
-            screen_manager.draw(display);
+            screen_manager.update(&mut world);
+            screen_manager.draw(&mut world);
         }
-
-        creature_visibility_system.run_now(&world.res);
-
-        player_display_system.run_now(&world.res);
-
-        creature_display_system.run_now(&world.res);
-
-        world.maintain();
-
-        {
-            let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
-            let mut display = mutex_display.lock().unwrap();
-            display.present();
-        }
-
-        creature_player_logic.run_now(&world.res);
-
-        world.maintain();
-
-        creature_wander_logic.run_now(&world.res);
-
-        world.maintain();
-
-        creature_wander_attack_logic.run_now(&world.res);
-
-        world.maintain();
-
-        creature_faction_logic.run_now(&world.res);
-
-        world.maintain();
-
-        creature_command_system.run_now(&world.res);
-
-        world.maintain();
-
-        world.write_resource::<Lightmap>().clear();
-        creature_ability_system.run_now(&world.res);
-
-        world.maintain();
-
-        creaature_last_update_system.run_now(&world.res);
-
-        world.maintain();
     }
 
     // Window::close();

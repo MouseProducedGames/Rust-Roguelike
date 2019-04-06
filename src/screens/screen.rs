@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes
+use specs::World;
 use std::sync::{Arc, Mutex};
 
 // Internal includes
@@ -25,11 +26,13 @@ pub trait Screen {
 
     fn close(&mut self);
 
-    fn is_blocker(&self) -> bool;
+    fn blocks_draw(&self) -> bool;
+    
+    fn blocks_update(&self) -> bool;
 
-    fn draw(&mut self, display: &Arc<Mutex<Display>>);
+    fn draw(&mut self, world: &mut World);
 
-    fn update(&mut self, manager: &mut ScreenPushWrapper);
+    fn update(&mut self, world: &mut World, manager: &mut ScreenPushWrapper);
 
     fn state(&self) -> ScreenState;
 }
