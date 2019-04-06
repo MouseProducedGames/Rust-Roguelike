@@ -11,7 +11,7 @@ use specs::World;
 // Internal includes
 use super::screen_manager::ScreenPushWrapper;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub enum ScreenState {
     Inactive,
     Started,

@@ -129,7 +129,7 @@ impl Screen for GameScreen {
         self.state = if world.read_resource::<GameState>().alive() {
             ScreenState::Running
         } else {
-            ScreenState::Inactive
+            ScreenState::Stopped
         }
     }
 
