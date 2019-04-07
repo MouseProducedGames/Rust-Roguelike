@@ -8,9 +8,11 @@ Documentation:
 // External includes.
 use rand::{thread_rng, Rng};
 
+// Standard includes.
+
 // Internal includes.
+use super::DungeonGenerator;
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
-use crate::dungen::DungeonGenerator;
 use crate::rrl_math::Bounds;
 use crate::tiled_shapes_2d::TiledRect;
 use crate::world::{MapPosition, Mapping, TiledArea, TiledAreaFilter};

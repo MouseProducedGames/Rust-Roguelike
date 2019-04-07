@@ -7,13 +7,15 @@ Documentation:
  **/
 // External includes.
 
+// Standard includes.
+
 // Internal includes.
-pub mod common;
-pub mod draw_funcs;
-// pub mod dungen_funcs;
-pub mod dungeon_generator;
-pub mod randomly_tile_dungeon;
-pub mod split_dungeon;
+mod common;
+mod draw_funcs;
+// mod dungen_funcs;
+mod dungeon_generator;
+mod randomly_tile_dungeon;
+mod split_dungeon;
 pub use common::DungenCommon;
 // pub use dungen_funcs::{DungenFunc, DungenFuncOp};
 pub use dungeon_generator::DungeonGenerator;

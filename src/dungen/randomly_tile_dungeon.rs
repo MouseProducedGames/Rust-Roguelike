@@ -7,9 +7,11 @@ Documentation:
  **/
 // External includes.
 
+// Standard includes.
+
 // Internal includes.
+use super::DungeonGenerator;
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape, FillTileShapeRandRange};
-use crate::dungen::DungeonGenerator;
 use crate::tiled_shapes_2d::TiledRect;
 use crate::world::{Mapping, TiledArea, TiledAreaFilter};
 
