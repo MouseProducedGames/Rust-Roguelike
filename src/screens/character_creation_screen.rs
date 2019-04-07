@@ -13,7 +13,7 @@ use std::convert::From;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{ScreenState, ScreenPushWrapper, Screen};
+use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{
     Command, CreatureLogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker, Visibility,
 };
@@ -68,7 +68,7 @@ impl Screen for CharacterCreationScreen {
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         world.add_resource(PlayerPosition(Position::new(8, 5)));
-        
+
         let origin_type;
         {
             let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();

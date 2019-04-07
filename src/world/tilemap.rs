@@ -14,8 +14,8 @@ use std::hash::{Hash, Hasher};
 
 // Internal includes.
 use super::{
-    Mapping, MapPosition, TileFunc, TileTypeData, TILE_FUNC_DATA,
-    TILE_FUNC_INDEX_VOID, TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID,
+    MapPosition, Mapping, TileFunc, TileTypeData, TILE_FUNC_DATA, TILE_FUNC_INDEX_VOID,
+    TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID,
 };
 use crate::multimap::Multimap;
 use crate::rrl_math::Position;

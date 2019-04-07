@@ -10,9 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use super::{
-    Lightmap, MapPosition, Mapping, TiledArea, Tilemap, VisibilityMap, VisibilityType,
-};
+use super::{Lightmap, MapPosition, Mapping, TiledArea, Tilemap, VisibilityMap, VisibilityType};
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, StatModifier};
 

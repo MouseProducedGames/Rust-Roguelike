@@ -60,7 +60,7 @@ impl Display for ConsoleDisplay {
 
         option
     }
-    
+
     fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType {
         let mut keep_going = true;
         let mut option = SpeciesType::Human;

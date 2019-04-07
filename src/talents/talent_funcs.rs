@@ -1,4 +1,3 @@
-use crate::rrl_math::Displacement;
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -12,6 +11,7 @@ Documentation:
 
 // Internal includes.
 use super::TalentRange;
+use crate::rrl_math::Displacement;
 
 pub fn talent_range_func<TData, TDataMut>(
     talent_range: TalentRange,

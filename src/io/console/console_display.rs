@@ -14,8 +14,8 @@ use std::iter::Iterator;
 
 // Internal includes.
 use super::ConsoleChar;
-use crate::multidim::Multidim;
 use crate::data_types::Immut;
+use crate::multidim::Multidim;
 use crate::rrl_math::Bounds;
 use crate::stats::{Attribute, Stat, StatModifier};
 

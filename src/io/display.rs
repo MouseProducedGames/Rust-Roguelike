@@ -19,7 +19,7 @@ use crate::world::{Tilemap, VisibilityMap};
 
 pub trait Display: Drop + Send + Sync {
     fn choose_origin(&mut self, options: &[OriginType]) -> OriginType;
-    
+
     fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType;
 
     fn display_stats(&mut self, stats: CreatureStats);

@@ -11,7 +11,7 @@ use specs::World;
 // Standard includes.
 
 // Internal includes.
-use super::{ScreenState, ScreenPushWrapper, Screen};
+use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{
     Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
     CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, ViewpointMarker, Visibility,

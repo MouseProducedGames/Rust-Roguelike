@@ -30,7 +30,7 @@ impl OriginType {
             OriginType::Rogue => String::from("Rogue"),
         }
     }
-    
+
     fn create_stats_farmer() -> CreatureStats {
         CreatureStats::new(2, 0, 0, 2, 0, 2)
     }

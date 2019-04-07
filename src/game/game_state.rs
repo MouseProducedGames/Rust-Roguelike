@@ -17,9 +17,7 @@ pub struct GameState {
 
 impl GameState {
     pub fn new() -> Self {
-        Self {
-            alive: true,
-        }
+        Self { alive: true }
     }
 
     pub fn alive(&self) -> bool {

@@ -12,7 +12,7 @@ use specs::{RunNow, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenState, ScreenPushWrapper};
+use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{
     CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
     CreatureLogicFactionSystem, CreatureLogicPlayerSystem, CreatureLogicWanderAttackSystem,

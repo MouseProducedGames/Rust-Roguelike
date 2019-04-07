@@ -11,7 +11,7 @@ Documentation:
 use std::default::Default;
 
 // Internal includes.
-use super::{Mapping, MapPosition};
+use super::{MapPosition, Mapping};
 use crate::multimap::Multimap;
 use crate::rrl_math::Position;
 

@@ -13,5 +13,7 @@ Documentation:
 use crate::world::{Mapping, TiledArea};
 
 pub trait DungeonGenerator {
-    fn apply<TArea>(&mut self, area: &mut TArea) where TArea: TiledArea + Mapping;
+    fn apply<TArea>(&mut self, area: &mut TArea)
+    where
+        TArea: TiledArea + Mapping;
 }

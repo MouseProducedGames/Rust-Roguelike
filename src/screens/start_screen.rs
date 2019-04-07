@@ -13,8 +13,8 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{
-    CharacterCreationScreen, MapInitScreen, ScreenState, ScreenPushWrapper,
-    GameScreen, Screen, WorldInitScreen
+    CharacterCreationScreen, GameScreen, MapInitScreen, Screen, ScreenPushWrapper, ScreenState,
+    WorldInitScreen,
 };
 use crate::ai::{Command, CreatureLogicFaction, Visibility};
 use crate::factions::Faction;
