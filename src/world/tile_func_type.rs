@@ -5,12 +5,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// Internal includes
+// Standard includes.
+
+// Internal includes.
+use super::{Mapping, Tilemap, VisibilityType};
 use crate::dice::roll_success;
 use crate::rrl_math::Position;
-use crate::world::{Mapping, Tilemap, VisibilityType};
 
 pub static TILE_FUNC_DATA: [TileFunc; 4] = [
     TileFunc::None,

@@ -5,12 +5,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// Internal includes
+// Standard includes.
+
+// Internal includes.
+use super::{MapPosition, Mapping, Tilemap};
 use crate::dungen::DungenCommon;
 use crate::tiled_shapes_2d::TiledShape2D;
-use crate::world::{MapPosition, Mapping, Tilemap};
 
 pub struct TiledAreaFilter<'a> {
     shape_filter: Box<dyn TiledShape2D>,

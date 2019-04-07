@@ -6,12 +6,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
+
+// Standard includes.
 use std::cmp::{Eq, PartialEq};
 use std::convert::From;
 use std::ops::{Add, Sub};
 
-// Internal includes
+// Internal includes.
 use super::MapScanPosition;
 
 #[derive(Copy, Clone, Debug)]

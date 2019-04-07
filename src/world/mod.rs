@@ -1,18 +1,27 @@
-// External includes
+/** Copyright (C) 2019 MouseProducedGames
 
-// Internal includes
-pub mod calculate_light;
-pub mod lightmap;
-pub mod line_of_sight;
-pub mod map_displacement;
-pub mod map_position;
-pub mod map_scan_position;
-pub mod mapping;
-pub mod tile_func_type;
-pub mod tile_type;
-pub mod tilemap;
-pub mod tileroom;
-pub mod visibility_map;
+See license in the LICENSE file
+
+Documentation:
+
+**/
+// External includes.
+
+// Standard includes.
+
+// Internal includes.
+mod calculate_light;
+mod lightmap;
+mod line_of_sight;
+mod map_displacement;
+mod map_position;
+mod map_scan_position;
+mod mapping;
+mod tile_func_type;
+mod tile_type;
+mod tilemap;
+mod tileroom;
+mod visibility_map;
 pub use calculate_light::calculate_light_level;
 pub use lightmap::Lightmap;
 pub use line_of_sight::calculate_visibility;

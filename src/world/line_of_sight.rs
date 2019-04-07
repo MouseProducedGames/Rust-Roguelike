@@ -5,14 +5,16 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal includes
-use crate::rrl_math::Position;
-use crate::stats::{CreatureStats, StatModifier};
-use crate::world::{
+// Standard includes.
+
+// Internal includes.
+use super::{
     Lightmap, MapPosition, Mapping, TiledArea, Tilemap, VisibilityMap, VisibilityType,
 };
+use crate::rrl_math::Position;
+use crate::stats::{CreatureStats, StatModifier};
 
 fn inner_iter(
     to: MapPosition,

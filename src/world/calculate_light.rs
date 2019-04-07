@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal includes
+// Standard includes.
+
+// Internal includes.
+use super::{Lightmap, MapPosition, Mapping, TiledArea, Tilemap};
 use crate::rrl_math::Position;
-use crate::world::{Lightmap, MapPosition, Mapping, TiledArea, Tilemap};
 
 fn inner_iter(
     to: MapPosition,

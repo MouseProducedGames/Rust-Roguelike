@@ -1,10 +1,19 @@
-// External includes
+/** Copyright (C) 2019 MouseProducedGames
+
+See license in the LICENSE file
+
+Documentation:
+
+**/
+// External includes.
+
+// Standard includes.
 use std::default::Default;
 
-// Internal includes
-use super::super::multimap::Multimap;
+// Internal includes.
+use super::{Mapping, MapPosition};
+use crate::multimap::Multimap;
 use crate::rrl_math::Position;
-use crate::world::{MapPosition, Mapping};
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum VisibilityType {

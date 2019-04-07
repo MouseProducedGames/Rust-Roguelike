@@ -6,9 +6,11 @@ Documentation:
 
  **/
 
-// External includes
+// External includes.
 
-// Internal includes
+// Standard includes.
+
+// Internal includes.
 
 #[derive(Clone, Copy)]
 pub struct TileTypeData {

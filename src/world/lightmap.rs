@@ -5,14 +5,16 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
+
+// Standard includes.
 use std::any::TypeId;
 use std::cmp::{Eq, PartialEq};
 use std::hash::{Hash, Hasher};
 
-// Internal includes
-use super::super::multimap::Multimap;
-use super::mapping::Mapping;
+// Internal includes.
+use super::Mapping;
+use crate::multimap::Multimap;
 use crate::rrl_math::Position;
 use crate::world::MapPosition;
 

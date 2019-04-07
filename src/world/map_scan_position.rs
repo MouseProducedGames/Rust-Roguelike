@@ -7,15 +7,15 @@ Documentation:
 **/
 // External includes
 use specs::{Component, VecStorage};
+
+// Standard includes.
 use std::cmp::{Eq, PartialEq};
 use std::convert::From;
-extern crate derive_more;
 use std::iter::Iterator;
 use std::ops::{Add, Sub};
 
 // Internal includes
-use super::MapDisplacement;
-use super::MapPosition;
+use super::{MapDisplacement, MapPosition};
 
 #[derive(Copy, Clone, Debug, Default)]
 pub struct MapScanPosition {

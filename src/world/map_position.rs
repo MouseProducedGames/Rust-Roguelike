@@ -7,8 +7,9 @@ Documentation:
 **/
 // External includes
 use specs::{Component, VecStorage};
+
+// Standard includes.
 use std::cmp::{Eq, PartialEq};
-extern crate derive_more;
 
 // Internal includes
 
