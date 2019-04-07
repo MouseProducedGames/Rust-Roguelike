@@ -6,9 +6,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External dependencies
+// External includes.
 
-// Internal dependencies.
-pub mod tiled_shape_2d;
+// Standard includes.
+
+// Internal includes.
+mod tiled_shape_2d;
 pub use tiled_rect::TiledRect;
 pub use tiled_shape_2d::TiledShape2D;

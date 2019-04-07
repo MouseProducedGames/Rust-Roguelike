@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External dependencies
+// External includes.
 
-// Internal dependencies.
+// Standard includes.
+
+// Internal includes.
 use crate::tiled_shapes_2d::TiledShape2D;
 use crate::world::{MapPosition, Mapping};
 

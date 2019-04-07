@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External dependencies
+// External includes
 
-// Internal dependencies.
+// Standard includes.
+
+// Internal includes.
 use crate::world::MapPosition;
 
 pub trait TiledShape2D {
