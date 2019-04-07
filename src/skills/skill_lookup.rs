@@ -7,6 +7,8 @@ Documentation:
  **/
 // External includes.
 use specs::{Component, VecStorage};
+
+// Standard includes.
 use std::collections::HashMap;
 
 // Internal includes.
