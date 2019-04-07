@@ -27,9 +27,9 @@ where
     #[allow(dead_code)]
     pub fn new(count: TCount, die: TDie, modifier: TModifier) -> Self {
         Self {
-            count: count,
-            die: die,
-            modifier: modifier,
+            count,
+            die,
+            modifier,
         }
     }
 }

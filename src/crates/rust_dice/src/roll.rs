@@ -22,7 +22,7 @@ impl Roll for i32 {
         self
     }
     fn total(&self) -> i64 {
-        *self as i64
+        i64::from(*self)
     }
 }
 
@@ -31,7 +31,7 @@ impl Roll for u32 {
         self
     }
     fn total(&self) -> i64 {
-        *self as i64
+        i64::from(*self)
     }
 }
 

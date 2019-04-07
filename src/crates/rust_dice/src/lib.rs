@@ -11,9 +11,9 @@ extern crate rand;
 // Standard includes.
 
 // Internal includes.
-pub mod die;
-pub mod roll;
-pub mod roll_set;
+mod die;
+mod roll;
+mod roll_set;
 #[allow(unused_imports)]
 pub use die::Die;
 pub use roll::Roll;

@@ -6,8 +6,7 @@ Documentation:
 
  **/
 // External includes.
-extern crate rand;
-use rand::Rng;
+use rand::{thread_rng, Rng};
 
 // Standard includes.
 
@@ -27,7 +26,7 @@ where
     #[allow(dead_code)]
     pub fn new(size: TSize) -> Self {
         Self {
-            size: size,
+            size,
             result: 0,
         }
     }
@@ -39,7 +38,7 @@ where
 {
     fn roll(&mut self) -> &Self {
         self.size.roll();
-        self.result = rand::thread_rng().gen_range(1, self.size.total() + 1) as i64;
+        self.result = thread_rng().gen_range(1, self.size.total() + 1) as i64;
 
         self
     }
