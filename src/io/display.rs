@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
+
+// Standard includes.
 use std::marker::{Send, Sync};
 
-// internal includes
+// Internal includes.
 use crate::background::SpeciesType;
 use crate::factions::Faction;
 use crate::rrl_math::Position;

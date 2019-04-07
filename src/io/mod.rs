@@ -8,6 +8,8 @@ Documentation:
 **/
 // External includes
 
+// Standard includes.
+
 // internal includes
-pub mod display;
+mod display;
 pub use display::Display;
