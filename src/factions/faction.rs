@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Component, VecStorage};
 
-// Internal includes
+// Standard includes.
 use std::cmp::{Eq, PartialEq};
+
+// Internal includes.
 
 #[derive(Copy, Clone, Default)]
 pub struct Faction {
