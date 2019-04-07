@@ -21,7 +21,7 @@ use crate::game::{EntityPositionTracker, GameState};
 use crate::items::Inventory;
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
-use crate::stats::{CreatureStats, SightRange};
+use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::VisibilityMapLookup;
 
@@ -79,7 +79,6 @@ impl Screen for WorldInitScreen {
         world.register::<LogicWanderAttack>();
         world.register::<PlayerMarker>();
         world.register::<Position>();
-        world.register::<SightRange>();
         world.register::<SkillLookup>();
         world.register::<TalentLookup>();
         world.register::<ViewpointMarker>();

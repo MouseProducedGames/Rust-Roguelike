@@ -21,7 +21,7 @@ use crate::io::Display;
 use crate::items::Inventory;
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
-use crate::stats::{CreatureStats, SightRange};
+use crate::stats::CreatureStats;
 use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
 use crate::world::VisibilityMapLookup;
 
@@ -118,7 +118,6 @@ impl Screen for CharacterCreationScreen {
                 .with(species.stats() + CreatureStats::from(origin_type))
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)
-                .with(SightRange::new(5.0))
                 .with(skills)
                 .with(talents)
                 .with(ViewpointMarker)

@@ -20,7 +20,7 @@ use crate::ai::{Command, LogicFaction};
 use crate::factions::Faction;
 use crate::io::Display;
 use crate::rrl_math::Position;
-use crate::stats::{CreatureStats, SightRange};
+use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::VisibilityMapLookup;
 
@@ -55,7 +55,6 @@ impl StartScreen {
             .with(Faction::new(0))
             .with(CreatureStats::default())
             .with(Position::new(12, 8))
-            .with(SightRange::new(5.0))
             .with(TalentLookup::new())
             .with(VisibilityMapLookup::new())
             .build();
@@ -67,7 +66,6 @@ impl StartScreen {
             .with(Faction::new(1))
             .with(CreatureStats::default())
             .with(Position::new(8, 12))
-            .with(SightRange::new(5.0))
             .with(TalentLookup::new())
             .with(VisibilityMapLookup::new())
             .build();

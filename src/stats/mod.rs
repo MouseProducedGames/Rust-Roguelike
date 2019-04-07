@@ -12,11 +12,9 @@ Documentation:
 // Internal includes.
 mod attribute;
 mod creature_stats;
-mod sight_range;
 mod stat;
 mod stat_modifier;
 pub use attribute::Attribute;
 pub use creature_stats::CreatureStats;
-pub use sight_range::SightRange;
 pub use stat::Stat;
 pub use stat_modifier::StatModifier;
