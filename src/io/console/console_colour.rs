@@ -6,14 +6,12 @@ Documentation:
 
  **/
 // External includes.
-extern crate crossterm;
-extern crate crossterm_style;
 use crossterm_style::Color;
+
+// Standard includes.
 
 // Internal includes.
 use super::Darker;
-
-// pub enum ConsoleColour { Color }
 
 impl Darker for Color {
     fn darker(self) -> Self {

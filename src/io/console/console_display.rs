@@ -6,19 +6,15 @@ Documentation:
 
  **/
 // External includes.
-extern crate crossterm;
-extern crate crossterm_cursor;
-extern crate crossterm_input;
-extern crate crossterm_screen;
-extern crate crossterm_style;
-extern crate crossterm_terminal;
 use crossterm::{terminal, Terminal};
 use crossterm_style::{Color, Colored};
+
+// Standard includes.
 use std::iter::Iterator;
 
 // Internal includes.
-use super::super::super::multidim::Multidim;
 use super::ConsoleChar;
+use crate::multidim::Multidim;
 use crate::data_types::Immut;
 use crate::rrl_math::Bounds;
 use crate::stats::{Attribute, Stat, StatModifier};

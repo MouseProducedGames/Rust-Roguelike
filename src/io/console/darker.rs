@@ -6,8 +6,8 @@ Documentation:
 
  **/
 // External includes.
-extern crate crossterm;
-extern crate crossterm_style;
+
+// Standard includes.
 
 // Internal includes.
 

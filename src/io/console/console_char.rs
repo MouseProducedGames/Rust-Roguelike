@@ -6,9 +6,9 @@ Documentation:
 
  **/
 // External includes.
-extern crate crossterm;
-extern crate crossterm_style;
 use crossterm_style::Color;
+
+// Standard includes.
 use std::default::Default;
 
 // Internal includes.

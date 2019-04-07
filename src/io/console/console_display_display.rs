@@ -6,12 +6,9 @@ Documentation:
 
  **/
 // External includes.
-extern crate crossterm;
-extern crate crossterm_cursor;
-extern crate crossterm_input;
-extern crate crossterm_screen;
-extern crate crossterm_style;
 use crossterm_style::Color;
+
+// Standard includes.
 
 // Internal includes.
 use super::ConsoleChar;
