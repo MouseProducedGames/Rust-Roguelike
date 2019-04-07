@@ -7,61 +7,45 @@ Documentation:
 **/
 // External includes.
 use specs::{
-    Component, DenseVecStorage, Entities, ReadExpect, ReadStorage, System, WriteExpect,
-    WriteStorage,
+    Component, DenseVecStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage,
 };
 
 // Standard includes.
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Command, CreatureTracker, PlayerMarker};
+use super::{Command, PlayerMarker};
 use crate::game::GameState;
 use crate::io::Display;
-use crate::rrl_math::{Displacement, Position};
-use crate::world::Tilemap;
+use crate::rrl_math::Displacement;
 
-pub struct CreatureLogicPlayer {}
+pub struct LogicPlayer {}
 
-impl Component for CreatureLogicPlayer {
+impl Component for LogicPlayer {
     type Storage = DenseVecStorage<Self>;
 }
 
-pub struct CreatureLogicPlayerSystem;
+pub struct LogicPlayerSystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
-    _entities: Entities<'a>,
-    _creature_tracker: ReadExpect<'a, CreatureTracker>,
-    _map: ReadExpect<'a, Tilemap>,
     display: ReadExpect<'a, Arc<Mutex<Display>>>,
     game_state: WriteExpect<'a, GameState>,
     player_marker: ReadStorage<'a, PlayerMarker>,
     commands: WriteStorage<'a, Command>,
-    logic: WriteStorage<'a, CreatureLogicPlayer>,
-    pos: WriteStorage<'a, Position>,
+    logic: WriteStorage<'a, LogicPlayer>,
 }
 
-impl<'a> System<'a> for CreatureLogicPlayerSystem {
+impl<'a> System<'a> for LogicPlayerSystem {
     type SystemData = SystemDataT<'a>;
 
     fn run(&mut self, mut data: SystemDataT) {
         use specs::Join;
 
-        let _creature_tracker = data._creature_tracker;
         let mut game_state = data.game_state;
-        let _map = data._map;
         let display = data.display.lock().unwrap();
 
-        for (_entity, _logic, command, _pos, _) in (
-            &data._entities,
-            &mut data.logic,
-            &mut data.commands,
-            &mut data.pos,
-            &data.player_marker,
-        )
-            .join()
-        {
+        for (_, command, _) in (&mut data.logic, &mut data.commands, &data.player_marker).join() {
             let key_command = display.get_char();
 
             let target_move;

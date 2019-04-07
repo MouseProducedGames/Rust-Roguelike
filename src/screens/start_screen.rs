@@ -16,7 +16,7 @@ use super::{
     CharacterCreationScreen, GameScreen, MapInitScreen, Screen, ScreenPushWrapper, ScreenState,
     WorldInitScreen,
 };
-use crate::ai::{Command, CreatureLogicFaction, Visibility};
+use crate::ai::{Command, LogicFaction, Visibility};
 use crate::factions::Faction;
 use crate::io::Display;
 use crate::rrl_math::Position;
@@ -50,7 +50,7 @@ impl StartScreen {
         world
             .create_entity()
             .with(Command::None)
-            .with(CreatureLogicFaction)
+            .with(LogicFaction)
             .with(Faction::new(0))
             .with(CreatureStats::default())
             .with(Position::new(12, 8))
@@ -62,7 +62,7 @@ impl StartScreen {
         world
             .create_entity()
             .with(Command::None)
-            .with(CreatureLogicFaction)
+            .with(LogicFaction)
             .with(Faction::new(1))
             .with(CreatureStats::default())
             .with(Position::new(8, 12))

@@ -14,41 +14,41 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{
-    CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
-    CreatureLogicFactionSystem, CreatureLogicPlayerSystem, CreatureLogicWanderAttackSystem,
-    CreatureLogicWanderSystem, CreatureVisibilitySystem, PlayerDisplaySystem,
+    AbilitySystem, CommandSystem, CreatureDisplaySystem, LastUpdateSystem, LogicFactionSystem,
+    LogicPlayerSystem, LogicWanderAttackSystem, LogicWanderSystem, PlayerDisplaySystem,
+    VisibilitySystem,
 };
 use crate::game::GameState;
 use crate::io::Display;
 use crate::world::Lightmap;
 
 pub struct GameScreen {
-    creature_ability_system: CreatureAbilitySystem,
-    creature_command_system: CreatureCommandSystem,
+    ability_system: AbilitySystem,
+    command_system: CommandSystem,
     creature_display_system: CreatureDisplaySystem,
-    creaature_last_update_system: CreatureLastUpdateSystem,
-    creature_faction_logic: CreatureLogicFactionSystem,
-    creature_player_logic: CreatureLogicPlayerSystem,
-    creature_wander_logic: CreatureLogicWanderSystem,
-    creature_wander_attack_logic: CreatureLogicWanderAttackSystem,
-    creature_visibility_system: CreatureVisibilitySystem,
+    faction_logic: LogicFactionSystem,
+    last_update_system: LastUpdateSystem,
     player_display_system: PlayerDisplaySystem,
+    player_logic: LogicPlayerSystem,
+    visibility_system: VisibilitySystem,
+    wander_logic: LogicWanderSystem,
+    wander_attack_logic: LogicWanderAttackSystem,
     state: ScreenState,
 }
 
 impl GameScreen {
     pub fn new() -> Self {
         Self {
-            creature_ability_system: CreatureAbilitySystem,
-            creature_command_system: CreatureCommandSystem,
+            ability_system: AbilitySystem,
+            command_system: CommandSystem,
             creature_display_system: CreatureDisplaySystem,
-            creaature_last_update_system: CreatureLastUpdateSystem,
-            creature_faction_logic: CreatureLogicFactionSystem,
-            creature_player_logic: CreatureLogicPlayerSystem,
-            creature_wander_logic: CreatureLogicWanderSystem,
-            creature_wander_attack_logic: CreatureLogicWanderAttackSystem,
-            creature_visibility_system: CreatureVisibilitySystem,
+            faction_logic: LogicFactionSystem,
+            last_update_system: LastUpdateSystem,
             player_display_system: PlayerDisplaySystem,
+            player_logic: LogicPlayerSystem,
+            visibility_system: VisibilitySystem,
+            wander_logic: LogicWanderSystem,
+            wander_attack_logic: LogicWanderAttackSystem,
             state: ScreenState::Started,
         }
     }
@@ -82,7 +82,7 @@ impl Screen for GameScreen {
     }
 
     fn draw(&mut self, world: &mut World) {
-        self.creature_visibility_system.run_now(&world.res);
+        self.visibility_system.run_now(&world.res);
 
         self.player_display_system.run_now(&world.res);
 
@@ -98,32 +98,32 @@ impl Screen for GameScreen {
     }
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
-        self.creature_player_logic.run_now(&world.res);
+        self.player_logic.run_now(&world.res);
 
         world.maintain();
 
-        self.creature_wander_logic.run_now(&world.res);
+        self.wander_logic.run_now(&world.res);
 
         world.maintain();
 
-        self.creature_wander_attack_logic.run_now(&world.res);
+        self.wander_attack_logic.run_now(&world.res);
 
         world.maintain();
 
-        self.creature_faction_logic.run_now(&world.res);
+        self.faction_logic.run_now(&world.res);
 
         world.maintain();
 
-        self.creature_command_system.run_now(&world.res);
+        self.command_system.run_now(&world.res);
 
         world.maintain();
 
         world.write_resource::<Lightmap>().clear();
-        self.creature_ability_system.run_now(&world.res);
+        self.ability_system.run_now(&world.res);
 
         world.maintain();
 
-        self.creaature_last_update_system.run_now(&world.res);
+        self.last_update_system.run_now(&world.res);
 
         world.maintain();
 

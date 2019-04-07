@@ -11,40 +11,40 @@ use specs::{Component, Entities, NullStorage, ReadExpect, ReadStorage, System, W
 // Standard includes.
 
 // Internal includes.
-use super::{Command, CreatureTracker, Visibility};
+use super::{Command, EntityPositionTracker, Visibility};
 use crate::dice::get_random_move;
 use crate::factions::Faction;
 use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::world::Tilemap;
 
 #[derive(Default)]
-pub struct CreatureLogicWanderAttack;
+pub struct LogicFaction;
 
-impl Component for CreatureLogicWanderAttack {
+impl Component for LogicFaction {
     type Storage = NullStorage<Self>;
 }
 
-pub struct CreatureLogicWanderAttackSystem;
+pub struct LogicFactionSystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
-    creature_tracker: ReadExpect<'a, CreatureTracker>,
+    entity_position_tracker: ReadExpect<'a, EntityPositionTracker>,
     entities: Entities<'a>,
     map: ReadExpect<'a, Tilemap>,
     visibility: ReadStorage<'a, Visibility>,
     factions: ReadStorage<'a, Faction>,
-    logic: ReadStorage<'a, CreatureLogicWanderAttack>,
+    logic: ReadStorage<'a, LogicFaction>,
     commands: WriteStorage<'a, Command>,
     pos: WriteStorage<'a, Position>,
 }
 
-impl<'a> System<'a> for CreatureLogicWanderAttackSystem {
+impl<'a> System<'a> for LogicFactionSystem {
     type SystemData = SystemDataT<'a>;
 
     fn run(&mut self, mut data: Self::SystemData) {
         use specs::join::Join;
 
-        let creature_tracker = data.creature_tracker;
+        let entity_position_tracker = data.entity_position_tracker;
         let factions = data.factions;
         let map = data.map;
         let map_hash = calculate_hash(&*map);
@@ -64,11 +64,19 @@ impl<'a> System<'a> for CreatureLogicWanderAttackSystem {
                 // println!("Boo! 1");
                 if let Some(visibility_map) = visibility.visibility_lookup().get(&map_hash) {
                     // println!("Boo! 2");
-                    if let Some((_enemy, enemy_pos)) =
-                        creature_tracker.get_nearest_enemy(*faction, &factions, visibility_map)
-                    {
+                    if let Some((_enemy, enemy_pos)) = entity_position_tracker.get_nearest_enemy(
+                        *faction,
+                        &factions,
+                        visibility_map,
+                    ) {
                         // println!("Boo! 3");
                         let disp = enemy_pos - *pos;
+                        target_move = Displacement::new(disp.x.signum(), disp.y.signum());
+                    } else if let Some((_friend, friend_pos)) = entity_position_tracker
+                        .get_nearest_friend(entity, *faction, &factions, visibility_map)
+                    {
+                        // println!("Boo! 3");
+                        let disp = friend_pos - *pos;
                         target_move = Displacement::new(disp.x.signum(), disp.y.signum());
                     } else {
                         target_move = get_random_move();

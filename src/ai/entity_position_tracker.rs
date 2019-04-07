@@ -20,11 +20,11 @@ pub struct _CreatureData {
     pos: Position,
 }
 
-pub struct CreatureTracker {
+pub struct EntityPositionTracker {
     lookup: HashMap<Entity, Position>,
 }
 
-impl CreatureTracker {
+impl EntityPositionTracker {
     pub fn new() -> Self {
         Self {
             lookup: HashMap::new(),

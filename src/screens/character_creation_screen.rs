@@ -14,9 +14,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::ai::{
-    Command, CreatureLogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker, Visibility,
-};
+use crate::ai::{Command, LogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker, Visibility};
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
 use crate::io::Display;
@@ -112,7 +110,7 @@ impl Screen for CharacterCreationScreen {
             world
                 .create_entity()
                 .with(Command::None)
-                .with(CreatureLogicPlayer {})
+                .with(LogicPlayer {})
                 .with(Faction::new(0))
                 .with(species.stats() + CreatureStats::from(origin_type))
                 .with(Position::new(8, 5))

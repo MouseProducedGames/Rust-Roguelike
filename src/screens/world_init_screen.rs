@@ -13,8 +13,8 @@ use specs::World;
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{
-    Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
-    CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, ViewpointMarker, Visibility,
+    Command, EntityPositionTracker, LogicFaction, LogicPlayer, LogicWander, LogicWanderAttack,
+    PlayerMarker, ViewpointMarker, Visibility,
 };
 use crate::factions::Faction;
 use crate::game::GameState;
@@ -65,13 +65,13 @@ impl Screen for WorldInitScreen {
     fn draw(&mut self, _world: &mut World) {}
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
-        world.add_resource(CreatureTracker::new());
+        world.add_resource(EntityPositionTracker::new());
         world.add_resource(GameState::new());
         world.register::<Command>();
-        world.register::<CreatureLogicFaction>();
-        world.register::<CreatureLogicPlayer>();
-        world.register::<CreatureLogicWander>();
-        world.register::<CreatureLogicWanderAttack>();
+        world.register::<LogicFaction>();
+        world.register::<LogicPlayer>();
+        world.register::<LogicWander>();
+        world.register::<LogicWanderAttack>();
         world.register::<CreatureStats>();
         world.register::<Faction>();
         world.register::<PlayerMarker>();

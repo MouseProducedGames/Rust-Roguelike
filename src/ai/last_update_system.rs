@@ -11,33 +11,33 @@ use specs::{Entities, ReadStorage, System, WriteExpect, WriteStorage};
 // Standard includes.
 
 // Internal includes.
-use super::{CreatureTracker, PlayerPosition, ViewpointMarker};
+use super::{EntityPositionTracker, PlayerPosition, ViewpointMarker};
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, Stat};
 
-pub struct CreatureLastUpdateSystem;
+pub struct LastUpdateSystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
     entities: Entities<'a>,
-    creature_tracker: WriteExpect<'a, CreatureTracker>,
+    entity_position_tracker: WriteExpect<'a, EntityPositionTracker>,
     player_pos: WriteExpect<'a, PlayerPosition>,
     viewpoint: ReadStorage<'a, ViewpointMarker>,
     stats: WriteStorage<'a, CreatureStats>,
     pos: WriteStorage<'a, Position>,
 }
 
-impl<'a> System<'a> for CreatureLastUpdateSystem {
+impl<'a> System<'a> for LastUpdateSystem {
     type SystemData = SystemDataT<'a>;
 
     fn run(&mut self, mut data: Self::SystemData) {
         use specs::join::Join;
 
-        let mut creature_tracker = data.creature_tracker;
+        let mut entity_position_tracker = data.entity_position_tracker;
 
         for (entity, stats) in (&data.entities, &data.stats).join() {
             if stats.health().value() <= 0 {
-                creature_tracker.remove_entity(entity);
+                entity_position_tracker.remove_entity(entity);
 
                 match data.entities.delete(entity) {
                     Ok(_) => (),

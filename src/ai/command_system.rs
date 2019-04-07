@@ -11,18 +11,18 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 // Standard includes.
 
 // Internal includes.
-use super::{Command, CreatureTracker, Visibility};
+use super::{Command, EntityPositionTracker, Visibility};
 use crate::factions::Faction;
 use crate::game::{Combat, CombatResult};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::{CreatureStats, Stat};
 use crate::world::{execute_tile_func, Tilemap, VisibilityType};
 
-pub struct CreatureCommandSystem;
+pub struct CommandSystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
-    creature_tracker: ReadExpect<'a, CreatureTracker>,
+    entity_position_tracker: ReadExpect<'a, EntityPositionTracker>,
     entities: Entities<'a>,
     map: WriteExpect<'a, Tilemap>,
     command: ReadStorage<'a, Command>,
@@ -32,13 +32,13 @@ pub struct SystemDataT<'a> {
     pos: WriteStorage<'a, Position>,
 }
 
-impl<'a> System<'a> for CreatureCommandSystem {
+impl<'a> System<'a> for CommandSystem {
     type SystemData = SystemDataT<'a>;
 
     fn run(&mut self, mut data: Self::SystemData) {
         use specs::join::Join;
 
-        let creature_tracker = &*data.creature_tracker;
+        let entity_position_tracker = &*data.entity_position_tracker;
         let factions = data.factions;
         let mut map = data.map;
         let map_hash = calculate_hash(&*map);
@@ -63,7 +63,7 @@ impl<'a> System<'a> for CreatureCommandSystem {
                             entity,
                             new_pos,
                             pos,
-                            creature_tracker,
+                            entity_position_tracker,
                             &factions,
                             stats,
                         );
@@ -88,11 +88,11 @@ fn impassable_movement<'a>(
     entity: Entity,
     new_pos: Position,
     pos: &mut Position,
-    creature_tracker: &CreatureTracker,
+    entity_position_tracker: &EntityPositionTracker,
     factions: &ReadStorage<'a, Faction>,
     stats: &mut WriteStorage<'a, CreatureStats>,
 ) {
-    match creature_tracker.check_collision(entity, new_pos) {
+    match entity_position_tracker.check_collision(entity, new_pos) {
         Some(other_entity) => {
             if let Some(faction_a) = factions.get(entity) {
                 if let Some(faction_b) = factions.get(other_entity) {

@@ -10,41 +10,39 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+mod ability_system;
 mod command;
-mod creature_ability_system;
-mod creature_command_system;
+mod command_system;
 mod creature_display_system;
-mod creature_last_update_system;
-mod creature_logic_faction;
-mod creature_logic_player;
-mod creature_logic_wander;
-mod creature_logic_wander_attack;
-mod creature_tracker;
-mod creature_visibility_system;
 mod decisions_instinct;
+mod entity_position_tracker;
+mod last_update_system;
+mod logic_faction;
+mod logic_player;
+mod logic_wander;
+mod logic_wander_attack;
 mod love_fear_hate;
 mod player_display_system;
 mod player_marker;
 mod player_position;
 mod viewpoint_marker;
 mod visibility;
+mod visibility_system;
+pub use ability_system::AbilitySystem;
 pub use command::Command;
-pub use creature_ability_system::CreatureAbilitySystem;
-pub use creature_command_system::CreatureCommandSystem;
+pub use command_system::CommandSystem;
 pub use creature_display_system::CreatureDisplaySystem;
-pub use creature_last_update_system::CreatureLastUpdateSystem;
-pub use creature_logic_faction::{CreatureLogicFaction, CreatureLogicFactionSystem};
-pub use creature_logic_player::{CreatureLogicPlayer, CreatureLogicPlayerSystem};
-pub use creature_logic_wander::{CreatureLogicWander, CreatureLogicWanderSystem};
-pub use creature_logic_wander_attack::{
-    CreatureLogicWanderAttack, CreatureLogicWanderAttackSystem,
-};
-pub use creature_tracker::CreatureTracker;
-pub use creature_visibility_system::CreatureVisibilitySystem;
 pub use decisions_instinct::_make_decision_attack;
+pub use entity_position_tracker::EntityPositionTracker;
+pub use last_update_system::LastUpdateSystem;
+pub use logic_faction::{LogicFaction, LogicFactionSystem};
+pub use logic_player::{LogicPlayer, LogicPlayerSystem};
+pub use logic_wander::{LogicWander, LogicWanderSystem};
+pub use logic_wander_attack::{LogicWanderAttack, LogicWanderAttackSystem};
 pub use love_fear_hate::_LoveFearHate;
 pub use player_display_system::PlayerDisplaySystem;
 pub use player_marker::PlayerMarker;
 pub use player_position::PlayerPosition;
 pub use viewpoint_marker::ViewpointMarker;
 pub use visibility::Visibility;
+pub use visibility_system::VisibilitySystem;

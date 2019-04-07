@@ -20,7 +20,7 @@ use crate::talents::{
 };
 use crate::world::{execute_tile_func, Tilemap, VisibilityMap, VisibilityType};
 
-pub struct CreatureAbilitySystem;
+pub struct AbilitySystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
@@ -32,7 +32,7 @@ pub struct SystemDataT<'a> {
     talents: WriteStorage<'a, TalentLookup>,
 }
 
-impl<'a> System<'a> for CreatureAbilitySystem {
+impl<'a> System<'a> for AbilitySystem {
     type SystemData = SystemDataT<'a>;
 
     fn run(&mut self, mut data: Self::SystemData) {

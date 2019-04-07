@@ -11,32 +11,32 @@ pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteSto
 // Standard includes.
 
 // Internal includes.
-use super::{CreatureTracker, Visibility};
+use super::{EntityPositionTracker, Visibility};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::{CreatureStats, SightRange};
 use crate::world::{calculate_visibility, Lightmap, Mapping, Tilemap, VisibilityMap};
 
-pub struct CreatureVisibilitySystem;
+pub struct VisibilitySystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
     entities: Entities<'a>,
     lightmap: WriteExpect<'a, Lightmap>,
     map: WriteExpect<'a, Tilemap>,
-    creature_tracker: WriteExpect<'a, CreatureTracker>,
+    entity_position_tracker: WriteExpect<'a, EntityPositionTracker>,
     stats: WriteStorage<'a, CreatureStats>,
     positions: WriteStorage<'a, Position>,
     sight_ranges: ReadStorage<'a, SightRange>,
     visibilities: WriteStorage<'a, Visibility>,
 }
 
-impl<'a> System<'a> for CreatureVisibilitySystem {
+impl<'a> System<'a> for VisibilitySystem {
     type SystemData = SystemDataT<'a>;
 
     fn run(&mut self, mut data: Self::SystemData) {
         use specs::join::Join;
 
-        let creature_tracker = &mut data.creature_tracker;
+        let entity_position_tracker = &mut data.entity_position_tracker;
         let lightmap = &mut *data.lightmap;
         let map = &mut *data.map;
         let map_hash = calculate_hash(&*map);
@@ -50,7 +50,7 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
         )
             .join()
         {
-            creature_tracker.set_position(entity, *pos);
+            entity_position_tracker.set_position(entity, *pos);
 
             let visibility_lookup = visibility_comp.visibility_lookup_mut();
 
@@ -78,7 +78,7 @@ impl<'a> System<'a> for CreatureVisibilitySystem {
         )
             .join()
         {
-            creature_tracker.set_position(entity, *pos);
+            entity_position_tracker.set_position(entity, *pos);
 
             let visibility_lookup = visibility_comp.visibility_lookup_mut();
 
