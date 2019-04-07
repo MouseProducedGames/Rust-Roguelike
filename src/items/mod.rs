@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal include
+// Standard includes.
+
+// Internal includes.
 mod inventory;
 mod item;
 pub use inventory::Inventory;

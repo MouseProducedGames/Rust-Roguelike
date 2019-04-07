@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
+
+// Standard includes.
 use std::slice::Iter;
 
-// internal include
-use super::item::Item;
+// internal includes.
+use super::Item;
 
 pub struct Inventory {
     values: Vec<Item>,

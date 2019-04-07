@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// Internal include
+// Standard includes.
+
+// Internal includes.
 use crate::abilities::Ability;
 
 pub enum Item {
