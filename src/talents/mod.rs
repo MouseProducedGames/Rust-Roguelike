@@ -7,10 +7,12 @@ Documentation:
  **/
 // External includes.
 
+// Standard includes.
+
 // Internal includes.
-pub mod talent_funcs;
-pub mod talent_lookup;
-pub mod talent_type;
+mod talent_funcs;
+mod talent_lookup;
+mod talent_type;
 pub use talent_funcs::talent_range_func;
 pub use talent_lookup::TalentLookup;
 pub use talent_type::{TalentActivation, TalentActivationOp, TalentRange, TalentType};
