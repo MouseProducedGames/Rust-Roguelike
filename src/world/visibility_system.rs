@@ -13,7 +13,7 @@ pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteSto
 // Internal includes.
 use super::VisibilityMapLookup;
 use crate::game::EntityPositionTracker;
-use crate::rrl_math::{Position};
+use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, SightRange};
 use crate::world::{calculate_visibility, Lightmap, Tilemap};
 

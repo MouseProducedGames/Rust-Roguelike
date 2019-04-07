@@ -15,8 +15,8 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
 use crate::ai::{
-    CommandSystem, LogicFactionSystem, LogicPlayerSystem,
-    LogicWanderAttackSystem, LogicWanderSystem,
+    CommandSystem, LogicFactionSystem, LogicPlayerSystem, LogicWanderAttackSystem,
+    LogicWanderSystem,
 };
 use crate::game::{GameState, LastUpdateSystem};
 use crate::io::{CreatureDisplaySystem, Display, PlayerDisplaySystem};
@@ -97,7 +97,7 @@ impl Screen for GameScreen {
         }
     }
 
-    fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
+    fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
         self.player_logic.run_now(&world.res);
 
         world.maintain();
@@ -131,6 +131,18 @@ impl Screen for GameScreen {
             ScreenState::Running
         } else {
             ScreenState::Stopped
+        };
+
+        {
+            let mut game_state = world.write_resource::<GameState>();
+            let mut new_screens = game_state.lock_new_screens();
+            while new_screens.len() > 0 {
+                if let Some(new_screen) = new_screens.pop() {
+                    screen_push_wrapper.push(new_screen);
+                } else {
+                    panic!("New screens should not be added elsewhere while we have a lock!");
+                }
+            }
         }
     }
 

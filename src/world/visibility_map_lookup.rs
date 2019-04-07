@@ -28,14 +28,18 @@ impl VisibilityMapLookup {
 
     pub fn get_or_add(&mut self, map: &Tilemap) -> &VisibilityMap {
         let map_hash = calculate_hash(map);
-        
-        self.values.entry(map_hash).or_insert_with(|| VisibilityMap::new(map.width(), map.height()))
+
+        self.values
+            .entry(map_hash)
+            .or_insert_with(|| VisibilityMap::new(map.width(), map.height()))
     }
 
     pub fn get_or_add_mut(&mut self, map: &Tilemap) -> &mut VisibilityMap {
         let map_hash = calculate_hash(map);
-        
-        self.values.entry(map_hash).or_insert_with(|| VisibilityMap::new(map.width(), map.height()))
+
+        self.values
+            .entry(map_hash)
+            .or_insert_with(|| VisibilityMap::new(map.width(), map.height()))
     }
 }
 

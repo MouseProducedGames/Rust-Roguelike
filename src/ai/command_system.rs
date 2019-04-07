@@ -14,7 +14,7 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 use super::Command;
 use crate::factions::Faction;
 use crate::game::{Combat, CombatResult, EntityPositionTracker};
-use crate::rrl_math::{Position};
+use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, Stat};
 use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 
@@ -52,7 +52,7 @@ impl<'a> System<'a> for CommandSystem {
             .join()
         {
             let command = command;
-            
+
             let visibility_map = visibility_map_lookup.get_or_add(map);
 
             match *command {

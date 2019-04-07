@@ -59,14 +59,12 @@ impl<'a> System<'a> for LogicWanderAttackSystem {
             .join()
         {
             let visibility_map = visibility_map_lookup.get_or_add(map);
-            
+
             let target_move;
             if let Some(faction) = factions.get(entity) {
-                if let Some((_enemy, enemy_pos)) = entity_position_tracker.get_nearest_enemy(
-                    *faction,
-                    &factions,
-                    visibility_map,
-                ) {
+                if let Some((_enemy, enemy_pos)) =
+                    entity_position_tracker.get_nearest_enemy(*faction, &factions, visibility_map)
+                {
                     let disp = enemy_pos - *pos;
                     target_move = Displacement::new(disp.x.signum(), disp.y.signum());
                 } else {

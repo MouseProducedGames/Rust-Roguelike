@@ -38,6 +38,6 @@ pub use tile_func_type::{
 pub use tile_type::{TileTypeData, TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID};
 pub use tilemap::Tilemap;
 pub use tileroom::{TiledArea, TiledAreaFilter};
-pub use visibility_map_lookup::VisibilityMapLookup;
 pub use visibility_map::{VisibilityMap, VisibilityType};
+pub use visibility_map_lookup::VisibilityMapLookup;
 pub use visibility_system::VisibilitySystem;

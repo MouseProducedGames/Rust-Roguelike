@@ -18,6 +18,7 @@ use crate::ai::{Command, LogicPlayer, PlayerMarker, PlayerPosition, ViewpointMar
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
 use crate::io::Display;
+use crate::items::Inventory;
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, SightRange};
@@ -113,6 +114,7 @@ impl Screen for CharacterCreationScreen {
                 .with(Command::None)
                 .with(LogicPlayer {})
                 .with(Faction::new(0))
+                .with(Inventory::new())
                 .with(species.stats() + CreatureStats::from(origin_type))
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)

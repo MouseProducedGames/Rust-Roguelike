@@ -13,11 +13,12 @@ use specs::World;
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{
-    Command, LogicFaction, LogicPlayer, LogicWander, LogicWanderAttack,
-    PlayerMarker, ViewpointMarker,
+    Command, LogicFaction, LogicPlayer, LogicWander, LogicWanderAttack, PlayerMarker,
+    ViewpointMarker,
 };
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState};
+use crate::items::Inventory;
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::{CreatureStats, SightRange};
@@ -69,12 +70,13 @@ impl Screen for WorldInitScreen {
         world.add_resource(EntityPositionTracker::new());
         world.add_resource(GameState::new());
         world.register::<Command>();
+        world.register::<CreatureStats>();
+        world.register::<Faction>();
+        world.register::<Inventory>();
         world.register::<LogicFaction>();
         world.register::<LogicPlayer>();
         world.register::<LogicWander>();
         world.register::<LogicWanderAttack>();
-        world.register::<CreatureStats>();
-        world.register::<Faction>();
         world.register::<PlayerMarker>();
         world.register::<Position>();
         world.register::<SightRange>();

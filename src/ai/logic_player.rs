@@ -7,7 +7,8 @@ Documentation:
 **/
 // External includes.
 use specs::{
-    Component, DenseVecStorage, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage,
+    Component, DenseVecStorage, Entities, ReadExpect, ReadStorage, System, WriteExpect,
+    WriteStorage,
 };
 
 // Standard includes.
@@ -17,7 +18,9 @@ use std::sync::{Arc, Mutex};
 use super::{Command, PlayerMarker};
 use crate::game::GameState;
 use crate::io::Display;
+use crate::items::Inventory;
 use crate::rrl_math::Displacement;
+use crate::screens::InventoryScreen;
 
 pub struct LogicPlayer {}
 
@@ -31,8 +34,12 @@ pub struct LogicPlayerSystem;
 pub struct SystemDataT<'a> {
     display: ReadExpect<'a, Arc<Mutex<Display>>>,
     game_state: WriteExpect<'a, GameState>,
+    entities: Entities<'a>,
     player_marker: ReadStorage<'a, PlayerMarker>,
     commands: WriteStorage<'a, Command>,
+    // Technically could be ReadStorage, but stored as WriteStorage for
+    // clarity.
+    inventory: WriteStorage<'a, Inventory>,
     logic: WriteStorage<'a, LogicPlayer>,
 }
 
@@ -42,30 +49,45 @@ impl<'a> System<'a> for LogicPlayerSystem {
     fn run(&mut self, mut data: SystemDataT) {
         use specs::Join;
 
-        let mut game_state = data.game_state;
         let display = data.display.lock().unwrap();
+        let mut game_state = data.game_state;
+        let inventory = data.inventory;
 
-        for (_, command, _) in (&mut data.logic, &mut data.commands, &data.player_marker).join() {
+        for (_, entity, command, _) in (
+            &mut data.logic,
+            &data.entities,
+            &mut data.commands,
+            &data.player_marker,
+        )
+            .join()
+        {
             let key_command = display.get_char();
 
-            let target_move;
-            match key_command {
-                '1' => target_move = Displacement::new(-1, 1),
-                '2' => target_move = Displacement::new(0, 1),
-                '3' => target_move = Displacement::new(1, 1),
-                '4' => target_move = Displacement::new(-1, 0),
-                '6' => target_move = Displacement::new(1, 0),
-                '7' => target_move = Displacement::new(-1, -1),
-                '8' => target_move = Displacement::new(0, -1),
-                '9' => target_move = Displacement::new(1, -1),
-                'q' => {
-                    target_move = Displacement::new(0, 0);
-                    game_state.kill();
+            *command = match key_command {
+                '1' => Command::Move(Displacement::new(-1, 1)),
+                '2' => Command::Move(Displacement::new(0, 1)),
+                '3' => Command::Move(Displacement::new(1, 1)),
+                '4' => Command::Move(Displacement::new(-1, 0)),
+                '6' => Command::Move(Displacement::new(1, 0)),
+                '7' => Command::Move(Displacement::new(-1, -1)),
+                '8' => Command::Move(Displacement::new(0, -1)),
+                '9' => Command::Move(Displacement::new(1, -1)),
+                'i' => {
+                    if let Some(inventory) = inventory.get(entity) {
+                        let inventory_screen_ref =
+                            Arc::new(Mutex::new(InventoryScreen::new(inventory.clone())));
+                        game_state.lock_new_screens().push(inventory_screen_ref);
+                        Command::Move(Displacement::new(0, 0))
+                    } else {
+                        panic!("Where's our inventory?!");
+                    }
                 }
-                _ => target_move = Displacement::new(0, 0),
+                'q' => {
+                    game_state.kill();
+                    Command::Move(Displacement::new(0, 0))
+                }
+                _ => Command::Move(Displacement::new(0, 0)),
             }
-
-            *command = Command::Move(target_move);
         }
     }
 }

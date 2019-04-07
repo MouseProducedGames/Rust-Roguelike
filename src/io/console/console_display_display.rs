@@ -11,16 +11,33 @@ use crossterm_style::Color;
 // Standard includes.
 
 // Internal includes.
-use super::ConsoleChar;
+use super::{ConsoleChar, ConsoleDisplay, Darker};
 use crate::background::{OriginType, SpeciesType};
 use crate::factions::Faction;
-use crate::io::console::{ConsoleDisplay, Darker};
 use crate::io::Display;
+use crate::items::{Inventory, Item};
 use crate::rrl_math::{Displacement, Position};
 use crate::stats::{CreatureStats, Stat};
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {
+    fn blit_inventory(&mut self, inventory: &Inventory) {
+        self.clear();
+
+        self.put_string(1, 1, "Inventory:", Color::Grey, Color::Black);
+
+        for (i, item) in inventory.get().iter().enumerate() {
+            let name = match item {
+                Item::Generic(name, _) => name,
+            };
+
+            let formatted = format!("{}) {}", (1 + i), name);
+            self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+        }
+
+        self.present();
+    }
+
     fn choose_origin(&mut self, options: &[OriginType]) -> OriginType {
         let mut keep_going = true;
         let mut option = OriginType::Farmer;

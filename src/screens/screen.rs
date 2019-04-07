@@ -21,7 +21,7 @@ pub enum ScreenState {
     Stopped,
 }
 
-pub trait Screen {
+pub trait Screen: Send {
     fn init(&mut self);
 
     fn close(&mut self);

@@ -12,6 +12,7 @@ Documentation:
 // Internal includes.
 mod character_creation_screen;
 mod game_screen;
+mod inventory_screen;
 mod map_init_screen;
 mod screen;
 mod screen_manager;
@@ -19,6 +20,7 @@ mod start_screen;
 mod world_init_screen;
 pub use character_creation_screen::CharacterCreationScreen;
 pub use game_screen::GameScreen;
+pub use inventory_screen::InventoryScreen;
 pub use map_init_screen::MapInitScreen;
 pub use screen::Screen;
 use screen::ScreenState;

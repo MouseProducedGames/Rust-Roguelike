@@ -6,31 +6,39 @@ Documentation:
 
 **/
 // External includes.
+use specs::{Component, VecStorage};
 
 // Standard includes.
-use std::slice::Iter;
+use std::sync::{Arc, Mutex, MutexGuard};
 
 // internal includes.
 use super::Item;
 
+#[derive(Clone)]
 pub struct Inventory {
-    values: Vec<Item>,
+    values: Arc<Mutex<Vec<Item>>>,
 }
 
 impl Inventory {
     pub fn new() -> Self {
-        Self { values: vec![] }
+        Self {
+            values: Arc::new(Mutex::new(vec![])),
+        }
     }
 
-    fn iter(&mut self) -> Iter<Item> {
-        self.values.iter()
+    pub fn get(&self) -> MutexGuard<Vec<Item>> {
+        self.values.lock().unwrap()
     }
 
     pub fn push(&mut self, item: Item) {
-        self.values.push(item)
+        self.values.lock().unwrap().push(item)
     }
 
     pub fn remove(&mut self, index: usize) -> Item {
-        self.values.remove(index)
+        self.values.lock().unwrap().remove(index)
     }
+}
+
+impl Component for Inventory {
+    type Storage = VecStorage<Self>;
 }
