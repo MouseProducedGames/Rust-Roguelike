@@ -5,13 +5,15 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Component, VecStorage};
+
+// Standard includes.
 use std::default::Default;
 use std::ops::{Add, AddAssign};
 
-// internal include
-use crate::stats::{Attribute, Stat};
+// Internal includes.
+use super::{Attribute, Stat};
 
 #[derive(Copy, Clone)]
 pub struct CreatureStats {

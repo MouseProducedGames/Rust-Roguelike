@@ -5,14 +5,16 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal include
-pub mod attribute;
-pub mod creature_stats;
-pub mod sight_range;
-pub mod stat;
-pub mod stat_modifier;
+// Standard includes.
+
+// Internal includes.
+mod attribute;
+mod creature_stats;
+mod sight_range;
+mod stat;
+mod stat_modifier;
 pub use attribute::Attribute;
 pub use creature_stats::CreatureStats;
 pub use sight_range::SightRange;

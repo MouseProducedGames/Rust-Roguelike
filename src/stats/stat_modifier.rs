@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External includes
+// External includes.
 
-// internal include
-use crate::stats::Stat;
+// Standard includes.
+
+// Internal includes.
+use super::Stat;
 
 pub trait StatModifier: Stat {
     fn modifier(&self) -> i32 {

@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Component, VecStorage};
 
-// internal includes
+// Standard includes.
+
+// Internal includes.
 use crate::abilities::Ability;
 
 pub struct SightRange {

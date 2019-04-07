@@ -5,12 +5,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Component, VecStorage};
+
+// Standard includes.
 use std::ops::{Add, AddAssign, Sub, SubAssign};
 
-// internal include
-use crate::stats::{Stat, StatModifier};
+// Internal includes.
+use super::{Stat, StatModifier};
 
 #[derive(Copy, Clone)]
 pub struct Attribute {
