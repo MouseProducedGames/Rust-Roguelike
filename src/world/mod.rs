@@ -21,8 +21,8 @@ mod tile_func_type;
 mod tile_type;
 mod tilemap;
 mod tileroom;
-mod visibility;
 mod visibility_map;
+mod visibility_map_lookup;
 mod visibility_system;
 pub use calculate_light::calculate_light_level;
 pub use lightmap::Lightmap;
@@ -38,6 +38,6 @@ pub use tile_func_type::{
 pub use tile_type::{TileTypeData, TILE_TYPE_DATA, TILE_TYPE_INDEX_VOID};
 pub use tilemap::Tilemap;
 pub use tileroom::{TiledArea, TiledAreaFilter};
-pub use visibility::Visibility;
+pub use visibility_map_lookup::VisibilityMapLookup;
 pub use visibility_map::{VisibilityMap, VisibilityType};
 pub use visibility_system::VisibilitySystem;

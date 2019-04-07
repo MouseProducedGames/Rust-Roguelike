@@ -9,15 +9,16 @@ Documentation:
 use specs::{ReadStorage, System, WriteExpect, WriteStorage};
 
 // Standard includes.
+use std::convert::From;
 
 // Internal includes.
-use crate::rrl_math::{calculate_hash, Displacement, Position};
+use crate::rrl_math::{Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, StatModifier};
 use crate::talents::{
     talent_range_func, TalentActivation, TalentActivationOp, TalentLookup, TalentType,
 };
-use crate::world::{execute_tile_func, Tilemap, Visibility, VisibilityMap, VisibilityType};
+use crate::world::{execute_tile_func, Tilemap, VisibilityMap, VisibilityMapLookup};
 
 pub struct AbilitySystem;
 
@@ -25,7 +26,7 @@ pub struct AbilitySystem;
 pub struct SystemDataT<'a> {
     map: WriteExpect<'a, Tilemap>,
     stats: ReadStorage<'a, CreatureStats>,
-    visibility: ReadStorage<'a, Visibility>,
+    visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
     pos: WriteStorage<'a, Position>,
     skills: WriteStorage<'a, SkillLookup>,
     talents: WriteStorage<'a, TalentLookup>,
@@ -37,21 +38,20 @@ impl<'a> System<'a> for AbilitySystem {
     fn run(&mut self, mut data: Self::SystemData) {
         use specs::join::Join;
 
-        let mut map = data.map;
-        let map_hash = calculate_hash(&*map);
+        let map = &mut *data.map;
 
-        for (pos, skills, talent, stats, visibility) in (
+        for (pos, skills, talent, stats, visibility_map_lookup) in (
             &data.pos,
             &mut data.skills,
             &mut data.talents,
             &data.stats,
-            &data.visibility,
+            &mut data.visibility_map_lookup,
         )
             .join()
         {
             let pos = *pos;
 
-            let maybe_visibility_map = visibility.visibility_lookup().get(&map_hash);
+            let visibility_map = visibility_map_lookup.get_or_add(map);
 
             for talent_type in
                 talent.get_set(TalentActivation::Passive(TalentActivationOp::EveryRound))
@@ -74,27 +74,22 @@ impl<'a> System<'a> for AbilitySystem {
 
                         talent_range_func(
                             *talent_range,
-                            &(pos, maybe_visibility_map, skill_bonus),
+                            &(pos, visibility_map, skill_bonus),
                             &mut *map,
                             |disp: Displacement,
-                             data: &(Position, Option<&VisibilityMap>, i64),
+                             data: &(Position, &VisibilityMap, i64),
                              data_mut: &mut Tilemap| {
-                                let (pos, maybe_visibility_map, skill_bonus) = data;
-                                let mut map = data_mut;
+                                let (pos, visibility_map, skill_bonus) = data;
+                                let map = data_mut;
 
                                 let scan_pos = *pos + disp;
 
-                                let visibility_type;
-                                if let Some(visibility_map) = maybe_visibility_map {
-                                    visibility_type = visibility_map.value_pos(scan_pos);
-                                } else {
-                                    visibility_type = VisibilityType::None;
-                                }
+                                let visibility_type = visibility_map.value_pos(scan_pos);
 
                                 execute_tile_func(
                                     true,
                                     *skill_bonus,
-                                    &mut map,
+                                    map,
                                     visibility_type,
                                     scan_pos,
                                 );

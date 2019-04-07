@@ -15,8 +15,8 @@ use super::Command;
 use crate::dice::get_random_move;
 use crate::factions::Faction;
 use crate::game::EntityPositionTracker;
-use crate::rrl_math::{calculate_hash, Displacement, Position};
-use crate::world::{Tilemap, Visibility};
+use crate::rrl_math::{Displacement, Position};
+use crate::world::{Tilemap, VisibilityMapLookup};
 
 #[derive(Default)]
 pub struct LogicFaction;
@@ -32,7 +32,7 @@ pub struct SystemDataT<'a> {
     entity_position_tracker: ReadExpect<'a, EntityPositionTracker>,
     entities: Entities<'a>,
     map: ReadExpect<'a, Tilemap>,
-    visibility: ReadStorage<'a, Visibility>,
+    visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
     factions: ReadStorage<'a, Faction>,
     logic: ReadStorage<'a, LogicFaction>,
     commands: WriteStorage<'a, Command>,
@@ -47,41 +47,35 @@ impl<'a> System<'a> for LogicFactionSystem {
 
         let entity_position_tracker = data.entity_position_tracker;
         let factions = data.factions;
-        let map = data.map;
-        let map_hash = calculate_hash(&*map);
-        let visibility = data.visibility;
+        let map = &*data.map;
 
-        for (entity, _, command, pos, visibility) in (
+        for (entity, _, command, pos, visibility_map_lookup) in (
             &data.entities,
             &data.logic,
             &mut data.commands,
             &mut data.pos,
-            &visibility,
+            &mut data.visibility_map_lookup,
         )
             .join()
         {
+            let visibility_map = visibility_map_lookup.get_or_add(map);
+            
             let target_move;
             if let Some(faction) = factions.get(entity) {
-                // println!("Boo! 1");
-                if let Some(visibility_map) = visibility.visibility_lookup().get(&map_hash) {
-                    // println!("Boo! 2");
-                    if let Some((_enemy, enemy_pos)) = entity_position_tracker.get_nearest_enemy(
-                        *faction,
-                        &factions,
-                        visibility_map,
-                    ) {
-                        // println!("Boo! 3");
-                        let disp = enemy_pos - *pos;
-                        target_move = Displacement::new(disp.x.signum(), disp.y.signum());
-                    } else if let Some((_friend, friend_pos)) = entity_position_tracker
-                        .get_nearest_friend(entity, *faction, &factions, visibility_map)
-                    {
-                        // println!("Boo! 3");
-                        let disp = friend_pos - *pos;
-                        target_move = Displacement::new(disp.x.signum(), disp.y.signum());
-                    } else {
-                        target_move = get_random_move();
-                    }
+                if let Some((_enemy, enemy_pos)) = entity_position_tracker.get_nearest_enemy(
+                    *faction,
+                    &factions,
+                    visibility_map,
+                ) {
+                    // println!("Boo! 3");
+                    let disp = enemy_pos - *pos;
+                    target_move = Displacement::new(disp.x.signum(), disp.y.signum());
+                } else if let Some((_friend, friend_pos)) = entity_position_tracker
+                    .get_nearest_friend(entity, *faction, &factions, visibility_map)
+                {
+                    // println!("Boo! 3");
+                    let disp = friend_pos - *pos;
+                    target_move = Displacement::new(disp.x.signum(), disp.y.signum());
                 } else {
                     target_move = get_random_move();
                 }

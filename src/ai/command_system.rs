@@ -14,9 +14,9 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 use super::Command;
 use crate::factions::Faction;
 use crate::game::{Combat, CombatResult, EntityPositionTracker};
-use crate::rrl_math::{calculate_hash, Position};
+use crate::rrl_math::{Position};
 use crate::stats::{CreatureStats, Stat};
-use crate::world::{execute_tile_func, Tilemap, Visibility, VisibilityType};
+use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 
 pub struct CommandSystem;
 
@@ -27,7 +27,7 @@ pub struct SystemDataT<'a> {
     map: WriteExpect<'a, Tilemap>,
     command: ReadStorage<'a, Command>,
     factions: ReadStorage<'a, Faction>,
-    visibility: ReadStorage<'a, Visibility>,
+    visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
     stats: WriteStorage<'a, CreatureStats>,
     pos: WriteStorage<'a, Position>,
 }
@@ -40,19 +40,20 @@ impl<'a> System<'a> for CommandSystem {
 
         let entity_position_tracker = &*data.entity_position_tracker;
         let factions = data.factions;
-        let mut map = data.map;
-        let map_hash = calculate_hash(&*map);
+        let map = &mut *data.map;
         let stats = &mut data.stats;
 
-        for (entity, command, pos, visibility) in (
+        for (entity, command, pos, visibility_map_lookup) in (
             &data.entities,
             &data.command,
             &mut data.pos,
-            &data.visibility,
+            &mut data.visibility_map_lookup,
         )
             .join()
         {
             let command = command;
+            
+            let visibility_map = visibility_map_lookup.get_or_add(map);
 
             match *command {
                 Command::Move(disp) => {
@@ -69,14 +70,9 @@ impl<'a> System<'a> for CommandSystem {
                         );
                     }
 
-                    let visibility_type;
-                    if let Some(visibility_map) = visibility.visibility_lookup().get(&map_hash) {
-                        visibility_type = visibility_map.value_pos(new_pos);
-                    } else {
-                        visibility_type = VisibilityType::None;
-                    }
+                    let visibility_type = visibility_map.value_pos(new_pos);
 
-                    execute_tile_func(false, 100, &mut map, visibility_type, new_pos);
+                    execute_tile_func(false, 100, map, visibility_type, new_pos);
                 }
                 _ => (),
             }

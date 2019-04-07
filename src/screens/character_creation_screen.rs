@@ -22,7 +22,7 @@ use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
-use crate::world::Visibility;
+use crate::world::VisibilityMapLookup;
 
 pub struct CharacterCreationScreen {
     state: ScreenState,
@@ -120,7 +120,7 @@ impl Screen for CharacterCreationScreen {
                 .with(skills)
                 .with(talents)
                 .with(ViewpointMarker)
-                .with(Visibility::new())
+                .with(VisibilityMapLookup::new())
                 .build();
         }
 

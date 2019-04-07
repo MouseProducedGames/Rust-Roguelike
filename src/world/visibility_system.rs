@@ -11,11 +11,11 @@ pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteSto
 // Standard includes.
 
 // Internal includes.
-use super::Visibility;
+use super::VisibilityMapLookup;
 use crate::game::EntityPositionTracker;
-use crate::rrl_math::{calculate_hash, Position};
+use crate::rrl_math::{Position};
 use crate::stats::{CreatureStats, SightRange};
-use crate::world::{calculate_visibility, Lightmap, Mapping, Tilemap, VisibilityMap};
+use crate::world::{calculate_visibility, Lightmap, Tilemap};
 
 pub struct VisibilitySystem;
 
@@ -28,7 +28,7 @@ pub struct SystemDataT<'a> {
     stats: WriteStorage<'a, CreatureStats>,
     positions: WriteStorage<'a, Position>,
     sight_ranges: ReadStorage<'a, SightRange>,
-    visibilities: WriteStorage<'a, Visibility>,
+    visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
 }
 
 impl<'a> System<'a> for VisibilitySystem {
@@ -40,61 +40,38 @@ impl<'a> System<'a> for VisibilitySystem {
         let entity_position_tracker = &mut data.entity_position_tracker;
         let lightmap = &mut *data.lightmap;
         let map = &mut *data.map;
-        let map_hash = calculate_hash(&*map);
 
-        for (entity, stats, pos, sight_range, visibility_comp) in (
+        for (entity, stats, pos, sight_range, visibility_map_lookup) in (
             &data.entities,
             &mut data.stats,
             &mut data.positions,
             &data.sight_ranges,
-            &mut data.visibilities,
+            &mut data.visibility_map_lookup,
         )
             .join()
         {
             entity_position_tracker.set_position(entity, *pos);
 
-            let visibility_lookup = visibility_comp.visibility_lookup_mut();
-
-            if visibility_lookup.contains_key(&map_hash) == false {
-                let (map_width, map_height) = map.bounds();
-                visibility_lookup.insert(map_hash, VisibilityMap::new(map_width, map_height));
-            }
-
-            let visibility;
-            match visibility_lookup.get_mut(&map_hash) {
-                Some(vis_map) => visibility = vis_map,
-                _ => panic!("We no longer have the visibility map we just added!"),
-            }
+            let visibility_map = visibility_map_lookup.get_or_add_mut(map);
 
             sight_range
                 .sight_range()
-                .apply(stats, lightmap, pos, map, visibility);
+                .apply(stats, lightmap, pos, map, visibility_map);
         }
 
-        for (entity, stats, pos, visibility_comp) in (
+        for (entity, stats, pos, visibility_map_lookup) in (
             &data.entities,
             &mut data.stats,
             &mut data.positions,
-            &mut data.visibilities,
+            &mut data.visibility_map_lookup,
         )
             .join()
         {
             entity_position_tracker.set_position(entity, *pos);
 
-            let visibility_lookup = visibility_comp.visibility_lookup_mut();
+            let visibility_map = visibility_map_lookup.get_or_add_mut(map);
 
-            if visibility_lookup.contains_key(&map_hash) == false {
-                let (map_width, map_height) = map.bounds();
-                visibility_lookup.insert(map_hash, VisibilityMap::new(map_width, map_height));
-            }
-
-            let visibility;
-            match visibility_lookup.get_mut(&map_hash) {
-                Some(vis_map) => visibility = vis_map,
-                _ => panic!("We no longer have the visibility map we just added!"),
-            }
-
-            calculate_visibility(lightmap, *pos, stats, &map, visibility);
+            calculate_visibility(lightmap, *pos, stats, &map, visibility_map);
         }
     }
 }

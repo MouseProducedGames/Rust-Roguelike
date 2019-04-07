@@ -22,7 +22,7 @@ use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::TalentLookup;
-use crate::world::Visibility;
+use crate::world::VisibilityMapLookup;
 
 pub struct WorldInitScreen {
     state: ScreenState,
@@ -81,7 +81,7 @@ impl Screen for WorldInitScreen {
         world.register::<SkillLookup>();
         world.register::<TalentLookup>();
         world.register::<ViewpointMarker>();
-        world.register::<Visibility>();
+        world.register::<VisibilityMapLookup>();
 
         self.state = ScreenState::Stopped;
     }

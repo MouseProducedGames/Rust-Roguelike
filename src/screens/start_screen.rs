@@ -22,7 +22,7 @@ use crate::io::Display;
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::TalentLookup;
-use crate::world::Visibility;
+use crate::world::VisibilityMapLookup;
 
 enum StartState {
     SetupDisplay,
@@ -57,7 +57,7 @@ impl StartScreen {
             .with(Position::new(12, 8))
             .with(SightRange::new(5.0))
             .with(TalentLookup::new())
-            .with(Visibility::new())
+            .with(VisibilityMapLookup::new())
             .build();
 
         world
@@ -69,7 +69,7 @@ impl StartScreen {
             .with(Position::new(8, 12))
             .with(SightRange::new(5.0))
             .with(TalentLookup::new())
-            .with(Visibility::new())
+            .with(VisibilityMapLookup::new())
             .build();
     }
 
