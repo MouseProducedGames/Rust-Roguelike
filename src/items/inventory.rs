@@ -13,6 +13,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 
 // internal includes.
 use super::Item;
+use crate::abilities::Ability;
 
 #[derive(Clone)]
 pub struct Inventory {
@@ -21,9 +22,11 @@ pub struct Inventory {
 
 impl Inventory {
     pub fn new() -> Self {
-        Self {
+        let mut output = Self {
             values: Arc::new(Mutex::new(vec![])),
-        }
+        };
+        output.push(Item::Generic(String::from("Torch"), Ability::Light(5.0)));
+        output
     }
 
     pub fn get(&self) -> MutexGuard<Vec<Item>> {
