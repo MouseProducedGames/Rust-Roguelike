@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External dependencies.
+// External includes.
 use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
-// Internal dependencies.
-use crate::ai::{Command, CreatureTracker, Visibility};
+// Standard includes.
+
+// Internal includes.
+use super::{Command, CreatureTracker, Visibility};
 use crate::factions::Faction;
 use crate::game::{Combat, CombatResult};
 use crate::rrl_math::{calculate_hash, Position};

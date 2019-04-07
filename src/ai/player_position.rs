@@ -6,10 +6,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal includes
+// Standard includes.
 use std::default::Default;
+
+// Internal includes.
 
 // #[derive(Default)]
 pub struct PlayerPosition(pub Position);

@@ -5,10 +5,11 @@ See license in the LICENSE file
 Documentation:
 
  **/
+// External includes.
 
-// External includes
+// Standard includes.
 
-// Internal includes
+// Internal includes.
 
 pub static _ABSOLUTE: f32 = 1.0;
 pub static _EXTREME: f32 = 0.8;

@@ -6,15 +6,17 @@ Documentation:
 
 **/
 // External includes
-pub use specs::{ReadExpect, ReadStorage, System, WriteExpect};
+use specs::{ReadExpect, ReadStorage, System, WriteExpect};
 
-// Internal includes
-pub use crate::ai::{PlayerMarker, Visibility};
-pub use crate::io::Display;
-pub use crate::rrl_math::{calculate_hash, Position};
-pub use crate::stats::CreatureStats;
-pub use crate::world::Tilemap;
+// Standard includes.
 use std::sync::{Arc, Mutex};
+
+// Internal includes.
+use super::{PlayerMarker, Visibility};
+use crate::io::Display;
+use crate::rrl_math::{calculate_hash, Position};
+use crate::stats::CreatureStats;
+use crate::world::Tilemap;
 
 pub struct PlayerDisplaySystem;
 

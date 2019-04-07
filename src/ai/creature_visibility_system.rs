@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
-// Internal includescarc
-use crate::ai::{CreatureTracker, Visibility};
+// Standard includes.
+
+// Internal includes.
+use super::{CreatureTracker, Visibility};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::{CreatureStats, SightRange};
 use crate::world::{calculate_visibility, Lightmap, Mapping, Tilemap, VisibilityMap};

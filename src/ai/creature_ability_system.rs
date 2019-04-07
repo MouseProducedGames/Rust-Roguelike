@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External dependencies.
+// External includes.
 use specs::{ReadStorage, System, WriteExpect, WriteStorage};
 
-// Internal dependencies.
-use crate::ai::Visibility;
+// Standard includes.
+
+// Internal includes.
+use super::Visibility;
 use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, StatModifier};

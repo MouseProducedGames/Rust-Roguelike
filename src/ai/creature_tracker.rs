@@ -7,6 +7,8 @@ Documentation:
 **/
 // External includes.
 use specs::{Entity, ReadStorage};
+
+// Standard includes.
 use std::collections::HashMap;
 
 // Internal includes.

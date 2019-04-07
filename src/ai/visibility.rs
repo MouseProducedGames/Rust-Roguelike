@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Component, VecStorage};
+
+// Standard includes.
 use std::collections::hash_map::HashMap;
 
-// internal includes
+// Internal includes.
 use crate::world::VisibilityMap;
 
 pub struct Visibility {

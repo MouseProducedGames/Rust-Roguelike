@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External dependencies.
+// External includes.
 use specs::{Component, VecStorage};
 
-// Internal dependencies.
+// Standard includes.
+
+// Internal includes.
 use crate::rrl_math::Displacement;
 
 #[derive(Copy, Clone)]

@@ -5,11 +5,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
+// External includes.
 
-use super::CreatureView;
-use super::CreatureLogic;
-use super::super::game_state::GameState;
-use super::super::tilemap::Tilemap;
+// Standard includes.
+
+// Internal includes.
+use super::{CreatureView, CreatureLogic};
+use crate::game::GameState;
+use crate::world::Tilemap;
 
 pub struct CreatureLogicNone
 {

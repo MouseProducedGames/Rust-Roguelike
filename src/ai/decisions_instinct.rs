@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External includes
+// External includes.
 use rand::{thread_rng, Rng};
 
-// Internal includes
+// Standard includes.
+
+// Internal includes.
 use crate::ai::_LoveFearHate;
 
 pub fn _make_decision_attack(emotion: _LoveFearHate, rel_str: f32) -> bool {

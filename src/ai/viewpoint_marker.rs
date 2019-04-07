@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Component, NullStorage};
 
-// internal includes
+// Standard includes.
+
+// Internal includes.
 
 #[derive(Default)]
 pub struct ViewpointMarker;

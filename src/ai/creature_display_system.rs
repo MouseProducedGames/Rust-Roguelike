@@ -5,12 +5,14 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External includes
+// External includes.
 use specs::{ReadExpect, ReadStorage, System, WriteExpect};
+
+// Standard includes.
 use std::sync::{Arc, Mutex};
 
-// Internal includes
-use crate::ai::PlayerPosition;
+// Internal includes.
+use super::PlayerPosition;
 use crate::factions::Faction;
 use crate::io::Display;
 use crate::rrl_math::Position;

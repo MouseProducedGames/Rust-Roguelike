@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External dependencies.
+// External includes.
 use specs::{Entities, ReadStorage, System, WriteExpect, WriteStorage};
 
-// Internal dependencies.
-use crate::ai::{CreatureTracker, PlayerPosition, ViewpointMarker};
+// Standard includes.
+
+// Internal includes.
+use super::{CreatureTracker, PlayerPosition, ViewpointMarker};
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, Stat};
 

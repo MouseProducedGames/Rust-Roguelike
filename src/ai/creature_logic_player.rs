@@ -5,15 +5,17 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{
     Component, DenseVecStorage, Entities, ReadExpect, ReadStorage, System, WriteExpect,
     WriteStorage,
 };
+
+// Standard includes.
 use std::sync::{Arc, Mutex};
 
-// Internal includes
-use crate::ai::{Command, CreatureTracker, PlayerMarker};
+// Internal includes.
+use super::{Command, CreatureTracker, PlayerMarker};
 use crate::game::GameState;
 use crate::io::Display;
 use crate::rrl_math::{Displacement, Position};

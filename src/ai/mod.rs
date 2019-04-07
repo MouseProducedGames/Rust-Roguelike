@@ -5,28 +5,29 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal includes
-pub mod command;
-// pub mod creature;
-pub mod creature_ability_system;
-pub mod creature_command_system;
-pub mod creature_display_system;
-pub mod creature_last_update_system;
-pub mod creature_logic_faction;
-pub mod creature_logic_player;
-pub mod creature_logic_wander;
-pub mod creature_logic_wander_attack;
-pub mod creature_tracker;
-pub mod creature_visibility_system;
-pub mod decisions_instinct;
-pub mod love_fear_hate;
-pub mod player_display_system;
-pub mod player_marker;
-pub mod player_position;
-pub mod viewpoint_marker;
-pub mod visibility;
+// Standard includes.
+
+// Internal includes.
+mod command;
+mod creature_ability_system;
+mod creature_command_system;
+mod creature_display_system;
+mod creature_last_update_system;
+mod creature_logic_faction;
+mod creature_logic_player;
+mod creature_logic_wander;
+mod creature_logic_wander_attack;
+mod creature_tracker;
+mod creature_visibility_system;
+mod decisions_instinct;
+mod love_fear_hate;
+mod player_display_system;
+mod player_marker;
+mod player_position;
+mod viewpoint_marker;
+mod visibility;
 pub use command::Command;
 pub use creature_ability_system::CreatureAbilitySystem;
 pub use creature_command_system::CreatureCommandSystem;
