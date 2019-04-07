@@ -19,11 +19,13 @@ As such, it is composed ( Width, Height ) and accessed in the order ( x, y ).
 Multimap is implemented as a thin wrapper over Multidim.
 
 **/
-// External includes
+// External includes.
 
-// Internal includes
+// Standard includes.
+
+// Internal includes.
 use super::multidim::Multidim;
-use super::world::{MapPosition, Mapping};
+use crate::world::{MapPosition, Mapping};
 
 pub struct Multimap<T>
 where

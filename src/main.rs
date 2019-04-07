@@ -12,8 +12,9 @@ See license in the LICENSE file
 
 Documentation:
 
- **/
-// External includess
+**/
+
+// External includes.
 #[macro_use]
 extern crate derive_more;
 extern crate rand;

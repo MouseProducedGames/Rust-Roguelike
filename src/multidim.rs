@@ -10,10 +10,12 @@ This prevents duplicating work, and the errors that would pop up if each type
 that nneded a two-dimensional array, had to compose one themselves.
 
 **/
-// External includes
+// External includes.
 
-// Internal includes
+// Standard includes.
 use std::default::Default;
+
+// Internal includes.
 
 pub struct Multidim<T>
 where
