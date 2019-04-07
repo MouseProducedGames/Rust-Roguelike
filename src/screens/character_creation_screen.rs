@@ -9,6 +9,7 @@ Documentation:
 use specs::{Builder, World};
 
 // Standard includes.
+use std::convert::From;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
@@ -16,12 +17,12 @@ use super::{ScreenState, ScreenPushWrapper, Screen};
 use crate::ai::{
     Command, CreatureLogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker, Visibility,
 };
-use crate::background::{Species, SpeciesType};
+use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
 use crate::io::Display;
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
-use crate::stats::SightRange;
+use crate::stats::{CreatureStats, SightRange};
 use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
 
 pub struct CharacterCreationScreen {
@@ -67,6 +68,18 @@ impl Screen for CharacterCreationScreen {
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         world.add_resource(PlayerPosition(Position::new(8, 5)));
+        
+        let origin_type;
+        {
+            let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
+            let mut display = mutex_display.lock().unwrap();
+            origin_type = display.choose_origin(&[
+                OriginType::Farmer,
+                OriginType::Hunter,
+                OriginType::Jack,
+                OriginType::Rogue,
+            ]);
+        }
 
         let species_type;
         {
@@ -101,7 +114,7 @@ impl Screen for CharacterCreationScreen {
                 .with(Command::None)
                 .with(CreatureLogicPlayer {})
                 .with(Faction::new(0))
-                .with(species.stats())
+                .with(species.stats() + CreatureStats::from(origin_type))
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)
                 .with(SightRange::new(5.0))

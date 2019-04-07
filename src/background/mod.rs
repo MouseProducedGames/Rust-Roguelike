@@ -10,5 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+mod origin;
 mod species;
+pub use origin::OriginType;
 pub use species::{Species, SpeciesType};

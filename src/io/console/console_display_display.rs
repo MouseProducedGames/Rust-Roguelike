@@ -12,7 +12,7 @@ use crossterm_style::Color;
 
 // Internal includes.
 use super::ConsoleChar;
-use crate::background::SpeciesType;
+use crate::background::{OriginType, SpeciesType};
 use crate::factions::Faction;
 use crate::io::console::{ConsoleDisplay, Darker};
 use crate::io::Display;
@@ -21,6 +21,46 @@ use crate::stats::{CreatureStats, Stat};
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {
+    fn choose_origin(&mut self, options: &[OriginType]) -> OriginType {
+        let mut keep_going = true;
+        let mut option = OriginType::Farmer;
+
+        while keep_going {
+            self.clear();
+
+            self.put_string(
+                1,
+                1,
+                "Select your character's origin:",
+                Color::Grey,
+                Color::Black,
+            );
+
+            for (i, option) in options.iter().enumerate() {
+                let formatted = format!("{}) {}", (1 + i), option.to_string());
+                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+            }
+
+            self.present();
+
+            if let Some(index) = self.get_char().to_digit(10) {
+                let index = index as usize;
+                let index = match index {
+                    0 => 10,
+                    _ => index - 1,
+                };
+                if index < options.len() {
+                    option = options[index];
+                    keep_going = false;
+                }
+            }
+        }
+
+        self.clear();
+
+        option
+    }
+    
     fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType {
         let mut keep_going = true;
         let mut option = SpeciesType::Human;

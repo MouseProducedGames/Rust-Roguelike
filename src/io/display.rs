@@ -11,13 +11,15 @@ Documentation:
 use std::marker::{Send, Sync};
 
 // Internal includes.
-use crate::background::SpeciesType;
+use crate::background::{OriginType, SpeciesType};
 use crate::factions::Faction;
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
 use crate::world::{Tilemap, VisibilityMap};
 
 pub trait Display: Drop + Send + Sync {
+    fn choose_origin(&mut self, options: &[OriginType]) -> OriginType;
+    
     fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType;
 
     fn display_stats(&mut self, stats: CreatureStats);
