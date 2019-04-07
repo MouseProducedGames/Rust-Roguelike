@@ -5,12 +5,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::World;
+
+// Standard includes.
 use std::sync::{Arc, Mutex};
 
-// Internal includes
-use super::screen::{Screen, ScreenState};
+// Internal includes.
+use super::{Screen, ScreenState};
 
 pub struct ScreenManager {
     stack: Vec<Arc<Mutex<dyn Screen>>>,

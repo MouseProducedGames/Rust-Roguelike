@@ -5,13 +5,13 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::World;
 
-// Internal includes
-use super::screen::ScreenState;
-use super::screen_manager::ScreenPushWrapper;
-use super::Screen;
+// Standard includes.
+
+// Internal includes.
+use super::{ScreenState, ScreenPushWrapper, Screen};
 use crate::ai::{
     Command, CreatureLogicFaction, CreatureLogicPlayer, CreatureLogicWander,
     CreatureLogicWanderAttack, CreatureTracker, PlayerMarker, ViewpointMarker, Visibility,

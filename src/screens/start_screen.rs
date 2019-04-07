@@ -5,14 +5,17 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Builder, World};
+
+// Standard includes.
 use std::sync::{Arc, Mutex};
 
-// Internal includes
-use super::screen::ScreenState;
-use super::screen_manager::ScreenPushWrapper;
-use super::{CharacterCreationScreen, GameScreen, MapInitScreen, Screen, WorldInitScreen};
+// Internal includes.
+use super::{
+    CharacterCreationScreen, MapInitScreen, ScreenState, ScreenPushWrapper,
+    GameScreen, Screen, WorldInitScreen
+};
 use crate::ai::{Command, CreatureLogicFaction, Visibility};
 use crate::factions::Faction;
 use crate::io::Display;

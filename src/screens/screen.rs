@@ -8,8 +8,10 @@ Documentation:
 // External includes
 use specs::World;
 
+// Standard includes.
+
 // Internal includes
-use super::screen_manager::ScreenPushWrapper;
+use super::ScreenPushWrapper;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum ScreenState {

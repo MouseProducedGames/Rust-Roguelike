@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// Internal includes
+// Standard includes.
+
+// Internal includes.
 mod character_creation_screen;
 mod game_screen;
 mod map_init_screen;
@@ -15,6 +17,8 @@ mod screen;
 mod screen_manager;
 mod start_screen;
 mod world_init_screen;
+use screen::ScreenState;
+use screen_manager::ScreenPushWrapper;
 pub use character_creation_screen::CharacterCreationScreen;
 pub use game_screen::GameScreen;
 pub use map_init_screen::MapInitScreen;

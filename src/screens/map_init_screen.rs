@@ -5,14 +5,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use rand::{thread_rng, Rng};
 use specs::World;
 
-// Internal includes
-use super::screen::ScreenState;
-use super::screen_manager::ScreenPushWrapper;
-use super::Screen;
+// Standard includes.
+
+// Internal includes.
+use super::{ScreenState, ScreenPushWrapper, Screen};
 use crate::dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::rrl_math::Bounds;
 use crate::world::{Lightmap, Mapping, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};

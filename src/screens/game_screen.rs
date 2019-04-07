@@ -5,13 +5,14 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{RunNow, World};
+
+// Standard includes.
 use std::sync::{Arc, Mutex};
 
-// Internal includes
-use super::screen::{Screen, ScreenState};
-use super::screen_manager::ScreenPushWrapper;
+// Internal includes.
+use super::{Screen, ScreenState, ScreenPushWrapper};
 use crate::ai::{
     CreatureAbilitySystem, CreatureCommandSystem, CreatureDisplaySystem, CreatureLastUpdateSystem,
     CreatureLogicFactionSystem, CreatureLogicPlayerSystem, CreatureLogicWanderAttackSystem,
