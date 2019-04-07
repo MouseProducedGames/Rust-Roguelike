@@ -11,14 +11,13 @@ use specs::{ReadStorage, System, WriteExpect, WriteStorage};
 // Standard includes.
 
 // Internal includes.
-use super::Visibility;
 use crate::rrl_math::{calculate_hash, Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, StatModifier};
 use crate::talents::{
     talent_range_func, TalentActivation, TalentActivationOp, TalentLookup, TalentType,
 };
-use crate::world::{execute_tile_func, Tilemap, VisibilityMap, VisibilityType};
+use crate::world::{execute_tile_func, Tilemap, Visibility, VisibilityMap, VisibilityType};
 
 pub struct AbilitySystem;
 

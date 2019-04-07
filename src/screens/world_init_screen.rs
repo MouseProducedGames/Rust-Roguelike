@@ -13,15 +13,16 @@ use specs::World;
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{
-    Command, EntityPositionTracker, LogicFaction, LogicPlayer, LogicWander, LogicWanderAttack,
-    PlayerMarker, ViewpointMarker, Visibility,
+    Command, LogicFaction, LogicPlayer, LogicWander, LogicWanderAttack,
+    PlayerMarker, ViewpointMarker,
 };
 use crate::factions::Faction;
-use crate::game::GameState;
+use crate::game::{EntityPositionTracker, GameState};
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::TalentLookup;
+use crate::world::Visibility;
 
 pub struct WorldInitScreen {
     state: ScreenState,

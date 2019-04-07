@@ -12,7 +12,7 @@ use specs::{ReadExpect, ReadStorage, System, WriteExpect};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::PlayerPosition;
+use crate::ai::PlayerPosition;
 use crate::factions::Faction;
 use crate::io::Display;
 use crate::rrl_math::Position;

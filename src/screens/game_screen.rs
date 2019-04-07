@@ -13,14 +13,14 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
+use crate::abilities::AbilitySystem;
 use crate::ai::{
-    AbilitySystem, CommandSystem, CreatureDisplaySystem, LastUpdateSystem, LogicFactionSystem,
-    LogicPlayerSystem, LogicWanderAttackSystem, LogicWanderSystem, PlayerDisplaySystem,
-    VisibilitySystem,
+    CommandSystem, LogicFactionSystem, LogicPlayerSystem,
+    LogicWanderAttackSystem, LogicWanderSystem,
 };
-use crate::game::GameState;
-use crate::io::Display;
-use crate::world::Lightmap;
+use crate::game::{GameState, LastUpdateSystem};
+use crate::io::{CreatureDisplaySystem, Display, PlayerDisplaySystem};
+use crate::world::{Lightmap, VisibilitySystem};
 
 pub struct GameScreen {
     ability_system: AbilitySystem,

@@ -11,7 +11,8 @@ use specs::{Entities, ReadStorage, System, WriteExpect, WriteStorage};
 // Standard includes.
 
 // Internal includes.
-use super::{EntityPositionTracker, PlayerPosition, ViewpointMarker};
+use super::EntityPositionTracker;
+use crate::ai::{PlayerPosition, ViewpointMarker};
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, Stat};
 

@@ -10,6 +10,8 @@ Documentation:
 // Standard includes.
 
 // internal includes.
+mod ability_system;
 mod ability;
 mod func;
+pub use ability_system::AbilitySystem;
 pub use ability::Ability;

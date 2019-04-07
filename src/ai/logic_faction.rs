@@ -11,11 +11,12 @@ use specs::{Component, Entities, NullStorage, ReadExpect, ReadStorage, System, W
 // Standard includes.
 
 // Internal includes.
-use super::{Command, EntityPositionTracker, Visibility};
+use super::Command;
 use crate::dice::get_random_move;
 use crate::factions::Faction;
+use crate::game::EntityPositionTracker;
 use crate::rrl_math::{calculate_hash, Displacement, Position};
-use crate::world::Tilemap;
+use crate::world::{Tilemap, Visibility};
 
 #[derive(Default)]
 pub struct LogicFaction;

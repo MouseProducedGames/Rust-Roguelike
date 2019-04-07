@@ -11,7 +11,8 @@ pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteSto
 // Standard includes.
 
 // Internal includes.
-use super::{EntityPositionTracker, Visibility};
+use super::Visibility;
+use crate::game::EntityPositionTracker;
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::{CreatureStats, SightRange};
 use crate::world::{calculate_visibility, Lightmap, Mapping, Tilemap, VisibilityMap};

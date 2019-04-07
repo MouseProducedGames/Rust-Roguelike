@@ -16,12 +16,13 @@ use super::{
     CharacterCreationScreen, GameScreen, MapInitScreen, Screen, ScreenPushWrapper, ScreenState,
     WorldInitScreen,
 };
-use crate::ai::{Command, LogicFaction, Visibility};
+use crate::ai::{Command, LogicFaction};
 use crate::factions::Faction;
 use crate::io::Display;
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::TalentLookup;
+use crate::world::Visibility;
 
 enum StartState {
     SetupDisplay,

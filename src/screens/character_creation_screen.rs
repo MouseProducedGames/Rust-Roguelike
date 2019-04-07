@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::ai::{Command, LogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker, Visibility};
+use crate::ai::{Command, LogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
 use crate::io::Display;
@@ -22,6 +22,7 @@ use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, SightRange};
 use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
+use crate::world::Visibility;
 
 pub struct CharacterCreationScreen {
     state: ScreenState,

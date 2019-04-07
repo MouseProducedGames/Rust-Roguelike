@@ -12,11 +12,11 @@ use specs::{ReadExpect, ReadStorage, System, WriteExpect};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{PlayerMarker, Visibility};
+use crate::ai::PlayerMarker;
 use crate::io::Display;
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::CreatureStats;
-use crate::world::Tilemap;
+use crate::world::{Tilemap, Visibility};
 
 pub struct PlayerDisplaySystem;
 

@@ -11,12 +11,12 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 // Standard includes.
 
 // Internal includes.
-use super::{Command, EntityPositionTracker, Visibility};
+use super::Command;
 use crate::factions::Faction;
-use crate::game::{Combat, CombatResult};
+use crate::game::{Combat, CombatResult, EntityPositionTracker};
 use crate::rrl_math::{calculate_hash, Position};
 use crate::stats::{CreatureStats, Stat};
-use crate::world::{execute_tile_func, Tilemap, VisibilityType};
+use crate::world::{execute_tile_func, Tilemap, Visibility, VisibilityType};
 
 pub struct CommandSystem;
 
