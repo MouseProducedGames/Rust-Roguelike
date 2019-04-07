@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// Internal includes
+// Standard includes.
+
+// Internal includes.
 use crate::world::Mapping;
 
 #[derive(Copy, Clone, Eq, PartialEq)]

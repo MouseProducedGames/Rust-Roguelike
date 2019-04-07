@@ -5,13 +5,15 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 use specs::{Component, VecStorage};
+
+// Standard includes.
 use std::cmp::{Eq, PartialEq};
 use std::convert::From;
 use std::ops::{Add, Sub};
 
-// Internal includes
+// Internal includes.
 use super::DisplacementU32;
 
 #[derive(Copy, Clone, Debug, Default)]

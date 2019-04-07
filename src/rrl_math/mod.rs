@@ -5,15 +5,17 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// Internal includes
-pub mod bounds;
-pub mod calculate_hash;
-pub mod displacement;
-pub mod displacement_u32;
-pub mod position;
-pub mod position_u32;
+// Standard includes.
+
+// Internal includes.
+mod bounds;
+mod calculate_hash;
+mod displacement;
+mod displacement_u32;
+mod position;
+mod position_u32;
 pub use bounds::Bounds;
 pub use calculate_hash::calculate_hash;
 pub use displacement::Displacement;
