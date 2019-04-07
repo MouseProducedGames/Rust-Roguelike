@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
+
+// Standard includes.
 use std::marker::PhantomData;
 
-// internal includes
+// Internal includes.
 
 pub struct Immut<T> {
     value: T,

@@ -5,11 +5,13 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 extern crate derive_more;
+
+// Standard includes.
 use std::convert::From;
 
-// internal includes
+// Internal includes.
 
 #[derive(
     Add,

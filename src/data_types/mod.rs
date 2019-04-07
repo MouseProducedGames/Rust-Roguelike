@@ -5,9 +5,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal include
+// Standard include.
+
+// Internal include.
+
 mod immut;
 mod range;
 pub use immut::Immut;
