@@ -5,9 +5,11 @@ See license in the LICENSE file
 Documentation:
 
  **/
-// External includes
+// External includes.
 
-// internal include
+// Standard includes.
+
+// Internal includes.
 use crate::dice::roll_success;
 use crate::stats::{CreatureStats, Stat, StatModifier};
 
