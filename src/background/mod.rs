@@ -5,8 +5,10 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
 
-// internal includes
-pub mod species;
+// Standard includes.
+
+// Internal includes.
+mod species;
 pub use species::{Species, SpeciesType};

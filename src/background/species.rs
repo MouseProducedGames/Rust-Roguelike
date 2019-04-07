@@ -5,10 +5,12 @@ See license in the LICENSE file
 Documentation:
 
 **/
-// External includes
+// External includes.
+
+// Standard includes.
 use std::default::Default;
 
-// internal includes
+// internal includes.
 use crate::stats::CreatureStats;
 
 #[derive(Copy, Clone)]
