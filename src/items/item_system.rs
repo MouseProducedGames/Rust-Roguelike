@@ -6,17 +6,18 @@ Documentation:
 
 **/
 // External includes.
-pub use specs::{Entities, ReadStorage, System, WriteExpect, WriteStorage};
+pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Standard includes.
 
 // Internal includes.
 use crate::game::EntityPositionTracker;
+use crate::items::Inventory;
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
-use crate::world::{calculate_visibility, Lightmap, Tilemap, VisibilityMapLookup};
+use crate::world::{Lightmap, Tilemap, VisibilityMapLookup};
 
-pub struct VisibilitySystem;
+pub struct ItemSystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
@@ -24,12 +25,13 @@ pub struct SystemDataT<'a> {
     lightmap: WriteExpect<'a, Lightmap>,
     map: WriteExpect<'a, Tilemap>,
     entity_position_tracker: WriteExpect<'a, EntityPositionTracker>,
+    inventory: WriteStorage<'a, Inventory>,
     stats: WriteStorage<'a, CreatureStats>,
     positions: WriteStorage<'a, Position>,
     visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
 }
 
-impl<'a> System<'a> for VisibilitySystem {
+impl<'a> System<'a> for ItemSystem {
     type SystemData = SystemDataT<'a>;
 
     fn run(&mut self, mut data: Self::SystemData) {
@@ -39,11 +41,12 @@ impl<'a> System<'a> for VisibilitySystem {
         let lightmap = &mut *data.lightmap;
         let map = &mut *data.map;
 
-        for (entity, stats, pos, visibility_map_lookup) in (
+        for (entity, stats, pos, visibility_map_lookup, inventory) in (
             &data.entities,
             &mut data.stats,
             &mut data.positions,
             &mut data.visibility_map_lookup,
+            &data.inventory,
         )
             .join()
         {
@@ -51,7 +54,9 @@ impl<'a> System<'a> for VisibilitySystem {
 
             let visibility_map = visibility_map_lookup.get_or_add_mut(map);
 
-            calculate_visibility(lightmap, *pos, stats, &map, visibility_map);
+            for item in inventory.get().iter() {
+                item.apply(stats, lightmap, pos, map, visibility_map);
+            }
         }
     }
 }

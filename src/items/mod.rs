@@ -12,5 +12,7 @@ Documentation:
 // Internal includes.
 mod inventory;
 mod item;
+mod item_system;
 pub use inventory::Inventory;
 pub use item::Item;
+pub use item_system::ItemSystem;
