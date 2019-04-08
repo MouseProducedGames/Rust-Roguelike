@@ -232,6 +232,8 @@ impl ConsoleDisplay {
 
 impl Drop for ConsoleDisplay {
     fn drop(&mut self) {
+        println!("{}{}{}", Colored::Fg(Color::Grey), Colored::Bg(Color::Black), "");
+        
         match self.term.cursor().show() {
             Ok(_v) => (),
             // We shouldn't panic; but we should inform the user.
