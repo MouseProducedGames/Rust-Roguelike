@@ -98,16 +98,31 @@ impl ConsoleDisplay {
     }
 
     pub(crate) fn clear(&mut self) {
-        let front_buffer_index = self.front_buffer_index();
-        let buffers = &mut self.buffers;
-        let (buffer_height, buffer_width) = buffers[self.back_buffer_index].bounds();
+        self.clear_back_buffer();
+        self.clear_front_buffer();
+
+        self.clear_terminal();
+    }
+
+    fn clear_buffer(&mut self, buffer_index: usize) {
+        let (buffer_height, buffer_width) = self.buffers[self.back_buffer_index].bounds();
+        let buffer = &mut self.buffers[buffer_index];
         for y in 0..buffer_height {
             for x in 0..buffer_width {
-                *self.buffers[front_buffer_index].value_mut(y, x) = self.map_graphics[0];
-                *self.buffers[self.back_buffer_index].value_mut(y, x) = self.map_graphics[0];
+                *buffer.value_mut(y, x) = self.map_graphics[0];
             }
         }
+    }
 
+    pub(crate) fn clear_back_buffer(&mut self) {
+        self.clear_buffer(self.back_buffer_index);
+    }
+
+    pub(crate) fn clear_front_buffer(&mut self) {
+        self.clear_buffer(self.front_buffer_index());
+    }
+    
+    pub(crate) fn clear_terminal(&mut self) {
         match self.term.terminal().clear(crossterm::ClearType::All) {
             Ok(_v) => (),
             _ => panic!("Could not clear screen."),
