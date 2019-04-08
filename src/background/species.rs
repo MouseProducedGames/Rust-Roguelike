@@ -22,12 +22,12 @@ pub enum SpeciesType {
 }
 
 impl SpeciesType {
-    pub fn to_string(self) -> String {
+    pub fn to_string(self) -> &'static str {
         match self {
-            SpeciesType::Dwarf => String::from("Dwarf"),
-            SpeciesType::Elf => String::from("Elf"),
-            SpeciesType::Halfling => String::from("Halfling"),
-            SpeciesType::Human => String::from("Human"),
+            SpeciesType::Dwarf => "Dwarf",
+            SpeciesType::Elf => "Elf",
+            SpeciesType::Halfling => "Halfling",
+            SpeciesType::Human => "Human",
         }
     }
 }
