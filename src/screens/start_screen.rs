@@ -18,7 +18,7 @@ use super::{
 };
 use crate::ai::{Command, LogicFaction};
 use crate::factions::Faction;
-use crate::io::Display;
+use crate::io::{Display, Input};
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
@@ -78,6 +78,7 @@ impl StartScreen {
         // Window::init();
 
         world.add_resource(display);
+        world.add_resource(Arc::new(Mutex::new(Input::new())));
     }
 }
 

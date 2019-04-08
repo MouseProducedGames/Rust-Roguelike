@@ -19,7 +19,7 @@ use crate::ai::{
     LogicWanderSystem,
 };
 use crate::game::{GameState, LastUpdateSystem};
-use crate::io::{CreatureDisplaySystem, Display, PlayerDisplaySystem};
+use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
 use crate::world::{Lightmap, VisibilitySystem};
 
 pub struct GameScreen {
@@ -98,7 +98,11 @@ impl Screen for GameScreen {
     }
     
     fn pre_update(&mut self, world: &mut World) {
-        world.read_resource::<Arc<Mutex<Display>>>().lock().unwrap().update();
+        let arc_mutex_display = world.read_resource::<Arc<Mutex<Display>>>();
+        let display = arc_mutex_display.lock().unwrap();
+        let arc_mutex_input = world.write_resource::<Arc<Mutex<Input>>>();
+        let input = arc_mutex_input.lock().unwrap();
+        display.update(input);
     }
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {

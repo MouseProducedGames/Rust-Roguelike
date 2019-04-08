@@ -12,7 +12,6 @@ crossterm_screen = "0.1.0"
 crossterm_style = "0.2.0"
 crossterm_terminal = "0.1.0"
 derive_more = "0.14.0"
-lazy_static = "1.3.0"
 rand = "0.6"
 rust_dice = { path = "./src/crates/rust_dice" }
 shred = "0.7.1"

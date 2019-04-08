@@ -9,10 +9,10 @@ Documentation:
 
 // Standard includes.
 use std::marker::{Send, Sync};
+use std::sync::MutexGuard;
 
 // Internal includes.
-use super::Input;
-use super::input::InputData;
+use super::{Input, InputData};
 use crate::background::{OriginType, SpeciesType};
 use crate::factions::Faction;
 use crate::items::Inventory;
@@ -33,8 +33,8 @@ pub trait Display: Drop + Send + Sync {
 
     fn present(&mut self);
     
-    fn update(&self) {
-        Input::update(InputData { ch: self.get_char() });
+    fn update(&self, mut input: MutexGuard<Input>) {
+        input.update(InputData { ch: self.get_char() });
     }
 
     fn write_creature(&mut self, faction: Faction, creature_pos: Position, view_pos: Position);

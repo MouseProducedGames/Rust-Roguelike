@@ -73,7 +73,9 @@ impl Screen for InventoryScreen {
         }
         
         {
-            let ch = Input::get_char();
+            let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>();
+            let input = arc_mutex_input.lock().unwrap();
+            let ch = input.instance().get_char();
             if ch == 13 as char {
                 self.state = ScreenState::Stopped;
             }

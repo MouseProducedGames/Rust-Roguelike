@@ -6,36 +6,30 @@ Documentation:
 
 **/
 // External includes
-// #[macro_use]
-// extern crate lazy_static;
 
 // Standard includes.
-use std::sync::{Arc, Mutex};
 
 // internal includes
-
-lazy_static! {
-    static ref INSTANCE: Arc<Mutex<Input>> = Arc::new(Mutex::new(Input::new()));
-}
-
-pub(super) union InputData {
-    pub(super) ch: char,
-}
+use super::input_instance::{InputData, InputInstance};
 
 pub struct Input {
-    input_data: InputData,
+    input_instance: InputInstance,
 }
 
 impl Input {
-    fn new() -> Self {
-        Self { input_data: InputData { ch: 0 as char } }
+    pub fn new() -> Self {
+        Self { input_instance: InputInstance::new() }
     }
     
-    pub(super) fn update(input_data: InputData) {
-        INSTANCE.lock().unwrap().input_data = input_data;
+    pub(super) fn update(&mut self, input_data: InputData) {
+        self.instance_mut().input_data = input_data;
     }
     
-    pub fn get_char() -> char {
-        unsafe { INSTANCE.lock().unwrap().input_data.ch }
+    pub fn instance(&self) -> &InputInstance {
+        &self.input_instance
+    }
+    
+    fn instance_mut(&mut self) -> &mut InputInstance {
+        &mut self.input_instance
     }
 }
