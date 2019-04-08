@@ -13,7 +13,8 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::io::Display;
+use crate::game::GameState;
+use crate::io::{Display, Input};
 use crate::items::Inventory;
 
 pub struct InventoryScreen {
@@ -54,7 +55,7 @@ impl Screen for InventoryScreen {
     }
 
     fn blocks_update(&self) -> bool {
-        true
+        false
     }
 
     fn draw(&mut self, world: &mut World) {
@@ -66,10 +67,13 @@ impl Screen for InventoryScreen {
     }
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
+        if world.read_resource::<GameState>().alive() == false {
+            self.state = ScreenState::Stopped;
+            return;
+        }
+        
         {
-            let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
-            let display = mutex_display.lock().unwrap();
-            let ch = display.get_char();
+            let ch = Input::get_char();
             if ch == 13 as char {
                 self.state = ScreenState::Stopped;
             }

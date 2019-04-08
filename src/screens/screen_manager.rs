@@ -32,7 +32,7 @@ impl ScreenManager {
             let mut screen = screen.lock().unwrap();
             screen.draw(world);
 
-            if screen.blocks_update() {
+            if screen.blocks_draw() {
                 break;
             }
         }
@@ -48,14 +48,16 @@ impl ScreenManager {
 
     pub fn update(&mut self, world: &mut World) {
         for screen in self.stack.iter_mut().rev() {
+            screen.lock().unwrap().pre_update(world);
+        }
+        
+        for screen in self.stack.iter_mut().rev() {
             let mut screen = screen.lock().unwrap();
             screen.update(world, &mut self.new_screens);
 
             if screen.state() == ScreenState::Stopped {
                 screen.close();
-            }
-
-            if screen.blocks_update() {
+            } else if screen.blocks_update() {
                 break;
             }
         }

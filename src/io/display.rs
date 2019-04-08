@@ -11,6 +11,8 @@ Documentation:
 use std::marker::{Send, Sync};
 
 // Internal includes.
+use super::Input;
+use super::input::InputData;
 use crate::background::{OriginType, SpeciesType};
 use crate::factions::Faction;
 use crate::items::Inventory;
@@ -30,6 +32,10 @@ pub trait Display: Drop + Send + Sync {
     fn get_char(&self) -> char;
 
     fn present(&mut self);
+    
+    fn update(&self) {
+        Input::update(InputData { ch: self.get_char() });
+    }
 
     fn write_creature(&mut self, faction: Faction, creature_pos: Position, view_pos: Position);
 

@@ -48,7 +48,7 @@ impl StartScreen {
     }
 
     fn create_monsters(&mut self, world: &mut World) {
-        world
+        /* world
             .create_entity()
             .with(Command::None)
             .with(LogicFaction)
@@ -57,7 +57,7 @@ impl StartScreen {
             .with(Position::new(12, 8))
             .with(TalentLookup::new())
             .with(VisibilityMapLookup::new())
-            .build();
+            .build(); */
 
         world
             .create_entity()

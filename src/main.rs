@@ -17,6 +17,8 @@ Documentation:
 // External includes.
 #[macro_use]
 extern crate derive_more;
+#[macro_use]
+extern crate lazy_static;
 extern crate rand;
 extern crate shred;
 #[macro_use]

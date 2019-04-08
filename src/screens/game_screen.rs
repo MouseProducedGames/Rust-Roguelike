@@ -82,7 +82,7 @@ impl Screen for GameScreen {
     }
 
     fn draw(&mut self, world: &mut World) {
-        self.visibility_system.run_now(&world.res);
+        // self.visibility_system.run_now(&world.res);
 
         self.player_display_system.run_now(&world.res);
 
@@ -96,8 +96,16 @@ impl Screen for GameScreen {
             display.present();
         }
     }
+    
+    fn pre_update(&mut self, world: &mut World) {
+        world.read_resource::<Arc<Mutex<Display>>>().lock().unwrap().update();
+    }
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
+        self.visibility_system.run_now(&world.res);
+
+        world.maintain();
+        
         self.player_logic.run_now(&world.res);
 
         world.maintain();

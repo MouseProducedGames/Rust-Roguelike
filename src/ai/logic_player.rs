@@ -7,7 +7,7 @@ Documentation:
 **/
 // External includes.
 use specs::{
-    Component, DenseVecStorage, Entities, ReadExpect, ReadStorage, System, WriteExpect,
+    Component, DenseVecStorage, Entities, ReadStorage, System, WriteExpect,
     WriteStorage,
 };
 
@@ -17,7 +17,7 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use super::{Command, PlayerMarker};
 use crate::game::GameState;
-use crate::io::Display;
+use crate::io::Input;
 use crate::items::Inventory;
 use crate::rrl_math::Displacement;
 use crate::screens::InventoryScreen;
@@ -32,7 +32,6 @@ pub struct LogicPlayerSystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
-    display: ReadExpect<'a, Arc<Mutex<Display>>>,
     game_state: WriteExpect<'a, GameState>,
     entities: Entities<'a>,
     player_marker: ReadStorage<'a, PlayerMarker>,
@@ -48,8 +47,7 @@ impl<'a> System<'a> for LogicPlayerSystem {
 
     fn run(&mut self, mut data: SystemDataT) {
         use specs::Join;
-
-        let display = data.display.lock().unwrap();
+        
         let mut game_state = data.game_state;
         let inventory = data.inventory;
 
@@ -61,7 +59,7 @@ impl<'a> System<'a> for LogicPlayerSystem {
         )
             .join()
         {
-            let key_command = display.get_char();
+            let key_command = Input::get_char();
 
             *command = match key_command {
                 '1' => Command::Move(Displacement::new(-1, 1)),
