@@ -94,7 +94,13 @@ impl Display for ConsoleDisplay {
             );
 
             for (i, species_type) in options.iter().enumerate() {
-                let formatted = format!("{}) {}", (1 + i), species_type.to_str());
+                let formatted =
+                    format!(
+                        "{}) {:<10} {}",
+                        (1 + i),
+                        species_type.to_str(),
+                        species_type.to_short_description_str()
+                        );
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
 

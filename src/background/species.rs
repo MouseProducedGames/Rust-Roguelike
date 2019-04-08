@@ -22,6 +22,15 @@ pub enum SpeciesType {
 }
 
 impl SpeciesType {
+    pub fn to_short_description_str(self) -> &'static str {
+        match self {
+            SpeciesType::Dwarf => "Dwarves are short, tough, and long-lived humanoids.",
+            SpeciesType::Elf => "Elves are very long-lived, lithe humanoids.",
+            SpeciesType::Halfling => "Halflings, despite being 3' tall, ignore the square-cube law.",
+            SpeciesType::Human => "Humans are highly social omnivorous pursuit predators.",
+        }
+    }
+    
     pub fn to_str(self) -> &'static str {
         match self {
             SpeciesType::Dwarf => "Dwarf",
