@@ -67,6 +67,10 @@ impl ScreenManager {
                 ScreenState::Inactive => false,
                 _ => true,
             });
+        
+        for screen in self.stack.iter_mut().rev() {
+            screen.lock().unwrap().post_update(world);
+        }
     }
 
     pub fn update_start(&mut self) {

@@ -35,6 +35,8 @@ pub trait Screen: Send {
     fn pre_update(&mut self, _world: &mut World) {}
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper);
+    
+    fn post_update(&mut self, _world: &mut World) {}
 
     fn state(&self) -> ScreenState;
 }

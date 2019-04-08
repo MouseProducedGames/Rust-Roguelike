@@ -82,8 +82,6 @@ impl Screen for GameScreen {
     }
 
     fn draw(&mut self, world: &mut World) {
-        // self.visibility_system.run_now(&world.res);
-
         self.player_display_system.run_now(&world.res);
 
         self.creature_display_system.run_now(&world.res);
@@ -106,10 +104,6 @@ impl Screen for GameScreen {
     }
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
-        self.visibility_system.run_now(&world.res);
-
-        world.maintain();
-        
         self.player_logic.run_now(&world.res);
 
         world.maintain();
@@ -156,6 +150,12 @@ impl Screen for GameScreen {
                 }
             }
         }
+    }
+    
+    fn post_update(&mut self, world: &mut World) {
+        self.visibility_system.run_now(&world.res);
+
+        world.maintain();
     }
 
     fn state(&self) -> ScreenState {
