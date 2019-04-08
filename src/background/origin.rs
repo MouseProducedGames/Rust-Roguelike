@@ -22,7 +22,7 @@ pub enum OriginType {
 }
 
 impl OriginType {
-    pub fn to_string(self) -> &'static str {
+    pub fn to_str(self) -> &'static str {
         match self {
             OriginType::Farmer => "Farmer",
             OriginType::Hunter => "Hunter",

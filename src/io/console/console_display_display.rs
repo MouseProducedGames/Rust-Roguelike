@@ -54,7 +54,7 @@ impl Display for ConsoleDisplay {
             );
 
             for (i, option) in options.iter().enumerate() {
-                let formatted = format!("{}) {}", (1 + i), option.to_string());
+                let formatted = format!("{}) {}", (1 + i), option.to_str());
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
 
@@ -94,7 +94,7 @@ impl Display for ConsoleDisplay {
             );
 
             for (i, species_type) in options.iter().enumerate() {
-                let formatted = format!("{}) {}", (1 + i), species_type.to_string());
+                let formatted = format!("{}) {}", (1 + i), species_type.to_str());
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
 
