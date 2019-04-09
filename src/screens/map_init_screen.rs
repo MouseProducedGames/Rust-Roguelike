@@ -17,7 +17,7 @@ use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::creatures::CreatureFactory;
 use crate::dungen::{DungenCommon, DungeonGenerator};
 use crate::game::GameState;
-use crate::rrl_math::{Position, Bounds};
+use crate::rrl_math::{Bounds, Position};
 use crate::screens::ThemeInitScreen;
 use crate::themes::ThemeLookup;
 use crate::world::{Lightmap, Mapping, Tilemap};
@@ -40,9 +40,8 @@ impl MapInitScreen {
             map_init_state: MapInitState::InitializingThemes,
         }
     }
-    
+
     fn create_map(&self, world: &mut World) {
-        
         let map;
         {
             let theme_lookup;
@@ -57,35 +56,30 @@ impl MapInitScreen {
             {
                 let dungen_index = thread_rng().gen_range(0, theme.dungeon_generator_count());
                 let mut temp_map = Tilemap::new(40, 30);
-                let mut call = 
-                    |
-                        index: usize,
-                        dungen: &Arc<Mutex<(dyn DungeonGenerator)>>,
-                    | {
-                        if index == dungen_index {
-                            dungen.lock().unwrap().apply(
-                            &mut temp_map,
-                            &mut generation_areas
-                            );
-                        }
-                    };
+                let mut call = |index: usize, dungen: &Arc<Mutex<(dyn DungeonGenerator)>>| {
+                    if index == dungen_index {
+                        dungen
+                            .lock()
+                            .unwrap()
+                            .apply(&mut temp_map, &mut generation_areas);
+                    }
+                };
                 theme.for_all_dungeon_generators(&mut call);
 
                 map = temp_map.finish();
             }
-            
+
             for (top_left, bottom_right) in generation_areas.iter() {
                 for y in top_left.y..bottom_right.y {
                     for x in top_left.x..bottom_right.x {
                         let position = Position::new(x, y);
                         // println!("({} {})", position.x, position.y);
-                        theme.get_random_creature_factory(
-                            &mut |
-                                _index: usize,
-                                creature_factory: &Arc<Mutex<CreatureFactory>>
-                            | {
-                                creature_factory.lock().unwrap().gen_once(position, world);
-                            });
+                        theme.get_random_creature_factory(&mut |_index: usize,
+                                                                creature_factory: &Arc<
+                            Mutex<CreatureFactory>,
+                        >| {
+                            creature_factory.lock().unwrap().gen_once(position, world);
+                        });
                     }
                 }
             }
@@ -131,25 +125,24 @@ impl Screen for MapInitScreen {
     fn draw(&mut self, _world: &mut World) {}
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
-        self.map_init_state =
-            match self.map_init_state {
-                MapInitState::InitializingThemes => {
-                    let theme_init_screen = Arc::new(Mutex::new(ThemeInitScreen::new()));
-                    screen_push_wrapper.push(theme_init_screen);
-                    MapInitState::CreatingMap
-                },
-                MapInitState::CreatingMap => {
-                    self.create_map(world);
-                    self.state = ScreenState::Stopped;
-                    MapInitState::Finished
-                },
-                MapInitState::Finished => {
+        self.map_init_state = match self.map_init_state {
+            MapInitState::InitializingThemes => {
+                let theme_init_screen = Arc::new(Mutex::new(ThemeInitScreen::new()));
+                screen_push_wrapper.push(theme_init_screen);
+                MapInitState::CreatingMap
+            }
+            MapInitState::CreatingMap => {
+                self.create_map(world);
+                self.state = ScreenState::Stopped;
+                MapInitState::Finished
+            }
+            MapInitState::Finished => {
                 // This state is a placeholder that exists due to the
                 // necessity of returning something from the MapInitState
                 // match. As such, we should never actually reach it.
                 panic!("We should have exited before getting here!");
-                }
-            };
+            }
+        };
     }
 
     fn state(&self) -> ScreenState {

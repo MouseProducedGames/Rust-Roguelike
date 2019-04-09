@@ -46,7 +46,7 @@ impl ThemeLookup {
             )))
         });
     }
-    
+
     pub fn get_theme(&self, name: String) -> Option<&Arc<Mutex<Theme>>> {
         self.values.get(&name)
     }

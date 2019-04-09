@@ -16,17 +16,14 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{Command, LogicFaction};
 use crate::creatures::CreatureFactory;
-use crate::dungen::{SplitDungeon, /* RandomlyTileDungeon, */ SplitType,};
+use crate::dungen::{SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
 use crate::items::Inventory;
 use crate::rrl_math::{Bounds, Position};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
-use crate::world::{
-    TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR,
-    VisibilityMapLookup,
-};
+use crate::world::{VisibilityMapLookup, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
 pub struct ThemeInitScreen {
     state: ScreenState,
@@ -72,7 +69,7 @@ impl Screen for ThemeInitScreen {
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         let theme_lookup = world.write_resource::<Arc<Mutex<ThemeLookup>>>();
         let mut theme_lookup = theme_lookup.lock().unwrap();
-        
+
         theme_lookup.add_theme(
             String::from("Split Rooms"),
             &[],
@@ -95,28 +92,26 @@ impl Screen for ThemeInitScreen {
             )))],
         );
 
-        if let Some(split_rooms) = theme_lookup.get_theme(String::from("Split Rooms"))
-        {
-            let creature_factory =
-                Arc::new(Mutex::new(CreatureFactory::new(
-                    Arc::new(Mutex::new(|position: Position, world: &mut World| {
-                        // panic!("This should happen, actually.");
-                        if thread_rng().gen_range(1, 300) == 1 {
-                            world
-                                .create_entity()
-                                .with(Command::None)
-                                .with(CreatureStats::default())
-                                .with(Faction::new(1))
-                                .with(Inventory::new())
-                                .with(LogicFaction)
-                                .with(position)
-                                .with(TalentLookup::new())
-                                .with(VisibilityMapLookup::new())
-                                .build();
-                        }
-                    }))
-                )));
-                
+        if let Some(split_rooms) = theme_lookup.get_theme(String::from("Split Rooms")) {
+            let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(
+                Mutex::new(|position: Position, world: &mut World| {
+                    // panic!("This should happen, actually.");
+                    if thread_rng().gen_range(1, 300) == 1 {
+                        world
+                            .create_entity()
+                            .with(Command::None)
+                            .with(CreatureStats::default())
+                            .with(Faction::new(1))
+                            .with(Inventory::new())
+                            .with(LogicFaction)
+                            .with(position)
+                            .with(TalentLookup::new())
+                            .with(VisibilityMapLookup::new())
+                            .build();
+                    }
+                }),
+            ))));
+
             let split_rooms = split_rooms.clone();
             theme_lookup.add_theme(
                 String::from("Generic"),
@@ -125,9 +120,9 @@ impl Screen for ThemeInitScreen {
                 &[],
             );
         }
-        
+
         theme_lookup.make_theme_top_level(String::from("Generic"));
-        
+
         self.state = ScreenState::Stopped;
     }
 

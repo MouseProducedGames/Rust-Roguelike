@@ -14,6 +14,6 @@ use std::marker::Send;
 use crate::rrl_math::{Bounds, Position};
 use crate::world::TiledArea;
 
-pub trait DungeonGenerator : Send {
+pub trait DungeonGenerator: Send {
     fn apply(&mut self, area: &mut dyn TiledArea, generation_areas: &mut Vec<(Position, Position)>);
 }

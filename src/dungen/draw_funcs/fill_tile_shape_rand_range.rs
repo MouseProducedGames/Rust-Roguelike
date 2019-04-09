@@ -30,7 +30,11 @@ impl FillTileShapeRandRange {
 }
 
 impl DungeonGenerator for FillTileShapeRandRange {
-    fn apply(&mut self, area: &mut dyn TiledArea, _generation_areas: &mut Vec<(Position, Position)>) {
+    fn apply(
+        &mut self,
+        area: &mut dyn TiledArea,
+        _generation_areas: &mut Vec<(Position, Position)>,
+    ) {
         let mut iter_index: u32 = 0;
         let mut keep_going: bool = true;
         while keep_going {

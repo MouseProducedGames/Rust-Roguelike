@@ -23,7 +23,7 @@ impl CreatureFactory {
     pub fn new(gen_func: Arc<Mutex<FnMut(Position, &mut World) + Send>>) -> Self {
         Self { gen_func }
     }
-    
+
     pub fn gen_once(&mut self, position: Position, world: &mut World) {
         let mut gen_func = self.gen_func.clone();
         let mut gen_func = gen_func.lock().unwrap();

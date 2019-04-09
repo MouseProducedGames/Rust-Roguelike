@@ -36,7 +36,7 @@ impl Theme {
             let sub_theme = sub_theme.lock().unwrap();
             creature_factory_count += sub_theme.creature_factory_count();
         }
-        
+
         let mut dungeon_generator_count = dungeon_generators.len();
         for sub_theme in sub_themes {
             let sub_theme = sub_theme.lock().unwrap();
@@ -53,8 +53,12 @@ impl Theme {
         };
 
         output.sub_themes.extend_from_slice(sub_themes);
-        output.creature_factories.extend_from_slice(creature_factories);
-        output.dungeon_generators.extend_from_slice(dungeon_generators);
+        output
+            .creature_factories
+            .extend_from_slice(creature_factories);
+        output
+            .dungeon_generators
+            .extend_from_slice(dungeon_generators);
 
         output
     }
@@ -67,18 +71,18 @@ impl Theme {
         self.dungeon_generator_count
     }
 
-    pub fn for_all_creature_factories<TFunc>(
-        &self,
-        call: &mut TFunc,
-    ) where TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactory)>>) {
+    pub fn for_all_creature_factories<TFunc>(&self, call: &mut TFunc)
+    where
+        TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactory)>>),
+    {
         let mut index: usize = 0;
         self.for_all_creature_factories_impl(&mut index, call);
     }
 
-    pub fn for_all_dungeon_generators<TFunc>(
-        &self,
-        call: &mut TFunc,
-    ) where TFunc: FnMut(usize, &Arc<Mutex<(dyn DungeonGenerator + 'static)>>) {
+    pub fn for_all_dungeon_generators<TFunc>(&self, call: &mut TFunc)
+    where
+        TFunc: FnMut(usize, &Arc<Mutex<(dyn DungeonGenerator + 'static)>>),
+    {
         let mut index: usize = 0;
         self.for_all_dungeon_generators_impl(&mut index, call);
     }
@@ -86,30 +90,26 @@ impl Theme {
     pub fn name(&self) -> &String {
         &self.name
     }
-    
-    pub fn get_random_creature_factory<TFunc>(
-        &self,
-        call: &mut TFunc,
-        ) where TFunc: FnMut(usize, &Arc<Mutex<CreatureFactory>>) {
+
+    pub fn get_random_creature_factory<TFunc>(&self, call: &mut TFunc)
+    where
+        TFunc: FnMut(usize, &Arc<Mutex<CreatureFactory>>),
+    {
         let index = thread_rng().gen_range(0, self.creature_factory_count());
         self.for_all_creature_factories(
-            &mut|
-                current_index: usize,
-                dungen: &Arc<Mutex<CreatureFactory>>
-            | {
+            &mut |current_index: usize, dungen: &Arc<Mutex<CreatureFactory>>| {
                 if current_index == index {
                     // let dungen = dungen.clone();
                     call(current_index, &dungen);
                 }
-            }
+            },
         );
     }
-    
-    fn for_all_creature_factories_impl<TFunc>(
-        &self,
-        index: &mut usize,
-        call: &mut TFunc,
-    ) where TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactory)>>) {
+
+    fn for_all_creature_factories_impl<TFunc>(&self, index: &mut usize, call: &mut TFunc)
+    where
+        TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactory)>>),
+    {
         for dungen in self.creature_factories.iter() {
             call(*index, dungen);
             *index += 1;
@@ -120,12 +120,11 @@ impl Theme {
             sub_theme.for_all_creature_factories_impl(index, call);
         }
     }
-    
-    fn for_all_dungeon_generators_impl<TFunc>(
-        &self,
-        index: &mut usize,
-        call: &mut TFunc,
-    ) where TFunc: FnMut(usize, &Arc<Mutex<(dyn DungeonGenerator + 'static)>>) {
+
+    fn for_all_dungeon_generators_impl<TFunc>(&self, index: &mut usize, call: &mut TFunc)
+    where
+        TFunc: FnMut(usize, &Arc<Mutex<(dyn DungeonGenerator + 'static)>>),
+    {
         for dungen in self.dungeon_generators.iter() {
             call(*index, dungen);
             *index += 1;

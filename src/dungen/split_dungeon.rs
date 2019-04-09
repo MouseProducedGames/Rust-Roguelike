@@ -50,7 +50,11 @@ impl SplitDungeon {
 }
 
 impl DungeonGenerator for SplitDungeon {
-    fn apply(&mut self, area: &mut dyn TiledArea, generation_areas: &mut Vec<(Position, Position)>) {
+    fn apply(
+        &mut self,
+        area: &mut dyn TiledArea,
+        generation_areas: &mut Vec<(Position, Position)>,
+    ) {
         let (left, top, right, bottom) = (area.left(), area.top(), area.right(), area.bottom());
         let (width, height) = (area.width(), area.height());
 
@@ -61,15 +65,16 @@ impl DungeonGenerator for SplitDungeon {
         } else {
             let top_left = Position::new(1, 1);
             let top_left = area.get_global_position_from_local_position(top_left);
-            let bottom_right = Position::new(i32::from(area.width() - 1), i32::from(area.height() - 1));
+            let bottom_right =
+                Position::new(i32::from(area.width() - 1), i32::from(area.height() - 1));
             let bottom_right = area.get_global_position_from_local_position(bottom_right);
             generation_areas.push((top_left, bottom_right));
-            
+
             /* for pos in area.get_position(0, 0) {
                 let create_positon = Position::new(i32::from(pos.x()), i32::from(pos.y()));
                 creature_factory(create_positon);
             } */
-            
+
             return;
         }
 
@@ -107,15 +112,16 @@ impl DungeonGenerator for SplitDungeon {
         } else if split_max < split_min {
             let top_left = Position::new(1, 1);
             let top_left = area.get_global_position_from_local_position(top_left);
-            let bottom_right = Position::new(i32::from(area.width() - 1), i32::from(area.height() - 1));
+            let bottom_right =
+                Position::new(i32::from(area.width() - 1), i32::from(area.height() - 1));
             let bottom_right = area.get_global_position_from_local_position(bottom_right);
             generation_areas.push((top_left, bottom_right));
-            
+
             /* for pos in area.get_position(0, 0) {
                 let create_positon = Position::new(i32::from(pos.x()), i32::from(pos.y()));
                 creature_factory(create_positon);
             } */
-            
+
             return;
         } else {
             split_on = thread_rng().gen_range(split_min, split_max);
