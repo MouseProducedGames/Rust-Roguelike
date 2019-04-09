@@ -9,17 +9,17 @@ Documentation:
 use rand::{thread_rng, Rng};
 
 // Standard includes.
+use std::iter::Iterator;
 use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
 
-#[derive(Clone)]
 pub struct Theme {
     name: String,
     dungeon_generator_count: usize,
-    sub_themes: Arc<Mutex<Vec<Arc<Mutex<Theme>>>>>,
-    dungeon_generators: Arc<Mutex<Vec<Arc<Mutex<dyn DungeonGenerator>>>>>,
+    sub_themes: Vec<Arc<Mutex<Theme>>>,
+    dungeon_generators: Vec<Arc<Mutex<dyn DungeonGenerator>>>,
 }
 
 impl Theme {
@@ -38,12 +38,12 @@ impl Theme {
             Self {
                 name,
                 dungeon_generator_count,
-                sub_themes: Arc::new(Mutex::new(vec![])),
-                dungeon_generators: Arc::new(Mutex::new(vec![])),
+                sub_themes: vec![],
+                dungeon_generators: vec![],
             };
         
-        output.sub_themes.lock().unwrap().extend_from_slice(sub_themes);
-        output.dungeon_generators.lock().unwrap().extend_from_slice(dungeon_generators);
+        output.sub_themes.extend_from_slice(sub_themes);
+        output.dungeon_generators.extend_from_slice(dungeon_generators);
         
         output
     }
@@ -52,39 +52,22 @@ impl Theme {
         self.dungeon_generator_count
     }
     
-    pub fn get_dungeon_generator(&self) -> MutexGuard<(dyn DungeonGenerator + 'static)> {
-        let mut index = thread_rng().gen_range(0, self.dungeon_generator_count());
-        if let Some(output) = self.get_dungeon_generator_impl(&mut index) {
-            return output;
-        } else {
-            panic!("Dungeon generator counts don't match!");
+    pub fn for_all_dungeon_generators(
+        &self,
+        call: fn(dungen: MutexGuard<(dyn DungeonGenerator + 'static)>)
+    ) {
+        for dungen in self.dungeon_generators.iter() {
+            let dungen = dungen.lock().unwrap();
+            call(dungen);
+        }
+        
+        for sub_theme in self.sub_themes.iter() {
+            let sub_theme = sub_theme.lock().unwrap();
+            sub_theme.for_all_dungeon_generators(call);
         }
     }
     
     pub fn name(&self) -> &String {
         &self.name
-    }
-    
-    fn get_dungeon_generator_impl(
-        &self,
-        index: &mut usize
-    ) -> Option<MutexGuard<(dyn DungeonGenerator + 'static)>> {
-        let dungeon_generators = self.dungeon_generators.lock().unwrap();
-        if *index < dungeon_generators.len() {
-            let dungeon_generator = dungeon_generators[*index];
-            let dungeon_generator = dungeon_generator.lock().unwrap();
-            return Some(dungeon_generator);
-        } else {
-            *index -= dungeon_generators.len();
-            let sub_themes = self.sub_themes.lock().unwrap();
-            for sub_theme in sub_themes.iter() {
-                let sub_theme = sub_theme.lock().unwrap();
-                let output = sub_theme.get_dungeon_generator_impl(index);
-                if let Some(temp) = output {
-                    return output;
-                }
-            }
-            return None;
-        }
     }
 }

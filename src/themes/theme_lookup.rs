@@ -30,25 +30,25 @@ impl ThemeLookup {
     }
     
     pub fn add_theme(
-        &self,
+        &mut self,
         name: String,
         sub_themes: &[Arc<Mutex<Theme>>],
         dungeon_generators: &[Arc<Mutex<dyn DungeonGenerator>>]
     ) -> MutexGuard<Theme> {
         let output =
             self.values
-            .entry(name)
+            .entry(name.clone())
             .or_insert_with(|| Arc::new(Mutex::new(Theme::new(name, sub_themes, dungeon_generators))));
         let output = output.lock().unwrap();
         output
     }
     
-    pub fn make_theme_top_level(&self, name: String) -> (bool, String, &'static str) {
+    pub fn make_theme_top_level(&mut self, name: String) -> (bool, String, &'static str) {
         if self.values.contains_key(&name) {
             if self.top_level_theme_names.contains(&name) {
                 return (true, name, "Already a top-level theme.");
             } else {
-                self.top_level_theme_names.insert(name);
+                self.top_level_theme_names.insert(name.clone());
                 return (true, name, "Theme exists and is now a top-level theme.");
             }
         }
@@ -60,9 +60,12 @@ impl ThemeLookup {
         let index = thread_rng().gen_range(0, self.top_level_theme_names.len());
         for (i, name) in self.top_level_theme_names.iter().enumerate() {
             if i == index {
-                let output = self.values[name];
-                let output = output.lock().unwrap();
-                return output;
+                if let Some(output) = self.values.get(name) {
+                    let output = output.lock().unwrap();
+                    return output;
+                } else {
+                    break;
+                }
             }
         }
         panic!("Theme count shrunk while we were observing it!");

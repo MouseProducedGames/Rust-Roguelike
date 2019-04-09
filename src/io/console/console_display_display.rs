@@ -79,12 +79,10 @@ impl Display for ConsoleDisplay {
     }
 
     fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType {
-        let mut keep_going = true;
-        let mut option = SpeciesType::Human;
         let mut index: usize = 0;
         
         self.clear();
-        while keep_going {
+        while true {
             self.clear_back_buffer();
             self.put_string(
                 1,
@@ -127,9 +125,7 @@ impl Display for ConsoleDisplay {
             }
         }
 
-        self.clear();
-
-        option
+        panic!("Broke from an infinite loop that only supports returning!");
     }
 
     fn display_stats(&mut self, stats: CreatureStats) {
