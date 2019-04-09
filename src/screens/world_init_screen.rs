@@ -9,6 +9,7 @@ Documentation:
 use specs::World;
 
 // Standard includes.
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
@@ -23,6 +24,7 @@ use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
+use crate::themes::ThemeLookup;
 use crate::world::VisibilityMapLookup;
 
 pub struct WorldInitScreen {
@@ -69,6 +71,7 @@ impl Screen for WorldInitScreen {
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         world.add_resource(EntityPositionTracker::new());
         world.add_resource(GameState::new());
+        world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
         world.register::<Command>();
         world.register::<CreatureStats>();
         world.register::<Faction>();

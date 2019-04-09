@@ -51,22 +51,31 @@ impl Theme {
         self.dungeon_generator_count
     }
 
-    pub fn for_all_dungeon_generators(
+    pub fn for_all_dungeon_generators<TFunc>(
         &self,
-        call: fn(dungen: MutexGuard<(dyn DungeonGenerator + 'static)>),
-    ) {
-        for dungen in self.dungeon_generators.iter() {
-            let dungen = dungen.lock().unwrap();
-            call(dungen);
-        }
-
-        for sub_theme in self.sub_themes.iter() {
-            let sub_theme = sub_theme.lock().unwrap();
-            sub_theme.for_all_dungeon_generators(call);
-        }
+        call: &mut TFunc,
+    ) where TFunc: FnMut(usize, &Arc<Mutex<(dyn DungeonGenerator + 'static)>>) {
+        let mut index: usize = 0;
+        self.for_all_dungeon_generators_impl(&mut index, call);
     }
 
     pub fn name(&self) -> &String {
         &self.name
+    }
+    
+    fn for_all_dungeon_generators_impl<TFunc>(
+        &self,
+        index: &mut usize,
+        call: &mut TFunc,
+    ) where TFunc: FnMut(usize, &Arc<Mutex<(dyn DungeonGenerator + 'static)>>) {
+        for dungen in self.dungeon_generators.iter() {
+            call(*index, dungen);
+            *index += 1;
+        }
+
+        for sub_theme in self.sub_themes.iter() {
+            let sub_theme = sub_theme.lock().unwrap();
+            sub_theme.for_all_dungeon_generators_impl(index, call);
+        }
     }
 }

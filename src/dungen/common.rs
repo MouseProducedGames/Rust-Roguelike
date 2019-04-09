@@ -25,6 +25,7 @@ impl DungenCommon for Tilemap {
         let mut output = Tilemap::new(self.width(), self.height());
         for pos in self.get_position(0, 0) {
             *output.tile_type_mut(pos) = self.tile_type(pos);
+            *output.tile_func_type_mut(pos) = self.tile_func_type(pos);
         }
 
         output

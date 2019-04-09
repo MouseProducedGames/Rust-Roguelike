@@ -34,11 +34,14 @@ impl ThemeLookup {
         name: String,
         sub_themes: &[Arc<Mutex<Theme>>],
         dungeon_generators: &[Arc<Mutex<dyn DungeonGenerator>>],
-    ) -> MutexGuard<Theme> {
-        let output = self.values.entry(name.clone()).or_insert_with(|| {
+    ){
+        self.values.entry(name.clone()).or_insert_with(|| {
             Arc::new(Mutex::new(Theme::new(name, sub_themes, dungeon_generators)))
         });
-        output.lock().unwrap()
+    }
+    
+    pub fn get_theme(&self, name: String) -> Option<&Arc<Mutex<Theme>>> {
+        self.values.get(&name)
     }
 
     pub fn make_theme_top_level(&mut self, name: String) -> (bool, String, &'static str) {

@@ -8,10 +8,11 @@ Documentation:
 // External includes.
 
 // Standard includes.
+use std::marker::Send;
 
 // Internal includes.
 use crate::world::TiledArea;
 
-pub trait DungeonGenerator {
+pub trait DungeonGenerator : Send {
     fn apply(&mut self, area: &mut dyn TiledArea);
 }
