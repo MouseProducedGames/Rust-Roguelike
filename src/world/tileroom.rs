@@ -8,6 +8,8 @@ Documentation:
 // External includes.
 
 // Standard includes.
+use std::cell::{RefCell, RefMut};
+use std::rc::Rc;
 
 // Internal includes.
 use super::{MapPosition, Mapping, Tilemap};
@@ -15,13 +17,22 @@ use crate::dungen::DungenCommon;
 use crate::tiled_shapes_2d::TiledShape2D;
 
 pub struct TiledAreaFilter<'a> {
-    shape_filter: Box<dyn TiledShape2D>,
+    shape_filter: &'a mut dyn TiledShape2D,
     area: &'a mut dyn TiledArea,
 }
 
 impl<'a> TiledAreaFilter<'a> {
-    pub fn new(area: &'a mut dyn TiledArea, shape_filter: Box<dyn TiledShape2D>) -> Self {
-        Self { area, shape_filter }
+    pub fn new(
+        area: &'a mut dyn TiledArea,
+        shape_filter: &'a mut dyn TiledShape2D
+    ) -> Self {
+        let mut output =
+            Self {
+                shape_filter,
+                area,
+            };
+        
+        output
     }
 
     /*     pub fn new_boxed( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Box<dyn TiledArea>
@@ -46,7 +57,7 @@ impl<'a> DungenCommon for TiledAreaFilter<'a> {
     }
 }
 
-impl<'a> Mapping for TiledAreaFilter<'a> {
+impl<'a> Mapping<'a> for TiledAreaFilter<'a> {
     fn height(&self) -> u16 {
         (self.shape_filter.bottom() - self.shape_filter.top()) + 1
     }
@@ -88,7 +99,7 @@ pub trait TiledArea {
     // fn width(&self) -> u16;
 }
 
-impl Mapping for TiledArea {
+impl<'a> Mapping<'a> for TiledArea + 'a {
     fn height(&self) -> u16 {
         (self.bottom() - self.top()) + 1
     }

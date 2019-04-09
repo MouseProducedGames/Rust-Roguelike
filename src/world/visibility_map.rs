@@ -72,7 +72,7 @@ impl VisibilityMap {
     }
 }
 
-impl Mapping for VisibilityMap {
+impl<'a> Mapping<'a> for VisibilityMap {
     fn height(&self) -> u16 {
         VisibilityMap::height(self)
     }

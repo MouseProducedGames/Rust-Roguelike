@@ -9,6 +9,8 @@ Documentation:
 use rand::{thread_rng, Rng};
 
 // Standard includes.
+use std::cell::RefCell;
+use std::rc::Rc;
 
 // Internal includes.
 use super::DungeonGenerator;
@@ -50,9 +52,7 @@ impl SplitDungeon {
 }
 
 impl DungeonGenerator for SplitDungeon {
-    fn apply<TArea>(&mut self, area: &mut TArea)
-    where
-        TArea: TiledArea + Mapping,
+    fn apply<'a>(&'a mut self, area: &'a mut (dyn TiledArea + 'a)) where dyn TiledArea + 'a: Mapping<'a>
     {
         let (left, top, right, bottom) = (area.left(), area.top(), area.right(), area.bottom());
         let (width, height) = (area.width(), area.height());
@@ -139,20 +139,23 @@ impl DungeonGenerator for SplitDungeon {
             FillTileShape::new(self.floor_tile_type).apply(area);
             DrawTileShape::new(self.wall_tile_type).apply(area);
 
-            let mut temp_area: TiledAreaFilter;
-            temp_area = TiledAreaFilter::new(area, Box::new(split_line));
+            let temp_area =
+                TiledAreaFilter::new(
+                        area,
+                        &mut split_line
+                );
             FillTileShape::new(self.wall_tile_type).apply(&mut temp_area);
         }
 
         {
-            let rect = Box::new(TiledRect::with_absolute_bounds(
-                room_left0,
-                room_top0,
-                room_right0,
-                room_bottom0,
-            ));
-            let mut temp_area: TiledAreaFilter;
-            temp_area = TiledAreaFilter::new(area, rect);
+            let rect =
+                TiledRect::with_absolute_bounds(
+                    room_left0,
+                    room_top0,
+                    room_right0,
+                    room_bottom0,
+                );
+            let mut temp_area = TiledAreaFilter::new(area, &mut rect);
             SplitDungeon::new(
                 self.split_type,
                 self.min_bounds,
@@ -164,14 +167,14 @@ impl DungeonGenerator for SplitDungeon {
         }
 
         {
-            let rect = Box::new(TiledRect::with_absolute_bounds(
-                room_left1,
-                room_top1,
-                room_right1,
-                room_bottom1,
-            ));
-            let mut temp_area: TiledAreaFilter;
-            temp_area = TiledAreaFilter::new(area, rect);
+            let rect = 
+                TiledRect::with_absolute_bounds(
+                    room_left1,
+                    room_top1,
+                    room_right1,
+                    room_bottom1,
+                );
+            let mut temp_area = TiledAreaFilter::new(area, &mut rect);
             SplitDungeon::new(
                 self.split_type,
                 self.min_bounds,

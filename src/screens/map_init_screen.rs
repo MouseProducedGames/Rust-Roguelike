@@ -10,10 +10,14 @@ use rand::{thread_rng, Rng};
 use specs::World;
 
 // Standard includes.
+use std::cell::RefCell;
+use std::rc::Rc;
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::dungen::{DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
+use crate::dungen::{
+    DungenCommon, DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType
+};
 use crate::rrl_math::Bounds;
 use crate::world::{Lightmap, Mapping, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
 
@@ -61,8 +65,8 @@ impl Screen for MapInitScreen {
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         let map;
         {
-            let mut temp_map: Tilemap = Tilemap::new(40, 30);
-            //     let mut boxed_map: Box<dyn TiledArea> = Box::new( temp_map );
+            let mut temp_map = Tilemap::new(40, 30);
+            //     let mut boxed_map: Rc<dyn TiledArea> = Rc::new( temp_map );
             SplitDungeon::new(
                 SplitType::LongestDimension,
                 Bounds {
@@ -81,7 +85,7 @@ impl Screen for MapInitScreen {
             )
             .apply(&mut temp_map);
 
-            map = temp_map;
+            map = temp_map.finish();
         }
 
         world.add_resource(Lightmap::new(map.width(), map.height()));

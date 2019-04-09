@@ -61,7 +61,7 @@ where
     }
 }
 
-impl<T> Mapping for Multimap<T>
+impl<'a, T> Mapping<'a> for Multimap<T>
 where
     T: Copy + Clone + Default,
 {

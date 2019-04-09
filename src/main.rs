@@ -46,6 +46,7 @@ mod screens;
 mod skills;
 mod stats;
 mod talents;
+mod themes;
 mod tiled_shapes_2d;
 mod world;
 use screens::{ScreenManager, StartScreen};

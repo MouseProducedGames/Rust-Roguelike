@@ -8,6 +8,8 @@ Documentation:
 // External includes.
 
 // Standard includes.
+use std::cell::RefCell;
+use std::rc::Rc;
 
 // Internal includes.
 use super::DungeonGenerator;
@@ -30,17 +32,17 @@ impl _RandomlyTileDungeon {
 }
 
 impl DungeonGenerator for _RandomlyTileDungeon {
-    fn apply<TArea>(&mut self, area: &mut TArea)
-    where
-        TArea: TiledArea + Mapping,
+    fn apply<'a>(&'a mut self, area: &'a mut (dyn TiledArea + 'a)) where dyn TiledArea + 'a: Mapping<'a>
     {
         FillTileShape::new(2).apply(area);
         DrawTileShape::new(1).apply(area);
         let (width, height) = (area.width(), area.height());
-        let mut filter_area: TiledAreaFilter = TiledAreaFilter::new(
-            area,
-            Box::new(TiledRect::with_absolute_bounds(1, 1, width - 1, height - 1)),
-        );
+        let rect = TiledRect::with_absolute_bounds(1, 1, width - 1, height - 1);
+        let mut filter_area =
+            TiledAreaFilter::new(
+                area,
+                &mut rect,
+            );
         FillTileShapeRandRange::new(self.start_range, self.end_range).apply(&mut filter_area);
     }
 }

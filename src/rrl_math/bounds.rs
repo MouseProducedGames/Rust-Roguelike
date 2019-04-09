@@ -24,7 +24,7 @@ impl Bounds {
     }
 }
 
-impl Mapping for Bounds {
+impl<'a> Mapping<'a> for Bounds {
     fn height(&self) -> u16 {
         self.height
     }

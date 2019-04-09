@@ -72,7 +72,7 @@ impl TiledRect {
     }
 }
 
-impl Mapping for TiledRect {
+impl<'a> Mapping<'a> for TiledRect {
     fn height(&self) -> u16 {
         TiledRect::height(self)
     }

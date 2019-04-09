@@ -9,6 +9,8 @@ Documentation:
 use rand::{thread_rng, Rng};
 
 // Standard includes.
+use std::cell::RefCell;
+use std::rc::Rc;
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
@@ -29,9 +31,7 @@ impl FillTileShapeRandRange {
 }
 
 impl DungeonGenerator for FillTileShapeRandRange {
-    fn apply<TArea>(&mut self, area: &mut TArea)
-    where
-        TArea: TiledArea + Mapping,
+    fn apply<'a>(&'a mut self, area: &'a mut (dyn TiledArea + 'a)) where dyn TiledArea + 'a: Mapping<'a>
     {
         let mut iter_index: u32 = 0;
         let mut keep_going: bool = true;

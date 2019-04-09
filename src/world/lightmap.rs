@@ -76,7 +76,7 @@ impl Hash for Lightmap {
     }
 }
 
-impl Mapping for Lightmap {
+impl<'a> Mapping<'a> for Lightmap {
     fn height(&self) -> Height {
         Lightmap::height(self)
     }

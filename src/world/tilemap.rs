@@ -118,7 +118,7 @@ impl Hash for Tilemap {
     }
 }
 
-impl Mapping for Tilemap {
+impl<'a> Mapping<'a> for Tilemap {
     fn height(&self) -> Height {
         Tilemap::height(self)
     }

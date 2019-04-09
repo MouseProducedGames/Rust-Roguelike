@@ -8,6 +8,8 @@ Documentation:
 // External includes.
 
 // Standard includes.
+use std::rc::Rc;
+use std::cell::RefCell;
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
@@ -24,9 +26,7 @@ impl DrawTileShape {
 }
 
 impl DungeonGenerator for DrawTileShape {
-    fn apply<TArea>(&mut self, area: &mut TArea)
-    where
-        TArea: TiledArea + Mapping,
+    fn apply<'a>(&'a mut self, area: &'a mut (dyn TiledArea + 'a)) where dyn TiledArea + 'a: Mapping<'a>
     {
         // let temp: &mut TiledShape2D = self;
         // for ( x, y ) in TiledShape2DCircumferenceIterator::new( self )
