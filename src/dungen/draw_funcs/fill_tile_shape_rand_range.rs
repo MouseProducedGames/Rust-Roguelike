@@ -31,7 +31,7 @@ impl FillTileShapeRandRange {
 }
 
 impl DungeonGenerator for FillTileShapeRandRange {
-    fn apply<'a>(&'a mut self, area: &'a mut (dyn TiledArea + 'a)) where dyn TiledArea + 'a: Mapping<'a>
+    fn apply(&mut self, area: &mut dyn TiledArea)
     {
         let mut iter_index: u32 = 0;
         let mut keep_going: bool = true;

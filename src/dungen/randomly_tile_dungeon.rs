@@ -32,12 +32,12 @@ impl _RandomlyTileDungeon {
 }
 
 impl DungeonGenerator for _RandomlyTileDungeon {
-    fn apply<'a>(&'a mut self, area: &'a mut (dyn TiledArea + 'a)) where dyn TiledArea + 'a: Mapping<'a>
+    fn apply(&mut self, area: &mut dyn TiledArea)
     {
         FillTileShape::new(2).apply(area);
         DrawTileShape::new(1).apply(area);
         let (width, height) = (area.width(), area.height());
-        let rect = TiledRect::with_absolute_bounds(1, 1, width - 1, height - 1);
+        let mut rect = TiledRect::with_absolute_bounds(1, 1, width - 1, height - 1);
         let mut filter_area =
             TiledAreaFilter::new(
                 area,
