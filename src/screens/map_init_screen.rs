@@ -10,8 +10,6 @@ use rand::{thread_rng, Rng};
 use specs::World;
 
 // Standard includes.
-use std::cell::RefCell;
-use std::rc::Rc;
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};

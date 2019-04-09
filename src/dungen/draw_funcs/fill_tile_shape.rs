@@ -9,11 +9,9 @@ Documentation:
 // External includes.
 
 // Standard includes.
-use std::cell::RefCell;
-use std::rc::Rc;
 
 // Internal includes.
-use crate::world::{Mapping, TiledArea};
+use crate::world::TiledArea;
 
 pub struct FillTileShape {
     tile_type: u32,

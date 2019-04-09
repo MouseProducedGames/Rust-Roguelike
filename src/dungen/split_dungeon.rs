@@ -9,8 +9,6 @@ Documentation:
 use rand::{thread_rng, Rng};
 
 // Standard includes.
-use std::cell::RefCell;
-use std::rc::Rc;
 
 // Internal includes.
 use super::DungeonGenerator;

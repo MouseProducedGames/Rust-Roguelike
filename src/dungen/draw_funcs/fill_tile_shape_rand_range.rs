@@ -9,12 +9,10 @@ Documentation:
 use rand::{thread_rng, Rng};
 
 // Standard includes.
-use std::cell::RefCell;
-use std::rc::Rc;
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
-use crate::world::{Mapping, TiledArea};
+use crate::world::TiledArea;
 
 pub struct FillTileShapeRandRange {
     start_range: u32,

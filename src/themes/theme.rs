@@ -6,10 +6,8 @@ Documentation:
 
 **/
 // External includes.
-use rand::{thread_rng, Rng};
 
 // Standard includes.
-use std::iter::Iterator;
 use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.

@@ -8,12 +8,10 @@ Documentation:
 // External includes.
 
 // Standard includes.
-use std::rc::Rc;
-use std::cell::RefCell;
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
-use crate::world::{Mapping, TiledArea};
+use crate::world::TiledArea;
 
 pub struct DrawTileShape {
     tile_type: u32,

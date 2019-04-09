@@ -39,8 +39,7 @@ impl ThemeLookup {
             self.values
             .entry(name.clone())
             .or_insert_with(|| Arc::new(Mutex::new(Theme::new(name, sub_themes, dungeon_generators))));
-        let output = output.lock().unwrap();
-        output
+        output.lock().unwrap()
     }
     
     pub fn make_theme_top_level(&mut self, name: String) -> (bool, String, &'static str) {
@@ -53,7 +52,7 @@ impl ThemeLookup {
             }
         }
         
-        return (false, name, "No such theme exists.");
+        (false, name, "No such theme exists.")
     }
     
     pub fn get_random_top_level_theme(&self) -> MutexGuard<Theme> {

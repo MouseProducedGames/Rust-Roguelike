@@ -8,8 +8,6 @@ Documentation:
 // External includes.
 
 // Standard includes.
-use std::cell::{RefCell, RefMut};
-use std::rc::Rc;
 
 // Internal includes.
 use super::{MapPosition, Mapping, Tilemap};
@@ -26,13 +24,10 @@ impl<'a> TiledAreaFilter<'a> {
         area: &'a mut dyn TiledArea,
         shape_filter: &'a mut dyn TiledShape2D
     ) -> Self {
-        let mut output =
-            Self {
-                shape_filter,
-                area,
-            };
-        
-        output
+        Self {
+            shape_filter,
+            area,
+        }
     }
 
     /*     pub fn new_boxed( area: Box<dyn TiledArea>, shape_filter: Box<dyn TiledShape2D> ) -> Box<dyn TiledArea>
