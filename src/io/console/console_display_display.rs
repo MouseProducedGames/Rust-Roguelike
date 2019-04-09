@@ -80,7 +80,7 @@ impl Display for ConsoleDisplay {
 
     fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType {
         let mut index: usize = 0;
-        
+
         self.clear();
         while true {
             self.clear_back_buffer();
@@ -93,34 +93,41 @@ impl Display for ConsoleDisplay {
             );
 
             for (i, species_type) in options.iter().enumerate() {
-                let formatted =
-                    format!(
-                        "   {:<10} {}",
-                        species_type.to_str(),
-                        species_type.to_short_description_str()
-                        );
+                let formatted = format!(
+                    "   {:<10} {}",
+                    species_type.to_str(),
+                    species_type.to_short_description_str()
+                );
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
-            
+
             self.put_string(1, 3_i32 + index as i32, "->", Color::Yellow, Color::Black);
-            
-            self.put_string(4, 20, options[index].to_long_description_str(), Color::Grey, Color::Black);
+
+            self.put_string(
+                4,
+                20,
+                options[index].to_long_description_str(),
+                Color::Grey,
+                Color::Black,
+            );
 
             self.present();
-            
+
             match self.get_char() {
                 // Return.
                 '\r' => {
                     self.clear();
                     return options[index];
-                },
+                }
                 '2' => {
                     index = (index + 1) % options.len();
-                },
+                }
                 '8' => {
                     index = index.wrapping_sub(1);
-                    if index > options.len() { index = options.len() - 1; }
-                },
+                    if index > options.len() {
+                        index = options.len() - 1;
+                    }
+                }
                 _ => (),
             }
         }

@@ -50,7 +50,7 @@ impl ScreenManager {
         for screen in self.stack.iter_mut().rev() {
             screen.lock().unwrap().pre_update(world);
         }
-        
+
         for screen in self.stack.iter_mut().rev() {
             let mut screen = screen.lock().unwrap();
             screen.update(world, &mut self.new_screens);
@@ -67,7 +67,7 @@ impl ScreenManager {
                 ScreenState::Inactive => false,
                 _ => true,
             });
-        
+
         for screen in self.stack.iter_mut().rev() {
             screen.lock().unwrap().post_update(world);
         }

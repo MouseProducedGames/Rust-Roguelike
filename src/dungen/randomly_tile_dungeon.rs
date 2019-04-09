@@ -30,17 +30,12 @@ impl _RandomlyTileDungeon {
 }
 
 impl DungeonGenerator for _RandomlyTileDungeon {
-    fn apply(&mut self, area: &mut dyn TiledArea)
-    {
+    fn apply(&mut self, area: &mut dyn TiledArea) {
         FillTileShape::new(2).apply(area);
         DrawTileShape::new(1).apply(area);
         let (width, height) = (area.width(), area.height());
         let mut rect = TiledRect::with_absolute_bounds(1, 1, width - 1, height - 1);
-        let mut filter_area =
-            TiledAreaFilter::new(
-                area,
-                &mut rect,
-            );
+        let mut filter_area = TiledAreaFilter::new(area, &mut rect);
         FillTileShapeRandRange::new(self.start_range, self.end_range).apply(&mut filter_area);
     }
 }

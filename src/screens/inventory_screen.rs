@@ -71,7 +71,7 @@ impl Screen for InventoryScreen {
             self.state = ScreenState::Stopped;
             return;
         }
-        
+
         {
             let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>();
             let input = arc_mutex_input.lock().unwrap();

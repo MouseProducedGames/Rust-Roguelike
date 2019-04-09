@@ -21,9 +21,11 @@ pub struct InputInstance {
 
 impl InputInstance {
     pub(super) fn new() -> Self {
-        Self { input_data: InputData { ch: 0 as char } }
+        Self {
+            input_data: InputData { ch: 0 as char },
+        }
     }
-    
+
     pub fn get_char(&self) -> char {
         unsafe { self.input_data.ch }
     }

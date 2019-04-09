@@ -97,7 +97,7 @@ impl Screen for GameScreen {
             display.present();
         }
     }
-    
+
     fn pre_update(&mut self, world: &mut World) {
         let arc_mutex_display = world.read_resource::<Arc<Mutex<Display>>>();
         let display = arc_mutex_display.lock().unwrap();
@@ -154,12 +154,12 @@ impl Screen for GameScreen {
             }
         }
     }
-    
+
     fn post_update(&mut self, world: &mut World) {
         self.item_system.run_now(&world.res);
 
         world.maintain();
-        
+
         self.visibility_system.run_now(&world.res);
 
         world.maintain();

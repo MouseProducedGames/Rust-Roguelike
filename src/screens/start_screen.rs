@@ -49,15 +49,15 @@ impl StartScreen {
 
     fn create_monsters(&mut self, world: &mut World) {
         /* world
-            .create_entity()
-            .with(Command::None)
-            .with(LogicFaction)
-            .with(Faction::new(0))
-            .with(CreatureStats::default())
-            .with(Position::new(12, 8))
-            .with(TalentLookup::new())
-            .with(VisibilityMapLookup::new())
-            .build(); */
+        .create_entity()
+        .with(Command::None)
+        .with(LogicFaction)
+        .with(Faction::new(0))
+        .with(CreatureStats::default())
+        .with(Position::new(12, 8))
+        .with(TalentLookup::new())
+        .with(VisibilityMapLookup::new())
+        .build(); */
 
         world
             .create_entity()

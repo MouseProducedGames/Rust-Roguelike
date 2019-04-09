@@ -48,7 +48,7 @@ impl<'a> System<'a> for LogicPlayerSystem {
 
     fn run(&mut self, mut data: SystemDataT) {
         use specs::Join;
-        
+
         let input = data.input.lock().unwrap();
         let mut game_state = data.game_state;
         let inventory = data.inventory;

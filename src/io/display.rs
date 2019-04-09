@@ -32,9 +32,11 @@ pub trait Display: Drop + Send + Sync {
     fn get_char(&self) -> char;
 
     fn present(&mut self);
-    
+
     fn update(&self, mut input: MutexGuard<Input>) {
-        input.update(InputData { ch: self.get_char() });
+        input.update(InputData {
+            ch: self.get_char(),
+        });
     }
 
     fn write_creature(&mut self, faction: Faction, creature_pos: Position, view_pos: Position);

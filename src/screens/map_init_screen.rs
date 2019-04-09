@@ -14,7 +14,7 @@ use specs::World;
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::dungen::{
-    DungenCommon, DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType
+    DungenCommon, DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType,
 };
 use crate::rrl_math::Bounds;
 use crate::world::{Lightmap, Mapping, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};

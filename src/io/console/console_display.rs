@@ -121,7 +121,7 @@ impl ConsoleDisplay {
     pub(crate) fn clear_front_buffer(&mut self) {
         self.clear_buffer(self.front_buffer_index());
     }
-    
+
     pub(crate) fn clear_terminal(&mut self) {
         match self.term.terminal().clear(crossterm::ClearType::All) {
             Ok(_v) => (),
@@ -247,8 +247,13 @@ impl ConsoleDisplay {
 
 impl Drop for ConsoleDisplay {
     fn drop(&mut self) {
-        println!("{}{}{}", Colored::Fg(Color::Grey), Colored::Bg(Color::Black), "");
-        
+        println!(
+            "{}{}{}",
+            Colored::Fg(Color::Grey),
+            Colored::Bg(Color::Black),
+            ""
+        );
+
         match self.term.cursor().show() {
             Ok(_v) => (),
             // We shouldn't panic; but we should inform the user.

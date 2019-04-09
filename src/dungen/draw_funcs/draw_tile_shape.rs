@@ -24,8 +24,7 @@ impl DrawTileShape {
 }
 
 impl DungeonGenerator for DrawTileShape {
-    fn apply(&mut self, area: &mut dyn TiledArea)
-    {
+    fn apply(&mut self, area: &mut dyn TiledArea) {
         // let temp: &mut TiledShape2D = self;
         // for ( x, y ) in TiledShape2DCircumferenceIterator::new( self )
         let mut iter_index: u32 = 0;
