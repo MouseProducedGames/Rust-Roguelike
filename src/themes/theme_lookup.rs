@@ -16,6 +16,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use super::Theme;
 use crate::creatures::CreatureFactory;
 use crate::dungen::DungeonGenerator;
+use crate::world::MapProcessor;
 
 pub struct ThemeLookup {
     values: HashMap<String, Arc<Mutex<Theme>>>,
@@ -36,6 +37,7 @@ impl ThemeLookup {
         sub_themes: &[Arc<Mutex<Theme>>],
         creature_factories: &[Arc<Mutex<CreatureFactory>>],
         dungeon_generators: &[Arc<Mutex<dyn DungeonGenerator>>],
+        map_processors: &[Arc<Mutex<MapProcessor>>],
     ) {
         self.values.entry(name.clone()).or_insert_with(|| {
             Arc::new(Mutex::new(Theme::new(
@@ -43,6 +45,7 @@ impl ThemeLookup {
                 sub_themes,
                 creature_factories,
                 dungeon_generators,
+                map_processors,
             )))
         });
     }

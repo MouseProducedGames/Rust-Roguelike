@@ -19,6 +19,9 @@ pub struct TileTypeData {
 }
 
 pub const TILE_TYPE_INDEX_VOID: u32 = 0;
+pub const TILE_TYPE_INDEX_WALL: u32 = 1;
+pub const TILE_TYPE_INDEX_FLOOR: u32 = 2;
+pub const TILE_TYPE_INDEX_DOOR: u32 = 3;
 pub static TILE_TYPE_DATA: [TileTypeData; 8] = [
     // The void.
     TileTypeData {

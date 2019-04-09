@@ -18,8 +18,8 @@ use crate::creatures::CreatureFactory;
 use crate::dungen::{DungenCommon, DungeonGenerator};
 use crate::rrl_math::Position;
 use crate::screens::ThemeInitScreen;
-use crate::themes::ThemeLookup;
-use crate::world::{Lightmap, Mapping, Tilemap};
+use crate::themes::{ThemeHelper, ThemeLookup};
+use crate::world::{Lightmap, MapProcessor, Mapping, Tilemap};
 
 enum MapInitState {
     InitializingThemes,
@@ -41,7 +41,7 @@ impl MapInitScreen {
     }
 
     fn create_map(&self, world: &mut World) {
-        let map;
+        let mut map;
         {
             let theme_lookup;
             {
@@ -66,6 +66,14 @@ impl MapInitScreen {
                 theme.for_all_dungeon_generators(&mut call);
 
                 map = temp_map.finish();
+            }
+
+            {
+                theme.get_random_map_processor(
+                    &mut |_index: usize, dungen: &Arc<Mutex<MapProcessor>>| {
+                        map = dungen.lock().unwrap().gen_once(&map);
+                    },
+                );
             }
 
             for (top_left, bottom_right) in generation_areas.iter() {

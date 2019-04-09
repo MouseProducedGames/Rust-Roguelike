@@ -11,6 +11,8 @@ Documentation:
 
 // Internal includes.
 mod theme;
+mod theme_helper;
 mod theme_lookup;
 pub use theme::Theme;
+pub use theme_helper::ThemeHelper;
 pub use theme_lookup::ThemeLookup;

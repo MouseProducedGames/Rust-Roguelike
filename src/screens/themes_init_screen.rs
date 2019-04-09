@@ -23,7 +23,11 @@ use crate::rrl_math::{Bounds, Position};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
-use crate::world::{VisibilityMapLookup, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
+use crate::world::{
+    MapProcessor, Mapping, Tilemap, VisibilityMapLookup, TILE_FUNC_INDEX_DOOR,
+    TILE_FUNC_INDEX_SECRET_DOOR, TILE_FUNC_INDEX_VOID, TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR,
+    TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
+};
 
 pub struct ThemeInitScreen {
     state: ScreenState,
@@ -80,16 +84,11 @@ impl Screen for ThemeInitScreen {
                     width: 6,
                     height: 6,
                 },
-                || -> (u32, u32) {
-                    if thread_rng().gen_bool(0.1) {
-                        (5, TILE_FUNC_INDEX_SECRET_DOOR)
-                    } else {
-                        (3, TILE_FUNC_INDEX_DOOR)
-                    }
-                },
+                || -> (u32, u32) { (3, TILE_FUNC_INDEX_VOID) },
                 2,
                 1,
             )))],
+            &[],
         );
 
         if let Some(split_rooms) = theme_lookup.get_theme(String::from("Split Rooms")) {
@@ -118,6 +117,36 @@ impl Screen for ThemeInitScreen {
                 &[split_rooms],
                 &[creature_factory],
                 &[],
+                &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
+                    Mutex::new(|meta_tile_map: &Tilemap| {
+                        let mut output =
+                            Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
+                        for pos in meta_tile_map.get_position(0, 0) {
+                            let (tile_type, tile_func_type) = match meta_tile_map.tile_type(pos) {
+                                TILE_TYPE_INDEX_DOOR => {
+                                    let (mut tile_type, mut tile_func_type) =
+                                        (TILE_TYPE_INDEX_DOOR, TILE_FUNC_INDEX_DOOR);
+                                    if thread_rng().gen_bool(0.1) {
+                                        tile_type = 5;
+                                        tile_func_type = TILE_FUNC_INDEX_SECRET_DOOR;
+                                    }
+
+                                    (tile_type, tile_func_type)
+                                }
+                                TILE_TYPE_INDEX_FLOOR => {
+                                    (TILE_TYPE_INDEX_FLOOR, TILE_FUNC_INDEX_VOID)
+                                }
+                                TILE_TYPE_INDEX_WALL => {
+                                    (TILE_TYPE_INDEX_WALL, TILE_FUNC_INDEX_VOID)
+                                }
+                                _ => (TILE_TYPE_INDEX_VOID, TILE_FUNC_INDEX_VOID),
+                            };
+                            *output.tile_type_mut(pos) = tile_type;
+                            *output.tile_func_type_mut(pos) = tile_func_type;
+                        }
+                        output
+                    }),
+                ))))],
             );
         }
 
