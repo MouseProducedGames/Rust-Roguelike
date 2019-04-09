@@ -12,7 +12,7 @@ use rand::{thread_rng, Rng};
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
-use crate::rrl_math::{Bounds, Position};
+use crate::rrl_math::Position;
 use crate::world::TiledArea;
 
 pub struct FillTileShapeRandRange {

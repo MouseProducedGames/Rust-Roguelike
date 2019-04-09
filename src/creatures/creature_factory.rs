@@ -25,7 +25,7 @@ impl CreatureFactory {
     }
 
     pub fn gen_once(&mut self, position: Position, world: &mut World) {
-        let mut gen_func = self.gen_func.clone();
+        let gen_func = self.gen_func.clone();
         let mut gen_func = gen_func.lock().unwrap();
         (&mut *gen_func)(position, world);
     }

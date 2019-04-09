@@ -11,7 +11,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use crate::rrl_math::{Bounds, Position};
+use crate::rrl_math::Position;
 use crate::world::TiledArea;
 
 pub struct FillTileShape {

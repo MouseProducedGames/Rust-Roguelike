@@ -248,10 +248,9 @@ impl ConsoleDisplay {
 impl Drop for ConsoleDisplay {
     fn drop(&mut self) {
         println!(
-            "{}{}{}",
+            "{}{}",
             Colored::Fg(Color::Grey),
-            Colored::Bg(Color::Black),
-            ""
+            Colored::Bg(Color::Black)
         );
 
         match self.term.cursor().show() {

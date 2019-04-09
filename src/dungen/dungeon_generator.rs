@@ -11,7 +11,7 @@ Documentation:
 use std::marker::Send;
 
 // Internal includes.
-use crate::rrl_math::{Bounds, Position};
+use crate::rrl_math::Position;
 use crate::world::TiledArea;
 
 pub trait DungeonGenerator: Send {

@@ -82,7 +82,7 @@ impl Display for ConsoleDisplay {
         let mut index: usize = 0;
 
         self.clear();
-        while true {
+        loop {
             self.clear_back_buffer();
             self.put_string(
                 1,
@@ -131,8 +131,6 @@ impl Display for ConsoleDisplay {
                 _ => (),
             }
         }
-
-        panic!("Broke from an infinite loop that only supports returning!");
     }
 
     fn display_stats(&mut self, stats: CreatureStats) {
