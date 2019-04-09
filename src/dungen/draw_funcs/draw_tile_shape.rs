@@ -11,6 +11,7 @@ Documentation:
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
+use crate::rrl_math::{Bounds, Position};
 use crate::world::TiledArea;
 
 pub struct DrawTileShape {
@@ -24,7 +25,7 @@ impl DrawTileShape {
 }
 
 impl DungeonGenerator for DrawTileShape {
-    fn apply(&mut self, area: &mut dyn TiledArea) {
+    fn apply(&mut self, area: &mut dyn TiledArea, _generation_areas: &mut Vec<(Position, Position)>) {
         // let temp: &mut TiledShape2D = self;
         // for ( x, y ) in TiledShape2DCircumferenceIterator::new( self )
         let mut iter_index: u32 = 0;

@@ -14,6 +14,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
 use super::Theme;
+use crate::creatures::CreatureFactory;
 use crate::dungen::DungeonGenerator;
 
 pub struct ThemeLookup {
@@ -33,10 +34,16 @@ impl ThemeLookup {
         &mut self,
         name: String,
         sub_themes: &[Arc<Mutex<Theme>>],
+        creature_factories: &[Arc<Mutex<CreatureFactory>>],
         dungeon_generators: &[Arc<Mutex<dyn DungeonGenerator>>],
-    ){
+    ) {
         self.values.entry(name.clone()).or_insert_with(|| {
-            Arc::new(Mutex::new(Theme::new(name, sub_themes, dungeon_generators)))
+            Arc::new(Mutex::new(Theme::new(
+                name,
+                sub_themes,
+                creature_factories,
+                dungeon_generators,
+            )))
         });
     }
     

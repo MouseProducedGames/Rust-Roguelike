@@ -32,6 +32,7 @@ extern crate rust_dice;
 mod abilities;
 mod ai;
 mod background;
+mod creatures;
 mod data_types;
 mod dice;
 mod dungen;

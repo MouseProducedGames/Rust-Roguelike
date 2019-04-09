@@ -12,6 +12,7 @@ Documentation:
 // Internal includes.
 use super::{MapPosition, Mapping, Tilemap};
 use crate::dungen::DungenCommon;
+use crate::rrl_math::{Displacement, Position};
 use crate::tiled_shapes_2d::TiledShape2D;
 
 pub struct TiledAreaFilter<'a> {
@@ -64,6 +65,8 @@ pub trait TiledArea {
     fn finish(&mut self) -> Tilemap;
 
     // fn height(&self) -> u16;
+    
+    fn get_global_position_from_local_position(&self, position: Position) -> Position;
 
     fn iter_circumference(&self, iter_index: &mut u32) -> Option<MapPosition>;
 
@@ -117,6 +120,10 @@ impl TiledArea for Tilemap {
 
     fn finish(&mut self) -> Tilemap {
         DungenCommon::finish(self)
+    }
+    
+    fn get_global_position_from_local_position(&self, position: Position) -> Position {
+        position
     }
 
     /* fn height(&self) -> u16 {
@@ -206,6 +213,16 @@ impl<'a> TiledArea for TiledAreaFilter<'a> {
 
     fn finish(&mut self) -> Tilemap {
         self.area.finish()
+    }
+    
+    fn get_global_position_from_local_position(&self, position: Position) -> Position {
+        self.area.get_global_position_from_local_position(
+            position +
+            Displacement::new(
+                i32::from(self.shape_filter.left()),
+                i32::from(self.shape_filter.top())
+            )
+        )
     }
 
     /* fn height(&self) -> u16 {

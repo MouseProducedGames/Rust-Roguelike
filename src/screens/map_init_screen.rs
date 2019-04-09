@@ -14,12 +14,13 @@ use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::dungen::{
-    DungenCommon, DungeonGenerator, SplitDungeon, /* RandomlyTileDungeon, */ SplitType,
-};
-use crate::rrl_math::Bounds;
+use crate::creatures::CreatureFactory;
+use crate::dungen::{DungenCommon, DungeonGenerator};
+use crate::game::GameState;
+use crate::rrl_math::{Position, Bounds};
+use crate::screens::ThemeInitScreen;
 use crate::themes::ThemeLookup;
-use crate::world::{Lightmap, Mapping, Tilemap, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR};
+use crate::world::{Lightmap, Mapping, Tilemap};
 
 enum MapInitState {
     InitializingThemes,
@@ -44,24 +45,50 @@ impl MapInitScreen {
         
         let map;
         {
-            let theme_lookup = world.write_resource::<Arc<Mutex<ThemeLookup>>>();
+            let theme_lookup;
+            {
+                let ref_theme_lookup = world.write_resource::<Arc<Mutex<ThemeLookup>>>();
+                theme_lookup = ref_theme_lookup.clone();
+            }
             let theme_lookup = theme_lookup.lock().unwrap();
             let theme = theme_lookup.get_random_top_level_theme();
-            
-            let dungen_index = thread_rng().gen_range(0, theme.dungeon_generator_count());
-            let mut temp_map = Tilemap::new(40, 30);
-            let mut call = 
-                |
-                    index: usize,
-                    dungen: &Arc<Mutex<(dyn DungeonGenerator)>>,
-                | {
-                    if index == dungen_index {
-                        dungen.lock().unwrap().apply(&mut temp_map);
-                    }
-                };
-            theme.for_all_dungeon_generators(&mut call);
 
-            map = temp_map.finish();
+            let mut generation_areas: Vec<(Position, Position)> = vec![];
+            {
+                let dungen_index = thread_rng().gen_range(0, theme.dungeon_generator_count());
+                let mut temp_map = Tilemap::new(40, 30);
+                let mut call = 
+                    |
+                        index: usize,
+                        dungen: &Arc<Mutex<(dyn DungeonGenerator)>>,
+                    | {
+                        if index == dungen_index {
+                            dungen.lock().unwrap().apply(
+                            &mut temp_map,
+                            &mut generation_areas
+                            );
+                        }
+                    };
+                theme.for_all_dungeon_generators(&mut call);
+
+                map = temp_map.finish();
+            }
+            
+            for (top_left, bottom_right) in generation_areas.iter() {
+                for y in top_left.y..bottom_right.y {
+                    for x in top_left.x..bottom_right.x {
+                        let position = Position::new(x, y);
+                        // println!("({} {})", position.x, position.y);
+                        theme.get_random_creature_factory(
+                            &mut |
+                                _index: usize,
+                                creature_factory: &Arc<Mutex<CreatureFactory>>
+                            | {
+                                creature_factory.lock().unwrap().gen_once(position, world);
+                            });
+                    }
+                }
+            }
         }
 
         world.add_resource(Lightmap::new(map.width(), map.height()));
@@ -71,44 +98,6 @@ impl MapInitScreen {
             let map_pos = world.read_resource::<Tilemap>().get_position(8, 5).unwrap();
             *world.write_resource::<Tilemap>().tile_type_mut(map_pos) = 2;
         }
-    }
-    
-    fn initialize_themes(&self, world: &mut World) {
-        let theme_lookup = world.write_resource::<Arc<Mutex<ThemeLookup>>>();
-        let mut theme_lookup = theme_lookup.lock().unwrap();
-        
-        theme_lookup.add_theme(
-            String::from("Split Rooms"),
-            &[],
-            &[Arc::new(Mutex::new(SplitDungeon::new(
-                SplitType::LongestDimension,
-                Bounds {
-                    width: 6,
-                    height: 6,
-                },
-                || -> (u32, u32) {
-                    if thread_rng().gen_bool(0.1) {
-                        (5, TILE_FUNC_INDEX_SECRET_DOOR)
-                    } else {
-                        (3, TILE_FUNC_INDEX_DOOR)
-                    }
-                },
-                2,
-                1,
-            )))],
-        );
-
-        if let Some(split_rooms) = theme_lookup.get_theme(String::from("Split Rooms"))
-        {
-            let split_rooms = split_rooms.clone();
-            theme_lookup.add_theme(
-                String::from("Generic"),
-                &[split_rooms],
-                &[],
-            );
-        }
-        
-        theme_lookup.make_theme_top_level(String::from("Generic"));
     }
 }
 
@@ -141,11 +130,12 @@ impl Screen for MapInitScreen {
 
     fn draw(&mut self, _world: &mut World) {}
 
-    fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
+    fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
         self.map_init_state =
             match self.map_init_state {
                 MapInitState::InitializingThemes => {
-                    self.initialize_themes(world);
+                    let theme_init_screen = Arc::new(Mutex::new(ThemeInitScreen::new()));
+                    screen_push_wrapper.push(theme_init_screen);
                     MapInitState::CreatingMap
                 },
                 MapInitState::CreatingMap => {
