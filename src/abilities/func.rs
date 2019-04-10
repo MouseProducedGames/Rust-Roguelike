@@ -10,22 +10,100 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use super::ability::Ability;
-use crate::rrl_math::Position;
-use crate::stats::CreatureStats;
-use crate::world::{calculate_light_level, Lightmap, Tilemap, VisibilityMap};
+use super::ability::{Ability, AbilityRange};
+use crate::rrl_math::{Displacement, Position};
+use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use crate::stats::{CreatureStats, StatModifier};
+use crate::world::{calculate_light_level, execute_tile_func, Lightmap, Tilemap, VisibilityMap};
 
 pub fn ability_func(
     ability: Ability,
-    _stats: &mut CreatureStats,
     lightmap: &mut Lightmap,
     pos: &mut Position,
+    skills: &mut SkillLookup,
+    stats: &mut CreatureStats,
     map: &mut Tilemap,
-    _vis: &mut VisibilityMap,
+    visibility_map: &mut VisibilityMap,
 ) {
     match ability {
         Ability::Light(value) => {
             calculate_light_level(lightmap, *pos, value, map);
         }
+        Ability::ScanForSecrets(ability_modifier, ability_range) => {
+            scan_for_secrets(
+                ability_modifier,
+                ability_range,
+                pos,
+                skills,
+                stats,
+                map,
+                visibility_map,
+            );
+        }
     }
+}
+
+fn ability_range_func<TData, TDataMut>(
+    ability_range: AbilityRange,
+    data: &TData,
+    data_mut: &mut TDataMut,
+    fn_ptr: fn(Displacement, &TData, &mut TDataMut),
+) {
+    match ability_range {
+        AbilityRange::Radius(radius) => {
+            let radius_sqr = u64::from(radius) * u64::from(radius);
+            let iradius = radius as i32;
+            for iyd in -iradius..=iradius {
+                for ixd in -iradius..=iradius {
+                    let xd = i64::from(ixd);
+                    let yd = i64::from(iyd);
+                    if ((yd * yd) + (xd * xd)) as u64 <= radius_sqr {
+                        fn_ptr(Displacement::new(ixd, iyd), data, data_mut);
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn scan_for_secrets(
+    ability_modifier: i32,
+    ability_range: AbilityRange,
+    pos: &mut Position,
+    skills: &mut SkillLookup,
+    stats: &mut CreatureStats,
+    map: &mut Tilemap,
+    visibility_map: &mut VisibilityMap,
+) {
+    let set = skills.get_set(SkillActivation::Passive(
+        SkillTag::Perception,
+        SkillPassiveOp::EveryRound,
+    ));
+
+    let mut skill_bonus = i64::from(ability_modifier);
+    for skill in set {
+        if let SkillType::Skill(v) = skill {
+            skill_bonus += i64::from(*v)
+        }
+    }
+
+    let skill_bonus = skill_bonus + i64::from(stats.perception().modifier());
+
+    ability_range_func(
+        ability_range,
+        &skill_bonus,
+        &mut (map, pos, visibility_map),
+        |disp: Displacement,
+         data: &i64,
+         data_mut: &mut (&mut Tilemap, &mut Position, &mut VisibilityMap)| {
+            let skill_bonus = data;
+            let (map, pos, visibility_map) = data_mut;
+
+            let scan_pos = **pos + disp;
+
+            let visibility_type = visibility_map.value_pos(scan_pos);
+
+            execute_tile_func(true, *skill_bonus, *map, visibility_type, scan_pos);
+        },
+    );
 }

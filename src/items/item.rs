@@ -12,6 +12,7 @@ Documentation:
 // Internal includes.
 use crate::abilities::Ability;
 use crate::rrl_math::Position;
+use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::world::{Lightmap, Tilemap, VisibilityMap};
 
@@ -23,14 +24,17 @@ pub enum Item {
 impl Item {
     pub fn apply(
         &self,
-        _stats: &mut CreatureStats,
         lightmap: &mut Lightmap,
         pos: &mut Position,
+        skills: &mut SkillLookup,
+        stats: &mut CreatureStats,
         map: &mut Tilemap,
-        _vis: &mut VisibilityMap,
+        visibility_map: &mut VisibilityMap,
     ) {
         match self {
-            Item::Generic(_, ability) => ability.apply(_stats, lightmap, pos, map, _vis),
+            Item::Generic(_, ability) => {
+                ability.apply(lightmap, pos, skills, stats, map, visibility_map)
+            }
         }
     }
 }

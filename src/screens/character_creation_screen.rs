@@ -14,6 +14,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
+use crate::abilities::{Ability, AbilityActivation, AbilityActivationOp, AbilityRange};
 use crate::ai::{Command, LogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
@@ -22,7 +23,7 @@ use crate::items::Inventory;
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
-use crate::talents::{TalentActivation, TalentActivationOp, TalentLookup, TalentRange, TalentType};
+use crate::talents::TalentLookup;
 use crate::world::VisibilityMapLookup;
 
 pub struct CharacterCreationScreen {
@@ -104,8 +105,8 @@ impl Screen for CharacterCreationScreen {
             let mut talents = TalentLookup::new();
 
             talents.insert(
-                TalentActivation::Passive(TalentActivationOp::EveryRound),
-                TalentType::ScanForSecrets(-2, TalentRange::Radius(1)),
+                AbilityActivation::Passive(AbilityActivationOp::EveryRound),
+                Ability::ScanForSecrets(-2, AbilityRange::Radius(1)),
             );
 
             let species = Species::create(species_type);

@@ -12,23 +12,41 @@ Documentation:
 // internal includes.
 use super::func::ability_func;
 use crate::rrl_math::Position;
+use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::world::{Lightmap, Tilemap, VisibilityMap};
+
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+pub enum AbilityActivation {
+    Passive(AbilityActivationOp),
+}
+
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+pub enum AbilityActivationOp {
+    EveryRound,
+}
 
 #[derive(Copy, Clone)]
 pub enum Ability {
     Light(f64),
+    ScanForSecrets(i32, AbilityRange),
+}
+
+#[derive(Copy, Clone)]
+pub enum AbilityRange {
+    Radius(u32),
 }
 
 impl Ability {
     pub fn apply(
         self,
-        _stats: &mut CreatureStats,
         lightmap: &mut Lightmap,
         pos: &mut Position,
+        skills: &mut SkillLookup,
+        stats: &mut CreatureStats,
         map: &mut Tilemap,
-        _vis: &mut VisibilityMap,
+        visibility_map: &mut VisibilityMap,
     ) {
-        ability_func(self, _stats, lightmap, pos, map, _vis);
+        ability_func(self, lightmap, pos, skills, stats, map, visibility_map);
     }
 }

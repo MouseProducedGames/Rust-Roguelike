@@ -14,6 +14,7 @@ pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, WriteSto
 use crate::game::EntityPositionTracker;
 use crate::items::Inventory;
 use crate::rrl_math::Position;
+use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::world::{Lightmap, Tilemap, VisibilityMapLookup};
 
@@ -26,8 +27,9 @@ pub struct SystemDataT<'a> {
     map: WriteExpect<'a, Tilemap>,
     entity_position_tracker: WriteExpect<'a, EntityPositionTracker>,
     inventory: WriteStorage<'a, Inventory>,
+    pos: WriteStorage<'a, Position>,
+    skills: WriteStorage<'a, SkillLookup>,
     stats: WriteStorage<'a, CreatureStats>,
-    positions: WriteStorage<'a, Position>,
     visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
 }
 
@@ -41,22 +43,27 @@ impl<'a> System<'a> for ItemSystem {
         let lightmap = &mut *data.lightmap;
         let map = &mut *data.map;
 
-        for (entity, stats, pos, visibility_map_lookup, inventory) in (
+        for (entity, pos, skills, stats, visibility_map_lookup, inventory) in (
             &data.entities,
+            &mut data.pos,
+            &mut data.skills,
             &mut data.stats,
-            &mut data.positions,
             &mut data.visibility_map_lookup,
             &data.inventory,
         )
             .join()
         {
-            entity_position_tracker.set_position(entity, *pos);
+            let mut pos = *pos;
 
-            let visibility_map = visibility_map_lookup.get_or_add_mut(map);
+            entity_position_tracker.set_position(entity, pos);
+
+            let visibility_map = &mut *visibility_map_lookup.get_or_add_mut(map);
 
             for item in inventory.get().iter() {
-                item.apply(stats, lightmap, pos, map, visibility_map);
+                item.apply(lightmap, &mut pos, skills, stats, map, visibility_map);
             }
+
+            entity_position_tracker.set_position(entity, pos);
         }
     }
 }
