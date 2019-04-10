@@ -11,7 +11,7 @@ Documentation:
 // Standard includes.
 use std::cmp::{Eq, PartialEq};
 use std::convert::From;
-use std::ops::{Add, Sub};
+use std::ops::{Add, Div, Sub};
 
 // Internal includes
 use super::Position;
@@ -43,6 +43,17 @@ impl Add<Displacement> for Displacement {
         Displacement {
             x: self.x + other.x,
             y: self.y + other.y,
+        }
+    }
+}
+
+impl Div<i32> for Displacement {
+    type Output = Displacement;
+
+    fn div(self, other: i32) -> Displacement {
+        Displacement {
+            x: self.x / other,
+            y: self.y / other,
         }
     }
 }

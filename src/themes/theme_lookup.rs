@@ -38,8 +38,8 @@ impl ThemeLookup {
         creature_factories: &[Arc<Mutex<CreatureFactory>>],
         dungeon_generators: &[Arc<Mutex<dyn DungeonGenerator>>],
         map_processors: &[Arc<Mutex<MapProcessor>>],
-    ) {
-        self.values.entry(name.clone()).or_insert_with(|| {
+    ) -> Arc<Mutex<Theme>> {
+        let output = self.values.entry(name.clone()).or_insert_with(|| {
             Arc::new(Mutex::new(Theme::new(
                 name,
                 sub_themes,
@@ -48,23 +48,29 @@ impl ThemeLookup {
                 map_processors,
             )))
         });
+
+        output.clone()
     }
 
     pub fn get_theme(&self, name: String) -> Option<&Arc<Mutex<Theme>>> {
         self.values.get(&name)
     }
 
-    pub fn make_theme_top_level(&mut self, name: String) -> (bool, String, &'static str) {
-        if self.values.contains_key(&name) {
-            if self.top_level_theme_names.contains(&name) {
-                return (true, name, "Already a top-level theme.");
+    pub fn make_theme_top_level(&mut self, name: &String) -> (bool, String, &'static str) {
+        if self.values.contains_key(name) {
+            if self.top_level_theme_names.contains(name) {
+                return (true, name.clone(), "Already a top-level theme.");
             } else {
                 self.top_level_theme_names.insert(name.clone());
-                return (true, name, "Theme exists and is now a top-level theme.");
+                return (
+                    true,
+                    name.clone(),
+                    "Theme exists and is now a top-level theme.",
+                );
             }
         }
 
-        (false, name, "No such theme exists.")
+        (false, name.clone(), "No such theme exists.")
     }
 
     pub fn get_random_top_level_theme(&self) -> MutexGuard<Theme> {

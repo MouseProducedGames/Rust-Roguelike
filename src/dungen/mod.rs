@@ -10,12 +10,14 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+mod catacombs;
 mod common;
 mod draw_funcs;
 // mod dungen_funcs;
 mod dungeon_generator;
 mod randomly_tile_dungeon;
 mod split_dungeon;
+pub use catacombs::Catacombs;
 pub use common::DungenCommon;
 // pub use dungen_funcs::{DungenFunc, DungenFuncOp};
 pub use dungeon_generator::DungeonGenerator;

@@ -13,7 +13,7 @@ use std::cmp::{Eq, PartialEq};
 
 // Internal includes
 
-#[derive(Copy, Clone, Debug, Default)]
+#[derive(Copy, Clone, Debug, Default, Eq, Hash, PartialEq)]
 pub struct MapPosition {
     x: u16,
     y: u16,
@@ -33,13 +33,5 @@ impl MapPosition {
     }
     pub fn y(self) -> u16 {
         self.y
-    }
-}
-
-impl Eq for MapPosition {}
-
-impl PartialEq<MapPosition> for MapPosition {
-    fn eq(&self, other: &MapPosition) -> bool {
-        (self.x == other.x) && (self.y == other.y)
     }
 }

@@ -16,7 +16,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::{Command, LogicFaction};
 use crate::creatures::CreatureFactory;
-use crate::dungen::{SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
+use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
 use crate::items::Inventory;
 use crate::rrl_math::{Bounds, Position};
@@ -74,7 +74,15 @@ impl Screen for ThemeInitScreen {
         let theme_lookup = world.write_resource::<Arc<Mutex<ThemeLookup>>>();
         let mut theme_lookup = theme_lookup.lock().unwrap();
 
-        theme_lookup.add_theme(
+        let catacombs = theme_lookup.add_theme(
+            String::from("Catacombs"),
+            &[],
+            &[],
+            &[Arc::new(Mutex::new(Catacombs::new()))],
+            &[],
+        );
+
+        let split_rooms = theme_lookup.add_theme(
             String::from("Split Rooms"),
             &[],
             &[],
@@ -91,66 +99,90 @@ impl Screen for ThemeInitScreen {
             &[],
         );
 
-        if let Some(split_rooms) = theme_lookup.get_theme(String::from("Split Rooms")) {
-            let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(
-                Mutex::new(|position: Position, world: &mut World| {
-                    // panic!("This should happen, actually.");
-                    if thread_rng().gen_range(1, 300) == 1 {
-                        world
-                            .create_entity()
-                            .with(Command::None)
-                            .with(CreatureStats::default())
-                            .with(Faction::new(1))
-                            .with(Inventory::new())
-                            .with(LogicFaction)
-                            .with(position)
-                            .with(TalentLookup::new())
-                            .with(VisibilityMapLookup::new())
-                            .build();
-                    }
-                }),
-            ))));
+        let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(Mutex::new(
+            |position: Position, world: &mut World| {
+                if thread_rng().gen_range(1, 300) == 1 {
+                    world
+                        .create_entity()
+                        .with(Command::None)
+                        .with(CreatureStats::default())
+                        .with(Faction::new(1))
+                        .with(Inventory::new())
+                        .with(LogicFaction)
+                        .with(position)
+                        .with(TalentLookup::new())
+                        .with(VisibilityMapLookup::new())
+                        .build();
+                }
+            },
+        )))));
 
-            let split_rooms = split_rooms.clone();
-            theme_lookup.add_theme(
-                String::from("Generic"),
-                &[split_rooms],
-                &[creature_factory],
-                &[],
-                &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
-                    Mutex::new(|meta_tile_map: &Tilemap| {
-                        let mut output =
-                            Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
-                        for pos in meta_tile_map.get_position(0, 0) {
-                            let (tile_type, tile_func_type) = match meta_tile_map.tile_type(pos) {
-                                TILE_TYPE_INDEX_DOOR => {
-                                    let (mut tile_type, mut tile_func_type) =
-                                        (TILE_TYPE_INDEX_DOOR, TILE_FUNC_INDEX_DOOR);
-                                    if thread_rng().gen_bool(0.1) {
-                                        tile_type = 5;
-                                        tile_func_type = TILE_FUNC_INDEX_SECRET_DOOR;
-                                    }
-
-                                    (tile_type, tile_func_type)
+        let generic = theme_lookup.add_theme(
+            String::from("Generic"),
+            &[split_rooms.clone()],
+            &[creature_factory.clone()],
+            &[],
+            &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
+                Mutex::new(|meta_tile_map: &Tilemap| {
+                    let mut output = Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
+                    for pos in meta_tile_map.get_position(0, 0) {
+                        let (tile_type, tile_func_type) = match meta_tile_map.tile_type(pos) {
+                            TILE_TYPE_INDEX_DOOR => {
+                                let (mut tile_type, mut tile_func_type) =
+                                    (TILE_TYPE_INDEX_DOOR, TILE_FUNC_INDEX_DOOR);
+                                if thread_rng().gen_bool(0.1) {
+                                    tile_type = 5;
+                                    tile_func_type = TILE_FUNC_INDEX_SECRET_DOOR;
                                 }
-                                TILE_TYPE_INDEX_FLOOR => {
+
+                                (tile_type, tile_func_type)
+                            }
+                            TILE_TYPE_INDEX_FLOOR => (TILE_TYPE_INDEX_FLOOR, TILE_FUNC_INDEX_VOID),
+                            TILE_TYPE_INDEX_WALL => (TILE_TYPE_INDEX_WALL, TILE_FUNC_INDEX_VOID),
+                            _ => (TILE_TYPE_INDEX_VOID, TILE_FUNC_INDEX_VOID),
+                        };
+                        *output.tile_type_mut(pos) = tile_type;
+                        *output.tile_func_type_mut(pos) = tile_func_type;
+                    }
+                    output
+                }),
+            ))))],
+        );
+
+        let undead = theme_lookup.add_theme(
+            String::from("Undead"),
+            &[catacombs.clone()],
+            &[creature_factory.clone()],
+            &[],
+            &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
+                Mutex::new(|meta_tile_map: &Tilemap| {
+                    let mut output = Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
+                    for pos in meta_tile_map.get_position(0, 0) {
+                        let (tile_type, tile_func_type) = match meta_tile_map.tile_type(pos) {
+                            TILE_TYPE_INDEX_DOOR => {
+                                if thread_rng().gen_bool(0.1) {
+                                    if thread_rng().gen_bool(0.3) {
+                                        (5, TILE_FUNC_INDEX_SECRET_DOOR)
+                                    } else {
+                                        (TILE_TYPE_INDEX_DOOR, TILE_FUNC_INDEX_DOOR)
+                                    }
+                                } else {
                                     (TILE_TYPE_INDEX_FLOOR, TILE_FUNC_INDEX_VOID)
                                 }
-                                TILE_TYPE_INDEX_WALL => {
-                                    (TILE_TYPE_INDEX_WALL, TILE_FUNC_INDEX_VOID)
-                                }
-                                _ => (TILE_TYPE_INDEX_VOID, TILE_FUNC_INDEX_VOID),
-                            };
-                            *output.tile_type_mut(pos) = tile_type;
-                            *output.tile_func_type_mut(pos) = tile_func_type;
-                        }
-                        output
-                    }),
-                ))))],
-            );
-        }
+                            }
+                            TILE_TYPE_INDEX_FLOOR => (TILE_TYPE_INDEX_FLOOR, TILE_FUNC_INDEX_VOID),
+                            TILE_TYPE_INDEX_WALL => (TILE_TYPE_INDEX_WALL, TILE_FUNC_INDEX_VOID),
+                            _ => (TILE_TYPE_INDEX_VOID, TILE_FUNC_INDEX_VOID),
+                        };
+                        *output.tile_type_mut(pos) = tile_type;
+                        *output.tile_func_type_mut(pos) = tile_func_type;
+                    }
+                    output
+                }),
+            ))))],
+        );
 
-        theme_lookup.make_theme_top_level(String::from("Generic"));
+        theme_lookup.make_theme_top_level(undead.lock().unwrap().name());
 
         self.state = ScreenState::Stopped;
     }

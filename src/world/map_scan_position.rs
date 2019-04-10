@@ -17,7 +17,7 @@ use std::ops::{Add, Sub};
 // Internal includes
 use super::{MapDisplacement, MapPosition};
 
-#[derive(Copy, Clone, Debug, Default)]
+#[derive(Copy, Clone, Debug, Default, Eq, Hash, PartialEq)]
 pub struct MapScanPosition {
     pub x: u16,
     pub y: u16,
@@ -61,8 +61,6 @@ impl Add<MapDisplacement> for MapScanPosition {
     }
 }
 
-impl Eq for MapScanPosition {}
-
 impl From<MapScanPosition> for bool {
     fn from(item: MapScanPosition) -> bool {
         (item.x <= item.x_bound) && (item.y <= item.y_bound)
@@ -94,15 +92,6 @@ impl Iterator for MapScanPosition {
 impl PartialEq<bool> for MapScanPosition {
     fn eq(&self, other: &bool) -> bool {
         bool::from(*self) == *other
-    }
-}
-
-impl PartialEq<MapScanPosition> for MapScanPosition {
-    fn eq(&self, other: &MapScanPosition) -> bool {
-        (self.x == other.x)
-            && (self.y == other.y)
-            && (self.x_bound == other.x_bound)
-            && (self.y_bound == other.y_bound)
     }
 }
 
