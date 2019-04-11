@@ -15,7 +15,10 @@ use super::DungeonGenerator;
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
 use crate::rrl_math::{Bounds, Position};
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{MapPosition, Mapping, TiledArea, TiledAreaFilter};
+use crate::world::{
+    MapPosition, Mapping, TiledArea, TiledAreaFilter, TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR,
+    TILE_TYPE_INDEX_WALL,
+};
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum SplitType {
@@ -26,25 +29,13 @@ pub enum SplitType {
 pub struct SplitDungeon {
     split_type: SplitType,
     min_bounds: Bounds,
-    door_tile_type: fn() -> (u32, u32),
-    floor_tile_type: u32,
-    wall_tile_type: u32,
 }
 
 impl SplitDungeon {
-    pub fn new(
-        split_type: SplitType,
-        min_bounds: Bounds,
-        door_tile_type: fn() -> (u32, u32),
-        floor_tile_type: u32,
-        wall_tile_type: u32,
-    ) -> Self {
+    pub fn new(split_type: SplitType, min_bounds: Bounds) -> Self {
         Self {
             split_type,
             min_bounds,
-            door_tile_type,
-            floor_tile_type,
-            wall_tile_type,
         }
     }
 }
@@ -161,49 +152,30 @@ impl DungeonGenerator for SplitDungeon {
         }
 
         {
-            FillTileShape::new(self.floor_tile_type).apply(area, generation_areas);
-            DrawTileShape::new(self.wall_tile_type).apply(area, generation_areas);
+            FillTileShape::new(TILE_TYPE_INDEX_FLOOR).apply(area, generation_areas);
+            DrawTileShape::new(TILE_TYPE_INDEX_WALL).apply(area, generation_areas);
 
             let mut temp_area = TiledAreaFilter::new(area, &mut split_line);
-            FillTileShape::new(self.wall_tile_type).apply(&mut temp_area, generation_areas);
+            FillTileShape::new(TILE_TYPE_INDEX_WALL).apply(&mut temp_area, generation_areas);
         }
 
         {
             let mut rect =
                 TiledRect::with_absolute_bounds(room_left0, room_top0, room_right0, room_bottom0);
             let mut temp_area = TiledAreaFilter::new(area, &mut rect);
-            SplitDungeon::new(
-                self.split_type,
-                self.min_bounds,
-                self.door_tile_type,
-                self.floor_tile_type,
-                self.wall_tile_type,
-            )
-            .apply(&mut temp_area, generation_areas);
+            SplitDungeon::new(self.split_type, self.min_bounds)
+                .apply(&mut temp_area, generation_areas);
         }
 
         {
             let mut rect =
                 TiledRect::with_absolute_bounds(room_left1, room_top1, room_right1, room_bottom1);
             let mut temp_area = TiledAreaFilter::new(area, &mut rect);
-            SplitDungeon::new(
-                self.split_type,
-                self.min_bounds,
-                self.door_tile_type,
-                self.floor_tile_type,
-                self.wall_tile_type,
-            )
-            .apply(&mut temp_area, generation_areas);
+            SplitDungeon::new(self.split_type, self.min_bounds)
+                .apply(&mut temp_area, generation_areas);
         }
-        /* if thread_rng().gen_bool(0.1) {
-                *area.tile_type_mut(put_door) = 5;
-                *area.tile_func_type_mut(put_door) = TILE_FUNC_INDEX_SECRET_DOOR;
-        } else { */
         {
-            let (door_tile_type, door_tile_func_type) = (self.door_tile_type)();
-            *area.tile_type_mut(put_door) = door_tile_type;
-            *area.tile_func_type_mut(put_door) = door_tile_func_type;
+            *area.tile_type_mut(put_door) = TILE_TYPE_INDEX_DOOR;
         }
-        // }
     }
 }

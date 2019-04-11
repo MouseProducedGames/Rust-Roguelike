@@ -92,9 +92,6 @@ impl Screen for ThemeInitScreen {
                     width: 6,
                     height: 6,
                 },
-                || -> (u32, u32) { (3, TILE_FUNC_INDEX_VOID) },
-                2,
-                1,
             )))],
             &[],
         );
@@ -117,7 +114,7 @@ impl Screen for ThemeInitScreen {
             },
         )))));
 
-        let _generic = theme_lookup.add_theme(
+        let generic = theme_lookup.add_theme(
             String::from("Generic"),
             &[split_rooms.clone()],
             &[creature_factory.clone()],
@@ -182,7 +179,8 @@ impl Screen for ThemeInitScreen {
             ))))],
         );
 
-        theme_lookup.make_theme_top_level(undead.lock().unwrap().name());
+        theme_lookup.make_theme_top_level(generic.lock().unwrap().name());
+        // theme_lookup.make_theme_top_level(undead.lock().unwrap().name());
 
         self.state = ScreenState::Stopped;
     }
