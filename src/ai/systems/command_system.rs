@@ -11,7 +11,7 @@ use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, Writ
 // Standard includes.
 
 // Internal includes.
-use super::Command;
+use crate::ai::Command;
 use crate::factions::Faction;
 use crate::game::{Combat, CombatResult, EntityPositionTracker};
 use crate::rrl_math::Position;

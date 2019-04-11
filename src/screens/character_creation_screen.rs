@@ -15,7 +15,8 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::{Ability, AbilityActivation, AbilityActivationOp, AbilityRange};
-use crate::ai::{Command, LogicPlayer, PlayerMarker, PlayerPosition, ViewpointMarker};
+use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
+use crate::ai::systems::LogicPlayer;
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
 use crate::io::Display;

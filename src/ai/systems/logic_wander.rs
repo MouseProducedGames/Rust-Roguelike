@@ -11,7 +11,7 @@ use specs::{Component, NullStorage, ReadStorage, System, WriteStorage};
 // Standard includes.
 
 // Internal includes.
-use super::Command;
+use crate::ai::Command;
 use crate::dice::get_random_move;
 
 #[derive(Default)]

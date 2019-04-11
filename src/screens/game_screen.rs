@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
-use crate::ai::{
+use crate::ai::systems::{
     CommandSystem, LogicFactionSystem, LogicPlayerSystem, LogicWanderAttackSystem,
     LogicWanderSystem,
 };

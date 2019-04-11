@@ -10,7 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use super::{CreatureView, CreatureLogic};
+use crate::ai::{CreatureView, CreatureLogic};
 use crate::game::GameState;
 use crate::world::Tilemap;
 

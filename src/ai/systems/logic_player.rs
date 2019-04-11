@@ -15,7 +15,7 @@ use specs::{
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Command, PlayerMarker};
+use crate::ai::{Command, PlayerMarker};
 use crate::game::GameState;
 use crate::io::Input;
 use crate::items::Inventory;

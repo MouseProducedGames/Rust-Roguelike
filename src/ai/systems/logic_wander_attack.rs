@@ -11,7 +11,7 @@ use specs::{Component, Entities, NullStorage, ReadExpect, ReadStorage, System, W
 // Standard includes.
 
 // Internal includes.
-use super::Command;
+use crate::ai::Command;
 use crate::dice::get_random_move;
 use crate::factions::Faction;
 use crate::game::EntityPositionTracker;
