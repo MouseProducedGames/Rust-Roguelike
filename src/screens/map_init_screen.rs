@@ -53,7 +53,7 @@ impl MapInitScreen {
 
             let mut generation_areas: Vec<(Position, Position)> = vec![];
             {
-                let mut temp_map = Tilemap::new(40, 30);
+                let mut temp_map = Tilemap::new(25, 34);
                 theme.get_random_dungeon_generator(&mut |_index: usize,
                                                          dungen: &Arc<
                     Mutex<dyn DungeonGenerator>,

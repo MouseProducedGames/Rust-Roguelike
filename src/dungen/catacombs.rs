@@ -54,8 +54,8 @@ impl DungeonGenerator for Catacombs {
             let map_scan_pos = area.get_position(x, y);
             if map_scan_pos == true {
                 let map_pos = map_scan_pos.unwrap();
-                if (map_pos.x() < (area.right() - 1))
-                    && (map_pos.y() < (area.bottom() - 1))
+                if (map_pos.x() < area.right())
+                    && (map_pos.y() < area.bottom())
                     && area.tile_type(map_pos) == TILE_TYPE_INDEX_WALL
                 {
                     *area.tile_type_mut(map_pos) = TILE_TYPE_INDEX_FLOOR;
