@@ -101,7 +101,7 @@ impl Screen for ThemeInitScreen {
 
         let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(Mutex::new(
             |position: Position, world: &mut World| {
-                if thread_rng().gen_range(1, 300) == 1 {
+                if thread_rng().gen_range(1, 30000000) == 1 {
                     world
                         .create_entity()
                         .with(Command::None)

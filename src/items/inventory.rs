@@ -25,7 +25,7 @@ impl Inventory {
         let mut output = Self {
             values: Arc::new(Mutex::new(vec![])),
         };
-        output.push(Item::Generic(String::from("Torch"), Ability::Light(5.0)));
+        output.push(Item::Generic(String::from("Torch"), Ability::Light(50.0)));
         output
     }
 
