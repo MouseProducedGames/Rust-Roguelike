@@ -82,12 +82,15 @@ impl DungeonGenerator for Catacombs {
             let mut found = false;
             for y_move in (-2_i32..=2_i32).step_by(2) {
                 for x_move in (-2_i32..=2_i32).step_by(2) {
-                    if ((x_move != 0) || (y_move != 0)) && x_move.abs() != y_move.abs() && do_the_thing(
-                        area,
-                        &mut expansion_list,
-                        current_position,
-                        Displacement::new(x_move, y_move),
-                    ) {
+                    if ((x_move != 0) || (y_move != 0))
+                        && x_move.abs() != y_move.abs()
+                        && do_the_thing(
+                            area,
+                            &mut expansion_list,
+                            current_position,
+                            Displacement::new(x_move, y_move),
+                        )
+                    {
                         found = true;
                         break;
                     }

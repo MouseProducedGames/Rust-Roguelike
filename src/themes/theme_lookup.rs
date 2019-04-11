@@ -10,7 +10,7 @@ use rand::{thread_rng, Rng};
 
 // Standard includes.
 use std::collections::{HashMap, HashSet};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::Theme;
@@ -73,13 +73,12 @@ impl ThemeLookup {
         (false, String::from(name), "No such theme exists.")
     }
 
-    pub fn get_random_top_level_theme(&self) -> MutexGuard<Theme> {
+    pub fn get_random_top_level_theme(&self) -> Arc<Mutex<Theme>> {
         let index = thread_rng().gen_range(0, self.top_level_theme_names.len());
         for (i, name) in self.top_level_theme_names.iter().enumerate() {
             if i == index {
                 if let Some(output) = self.values.get(name) {
-                    let output = output.lock().unwrap();
-                    return output;
+                    return output.clone();
                 } else {
                     break;
                 }

@@ -6,11 +6,10 @@ Documentation:
 
 **/
 // External includes.
-use rand::{thread_rng, Rng};
 use specs::World;
 
 // Standard includes.
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
@@ -50,20 +49,20 @@ impl MapInitScreen {
             }
             let theme_lookup = theme_lookup.lock().unwrap();
             let theme = theme_lookup.get_random_top_level_theme();
+            let theme = theme.lock().unwrap();
 
             let mut generation_areas: Vec<(Position, Position)> = vec![];
             {
-                let dungen_index = thread_rng().gen_range(0, theme.dungeon_generator_count());
                 let mut temp_map = Tilemap::new(40, 30);
-                let mut call = |index: usize, dungen: &Arc<Mutex<(dyn DungeonGenerator)>>| {
-                    if index == dungen_index {
-                        dungen
-                            .lock()
-                            .unwrap()
-                            .apply(&mut temp_map, &mut generation_areas);
-                    }
-                };
-                theme.for_all_dungeon_generators(&mut call);
+                theme.get_random_dungeon_generator(&mut |_index: usize,
+                                                         dungen: &Arc<
+                    Mutex<dyn DungeonGenerator>,
+                >| {
+                    dungen
+                        .lock()
+                        .unwrap()
+                        .apply(&mut temp_map, &mut generation_areas);
+                });
 
                 map = temp_map.finish();
             }

@@ -10,7 +10,7 @@ use rand::{thread_rng, Rng};
 use specs::{Builder, World};
 
 // Standard includes.
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
@@ -101,7 +101,7 @@ impl Screen for ThemeInitScreen {
 
         let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(Mutex::new(
             |position: Position, world: &mut World| {
-                if thread_rng().gen_range(1, 30000000) == 1 {
+                if thread_rng().gen_range(1, 30_000_000) == 1 {
                     world
                         .create_entity()
                         .with(Command::None)

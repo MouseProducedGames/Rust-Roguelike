@@ -6,10 +6,9 @@ Documentation:
 
 **/
 // External includes.
-use rand::{thread_rng, Rng};
 
 // Standard includes.
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use crate::creatures::CreatureFactory;
