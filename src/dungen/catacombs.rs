@@ -6,17 +6,14 @@ Documentation:
 
  **/
 // External includes.
-use rand::{thread_rng, Rng};
 
 // Standard includes.
-use std::collections::HashSet;
 
 // Internal includes.
 use super::DungeonGenerator;
 use crate::rrl_math::{Displacement, Position};
 use crate::world::{
-    Mapping, TiledArea, TiledAreaFilter, TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR,
-    TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
+    Mapping, TiledArea, TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR, TILE_TYPE_INDEX_WALL,
 };
 pub struct Catacombs {}
 
@@ -80,21 +77,19 @@ impl DungeonGenerator for Catacombs {
             }
         }
 
-        while expansion_list.len() > 0 {
+        while expansion_list.is_empty() == false {
             let current_position = expansion_list[expansion_list.len() - 1];
             let mut found = false;
             for y_move in (-2_i32..=2_i32).step_by(2) {
                 for x_move in (-2_i32..=2_i32).step_by(2) {
-                    if ((x_move != 0) || (y_move != 0)) && x_move.abs() != y_move.abs() {
-                        if do_the_thing(
-                            area,
-                            &mut expansion_list,
-                            current_position,
-                            Displacement::new(x_move, y_move),
-                        ) {
-                            found = true;
-                            break;
-                        }
+                    if ((x_move != 0) || (y_move != 0)) && x_move.abs() != y_move.abs() && do_the_thing(
+                        area,
+                        &mut expansion_list,
+                        current_position,
+                        Displacement::new(x_move, y_move),
+                    ) {
+                        found = true;
+                        break;
                     }
                 }
             }

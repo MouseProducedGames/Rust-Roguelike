@@ -117,7 +117,7 @@ impl Screen for ThemeInitScreen {
             },
         )))));
 
-        let generic = theme_lookup.add_theme(
+        let _generic = theme_lookup.add_theme(
             String::from("Generic"),
             &[split_rooms.clone()],
             &[creature_factory.clone()],

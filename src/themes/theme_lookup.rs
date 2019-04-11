@@ -56,21 +56,21 @@ impl ThemeLookup {
         self.values.get(&name)
     }
 
-    pub fn make_theme_top_level(&mut self, name: &String) -> (bool, String, &'static str) {
+    pub fn make_theme_top_level(&mut self, name: &str) -> (bool, String, &'static str) {
         if self.values.contains_key(name) {
             if self.top_level_theme_names.contains(name) {
-                return (true, name.clone(), "Already a top-level theme.");
+                return (true, String::from(name), "Already a top-level theme.");
             } else {
-                self.top_level_theme_names.insert(name.clone());
+                self.top_level_theme_names.insert(String::from(name));
                 return (
                     true,
-                    name.clone(),
+                    String::from(name),
                     "Theme exists and is now a top-level theme.",
                 );
             }
         }
 
-        (false, name.clone(), "No such theme exists.")
+        (false, String::from(name), "No such theme exists.")
     }
 
     pub fn get_random_top_level_theme(&self) -> MutexGuard<Theme> {

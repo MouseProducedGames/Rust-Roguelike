@@ -9,7 +9,6 @@ Documentation:
 use specs::{Component, VecStorage};
 
 // Standard includes.
-use std::cmp::{Eq, PartialEq};
 
 // Internal includes
 
