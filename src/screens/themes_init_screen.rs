@@ -14,8 +14,8 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::ai::Command;
 use crate::ai::systems::LogicFaction;
+use crate::ai::Command;
 use crate::creatures::CreatureFactory;
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;

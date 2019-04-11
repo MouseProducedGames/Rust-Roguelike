@@ -1,3 +1,9 @@
+mod command;
+mod decisions_instinct;
+mod love_fear_hate;
+pub mod maslow;
+mod player_marker;
+mod player_position;
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -11,11 +17,6 @@ Documentation:
 
 // Internal includes.
 pub mod systems;
-mod command;
-mod decisions_instinct;
-mod love_fear_hate;
-mod player_marker;
-mod player_position;
 mod viewpoint_marker;
 pub use command::Command;
 pub use decisions_instinct::_make_decision_attack;

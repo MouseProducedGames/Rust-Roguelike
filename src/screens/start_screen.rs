@@ -16,8 +16,8 @@ use super::{
     CharacterCreationScreen, GameScreen, MapInitScreen, Screen, ScreenPushWrapper, ScreenState,
     WorldInitScreen,
 };
-use crate::ai::Command;
 use crate::ai::systems::LogicFaction;
+use crate::ai::Command;
 use crate::factions::Faction;
 use crate::io::{Display, Input};
 use crate::rrl_math::Position;
