@@ -6,12 +6,15 @@ Documentation:
 
 **/
 // External includes.
+use specs::{Component, Entity, VecStorage, WriteStorage};
 
 // Standard includes.
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::MaslowNode;
 use crate::ai::Command;
+use crate::factions::Faction;
 use crate::game::EntityPositionTracker;
 use crate::items::Inventory;
 use crate::rrl_math::Position;
@@ -20,28 +23,30 @@ use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::{Tilemap, VisibilityMap};
 
-pub struct MaslowTree<'a> {
-    name: &'a str,
-    sub_nodes: Vec<&'a MaslowNode<'a>>,
+pub struct MaslowTree {
+    name: String,
+    sub_nodes: Vec<Arc<Mutex<MaslowNode>>>,
 }
 
-impl<'a> MaslowTree<'a> {
-    pub fn new(name: &'a str, sub_nodes: &[&'a MaslowNode<'a>]) -> Self {
+impl MaslowTree {
+    pub fn new(name: &str, sub_nodes: &[Arc<Mutex<MaslowNode>>]) -> Self {
         Self {
-            name,
+            name: String::from(name),
             sub_nodes: sub_nodes.to_vec(),
         }
     }
 
-    pub fn name(&self) -> &'a str {
-        self.name
+    pub fn name(&self) -> &String {
+        &self.name
     }
 
     #[allow(clippy::too_many_arguments)]
     pub fn call(
         &self,
         creature_stats: &mut CreatureStats,
-        entity_position_lookup: &mut EntityPositionTracker,
+        entity: Entity,
+        entity_position_tracker: &mut EntityPositionTracker,
+        factions: &mut WriteStorage<Faction>,
         inventory: &mut Inventory,
         position: &mut Position,
         skills: &mut SkillLookup,
@@ -50,9 +55,11 @@ impl<'a> MaslowTree<'a> {
         visibility_map: &mut VisibilityMap,
     ) -> Command {
         for item in self.sub_nodes.iter() {
-            if let Some(command_value) = item.call(
+            if let Some(command_value) = item.lock().unwrap().call(
                 creature_stats,
-                entity_position_lookup,
+                entity,
+                entity_position_tracker,
+                factions,
                 inventory,
                 position,
                 skills,
@@ -66,4 +73,8 @@ impl<'a> MaslowTree<'a> {
 
         Command::None
     }
+}
+
+impl Component for MaslowTree {
+    type Storage = VecStorage<Self>;
 }

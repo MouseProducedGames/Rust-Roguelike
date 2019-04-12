@@ -16,11 +16,14 @@ use super::{
     CharacterCreationScreen, GameScreen, MapInitScreen, Screen, ScreenPushWrapper, ScreenState,
     WorldInitScreen,
 };
-use crate::ai::systems::LogicFaction;
 use crate::ai::Command;
+use crate::ai::systems::LogicMaslow;
+use crate::ai::maslow::{faction_reaction, random_wander, MaslowNode, MaslowTree};
 use crate::factions::Faction;
 use crate::io::{Display, Input};
+use crate::items::Inventory;
 use crate::rrl_math::Position;
+use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::VisibilityMapLookup;
@@ -49,16 +52,35 @@ impl StartScreen {
     }
 
     fn create_monsters(&mut self, world: &mut World) {
-        /* world
+        let faction_reaction_func = Arc::new(Mutex::new(faction_reaction));
+        let random_wander_func = Arc::new(Mutex::new(random_wander));
+        let faction_reaction_node = Arc::new(Mutex::new(MaslowNode::new(
+            &"Faction Reaction",
+            faction_reaction_func,
+            &[],
+        )));
+        let random_wander_node = Arc::new(Mutex::new(MaslowNode::new(
+            &"Faction Reaction",
+            random_wander_func,
+            &[],
+        )));
+        let maslow_tree = MaslowTree::new(
+            &"Faction/Wander Tree",
+            &[faction_reaction_node, random_wander_node],
+        );
+        world
         .create_entity()
         .with(Command::None)
-        .with(LogicFaction)
+        .with(LogicMaslow)
         .with(Faction::new(0))
         .with(CreatureStats::default())
+        .with(Inventory::new())
+        .with(maslow_tree)
         .with(Position::new(12, 8))
+        .with(SkillLookup::new())
         .with(TalentLookup::new())
         .with(VisibilityMapLookup::new())
-        .build(); */
+        .build();
     }
 
     fn setup_display(&mut self, world: &mut World) {

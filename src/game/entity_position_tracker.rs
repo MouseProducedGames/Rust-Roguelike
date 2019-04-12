@@ -6,7 +6,7 @@ Documentation:
 
 **/
 // External includes.
-use specs::{Entity, ReadStorage};
+use specs::{Entity, WriteStorage};
 
 // Standard includes.
 use std::collections::HashMap;
@@ -45,7 +45,7 @@ impl EntityPositionTracker {
     pub fn get_nearest_enemy<'a>(
         &self,
         faction: Faction,
-        factions: &ReadStorage<'a, Faction>,
+        factions: &WriteStorage<'a, Faction>,
         visibility_map: &VisibilityMap,
     ) -> Option<(Entity, Position)> {
         for (other, other_pos) in self.lookup.iter() {
@@ -68,7 +68,7 @@ impl EntityPositionTracker {
         &self,
         entity: Entity,
         faction: Faction,
-        factions: &ReadStorage<'a, Faction>,
+        factions: &WriteStorage<'a, Faction>,
         visibility_map: &VisibilityMap,
     ) -> Option<(Entity, Position)> {
         for (other, other_pos) in self.lookup.iter() {

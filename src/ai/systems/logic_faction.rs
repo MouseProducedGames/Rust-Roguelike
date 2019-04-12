@@ -33,7 +33,7 @@ pub struct SystemDataT<'a> {
     entities: Entities<'a>,
     map: ReadExpect<'a, Tilemap>,
     visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
-    factions: ReadStorage<'a, Faction>,
+    factions: WriteStorage<'a, Faction>,
     logic: ReadStorage<'a, LogicFaction>,
     commands: WriteStorage<'a, Command>,
     pos: WriteStorage<'a, Position>,
