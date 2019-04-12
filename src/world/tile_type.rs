@@ -31,7 +31,7 @@ pub static TILE_TYPE_DATA: [TileTypeData; 8] = [
     // Wall.
     TileTypeData {
         passable: false,
-        transparent: true, // transparent: false,
+        transparent: false,
     },
     // Floor.
     TileTypeData {
@@ -41,7 +41,7 @@ pub static TILE_TYPE_DATA: [TileTypeData; 8] = [
     // Door.
     TileTypeData {
         passable: true,
-        transparent: true, // transparent: false,
+        transparent: false,
     },
     // Open door.
     TileTypeData {
@@ -51,12 +51,12 @@ pub static TILE_TYPE_DATA: [TileTypeData; 8] = [
     // Secret door.
     TileTypeData {
         passable: true,
-        transparent: true, // transparent: false,
+        transparent: false,
     },
     // Discovered secret door.
     TileTypeData {
         passable: true,
-        transparent: true, // transparent: false,
+        transparent: false,
     },
     // Open secret door.
     TileTypeData {

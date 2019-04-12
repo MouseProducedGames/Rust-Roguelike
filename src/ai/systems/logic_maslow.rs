@@ -6,15 +6,13 @@ Documentation:
 
  **/
 // External includes.
-use specs::{
-    Component, Entities, NullStorage, ReadStorage, System, WriteExpect, WriteStorage
-};
+use specs::{Component, Entities, NullStorage, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Standard includes.
 
 // Internal includes.
-use crate::ai::Command;
 use crate::ai::maslow::MaslowTree;
+use crate::ai::Command;
 use crate::factions::Faction;
 use crate::game::EntityPositionTracker;
 use crate::items::Inventory;
@@ -22,7 +20,7 @@ use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
-use crate::world::{Tilemap, VisibilityMap, VisibilityMapLookup};
+use crate::world::{Tilemap, VisibilityMapLookup};
 
 #[derive(Default)]
 pub struct LogicMaslow;
@@ -70,7 +68,7 @@ impl<'a> System<'a> for LogicMaslowSystem {
             visibility_map_lookup,
             _,
             maslow,
-            command
+            command,
         ) in (
             &data.entities,
             &mut data.creature_stats,
@@ -86,8 +84,8 @@ impl<'a> System<'a> for LogicMaslowSystem {
             .join()
         {
             let visibility_map = visibility_map_lookup.get_or_add_mut(map);
-            
-            maslow.call(
+
+            *command = maslow.call(
                 creature_stats,
                 entity,
                 entity_position_tracker,

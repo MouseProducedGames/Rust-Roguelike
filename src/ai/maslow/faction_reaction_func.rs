@@ -21,6 +21,7 @@ use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::{Tilemap, VisibilityMap};
 
+#[allow(clippy::too_many_arguments)]
 pub fn faction_reaction(
     _creature_stats: &mut CreatureStats,
     entity: Entity,

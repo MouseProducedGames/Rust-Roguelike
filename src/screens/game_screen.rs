@@ -15,8 +15,8 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
 use crate::ai::systems::{
-    CommandSystem, LogicFactionSystem, LogicPlayerSystem, LogicWanderAttackSystem,
-    LogicWanderSystem,
+    CommandSystem, LogicFactionSystem, LogicMaslowSystem, LogicPlayerSystem,
+    LogicWanderAttackSystem, LogicWanderSystem,
 };
 use crate::game::{GameState, LastUpdateSystem};
 use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
@@ -29,6 +29,7 @@ pub struct GameScreen {
     creature_display_system: CreatureDisplaySystem,
     faction_logic: LogicFactionSystem,
     item_system: ItemSystem,
+    logic_maslow_systems: LogicMaslowSystem,
     last_update_system: LastUpdateSystem,
     player_display_system: PlayerDisplaySystem,
     player_logic: LogicPlayerSystem,
@@ -46,6 +47,7 @@ impl GameScreen {
             creature_display_system: CreatureDisplaySystem,
             faction_logic: LogicFactionSystem,
             item_system: ItemSystem,
+            logic_maslow_systems: LogicMaslowSystem,
             last_update_system: LastUpdateSystem,
             player_display_system: PlayerDisplaySystem,
             player_logic: LogicPlayerSystem,
@@ -120,6 +122,10 @@ impl Screen for GameScreen {
         world.maintain();
 
         self.faction_logic.run_now(&world.res);
+
+        world.maintain();
+
+        self.logic_maslow_systems.run_now(&world.res);
 
         world.maintain();
 

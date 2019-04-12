@@ -22,6 +22,7 @@ use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::{Tilemap, VisibilityMap};
 
+#[allow(clippy::too_many_arguments)]
 pub fn random_wander(
     _creature_stats: &mut CreatureStats,
     _entity: Entity,

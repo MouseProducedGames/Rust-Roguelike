@@ -14,13 +14,15 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::ai::systems::LogicFaction;
+use crate::ai::maslow::{faction_reaction, random_wander, MaslowNode, MaslowTree};
+use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
 use crate::creatures::CreatureFactory;
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
 use crate::items::Inventory;
 use crate::rrl_math::{Bounds, Position};
+use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
@@ -99,15 +101,36 @@ impl Screen for ThemeInitScreen {
 
         let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(Mutex::new(
             |position: Position, world: &mut World| {
-                if thread_rng().gen_range(1, 30_000_000) == 1 {
+                if thread_rng().gen_range(1, 300) == 1 {
+                    let faction_reaction_func = Arc::new(Mutex::new(faction_reaction));
+                    let random_wander_func = Arc::new(Mutex::new(random_wander));
+
+                    let faction_reaction_node = Arc::new(Mutex::new(MaslowNode::new(
+                        &"Faction Reaction",
+                        faction_reaction_func,
+                        &[],
+                    )));
+                    let random_wander_node = Arc::new(Mutex::new(MaslowNode::new(
+                        &"Faction Reaction",
+                        random_wander_func,
+                        &[],
+                    )));
+
+                    let maslow_tree = MaslowTree::new(
+                        &"Faction/Wander Tree",
+                        &[faction_reaction_node, random_wander_node],
+                    );
+
                     world
                         .create_entity()
                         .with(Command::None)
+                        .with(LogicMaslow)
                         .with(CreatureStats::default())
                         .with(Faction::new(1))
                         .with(Inventory::new())
-                        .with(LogicFaction)
+                        .with(maslow_tree)
                         .with(position)
+                        .with(SkillLookup::new())
                         .with(TalentLookup::new())
                         .with(VisibilityMapLookup::new())
                         .build();

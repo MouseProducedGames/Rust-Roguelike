@@ -16,9 +16,9 @@ use super::{
     CharacterCreationScreen, GameScreen, MapInitScreen, Screen, ScreenPushWrapper, ScreenState,
     WorldInitScreen,
 };
-use crate::ai::Command;
-use crate::ai::systems::LogicMaslow;
 use crate::ai::maslow::{faction_reaction, random_wander, MaslowNode, MaslowTree};
+use crate::ai::systems::LogicMaslow;
+use crate::ai::Command;
 use crate::factions::Faction;
 use crate::io::{Display, Input};
 use crate::items::Inventory;
@@ -69,18 +69,18 @@ impl StartScreen {
             &[faction_reaction_node, random_wander_node],
         );
         world
-        .create_entity()
-        .with(Command::None)
-        .with(LogicMaslow)
-        .with(Faction::new(0))
-        .with(CreatureStats::default())
-        .with(Inventory::new())
-        .with(maslow_tree)
-        .with(Position::new(12, 8))
-        .with(SkillLookup::new())
-        .with(TalentLookup::new())
-        .with(VisibilityMapLookup::new())
-        .build();
+            .create_entity()
+            .with(Command::None)
+            .with(LogicMaslow)
+            .with(Faction::new(0))
+            .with(CreatureStats::default())
+            .with(Inventory::new())
+            .with(maslow_tree)
+            .with(Position::new(12, 8))
+            .with(SkillLookup::new())
+            .with(TalentLookup::new())
+            .with(VisibilityMapLookup::new())
+            .build();
     }
 
     fn setup_display(&mut self, world: &mut World) {

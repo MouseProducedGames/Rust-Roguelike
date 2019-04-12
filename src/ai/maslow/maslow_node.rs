@@ -24,17 +24,18 @@ use crate::talents::TalentLookup;
 use crate::world::{Tilemap, VisibilityMap};
 
 pub type MaslowFn = Fn(
-    &mut CreatureStats,
-    Entity,
-    &mut EntityPositionTracker,
-    &mut WriteStorage<Faction>,
-    &mut Inventory,
-    &mut Position,
-    &mut SkillLookup,
-    &mut TalentLookup,
-    &mut Tilemap,
-    &mut VisibilityMap,
-) -> Option<Command> + Send;
+        &mut CreatureStats,
+        Entity,
+        &mut EntityPositionTracker,
+        &mut WriteStorage<Faction>,
+        &mut Inventory,
+        &mut Position,
+        &mut SkillLookup,
+        &mut TalentLookup,
+        &mut Tilemap,
+        &mut VisibilityMap,
+    ) -> Option<Command>
+    + Send;
 
 pub struct MaslowNode {
     name: String,
@@ -43,7 +44,11 @@ pub struct MaslowNode {
 }
 
 impl MaslowNode {
-    pub fn new(name: &str, call: Arc<Mutex<MaslowFn>>, sub_nodes: &[Arc<Mutex<MaslowNode>>]) -> Self {
+    pub fn new(
+        name: &str,
+        call: Arc<Mutex<MaslowFn>>,
+        sub_nodes: &[Arc<Mutex<MaslowNode>>],
+    ) -> Self {
         Self {
             name: String::from(name),
             call,
