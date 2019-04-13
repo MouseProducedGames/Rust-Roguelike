@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::maslow::MaslowTree;
-use crate::ai::systems::{LogicFaction, LogicMaslow, LogicPlayer, LogicWander, LogicWanderAttack};
+use crate::ai::systems::{LogicMaslow, LogicPlayer};
 use crate::ai::{Command, PlayerMarker, ViewpointMarker};
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState};
@@ -75,11 +75,8 @@ impl Screen for WorldInitScreen {
         world.register::<CreatureStats>();
         world.register::<Faction>();
         world.register::<Inventory>();
-        world.register::<LogicFaction>();
         world.register::<LogicMaslow>();
         world.register::<LogicPlayer>();
-        world.register::<LogicWander>();
-        world.register::<LogicWanderAttack>();
         world.register::<MaslowTree>();
         world.register::<PlayerMarker>();
         world.register::<Position>();

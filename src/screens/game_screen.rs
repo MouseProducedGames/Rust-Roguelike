@@ -14,10 +14,7 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
-use crate::ai::systems::{
-    CommandSystem, LogicFactionSystem, LogicMaslowSystem, LogicPlayerSystem,
-    LogicWanderAttackSystem, LogicWanderSystem,
-};
+use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
 use crate::game::{GameState, LastUpdateSystem};
 use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
 use crate::items::ItemSystem;
@@ -27,15 +24,12 @@ pub struct GameScreen {
     ability_system: AbilitySystem,
     command_system: CommandSystem,
     creature_display_system: CreatureDisplaySystem,
-    faction_logic: LogicFactionSystem,
     item_system: ItemSystem,
     logic_maslow_systems: LogicMaslowSystem,
     last_update_system: LastUpdateSystem,
     player_display_system: PlayerDisplaySystem,
     player_logic: LogicPlayerSystem,
     visibility_system: VisibilitySystem,
-    wander_logic: LogicWanderSystem,
-    wander_attack_logic: LogicWanderAttackSystem,
     state: ScreenState,
 }
 
@@ -45,15 +39,12 @@ impl GameScreen {
             ability_system: AbilitySystem,
             command_system: CommandSystem,
             creature_display_system: CreatureDisplaySystem,
-            faction_logic: LogicFactionSystem,
             item_system: ItemSystem,
             logic_maslow_systems: LogicMaslowSystem,
             last_update_system: LastUpdateSystem,
             player_display_system: PlayerDisplaySystem,
             player_logic: LogicPlayerSystem,
             visibility_system: VisibilitySystem,
-            wander_logic: LogicWanderSystem,
-            wander_attack_logic: LogicWanderAttackSystem,
             state: ScreenState::Started,
         }
     }
@@ -110,18 +101,6 @@ impl Screen for GameScreen {
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
         self.player_logic.run_now(&world.res);
-
-        world.maintain();
-
-        self.wander_logic.run_now(&world.res);
-
-        world.maintain();
-
-        self.wander_attack_logic.run_now(&world.res);
-
-        world.maintain();
-
-        self.faction_logic.run_now(&world.res);
 
         world.maintain();
 
