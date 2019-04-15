@@ -14,6 +14,7 @@ use super::{Lightmap, MapPosition, Mapping, TiledArea, Tilemap, VisibilityMap, V
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, StatModifier};
 
+#[allow(clippy::too_many_arguments)]
 fn inner_iter(
     to: MapPosition,
     check_pos_x: f64,

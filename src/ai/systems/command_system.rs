@@ -55,6 +55,7 @@ impl<'a> System<'a> for CommandSystem {
 
             let visibility_map = visibility_map_lookup.get_or_add(map);
 
+            #[allow(clippy::single_match)]
             match *command {
                 Command::Move(disp) => {
                     let new_pos = *pos + disp;
