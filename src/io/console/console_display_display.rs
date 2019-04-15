@@ -38,99 +38,12 @@ impl Display for ConsoleDisplay {
         self.present();
     }
 
-    fn choose_origin(&mut self, options: &[OriginType]) -> OriginType {
-        let mut keep_going = true;
-        let mut option = OriginType::Farmer;
-
-        while keep_going {
-            self.clear();
-
-            self.put_string(
-                1,
-                1,
-                "Select your character's origin:",
-                Color::Grey,
-                Color::Black,
-            );
-
-            for (i, option) in options.iter().enumerate() {
-                let formatted = format!("{}) {}", (1 + i), option.to_str());
-                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
-            }
-
-            self.present();
-
-            if let Some(index) = self.get_char().to_digit(10) {
-                let index = index as usize;
-                let index = match index {
-                    0 => 10,
-                    _ => index - 1,
-                };
-                if index < options.len() {
-                    option = options[index];
-                    keep_going = false;
-                }
-            }
-        }
-
-        self.clear();
-
-        option
+    fn choose_origin(&mut self, options: &'static [OriginType]) -> OriginType {
+        self.choose("Select your character's origin:", options)
     }
 
-    fn choose_species(&mut self, options: &[SpeciesType]) -> SpeciesType {
-        let mut index: usize = 0;
-
-        self.clear();
-        loop {
-            self.clear_back_buffer();
-            self.put_string(
-                1,
-                1,
-                "Select your character's species:",
-                Color::Grey,
-                Color::Black,
-            );
-
-            for (i, species_type) in options.iter().enumerate() {
-                let formatted = format!(
-                    "   {:<10} {}",
-                    species_type.to_str(),
-                    species_type.to_short_description_str()
-                );
-                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
-            }
-
-            self.put_string(1, 3_i32 + index as i32, "->", Color::Yellow, Color::Black);
-
-            self.put_string(
-                4,
-                20,
-                options[index].to_long_description_str(),
-                Color::Grey,
-                Color::Black,
-            );
-
-            self.present();
-
-            match self.get_char() {
-                // Return.
-                '\r' => {
-                    self.clear();
-                    return options[index];
-                }
-                '2' => {
-                    index = (index + 1) % options.len();
-                }
-                '8' => {
-                    index = index.wrapping_sub(1);
-                    if index > options.len() {
-                        index = options.len() - 1;
-                    }
-                }
-                _ => (),
-            }
-        }
+    fn choose_species(&mut self, options: &'static [SpeciesType]) -> SpeciesType {
+        self.choose("Select your character's species:", options)
     }
 
     fn display_stats(&mut self, stats: CreatureStats) {

@@ -10,11 +10,14 @@ use crossterm::{terminal, Terminal};
 use crossterm_style::{Color, Colored};
 
 // Standard includes.
+use std::convert::Into;
+use std::fmt;
 use std::iter::Iterator;
 
 // Internal includes.
 use super::ConsoleChar;
 use crate::data_types::Immut;
+use crate::io::{Display, LongDescription, ShortDescription};
 use crate::multidim::Multidim;
 use crate::rrl_math::Bounds;
 use crate::stats::{Attribute, Stat, StatModifier};
@@ -126,6 +129,64 @@ impl ConsoleDisplay {
         match self.term.terminal().clear(crossterm::ClearType::All) {
             Ok(_v) => (),
             _ => panic!("Could not clear screen."),
+        }
+    }
+
+    pub(crate) fn choose<TOption: 'static>(
+        &mut self,
+        header: &'static str,
+        options: &'static [TOption],
+    ) -> TOption
+    where
+        TOption: fmt::Display + Copy + Into<LongDescription> + Into<ShortDescription>,
+        LongDescription: std::convert::From<TOption>,
+        ShortDescription: std::convert::From<&'static TOption>,
+    {
+        let mut index: usize = 0;
+
+        self.clear();
+        loop {
+            self.clear_back_buffer();
+            self.put_string(1, 1, header, Color::Grey, Color::Black);
+
+            for (i, species_type) in options.iter().enumerate() {
+                let formatted = format!(
+                    "   {:<10} {}",
+                    species_type.to_string(),
+                    *ShortDescription::from(species_type)
+                );
+                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+            }
+
+            self.put_string(1, 3_i32 + index as i32, "->", Color::Yellow, Color::Black);
+
+            self.put_string(
+                4,
+                20,
+                *LongDescription::from(options[index]),
+                Color::Grey,
+                Color::Black,
+            );
+
+            self.present();
+
+            match self.get_char() {
+                // Return.
+                '\r' => {
+                    self.clear();
+                    return options[index];
+                }
+                '2' => {
+                    index = (index + 1) % options.len();
+                }
+                '8' => {
+                    index = index.wrapping_sub(1);
+                    if index > options.len() {
+                        index = options.len() - 1;
+                    }
+                }
+                _ => (),
+            }
         }
     }
 

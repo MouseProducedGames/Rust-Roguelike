@@ -9,8 +9,10 @@ Documentation:
 
 // Standard includes.
 use std::convert::From;
+use std::fmt;
 
 // internal includes.
+use crate::io::{LongDescription, ShortDescription};
 use crate::stats::CreatureStats;
 
 #[derive(Copy, Clone)]
@@ -22,15 +24,6 @@ pub enum OriginType {
 }
 
 impl OriginType {
-    pub fn to_str(self) -> &'static str {
-        match self {
-            OriginType::Farmer => "Farmer",
-            OriginType::Hunter => "Hunter",
-            OriginType::Jack => "jack",
-            OriginType::Rogue => "Rogue",
-        }
-    }
-
     fn create_stats_farmer() -> CreatureStats {
         CreatureStats::new(2, 0, 0, 2, 0, 2)
     }
@@ -55,6 +48,61 @@ impl From<OriginType> for CreatureStats {
             OriginType::Hunter => OriginType::create_stats_hunter(),
             OriginType::Jack => OriginType::create_stats_jack(),
             OriginType::Rogue => OriginType::create_stats_rogue(),
+        }
+    }
+}
+
+impl fmt::Display for OriginType {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                OriginType::Farmer => "Farmer",
+                OriginType::Hunter => "Hunter",
+                OriginType::Jack => "Jack",
+                OriginType::Rogue => "Rogue",
+            }
+        )
+    }
+}
+
+impl From<&OriginType> for LongDescription {
+    fn from(item: &OriginType) -> LongDescription {
+        LongDescription::from(*item)
+    }
+}
+
+impl From<OriginType> for LongDescription {
+    fn from(item: OriginType) -> LongDescription {
+        match item {
+            OriginType::Farmer => LongDescription(concat!("Placeholder", ".",)),
+            OriginType::Hunter => LongDescription(concat!("Placeholder", ".",)),
+            OriginType::Jack => LongDescription(concat!("Placeholder", ".",)),
+            OriginType::Rogue => LongDescription(concat!("Placeholder", ".",)),
+        }
+    }
+}
+
+impl From<&OriginType> for ShortDescription {
+    fn from(item: &OriginType) -> ShortDescription {
+        ShortDescription::from(*item)
+    }
+}
+
+impl From<OriginType> for ShortDescription {
+    fn from(item: OriginType) -> ShortDescription {
+        match item {
+            OriginType::Farmer => {
+                ShortDescription("Work hard spring, summer, and fall. Freeze in the winter.")
+            }
+            OriginType::Hunter => {
+                ShortDescription("Beats working, as long as you can catch something.")
+            }
+            OriginType::Jack => {
+                ShortDescription("You do odd jobs. Some of the jobs have been very odd.")
+            }
+            OriginType::Rogue => ShortDescription("You do stuff. And things. For money."),
         }
     }
 }
