@@ -18,7 +18,7 @@ use crate::ai::systems::{LogicMaslow, LogicPlayer};
 use crate::ai::{Command, PlayerMarker, ViewpointMarker};
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState};
-use crate::items::Inventory;
+use crate::items::{Inventory, Item, LightSource};
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
@@ -75,6 +75,8 @@ impl Screen for WorldInitScreen {
         world.register::<CreatureStats>();
         world.register::<Faction>();
         world.register::<Inventory>();
+        world.register::<Item>();
+        world.register::<LightSource>();
         world.register::<LogicMaslow>();
         world.register::<LogicPlayer>();
         world.register::<MaslowTree>();

@@ -70,7 +70,7 @@ impl MapInitScreen {
             {
                 theme.get_random_map_processor(
                     &mut |_index: usize, dungen: &Arc<Mutex<MapProcessor>>| {
-                        map = dungen.lock().unwrap().gen_once(&map);
+                        map = dungen.lock().unwrap().gen_once(&map, world);
                     },
                 );
             }

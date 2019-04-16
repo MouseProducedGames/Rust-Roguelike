@@ -20,7 +20,7 @@ use crate::ai::Command;
 use crate::creatures::CreatureFactory;
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
-use crate::items::Inventory;
+use crate::items::{Inventory, Item, LightSource};
 use crate::rrl_math::{Bounds, Position};
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
@@ -144,7 +144,7 @@ impl Screen for ThemeInitScreen {
             &[creature_factory.clone()],
             &[],
             &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
-                Mutex::new(|meta_tile_map: &Tilemap| {
+                Mutex::new(|meta_tile_map: &Tilemap, world: &mut World| {
                     let mut output = Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
                     for pos in meta_tile_map.get_position(0, 0) {
                         let (tile_type, tile_func_type) = match meta_tile_map.tile_type(pos) {
@@ -158,7 +158,19 @@ impl Screen for ThemeInitScreen {
 
                                 (tile_type, tile_func_type)
                             }
-                            TILE_TYPE_INDEX_FLOOR => (TILE_TYPE_INDEX_FLOOR, TILE_FUNC_INDEX_VOID),
+                            TILE_TYPE_INDEX_FLOOR => {
+                                if thread_rng().gen_range(1, 30) == 1 {
+                                    let pos = Position::new(i32::from(pos.x()), i32::from(pos.y()));
+                                    world
+                                        .create_entity()
+                                        .with(Item::new("Torch", 0))
+                                        .with(LightSource::new(5.0))
+                                        .with(pos)
+                                        .build();
+                                }
+
+                                (TILE_TYPE_INDEX_FLOOR, TILE_FUNC_INDEX_VOID)
+                            }
                             TILE_TYPE_INDEX_WALL => (TILE_TYPE_INDEX_WALL, TILE_FUNC_INDEX_VOID),
                             _ => (TILE_TYPE_INDEX_VOID, TILE_FUNC_INDEX_VOID),
                         };
@@ -176,7 +188,7 @@ impl Screen for ThemeInitScreen {
             &[creature_factory.clone()],
             &[],
             &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
-                Mutex::new(|meta_tile_map: &Tilemap| {
+                Mutex::new(|meta_tile_map: &Tilemap, _world: &mut World| {
                     let mut output = Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
                     for pos in meta_tile_map.get_position(0, 0) {
                         let (tile_type, tile_func_type) = match meta_tile_map.tile_type(pos) {

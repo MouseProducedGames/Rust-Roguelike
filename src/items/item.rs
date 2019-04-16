@@ -18,8 +18,11 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(name: String, icon_id: u32) -> Self {
-        Self { name, icon_id }
+    pub fn new(name: &str, icon_id: u32) -> Self {
+        Self {
+            name: String::from(name),
+            icon_id,
+        }
     }
 
     pub fn name(&self) -> &String {
