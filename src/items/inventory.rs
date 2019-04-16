@@ -6,7 +6,7 @@ Documentation:
 
 **/
 // External includes.
-use specs::{Component, VecStorage};
+use specs::{Component, Entity, VecStorage};
 
 // Standard includes.
 use std::sync::{Arc, Mutex, MutexGuard};
@@ -17,27 +17,25 @@ use crate::abilities::Ability;
 
 #[derive(Clone)]
 pub struct Inventory {
-    values: Arc<Mutex<Vec<Item>>>,
+    values: Arc<Mutex<Vec<Entity>>>,
 }
 
 impl Inventory {
     pub fn new() -> Self {
-        let mut output = Self {
+        Self {
             values: Arc::new(Mutex::new(vec![])),
-        };
-        output.push(Item::Generic(String::from("Torch"), Ability::Light(5.0)));
-        output
+        }
     }
 
-    pub fn get(&self) -> MutexGuard<Vec<Item>> {
+    pub fn get(&self) -> MutexGuard<Vec<Entity>> {
         self.values.lock().unwrap()
     }
 
-    pub fn push(&mut self, item: Item) {
+    pub fn push(&mut self, item: Entity) {
         self.values.lock().unwrap().push(item)
     }
 
-    pub fn remove(&mut self, index: usize) -> Item {
+    pub fn remove(&mut self, index: usize) -> Entity {
         self.values.lock().unwrap().remove(index)
     }
 }

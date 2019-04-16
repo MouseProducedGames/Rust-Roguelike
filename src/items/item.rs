@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use specs::{Component, VecStorage};
 
 // Standard includes.
 
@@ -16,25 +17,35 @@ use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::world::{Lightmap, Tilemap, VisibilityMap};
 
-pub enum Item {
-    // Name, Ability.
-    Generic(String, Ability),
+pub struct Item {
+    name: String,
+    icon_id: u32,
 }
 
 impl Item {
-    pub fn apply(
-        &self,
-        lightmap: &mut Lightmap,
-        pos: &mut Position,
-        skills: &mut SkillLookup,
-        stats: &mut CreatureStats,
-        map: &mut Tilemap,
-        visibility_map: &mut VisibilityMap,
-    ) {
-        match self {
-            Item::Generic(_, ability) => {
-                ability.apply(lightmap, pos, skills, stats, map, visibility_map)
-            }
-        }
+    pub fn new(name: String, icon_id: u32) {
+        Self { name, icon_id }
     }
+
+    pub fn name(&self) -> &String {
+        self.name
+    }
+
+    pub fn name_mut(&mut self, name: String) -> &String {
+        self.name = name;
+        self.name()
+    }
+
+    pub fn icon_id(&self) -> u32 {
+        self.icon_id
+    }
+
+    pub fn icon_id_mut(&mut self, icon_id: u32) -> u32 {
+        self.icon_id = icon_id;
+        self.icon_id()
+    }
+}
+
+impl Component for Item {
+    type Storage = VecStorage<Self>;
 }
