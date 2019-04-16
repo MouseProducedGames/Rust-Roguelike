@@ -13,6 +13,6 @@ Documentation:
 mod inventory;
 mod item;
 mod light_source;
-pub use inventory::Inventory;
+pub use inventory::{Inventory, InventorySystem};
 pub use item::Item;
 pub use light_source::{LightSource, LightSourceSystem};

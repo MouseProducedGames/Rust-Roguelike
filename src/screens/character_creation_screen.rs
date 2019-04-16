@@ -20,7 +20,7 @@ use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
 use crate::io::Display;
-use crate::items::Inventory;
+use crate::items::{Inventory, Item, LightSource};
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
@@ -111,12 +111,23 @@ impl Screen for CharacterCreationScreen {
             );
 
             let species = Species::create(species_type);
+
+            let torch = world
+                .create_entity()
+                .with(Item::new("Torch", 0))
+                .with(LightSource::new(5.0))
+                .build();
+
+            let mut inventory = Inventory::new();
+            inventory.push(torch);
+            let inventory = inventory;
+
             world
                 .create_entity()
                 .with(Command::None)
                 .with(LogicPlayer {})
                 .with(Faction::new(0))
-                .with(Inventory::new())
+                .with(inventory)
                 .with(species.stats() + CreatureStats::from(origin_type))
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)

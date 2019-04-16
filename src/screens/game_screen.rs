@@ -17,13 +17,14 @@ use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
 use crate::game::{GameState, LastUpdateSystem};
 use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
-use crate::items::LightSourceSystem;
+use crate::items::{InventorySystem, LightSourceSystem};
 use crate::world::{Lightmap, VisibilitySystem};
 
 pub struct GameScreen {
     ability_system: AbilitySystem,
     command_system: CommandSystem,
     creature_display_system: CreatureDisplaySystem,
+    inventory_system: InventorySystem,
     last_update_system: LastUpdateSystem,
     light_source_system: LightSourceSystem,
     logic_maslow_systems: LogicMaslowSystem,
@@ -39,6 +40,7 @@ impl GameScreen {
             ability_system: AbilitySystem,
             command_system: CommandSystem,
             creature_display_system: CreatureDisplaySystem,
+            inventory_system: InventorySystem,
             last_update_system: LastUpdateSystem,
             light_source_system: LightSourceSystem,
             logic_maslow_systems: LogicMaslowSystem,
@@ -141,6 +143,10 @@ impl Screen for GameScreen {
     }
 
     fn post_update(&mut self, world: &mut World) {
+        self.inventory_system.run_now(&world.res);
+
+        world.maintain();
+
         self.light_source_system.run_now(&world.res);
 
         world.maintain();
