@@ -11,11 +11,6 @@ use specs::{Component, VecStorage};
 // Standard includes.
 
 // Internal includes.
-use crate::abilities::Ability;
-use crate::rrl_math::Position;
-use crate::skills::SkillLookup;
-use crate::stats::CreatureStats;
-use crate::world::{Lightmap, Tilemap, VisibilityMap};
 
 pub struct Item {
     name: String,
@@ -23,12 +18,12 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(name: String, icon_id: u32) {
+    pub fn new(name: String, icon_id: u32) -> Self {
         Self { name, icon_id }
     }
 
     pub fn name(&self) -> &String {
-        self.name
+        &self.name
     }
 
     pub fn name_mut(&mut self, name: String) -> &String {

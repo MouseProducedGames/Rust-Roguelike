@@ -12,8 +12,6 @@ use specs::{Component, Entity, VecStorage};
 use std::sync::{Arc, Mutex, MutexGuard};
 
 // internal includes.
-use super::Item;
-use crate::abilities::Ability;
 
 #[derive(Clone)]
 pub struct Inventory {

@@ -12,7 +12,7 @@ Documentation:
 // Internal includes.
 mod inventory;
 mod item;
-mod item_system;
+mod light_source;
 pub use inventory::Inventory;
 pub use item::Item;
-pub use item_system::ItemSystem;
+pub use light_source::{LightSource, LightSourceSystem};

@@ -17,20 +17,20 @@ use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
 use crate::game::{GameState, LastUpdateSystem};
 use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
-use crate::items::ItemSystem;
+use crate::items::LightSourceSystem;
 use crate::world::{Lightmap, VisibilitySystem};
 
 pub struct GameScreen {
     ability_system: AbilitySystem,
     command_system: CommandSystem,
     creature_display_system: CreatureDisplaySystem,
-    item_system: ItemSystem,
-    logic_maslow_systems: LogicMaslowSystem,
     last_update_system: LastUpdateSystem,
+    light_source_system: LightSourceSystem,
+    logic_maslow_systems: LogicMaslowSystem,
     player_display_system: PlayerDisplaySystem,
     player_logic: LogicPlayerSystem,
-    visibility_system: VisibilitySystem,
     state: ScreenState,
+    visibility_system: VisibilitySystem,
 }
 
 impl GameScreen {
@@ -39,13 +39,13 @@ impl GameScreen {
             ability_system: AbilitySystem,
             command_system: CommandSystem,
             creature_display_system: CreatureDisplaySystem,
-            item_system: ItemSystem,
-            logic_maslow_systems: LogicMaslowSystem,
             last_update_system: LastUpdateSystem,
+            light_source_system: LightSourceSystem,
+            logic_maslow_systems: LogicMaslowSystem,
             player_display_system: PlayerDisplaySystem,
             player_logic: LogicPlayerSystem,
-            visibility_system: VisibilitySystem,
             state: ScreenState::Started,
+            visibility_system: VisibilitySystem,
         }
     }
 }
@@ -141,7 +141,7 @@ impl Screen for GameScreen {
     }
 
     fn post_update(&mut self, world: &mut World) {
-        self.item_system.run_now(&world.res);
+        self.light_source_system.run_now(&world.res);
 
         world.maintain();
 

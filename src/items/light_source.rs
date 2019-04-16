@@ -7,28 +7,32 @@ Documentation:
 **/
 // External includes.
 use specs::{Component, VecStorage};
-pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect, ReadStorage};
-use crate::rrl_math::Position;
-use crate::world::{calculate_light, Lightmap, Tilemap, VisibilityMapLookup};
+pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect};
 
 // Standard includes.
 
 // Internal includes.
 use crate::rrl_math::Position;
-use crate::world::{Lightmap, Tilemap};
+use crate::world::{calculate_light_level, Lightmap, Tilemap};
 
+#[derive(Clone, Copy)]
 pub struct LightSource {
     power: f64,
 }
 
 impl LightSource {
-    pub fn new(power: f64) {
+    pub fn new(power: f64) -> Self {
         Self { power }
     }
-    
-    fn power(self) -> f64 { self.power }
-    
-    fn power_mut(&mut self, value: f64) -> f64 { self.power = value; self.power() }
+
+    fn power(self) -> f64 {
+        self.power
+    }
+
+    fn power_mut(&mut self, value: f64) -> f64 {
+        self.power = value;
+        self.power()
+    }
 }
 
 impl Component for LightSource {
@@ -54,11 +58,10 @@ impl<'a> System<'a> for LightSourceSystem {
         let lightmap = &mut *data.lightmap;
         let tilemap = &*data.tilemap;
 
-        for (light_source, position) in (&data.light_sources, &data.positions).join()
-        {
+        for (light_source, position) in (&data.light_sources, &data.positions).join() {
             let light_source = *light_source;
             let position = *position;
-            
+
             calculate_light_level(lightmap, position, light_source.power(), tilemap);
         }
     }

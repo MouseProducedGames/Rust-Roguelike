@@ -7,6 +7,7 @@ Documentation:
  **/
 // External includes.
 use crossterm_style::Color;
+use specs::ReadStorage;
 
 // Standard includes.
 
@@ -21,18 +22,16 @@ use crate::stats::{CreatureStats, Stat};
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {
-    fn blit_inventory(&mut self, inventory: &Inventory) {
+    fn blit_inventory(&mut self, item_data: ReadStorage<Item>, inventory: &Inventory) {
         self.clear();
 
         self.put_string(1, 1, "Inventory:", Color::Grey, Color::Black);
 
-        for (i, item) in inventory.get().iter().enumerate() {
-            let name = match item {
-                Item::Generic(name, _) => name,
-            };
-
-            let formatted = format!("{}) {}", (1 + i), name);
-            self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+        for (i, entity) in inventory.get().iter().enumerate() {
+            if let Some(item) = item_data.get(*entity) {
+                let formatted = format!("{}) {}", (1 + i), item.name());
+                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+            }
         }
 
         self.present();

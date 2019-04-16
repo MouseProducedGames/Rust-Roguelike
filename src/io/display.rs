@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use specs::ReadStorage;
 
 // Standard includes.
 use std::marker::{Send, Sync};
@@ -15,13 +16,13 @@ use std::sync::MutexGuard;
 use super::{Input, InputData};
 use crate::background::{OriginType, SpeciesType};
 use crate::factions::Faction;
-use crate::items::Inventory;
+use crate::items::{Inventory, Item};
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
 use crate::world::{Tilemap, VisibilityMap};
 
 pub trait Display: Drop + Send + Sync {
-    fn blit_inventory(&mut self, inventory: &Inventory);
+    fn blit_inventory(&mut self, item_data: ReadStorage<Item>, inventory: &Inventory);
 
     fn choose_origin(&mut self, options: &'static [OriginType]) -> OriginType;
 

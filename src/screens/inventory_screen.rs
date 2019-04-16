@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::game::GameState;
 use crate::io::{Display, Input};
-use crate::items::Inventory;
+use crate::items::{Inventory, Item};
 
 pub struct InventoryScreen {
     inventory: Inventory,
@@ -62,7 +62,7 @@ impl Screen for InventoryScreen {
         {
             let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
             let mut display = mutex_display.lock().unwrap();
-            display.blit_inventory(&self.inventory);
+            display.blit_inventory(world.read_storage::<Item>(), &self.inventory);
         }
     }
 
