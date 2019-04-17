@@ -10,7 +10,7 @@ use rand::{thread_rng, Rng};
 use specs::{Builder, World};
 
 // Standard includes.
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
@@ -20,6 +20,7 @@ use crate::ai::Command;
 use crate::creatures::CreatureFactory;
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
+#[allow(unused_imports)]
 use crate::items::{Inventory, Item, LightSource};
 use crate::rrl_math::{Bounds, Position};
 use crate::skills::SkillLookup;
@@ -74,36 +75,6 @@ impl Screen for ThemeInitScreen {
     fn draw(&mut self, _world: &mut World) {}
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
-        {
-            let pattern_lookup = world.write_resource::<Arc<Mutex<PatternLookup>>>();
-            let mut pattern_lookup = pattern_lookup.lock().unwrap();
-
-            let mut crypt_niche = Tilemap::new(3, 3);
-
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(0, 0).unwrap()) =
-                TILE_TYPE_INDEX_WALL;
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(1, 0).unwrap()) =
-                TILE_TYPE_INDEX_WALL;
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(2, 0).unwrap()) =
-                TILE_TYPE_INDEX_WALL;
-
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(0, 1).unwrap()) =
-                TILE_TYPE_INDEX_WALL;
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(1, 1).unwrap()) =
-                TILE_TYPE_INDEX_FLOOR;
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(2, 1).unwrap()) =
-                TILE_TYPE_INDEX_WALL;
-
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(0, 2).unwrap()) =
-                TILE_TYPE_INDEX_WALL;
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(1, 2).unwrap()) =
-                TILE_TYPE_INDEX_DOOR;
-            *crypt_niche.tile_type_mut(crypt_niche.get_position(2, 2).unwrap()) =
-                TILE_TYPE_INDEX_WALL;
-
-            pattern_lookup.insert("Crypt Niche", crypt_niche);
-        }
-
         let theme_lookup = world.write_resource::<Arc<Mutex<ThemeLookup>>>();
         let mut theme_lookup = theme_lookup.lock().unwrap();
 

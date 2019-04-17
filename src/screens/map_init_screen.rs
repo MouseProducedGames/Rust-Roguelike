@@ -16,11 +16,12 @@ use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::creatures::CreatureFactory;
 use crate::dungen::{DungenCommon, DungeonGenerator};
 use crate::rrl_math::Position;
-use crate::screens::ThemeInitScreen;
+use crate::screens::{PatternsInitScreen, ThemeInitScreen};
 use crate::themes::{ThemeHelper, ThemeLookup};
 use crate::world::{Lightmap, MapProcessor, Mapping, Tilemap};
 
 enum MapInitState {
+    InitializingPatterns,
     InitializingThemes,
     CreatingMap,
     Finished,
@@ -35,7 +36,7 @@ impl MapInitScreen {
     pub fn new() -> Self {
         Self {
             state: ScreenState::Started,
-            map_init_state: MapInitState::InitializingThemes,
+            map_init_state: MapInitState::InitializingPatterns,
         }
     }
 
@@ -132,6 +133,11 @@ impl Screen for MapInitScreen {
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
         self.map_init_state = match self.map_init_state {
+            MapInitState::InitializingPatterns => {
+                let patterns_init_screen = Arc::new(Mutex::new(PatternsInitScreen::new()));
+                screen_push_wrapper.push(patterns_init_screen);
+                MapInitState::InitializingThemes
+            }
             MapInitState::InitializingThemes => {
                 let theme_init_screen = Arc::new(Mutex::new(ThemeInitScreen::new()));
                 screen_push_wrapper.push(theme_init_screen);
