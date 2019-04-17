@@ -24,7 +24,7 @@ use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
-use crate::world::VisibilityMapLookup;
+use crate::world::{PatternLookup, VisibilityMapLookup};
 
 pub struct WorldInitScreen {
     state: ScreenState,
@@ -71,6 +71,7 @@ impl Screen for WorldInitScreen {
         world.add_resource(EntityPositionTracker::new());
         world.add_resource(GameState::new());
         world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
+        world.add_resource(Arc::new(Mutex::new(PatternLookup::new())));
         world.register::<Command>();
         world.register::<CreatureStats>();
         world.register::<Faction>();

@@ -62,7 +62,7 @@ impl Add<MapDisplacement> for MapScanPosition {
 
 impl From<MapScanPosition> for bool {
     fn from(item: MapScanPosition) -> bool {
-        (item.x <= item.x_bound) && (item.y <= item.y_bound)
+        (item.x < item.x_bound) && (item.y < item.y_bound)
     }
 }
 

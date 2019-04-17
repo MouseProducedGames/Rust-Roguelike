@@ -17,6 +17,9 @@ Documentation:
 // External includes.
 #[macro_use]
 extern crate derive_more;
+extern crate enumflags2;
+#[macro_use]
+extern crate enumflags2_derive;
 extern crate rand;
 extern crate shred;
 #[macro_use]
