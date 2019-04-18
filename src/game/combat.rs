@@ -40,7 +40,7 @@ impl Combat {
         if roll_success(attack_mod - defence_mod) {
             result = CombatResult::Hit;
 
-            let damage_mod = 5 + defender_stats.strength().modifier();
+            let damage_mod = 5 + attacker_stats.strength().modifier();
             let new_defender_health = defender_stats.health() - damage_mod;
             *defender_stats.health_mut() = new_defender_health;
 
