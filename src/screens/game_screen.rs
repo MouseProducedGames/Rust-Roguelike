@@ -97,8 +97,12 @@ impl Screen for GameScreen {
         let arc_mutex_display = world.read_resource::<Arc<Mutex<Display>>>();
         let display = arc_mutex_display.lock().unwrap();
         let arc_mutex_input = world.write_resource::<Arc<Mutex<Input>>>();
-        let input = arc_mutex_input.lock().unwrap();
-        display.update(input);
+        let mut input = arc_mutex_input.lock().unwrap();
+        display.update(&mut input);
+
+        if input.instance().get_char() == 'Q' {
+            world.write_resource::<GameState>().kill();
+        }
     }
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {

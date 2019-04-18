@@ -82,10 +82,6 @@ impl<'a> System<'a> for LogicPlayerSystem {
                         panic!("Where's our inventory?!");
                     }
                 }
-                'q' => {
-                    game_state.kill();
-                    Command::Move(Displacement::new(0, 0))
-                }
                 _ => Command::Move(Displacement::new(0, 0)),
             }
         }

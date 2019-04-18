@@ -34,7 +34,7 @@ pub trait Display: Drop + Send + Sync {
 
     fn present(&mut self);
 
-    fn update(&self, mut input: MutexGuard<Input>) {
+    fn update(&self, input: &mut MutexGuard<Input>) {
         input.update(InputData {
             ch: self.get_char(),
         });
