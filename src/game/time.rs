@@ -8,6 +8,7 @@ Documentation:
 // External includes.
 
 // Standard includes.
+use std::cmp::Ordering;
 use std::fmt;
 
 // Internal includes.
@@ -24,5 +25,17 @@ impl Time {
 impl fmt::Display for Time {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{} turns", self.0)
+    }
+}
+
+impl Ord for Time {
+    fn cmp(&self, other: &Time) -> Ordering {
+        other.0.cmp(&self.0)
+    }
+}
+
+impl PartialOrd for Time {
+    fn partial_cmp(&self, other: &Time) -> Option<Ordering> {
+        other.0.partial_cmp(&self.0)
     }
 }

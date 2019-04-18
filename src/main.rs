@@ -39,6 +39,7 @@ mod creatures;
 mod data_types;
 mod dice;
 mod dungen;
+mod events;
 mod factions;
 mod game;
 mod io;
