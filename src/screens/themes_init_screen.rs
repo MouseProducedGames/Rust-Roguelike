@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::ai::maslow::{faction_reaction, random_wander, MaslowNode, MaslowTree};
+use crate::ai::maslow::MaslowTreeLookup;
 use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
 use crate::creatures::CreatureFactory;
@@ -103,24 +103,10 @@ impl Screen for ThemeInitScreen {
         let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(Mutex::new(
             |position: Position, world: &mut World| {
                 if thread_rng().gen_range(1, 300) == 1 {
-                    let faction_reaction_func = Arc::new(Mutex::new(faction_reaction));
-                    let random_wander_func = Arc::new(Mutex::new(random_wander));
-
-                    let faction_reaction_node = Arc::new(Mutex::new(MaslowNode::new(
-                        &"Faction Reaction",
-                        faction_reaction_func,
-                        &[],
-                    )));
-                    let random_wander_node = Arc::new(Mutex::new(MaslowNode::new(
-                        &"Faction Reaction",
-                        random_wander_func,
-                        &[],
-                    )));
-
-                    let maslow_tree = MaslowTree::new(
-                        &"Faction/Wander Tree",
-                        &[faction_reaction_node, random_wander_node],
-                    );
+                    let maslow_tree_lookup = world
+                        .read_resource::<Arc<Mutex<MaslowTreeLookup>>>()
+                        .clone();
+                    let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
 
                     world
                         .create_entity()
@@ -129,7 +115,7 @@ impl Screen for ThemeInitScreen {
                         .with(CreatureStats::default())
                         .with(Faction::new(1))
                         .with(Inventory::new())
-                        .with(maslow_tree)
+                        .with(maslow_tree_lookup.get("Faction/Wander").unwrap().clone())
                         .with(position)
                         .with(SkillLookup::new())
                         .with(TalentLookup::new())
@@ -229,26 +215,10 @@ impl Screen for ThemeInitScreen {
                                         i32::from(creature_map_position.y()),
                                     );
 
-                                    let faction_reaction_func =
-                                        Arc::new(Mutex::new(faction_reaction));
-                                    let random_wander_func = Arc::new(Mutex::new(random_wander));
-
-                                    let faction_reaction_node =
-                                        Arc::new(Mutex::new(MaslowNode::new(
-                                            &"Faction Reaction",
-                                            faction_reaction_func,
-                                            &[],
-                                        )));
-                                    let random_wander_node = Arc::new(Mutex::new(MaslowNode::new(
-                                        &"Faction Reaction",
-                                        random_wander_func,
-                                        &[],
-                                    )));
-
-                                    let maslow_tree = MaslowTree::new(
-                                        &"Faction/Wander Tree",
-                                        &[faction_reaction_node, random_wander_node],
-                                    );
+                                    let maslow_tree_lookup = world
+                                        .read_resource::<Arc<Mutex<MaslowTreeLookup>>>()
+                                        .clone();
+                                    let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
 
                                     world
                                         .create_entity()
@@ -257,7 +227,12 @@ impl Screen for ThemeInitScreen {
                                         .with(CreatureStats::default())
                                         .with(Faction::new(1))
                                         .with(Inventory::new())
-                                        .with(maslow_tree)
+                                        .with(
+                                            maslow_tree_lookup
+                                                .get("Faction/Wander")
+                                                .unwrap()
+                                                .clone(),
+                                        )
                                         .with(creature_position)
                                         .with(SkillLookup::new())
                                         .with(TalentLookup::new())

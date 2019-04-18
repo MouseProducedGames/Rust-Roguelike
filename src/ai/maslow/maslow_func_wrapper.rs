@@ -12,7 +12,7 @@ use specs::{Entity, WriteStorage};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::MaslowFuncWrapper;
+use super::MaslowFn;
 use crate::ai::Command;
 use crate::factions::Faction;
 use crate::game::EntityPositionTracker;
@@ -24,18 +24,16 @@ use crate::talents::TalentLookup;
 use crate::world::{Tilemap, VisibilityMap};
 
 #[derive(Clone)]
-pub struct MaslowNode {
+pub struct MaslowFuncWrapper {
     name: String,
-    call: MaslowFuncWrapper,
-    sub_nodes: Vec<Arc<Mutex<MaslowNode>>>,
+    call: Arc<Mutex<MaslowFn>>,
 }
 
-impl MaslowNode {
-    pub fn new(name: &str, call: MaslowFuncWrapper, sub_nodes: &[Arc<Mutex<MaslowNode>>]) -> Self {
+impl MaslowFuncWrapper {
+    pub fn new(name: &str, call: Arc<Mutex<MaslowFn>>) -> Self {
         Self {
             name: String::from(name),
             call,
-            sub_nodes: sub_nodes.to_vec(),
         }
     }
 
@@ -57,7 +55,7 @@ impl MaslowNode {
         map: &mut Tilemap,
         visibility_map: &mut VisibilityMap,
     ) -> Option<Command> {
-        if let Some(command_value) = (self.call).call(
+        if let Some(command_value) = (&*self.call.lock().unwrap())(
             creature_stats,
             entity,
             entity_position_tracker,
@@ -71,23 +69,6 @@ impl MaslowNode {
         ) {
             return Some(command_value);
         } else {
-            for item in self.sub_nodes.iter() {
-                if let Some(command_value) = item.lock().unwrap().call(
-                    creature_stats,
-                    entity,
-                    entity_position_tracker,
-                    factions,
-                    inventory,
-                    position,
-                    skills,
-                    talents,
-                    map,
-                    visibility_map,
-                ) {
-                    return Some(command_value);
-                }
-            }
-
             None
         }
     }

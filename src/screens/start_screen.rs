@@ -13,10 +13,10 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{
-    CharacterCreationScreen, GameScreen, MapInitScreen, Screen, ScreenPushWrapper, ScreenState,
-    WorldInitScreen,
+    CharacterCreationScreen, GameScreen, MapInitScreen, MaslowInitScreen, Screen,
+    ScreenPushWrapper, ScreenState, WorldInitScreen,
 };
-use crate::ai::maslow::{faction_reaction, random_wander, MaslowNode, MaslowTree};
+use crate::ai::maslow::MaslowTreeLookup;
 use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
 use crate::factions::Faction;
@@ -30,6 +30,7 @@ use crate::world::VisibilityMapLookup;
 
 enum StartState {
     SetupDisplay,
+    InitializeAI,
     InitializeWorld,
     CharacterCreation,
     MapCreation,
@@ -52,22 +53,10 @@ impl StartScreen {
     }
 
     fn create_monsters(&mut self, world: &mut World) {
-        let faction_reaction_func = Arc::new(Mutex::new(faction_reaction));
-        let random_wander_func = Arc::new(Mutex::new(random_wander));
-        let faction_reaction_node = Arc::new(Mutex::new(MaslowNode::new(
-            &"Faction Reaction",
-            faction_reaction_func,
-            &[],
-        )));
-        let random_wander_node = Arc::new(Mutex::new(MaslowNode::new(
-            &"Faction Reaction",
-            random_wander_func,
-            &[],
-        )));
-        let maslow_tree = MaslowTree::new(
-            &"Faction/Wander Tree",
-            &[faction_reaction_node, random_wander_node],
-        );
+        let maslow_tree_lookup = world
+            .read_resource::<Arc<Mutex<MaslowTreeLookup>>>()
+            .clone();
+        let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
         world
             .create_entity()
             .with(Command::None)
@@ -75,7 +64,7 @@ impl StartScreen {
             .with(Faction::new(0))
             .with(CreatureStats::default() + CreatureStats::new(4, 4, 4, 4, 4, 4))
             .with(Inventory::new())
-            .with(maslow_tree)
+            .with(maslow_tree_lookup.get("Faction/Wander").unwrap().clone())
             .with(Position::new(12, 8))
             .with(SkillLookup::new())
             .with(TalentLookup::new())
@@ -127,6 +116,12 @@ impl Screen for StartScreen {
         self.start_state = match self.start_state {
             StartState::SetupDisplay => {
                 self.setup_display(world);
+
+                StartState::InitializeAI
+            }
+            StartState::InitializeAI => {
+                let maslow_init_screen = Arc::new(Mutex::new(MaslowInitScreen::new()));
+                screen_push_wrapper.push(maslow_init_screen);
 
                 StartState::InitializeWorld
             }

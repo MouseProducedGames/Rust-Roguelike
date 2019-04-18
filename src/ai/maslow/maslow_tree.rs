@@ -23,6 +23,7 @@ use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::{Tilemap, VisibilityMap};
 
+#[derive(Clone)]
 pub struct MaslowTree {
     name: String,
     sub_nodes: Vec<Arc<Mutex<MaslowNode>>>,
