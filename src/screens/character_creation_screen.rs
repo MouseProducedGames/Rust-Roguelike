@@ -128,7 +128,11 @@ impl Screen for CharacterCreationScreen {
                 .with(LogicPlayer {})
                 .with(Faction::new(0))
                 .with(inventory)
-                .with(species.stats() + CreatureStats::from(origin_type))
+                .with(
+                    species.stats()
+                        + CreatureStats::from(origin_type)
+                        + CreatureStats::new(4, 4, 4, 4, 4, 4),
+                )
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)
                 .with(skills)

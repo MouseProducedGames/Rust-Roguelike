@@ -73,7 +73,7 @@ impl StartScreen {
             .with(Command::None)
             .with(LogicMaslow)
             .with(Faction::new(0))
-            .with(CreatureStats::default())
+            .with(CreatureStats::default() + CreatureStats::new(4, 4, 4, 4, 4, 4))
             .with(Inventory::new())
             .with(maslow_tree)
             .with(Position::new(12, 8))
