@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
-use crate::game::{GameState, LastUpdateSystem};
+use crate::game::{GameState, LastUpdateSystem, Time};
 use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
 use crate::items::{InventorySystem, LightSourceSystem};
 use crate::world::{Lightmap, VisibilitySystem};
@@ -31,6 +31,7 @@ pub struct GameScreen {
     player_display_system: PlayerDisplaySystem,
     player_logic: LogicPlayerSystem,
     state: ScreenState,
+    time: Time,
     visibility_system: VisibilitySystem,
 }
 
@@ -47,6 +48,7 @@ impl GameScreen {
             player_display_system: PlayerDisplaySystem,
             player_logic: LogicPlayerSystem,
             state: ScreenState::Started,
+            time: Time::new(0),
             visibility_system: VisibilitySystem,
         }
     }
@@ -158,6 +160,9 @@ impl Screen for GameScreen {
         self.visibility_system.run_now(&world.res);
 
         world.maintain();
+
+        self.time += Time::new(1);
+        *world.write_resource::<Time>() = self.time;
     }
 
     fn state(&self) -> ScreenState {
