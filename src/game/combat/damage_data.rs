@@ -11,16 +11,17 @@ use specs::Entity;
 // Standard includes.
 
 // Internal includes.
+use super::DamageValue;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct DamageData {
     attacker: Entity,
     defender: Entity,
-    damage: i32,
+    damage: DamageValue,
 }
 
 impl DamageData {
-    pub fn new(attacker: Entity, defender: Entity, damage: i32) -> Self {
+    pub fn new(attacker: Entity, defender: Entity, damage: DamageValue) -> Self {
         Self {
             attacker,
             defender,
@@ -36,11 +37,11 @@ impl DamageData {
         self.defender
     }
 
-    pub fn damage(&self) -> i32 {
+    pub fn damage(&self) -> DamageValue {
         self.damage
     }
 
-    pub fn damage_mut(&mut self) -> &mut i32 {
+    pub fn damage_mut(&mut self) -> &mut DamageValue {
         &mut self.damage
     }
 }

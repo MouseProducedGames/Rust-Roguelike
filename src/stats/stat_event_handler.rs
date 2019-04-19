@@ -13,7 +13,9 @@ use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
 use crate::events::{Event, EventManager};
-use crate::game::combat::{AttackData, DamageData, InjuryData};
+use crate::game::combat::{
+    AttackData, AttackValue, DamageData, DamageValue, DefenceValue, InjuryData, InjuryValue,
+};
 use crate::stats::{CreatureStats, Stat, StatModifier};
 
 pub struct StatEventHandler;
@@ -35,8 +37,10 @@ impl StatEventHandler {
         let creature_stats = world.read_storage::<CreatureStats>();
         if let Some(attacker_stats) = creature_stats.get(event_data.attacker()) {
             if let Some(defender_stats) = creature_stats.get(event_data.defender()) {
-                *event_data.attack_modifier_mut() += attacker_stats.coordination().modifier();
-                *event_data.defence_modifier_mut() += defender_stats.agility().modifier();
+                *event_data.attack_modifier_mut() +=
+                    AttackValue::from(attacker_stats.coordination().modifier());
+                *event_data.defence_modifier_mut() +=
+                    DefenceValue::from(defender_stats.agility().modifier());
 
                 *event.data_mut() = event_data;
             }
@@ -47,7 +51,7 @@ impl StatEventHandler {
         let mut event_data = *event.data();
         let creature_stats = world.read_storage::<CreatureStats>();
         if let Some(attacker_stats) = creature_stats.get(event_data.attacker()) {
-            *event_data.damage_mut() += attacker_stats.strength().modifier();
+            *event_data.damage_mut() += DamageValue::from(attacker_stats.strength().modifier());
 
             *event.data_mut() = event_data;
         }
@@ -57,8 +61,8 @@ impl StatEventHandler {
         let mut event_data = *event.data();
         let mut creature_stats = world.write_storage::<CreatureStats>();
         if let Some(defender_stats) = creature_stats.get_mut(event_data.defender()) {
-            *defender_stats.health_mut().value_mut() -= event_data.injury();
-            *event_data.injury_mut() = 0;
+            *defender_stats.health_mut().value_mut() -= i32::from(event_data.injury());
+            *event_data.injury_mut() = InjuryValue::from(0);
 
             *event.data_mut() = event_data;
         }

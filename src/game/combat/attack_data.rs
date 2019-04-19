@@ -11,21 +11,22 @@ use specs::Entity;
 // Standard includes.
 
 // Internal includes.
+use super::{AttackValue, DefenceValue};
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct AttackData {
     attacker: Entity,
     defender: Entity,
-    attack_modifier: i32,
-    defence_modifier: i32,
+    attack_modifier: AttackValue,
+    defence_modifier: DefenceValue,
 }
 
 impl AttackData {
     pub fn new(
         attacker: Entity,
         defender: Entity,
-        attack_modifier: i32,
-        defence_modifier: i32,
+        attack_modifier: AttackValue,
+        defence_modifier: DefenceValue,
     ) -> Self {
         Self {
             attacker,
@@ -43,19 +44,19 @@ impl AttackData {
         self.defender
     }
 
-    pub fn attack_modifier(&self) -> i32 {
+    pub fn attack_modifier(&self) -> AttackValue {
         self.attack_modifier
     }
 
-    pub fn defence_modifier(&self) -> i32 {
+    pub fn defence_modifier(&self) -> DefenceValue {
         self.defence_modifier
     }
 
-    pub fn attack_modifier_mut(&mut self) -> &mut i32 {
+    pub fn attack_modifier_mut(&mut self) -> &mut AttackValue {
         &mut self.attack_modifier
     }
 
-    pub fn defence_modifier_mut(&mut self) -> &mut i32 {
+    pub fn defence_modifier_mut(&mut self) -> &mut DefenceValue {
         &mut self.defence_modifier
     }
 }
