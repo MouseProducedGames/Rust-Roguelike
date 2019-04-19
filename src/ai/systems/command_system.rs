@@ -9,11 +9,13 @@ Documentation:
 use specs::{Entities, Entity, ReadExpect, ReadStorage, System, WriteExpect, WriteStorage};
 
 // Standard includes.
+use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use crate::ai::Command;
+use crate::events::EventManager;
 use crate::factions::Faction;
-use crate::game::{Combat, CombatResult, EntityPositionTracker};
+use crate::game::{AttackData, Combat, CombatResult, EntityPositionTracker, Time};
 use crate::rrl_math::Position;
 use crate::stats::{CreatureStats, Stat};
 use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
@@ -22,8 +24,10 @@ pub struct CommandSystem;
 
 #[derive(SystemData)]
 pub struct SystemDataT<'a> {
+    current_time: ReadExpect<'a, Time>,
     entity_position_tracker: ReadExpect<'a, EntityPositionTracker>,
     entities: Entities<'a>,
+    event_manager: ReadExpect<'a, Arc<Mutex<EventManager>>>,
     map: WriteExpect<'a, Tilemap>,
     command: ReadStorage<'a, Command>,
     factions: ReadStorage<'a, Faction>,
@@ -38,7 +42,9 @@ impl<'a> System<'a> for CommandSystem {
     fn run(&mut self, mut data: Self::SystemData) {
         use specs::join::Join;
 
+        let current_time = *data.current_time;
         let entity_position_tracker = &*data.entity_position_tracker;
+        let event_manager = data.event_manager.clone();
         let factions = data.factions;
         let map = &mut *data.map;
         let stats = &mut data.stats;
@@ -62,7 +68,9 @@ impl<'a> System<'a> for CommandSystem {
 
                     if map.passable_pos(new_pos) {
                         impassable_movement(
+                            current_time,
                             entity,
+                            event_manager.clone(),
                             new_pos,
                             pos,
                             entity_position_tracker,
@@ -81,8 +89,11 @@ impl<'a> System<'a> for CommandSystem {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn impassable_movement<'a>(
+    current_time: Time,
     entity: Entity,
+    event_manager: Arc<Mutex<EventManager>>,
     new_pos: Position,
     pos: &mut Position,
     entity_position_tracker: &EntityPositionTracker,
@@ -99,7 +110,12 @@ fn impassable_movement<'a>(
                 }
             }
 
-            let attacker_stats;
+            event_manager
+                .lock()
+                .unwrap()
+                .push_attack_event(current_time, AttackData::new(entity, other_entity, 0, 0));
+
+            /* let attacker_stats;
             let defender_stats;
             match stats.get(entity) {
                 Some(stats) => attacker_stats = *stats,
@@ -113,7 +129,7 @@ fn impassable_movement<'a>(
             if let CombatResult::DefenderDead = Combat::one_attack(&attacker_stats, defender_stats)
             {
                 (*defender_stats.health_mut().value_mut()).min(-100);
-            }
+            } */
         }
         None => *pos = new_pos,
     }
