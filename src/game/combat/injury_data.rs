@@ -12,20 +12,28 @@ use specs::Entity;
 
 // Internal includes.
 use super::InjuryValue;
+use crate::items::WeaponType;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct InjuryData {
     attacker: Entity,
     defender: Entity,
-    pub injury: InjuryValue,
+    injury: InjuryValue,
+    weapon_type: WeaponType,
 }
 
 impl InjuryData {
-    pub fn new(attacker: Entity, defender: Entity, injury: InjuryValue) -> Self {
+    pub fn new(
+        attacker: Entity,
+        defender: Entity,
+        injury: InjuryValue,
+        weapon_type: WeaponType,
+    ) -> Self {
         Self {
             attacker,
             defender,
             injury,
+            weapon_type,
         }
     }
 
@@ -43,5 +51,13 @@ impl InjuryData {
 
     pub fn injury_mut(&mut self) -> &mut InjuryValue {
         &mut self.injury
+    }
+
+    pub fn _weapon_type(&self) -> WeaponType {
+        self.weapon_type
+    }
+
+    pub fn _weapon_type_mut(&mut self) -> &mut WeaponType {
+        &mut self.weapon_type
     }
 }

@@ -14,5 +14,6 @@ Documentation:
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 #[repr(C)]
 pub enum WeaponType {
+    Swords,
     Unarmed,
 }

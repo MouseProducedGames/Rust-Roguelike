@@ -16,6 +16,7 @@ use super::{EventHandler, RefEventFn};
 use crate::dice::roll_attack;
 use crate::game::combat::{AttackData, DamageData, DamageValue, InjuryData, InjuryValue};
 use crate::game::Time;
+use crate::items::WeaponType;
 use crate::stats::{CreatureStats, Stat};
 
 #[derive(Clone)]
@@ -66,6 +67,7 @@ impl EventManager {
                         event.data().attacker(),
                         event.data().defender(),
                         DamageValue::from(5),
+                        event.data().weapon_type(),
                     );
                     damage_events.push_event(current_time, damage_data);
                 }
@@ -81,6 +83,7 @@ impl EventManager {
                         event.data().attacker(),
                         event.data().defender(),
                         InjuryValue::from(event.data().damage()),
+                        event.data().weapon_type(),
                     );
                     injury_events.push_event(current_time, injury_data);
                 }

@@ -35,7 +35,7 @@ impl SkillEventHandler {
         ));
         for combat_skill in passive_combat_skills.iter() {
             if let SkillType::Weapon(weapon_type, attack_value, _) = *combat_skill {
-                if weapon_type == WeaponType::Unarmed {
+                if weapon_type == event_data.weapon_type() {
                     *event_data.attack_modifier_mut() += attack_value
                 }
             }

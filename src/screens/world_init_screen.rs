@@ -19,7 +19,7 @@ use crate::ai::{Command, PlayerMarker, ViewpointMarker};
 use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState, Time};
-use crate::items::{Inventory, Item, LightSource};
+use crate::items::{Inventory, Item, LightSource, Weapon, WeaponEventHandler};
 use crate::rrl_math::Position;
 use crate::skills::{SkillEventHandler, SkillLookup};
 use crate::stats::{CreatureStats, StatEventHandler};
@@ -74,6 +74,7 @@ impl Screen for WorldInitScreen {
         {
             let event_manager = world.write_resource::<Arc<Mutex<EventManager>>>().clone();
             let mut event_manager = event_manager.lock().unwrap();
+            world.add_resource(WeaponEventHandler::new(&mut event_manager));
             world.add_resource(SkillEventHandler::new(&mut event_manager));
             world.add_resource(StatEventHandler::new(&mut event_manager));
         }
@@ -96,6 +97,7 @@ impl Screen for WorldInitScreen {
         world.register::<TalentLookup>();
         world.register::<ViewpointMarker>();
         world.register::<VisibilityMapLookup>();
+        world.register::<Weapon>();
 
         self.state = ScreenState::Stopped;
     }
