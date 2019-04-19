@@ -15,7 +15,7 @@ mod entity_position_tracker;
 mod game_state;
 mod last_update_system;
 mod time;
-pub use combat::{AttackData, Combat, CombatResult, DamageData, InjuryData};
+pub use combat::{AttackData, DamageData, InjuryData};
 pub use entity_position_tracker::EntityPositionTracker;
 pub use game_state::GameState;
 pub use last_update_system::LastUpdateSystem;
