@@ -22,7 +22,7 @@ use crate::game::{EntityPositionTracker, GameState, Time};
 use crate::items::{Inventory, Item, LightSource};
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
-use crate::stats::CreatureStats;
+use crate::stats::{CreatureStats, StatEventHandler};
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
 use crate::world::{PatternLookup, VisibilityMapLookup};
@@ -71,9 +71,14 @@ impl Screen for WorldInitScreen {
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         world.add_resource(EntityPositionTracker::new());
         world.add_resource(Arc::new(Mutex::new(EventManager::new())));
+        {
+            let event_manager = world.write_resource::<Arc<Mutex<EventManager>>>().clone();
+            let mut event_manager = event_manager.lock().unwrap();
+            world.add_resource(StatEventHandler::new(&mut event_manager));
+        }
         world.add_resource(GameState::new());
-        world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
         world.add_resource(Arc::new(Mutex::new(PatternLookup::new())));
+        world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
         world.add_resource(Time::new(0));
         world.register::<Command>();
         world.register::<CreatureStats>();

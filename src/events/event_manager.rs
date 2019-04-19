@@ -33,16 +33,16 @@ impl EventManager {
         }
     }
 
-    pub fn add_attack_handler(&mut self, handler: RefEventFn<AttackData>) {
-        self.attack_events.lock().unwrap().add_handler(handler);
+    pub fn push_attack_handler(&mut self, handler: RefEventFn<AttackData>) {
+        self.attack_events.lock().unwrap().push_handler(handler);
     }
 
-    pub fn add_damage_handler(&mut self, handler: RefEventFn<DamageData>) {
-        self.damage_events.lock().unwrap().add_handler(handler);
+    pub fn push_damage_handler(&mut self, handler: RefEventFn<DamageData>) {
+        self.damage_events.lock().unwrap().push_handler(handler);
     }
 
-    pub fn add_injury_handler(&mut self, handler: RefEventFn<InjuryData>) {
-        self.injury_events.lock().unwrap().add_handler(handler);
+    pub fn push_injury_handler(&mut self, handler: RefEventFn<InjuryData>) {
+        self.injury_events.lock().unwrap().push_handler(handler);
     }
 
     pub fn push_attack_event(&mut self, time: Time, attack_data: AttackData) {
@@ -57,21 +57,11 @@ impl EventManager {
             let mut attack_events = self.attack_events.lock().unwrap();
             let mut damage_events = self.damage_events.lock().unwrap();
             while let Some(event) = attack_events.run_once(current_time, world) {
-                println!(
-                    "{}, {}, {}",
-                    event.time(),
-                    event.data().attack_modifier(),
-                    event.data().defence_modifier()
-                );
                 if roll_success(i64::from(
                     event.data().attack_modifier() - event.data().defence_modifier(),
                 )) {
-                    let damage_data = DamageData::new(
-                        event.data().attacker(),
-                        event.data().defender(),
-                        event.data().attack_modifier() - event.data().defence_modifier(),
-                    );
-                    println!("{}", damage_data.damage());
+                    let damage_data =
+                        DamageData::new(event.data().attacker(), event.data().defender(), 5);
                     damage_events.push_event(current_time, damage_data);
                 }
             }
@@ -87,7 +77,6 @@ impl EventManager {
                         event.data().defender(),
                         event.data().damage(),
                     );
-                    println!("{}", injury_data.injury());
                     injury_events.push_event(current_time, injury_data);
                 }
             }
@@ -96,7 +85,6 @@ impl EventManager {
         {
             let mut injury_events = self.injury_events.lock().unwrap();
             while let Some(event) = injury_events.run_once(current_time, world) {
-                println!("{}", event.data().injury());
                 if event.data().injury() > 0 {
                     let defender = event.data().defender();
                     let injury = event.data().injury();

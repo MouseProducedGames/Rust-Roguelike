@@ -15,9 +15,8 @@ use std::sync::{Arc, Mutex};
 use crate::ai::Command;
 use crate::events::EventManager;
 use crate::factions::Faction;
-use crate::game::{AttackData, Combat, CombatResult, EntityPositionTracker, Time};
+use crate::game::{AttackData, EntityPositionTracker, Time};
 use crate::rrl_math::Position;
-use crate::stats::{CreatureStats, Stat};
 use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 
 pub struct CommandSystem;
@@ -32,7 +31,6 @@ pub struct SystemDataT<'a> {
     command: ReadStorage<'a, Command>,
     factions: ReadStorage<'a, Faction>,
     visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
-    stats: WriteStorage<'a, CreatureStats>,
     pos: WriteStorage<'a, Position>,
 }
 
@@ -47,7 +45,6 @@ impl<'a> System<'a> for CommandSystem {
         let event_manager = data.event_manager.clone();
         let factions = data.factions;
         let map = &mut *data.map;
-        let stats = &mut data.stats;
 
         for (entity, command, pos, visibility_map_lookup) in (
             &data.entities,
@@ -75,7 +72,6 @@ impl<'a> System<'a> for CommandSystem {
                             pos,
                             entity_position_tracker,
                             &factions,
-                            stats,
                         );
                     }
 
@@ -98,7 +94,6 @@ fn impassable_movement<'a>(
     pos: &mut Position,
     entity_position_tracker: &EntityPositionTracker,
     factions: &ReadStorage<'a, Faction>,
-    stats: &mut WriteStorage<'a, CreatureStats>,
 ) {
     match entity_position_tracker.check_collision(entity, new_pos) {
         Some(other_entity) => {
@@ -114,22 +109,6 @@ fn impassable_movement<'a>(
                 .lock()
                 .unwrap()
                 .push_attack_event(current_time, AttackData::new(entity, other_entity, 0, 0));
-
-            /* let attacker_stats;
-            let defender_stats;
-            match stats.get(entity) {
-                Some(stats) => attacker_stats = *stats,
-                _ => return,
-            }
-            match stats.get_mut(other_entity) {
-                Some(stats) => defender_stats = stats,
-                _ => return,
-            }
-
-            if let CombatResult::DefenderDead = Combat::one_attack(&attacker_stats, defender_stats)
-            {
-                (*defender_stats.health_mut().value_mut()).min(-100);
-            } */
         }
         None => *pos = new_pos,
     }

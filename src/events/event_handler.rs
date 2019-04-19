@@ -16,7 +16,7 @@ use std::sync::{Arc, Mutex};
 use super::Event;
 use crate::game::Time;
 
-pub type EventFn<TData> = Fn(&Event<TData>, &mut World) + Send;
+pub type EventFn<TData> = Fn(&mut Event<TData>, &mut World) + Send;
 pub type RefEventFn<TData> = Arc<Mutex<EventFn<TData>>>;
 
 pub struct EventHandler<TData: Clone + Eq + PartialEq + Sized> {
@@ -32,7 +32,7 @@ impl<TData: Clone + Eq + PartialEq + Sized> EventHandler<TData> {
         }
     }
 
-    pub fn add_handler(&mut self, handler: RefEventFn<TData>) {
+    pub fn push_handler(&mut self, handler: RefEventFn<TData>) {
         self.event_handlers.push(handler);
     }
 
@@ -41,9 +41,9 @@ impl<TData: Clone + Eq + PartialEq + Sized> EventHandler<TData> {
     }
 
     pub fn run_once(&mut self, current_time: Time, world: &mut World) -> Option<Event<TData>> {
-        if let Some(event) = self.events.pop() {
+        if let Some(mut event) = self.events.pop() {
             if event.time() <= current_time {
-                let event = &event;
+                let event = &mut event;
                 for handler in self.event_handlers.iter() {
                     (*handler.lock().unwrap())(event, world);
                 }
