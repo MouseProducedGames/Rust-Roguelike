@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
 use crate::events::{Event, EventManager};
-use crate::game::{AttackData, DamageData, InjuryData};
+use crate::game::combat::{AttackData, DamageData, InjuryData};
 use crate::stats::{CreatureStats, Stat, StatModifier};
 
 pub struct StatEventHandler;

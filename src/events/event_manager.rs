@@ -14,7 +14,8 @@ use std::sync::{Arc, Mutex};
 // internal includes.
 use super::{EventHandler, RefEventFn};
 use crate::dice::roll_success;
-use crate::game::{AttackData, DamageData, InjuryData, Time};
+use crate::game::combat::{AttackData, DamageData, InjuryData};
+use crate::game::Time;
 use crate::stats::{CreatureStats, Stat};
 
 #[derive(Clone)]

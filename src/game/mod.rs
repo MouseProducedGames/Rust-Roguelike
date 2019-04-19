@@ -10,7 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-mod combat;
+pub mod combat;
 mod entity_position_tracker;
 mod game_state;
 mod last_update_system;

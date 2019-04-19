@@ -15,7 +15,8 @@ use std::sync::{Arc, Mutex};
 use crate::ai::Command;
 use crate::events::EventManager;
 use crate::factions::Faction;
-use crate::game::{AttackData, EntityPositionTracker, Time};
+use crate::game::combat::AttackData;
+use crate::game::{EntityPositionTracker, Time};
 use crate::rrl_math::Position;
 use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 
