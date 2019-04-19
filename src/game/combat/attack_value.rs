@@ -16,7 +16,19 @@ use std::ops::{Sub, SubAssign};
 use super::DefenceValue;
 
 #[derive(
-    Add, AddAssign, Copy, Clone, Default, Display, Ord, PartialOrd, Eq, PartialEq, Sub, SubAssign,
+    Add,
+    AddAssign,
+    Copy,
+    Clone,
+    Default,
+    Display,
+    Hash,
+    Ord,
+    PartialOrd,
+    Eq,
+    PartialEq,
+    Sub,
+    SubAssign,
 )]
 pub struct AttackValue(i32);
 

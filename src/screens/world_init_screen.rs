@@ -21,7 +21,7 @@ use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState, Time};
 use crate::items::{Inventory, Item, LightSource};
 use crate::rrl_math::Position;
-use crate::skills::SkillLookup;
+use crate::skills::{SkillEventHandler, SkillLookup};
 use crate::stats::{CreatureStats, StatEventHandler};
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
@@ -74,6 +74,7 @@ impl Screen for WorldInitScreen {
         {
             let event_manager = world.write_resource::<Arc<Mutex<EventManager>>>().clone();
             let mut event_manager = event_manager.lock().unwrap();
+            world.add_resource(SkillEventHandler::new(&mut event_manager));
             world.add_resource(StatEventHandler::new(&mut event_manager));
         }
         world.add_resource(GameState::new());

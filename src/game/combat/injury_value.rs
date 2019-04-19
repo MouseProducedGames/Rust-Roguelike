@@ -15,7 +15,19 @@ use std::convert::From;
 use super::DamageValue;
 
 #[derive(
-    Add, AddAssign, Copy, Clone, Default, Display, Eq, Ord, PartialOrd, PartialEq, Sub, SubAssign,
+    Add,
+    AddAssign,
+    Copy,
+    Clone,
+    Default,
+    Display,
+    Eq,
+    Hash,
+    Ord,
+    PartialOrd,
+    PartialEq,
+    Sub,
+    SubAssign,
 )]
 pub struct InjuryValue(i32);
 

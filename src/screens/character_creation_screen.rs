@@ -19,8 +19,9 @@ use crate::ai::systems::LogicPlayer;
 use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::factions::Faction;
+use crate::game::combat::{AttackValue, DefenceValue};
 use crate::io::Display;
-use crate::items::{Inventory, Item, LightSource};
+use crate::items::{Inventory, Item, LightSource, WeaponType};
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
@@ -103,6 +104,15 @@ impl Screen for CharacterCreationScreen {
                 SkillType::Skill(2),
             );
 
+            skills.insert(
+                SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
+                SkillType::Weapon(
+                    WeaponType::Unarmed,
+                    AttackValue::from(2),
+                    DefenceValue::from(2),
+                ),
+            );
+
             let mut talents = TalentLookup::new();
 
             talents.insert(
@@ -131,7 +141,7 @@ impl Screen for CharacterCreationScreen {
                 .with(
                     species.stats()
                         + CreatureStats::from(origin_type)
-                        + CreatureStats::new(4, 4, 4, 4, 4, 4),
+                        + CreatureStats::new(4, 0, 0, 4, 4, 4),
                 )
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)

@@ -20,10 +20,11 @@ use crate::ai::maslow::MaslowTreeLookup;
 use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
 use crate::factions::Faction;
+use crate::game::combat::{AttackValue, DefenceValue};
 use crate::io::{Display, Input};
-use crate::items::Inventory;
+use crate::items::{Inventory, WeaponType};
 use crate::rrl_math::Position;
-use crate::skills::SkillLookup;
+use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::world::VisibilityMapLookup;
@@ -53,20 +54,36 @@ impl StartScreen {
     }
 
     fn create_monsters(&mut self, world: &mut World) {
-        let maslow_tree_lookup = world
-            .read_resource::<Arc<Mutex<MaslowTreeLookup>>>()
-            .clone();
-        let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
+        let maslow_tree;
+        {
+            let maslow_tree_lookup = world
+                .read_resource::<Arc<Mutex<MaslowTreeLookup>>>()
+                .clone();
+            let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
+            maslow_tree = maslow_tree_lookup.get("Faction/Wander").unwrap().clone();
+        }
+
+        let mut skills = SkillLookup::new();
+
+        skills.insert(
+            SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
+            SkillType::Weapon(
+                WeaponType::Unarmed,
+                AttackValue::from(2),
+                DefenceValue::from(2),
+            ),
+        );
+
         world
             .create_entity()
             .with(Command::None)
             .with(LogicMaslow)
             .with(Faction::new(0))
-            .with(CreatureStats::default() + CreatureStats::new(4, 4, 4, 4, 4, 4))
+            .with(CreatureStats::default() + CreatureStats::new(4, 0, 0, 4, 4, 4))
             .with(Inventory::new())
-            .with(maslow_tree_lookup.get("Faction/Wander").unwrap().clone())
+            .with(maslow_tree)
             .with(Position::new(12, 8))
-            .with(SkillLookup::new())
+            .with(skills)
             .with(TalentLookup::new())
             .with(VisibilityMapLookup::new())
             .build();

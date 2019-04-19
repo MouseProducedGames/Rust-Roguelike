@@ -10,6 +10,8 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+use crate::game::combat::{AttackValue, DefenceValue};
+use crate::items::WeaponType;
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillActivation {
@@ -25,16 +27,18 @@ pub enum SkillActiveOp {
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillPassiveOp {
     EveryRound,
+    OnUse,
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillTag {
+    Combat,
     Perception,
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillType {
-    Attack(SkillRange, i32, i32),
+    Weapon(WeaponType, AttackValue, DefenceValue),
     Skill(i32),
 }
 

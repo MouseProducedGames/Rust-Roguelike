@@ -14,7 +14,19 @@ use std::convert::From;
 // Internal includes.
 
 #[derive(
-    Add, AddAssign, Copy, Clone, Default, Display, Eq, Ord, PartialOrd, PartialEq, Sub, SubAssign,
+    Add,
+    AddAssign,
+    Copy,
+    Clone,
+    Default,
+    Display,
+    Eq,
+    Hash,
+    Ord,
+    PartialOrd,
+    PartialEq,
+    Sub,
+    SubAssign,
 )]
 pub struct DefenceValue(i32);
 

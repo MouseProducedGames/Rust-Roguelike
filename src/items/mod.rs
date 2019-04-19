@@ -13,6 +13,8 @@ Documentation:
 mod inventory;
 mod item;
 mod light_source;
+mod weapon_type;
 pub use inventory::{Inventory, InventorySystem};
 pub use item::Item;
 pub use light_source::{LightSource, LightSourceSystem};
+pub use weapon_type::WeaponType;
