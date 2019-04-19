@@ -16,6 +16,7 @@ use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::maslow::MaslowTree;
 use crate::ai::systems::{LogicMaslow, LogicPlayer};
 use crate::ai::{Command, PlayerMarker, ViewpointMarker};
+use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState, Time};
 use crate::items::{Inventory, Item, LightSource};
@@ -69,6 +70,7 @@ impl Screen for WorldInitScreen {
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
         world.add_resource(EntityPositionTracker::new());
+        world.add_resource(Arc::new(Mutex::new(EventManager::new())));
         world.add_resource(GameState::new());
         world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
         world.add_resource(Arc::new(Mutex::new(PatternLookup::new())));

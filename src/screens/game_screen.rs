@@ -15,6 +15,7 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
+use crate::events::EventManager;
 use crate::game::{GameState, LastUpdateSystem, Time};
 use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
 use crate::items::{InventorySystem, LightSourceSystem};
@@ -119,6 +120,13 @@ impl Screen for GameScreen {
         self.command_system.run_now(&world.res);
 
         world.maintain();
+
+        {
+            let event_manager = world.write_resource::<Arc<Mutex<EventManager>>>().clone();
+            let mut event_manager = event_manager.lock().unwrap();
+            let current_time = *world.read_resource::<Time>();
+            event_manager.run_now(current_time, world);
+        }
 
         world.write_resource::<Lightmap>().clear();
         self.ability_system.run_now(&world.res);
