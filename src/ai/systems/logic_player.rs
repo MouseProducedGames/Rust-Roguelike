@@ -79,9 +79,14 @@ impl<'a> System<'a> for LogicPlayerSystem {
                 '9' => Command::Move(Displacement::new(1, -1)),
                 'b' => {
                     if let Some(body) = bodies.get(entity) {
-                        let body_screen_ref = Arc::new(Mutex::new(BodyScreen::new(body.clone())));
-                        game_state.lock_new_screens().push(body_screen_ref);
-                        Command::Move(Displacement::new(0, 0))
+                        if let Some(inventory) = inventory.get(entity) {
+                            let body_screen_ref =
+                                Arc::new(Mutex::new(BodyScreen::new(body.clone(), inventory.clone())));
+                            game_state.lock_new_screens().push(body_screen_ref);
+                            Command::Move(Displacement::new(0, 0))
+                        } else {
+                            panic!("Where's our inventory?!");
+                        }
                     } else {
                         panic!("Where's our body?!");
                     }

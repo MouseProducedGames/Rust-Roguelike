@@ -20,6 +20,7 @@ use crate::items::{Inventory, Item};
 pub struct InventoryScreen {
     inventory: Inventory,
     state: ScreenState,
+    selected_index: Option<usize>,
 }
 
 impl InventoryScreen {
@@ -27,7 +28,12 @@ impl InventoryScreen {
         Self {
             inventory,
             state: ScreenState::Started,
+            selected_index: None,
         }
+    }
+    
+    pub fn selected_index(&self) -> Option<usize> {
+        self.selected_index
     }
 }
 
@@ -74,11 +80,28 @@ impl Screen for InventoryScreen {
 
         {
             let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>();
-            let input = arc_mutex_input.lock().unwrap();
-            let ch = input.instance().get_char();
+            let mut input = arc_mutex_input.lock().unwrap();
+            let ch = input.instance_mut().consume_char();
             if ch == 13 as char {
                 self.state = ScreenState::Stopped;
+                return;
             }
+            
+            self.selected_index = if (ch >= 'a') && (ch <= 'z') {
+                    let index = (ch as usize) - ('a' as usize);
+                    if index < self.inventory.get().len() {
+                        self.state = ScreenState::Stopped;
+                        Some(index)
+                    } else { None }
+                } else if (ch >= 'A') && (ch <= 'Z') {
+                    let index = ((ch as usize) - ('A' as usize)) + 26;
+                    if index < self.inventory.get().len() {
+                        self.state = ScreenState::Stopped;
+                        Some(index)
+                    } else { None }
+                } else {
+                    None
+                };
         }
     }
 

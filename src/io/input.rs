@@ -24,14 +24,32 @@ impl Input {
     }
 
     pub(super) fn update(&mut self, input_data: InputData) {
-        self.instance_mut().input_data = input_data;
+        self.input_instance.input_data = input_data;
     }
 
     pub fn instance(&self) -> &InputInstance {
         &self.input_instance
     }
 
-    fn instance_mut(&mut self) -> &mut InputInstance {
-        &mut self.input_instance
+    pub fn instance_mut(&mut self) -> Arg {
+        Arg::new(&mut self.input_instance)
+    }
+}
+
+pub struct Arg<'a> {
+    value: &'a mut InputInstance,
+}
+
+impl<'a> Arg<'a> {
+    pub fn new(value: &'a mut InputInstance) -> Self {
+        Self { value }
+    }
+
+    pub fn consume_char(&mut self) -> char {
+        self.value.consume_char()
+    }
+
+    pub fn get_char(&self) -> char {
+        self.value.get_char()
     }
 }
