@@ -72,10 +72,20 @@ impl Screen for DisplayInitScreen {
                     let mut display = crate::io::console::ConsoleDisplay::new();
 
                     world.add_resource::<Arc<Mutex<dyn Display>>>(
-                        match display.choose_display_option(&[DisplayOption::Console]) {
+                        match display.choose_display_option(&[
+                            DisplayOption::Console,
+                            DisplayOption::R8G8B8Console,
+                        ]) {
                             DisplayOption::Console => {
                                 let display: Arc<Mutex<dyn Display>> =
                                     Arc::new(Mutex::new(crate::io::console::ConsoleDisplay::new()));
+
+                                display
+                            }
+                            DisplayOption::R8G8B8Console => {
+                                let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(
+                                    crate::io::r8g8b8_console::ConsoleDisplay::new(),
+                                ));
 
                                 display
                             }

@@ -18,6 +18,7 @@ mod display_option;
 mod input;
 mod input_instance;
 mod player_display_system;
+pub mod r8g8b8_console;
 pub use creature_display_system::CreatureDisplaySystem;
 pub use description::{LongDescription, ShortDescription};
 pub use display::Display;
