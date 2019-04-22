@@ -4,8 +4,12 @@ Rust Roguelike is a text-based roguelike written in Rust, and licensed under the
 
 # Current State
 
-* Wander around a small map with randomly-placed walls and floors.
+* Wander around a small map with a generated dungeon.
 * Movement using the number pad.
+* Fight generic monsters.
+* Have a generic ally.
+* Press 'i' for inventory.
+* Press 'b' for body (equip/unequip).
 
 ## Roadmap
 

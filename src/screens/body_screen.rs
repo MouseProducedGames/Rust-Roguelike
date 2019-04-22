@@ -16,7 +16,7 @@ use super::{InventoryScreen, Screen, ScreenPushWrapper, ScreenState};
 use crate::bodies::Body;
 use crate::game::GameState;
 use crate::io::{Display, Input};
-use crate::items::{Item, Inventory};
+use crate::items::{Inventory, Item};
 
 enum BodyScreenState {
     Viewing,
@@ -95,15 +95,15 @@ impl Screen for BodyScreen {
                     self.state = ScreenState::Stopped;
                     return;
                 };
-                
+
                 self.body_index = if (ch >= 'a') && (ch <= 'z') {
-                        Some((ch as usize) - ('a' as usize))
-                    } else if (ch >= 'A') && (ch <= 'Z') {
-                        Some(((ch as usize) - ('A' as usize)) + 26)
-                    } else {
-                        None
-                    };
-                
+                    Some((ch as usize) - ('a' as usize))
+                } else if (ch >= 'A') && (ch <= 'Z') {
+                    Some(((ch as usize) - ('A' as usize)) + 26)
+                } else {
+                    None
+                };
+
                 if let Some(body_index) = self.body_index {
                     let mut selected_key: Option<String> = None;
                     for (i, name) in self.body.get().keys().enumerate() {
@@ -112,18 +112,20 @@ impl Screen for BodyScreen {
                             break;
                         }
                     }
-                    
+
                     if let Some(selected_key) = selected_key {
                         if let Some(body_slot) = self.body.get().get_mut(&selected_key) {
                             if let Some(item) = body_slot.drop_item() {
                                 self.body_index = None;
                                 self.inventory.push(item);
                             } else {
-                                self.inventory_screen =
-                                    Arc::new(Mutex::new(InventoryScreen::new(self.inventory.clone())));
+                                self.inventory_screen = Arc::new(Mutex::new(InventoryScreen::new(
+                                    self.inventory.clone(),
+                                )));
                                 screen_push_wrapper.push(self.inventory_screen.clone());
-                                
-                                self.body_screen_state = BodyScreenState::SelectingItemFromInventory;
+
+                                self.body_screen_state =
+                                    BodyScreenState::SelectingItemFromInventory;
                             }
                         } else {
                             panic!("Named body slot disappeared while we were using it!");
@@ -134,14 +136,14 @@ impl Screen for BodyScreen {
             BodyScreenState::SelectingItemFromInventory => {
                 let inventory_screen = self.inventory_screen.clone();
                 let inventory_screen = inventory_screen.lock().unwrap();
-                if (inventory_screen.state() == ScreenState::Stopped) ||
-                    (inventory_screen.state() == ScreenState::Inactive) {
+                if (inventory_screen.state() == ScreenState::Stopped)
+                    || (inventory_screen.state() == ScreenState::Inactive)
+                {
                     if let Some(selected_index) = inventory_screen.selected_index() {
                         if let Some(body_index) = self.body_index {
-                            
                             if selected_index < self.inventory.get().len() {
                                 let item = self.inventory.get().remove(selected_index);
-                                
+
                                 let mut selected_key: Option<String> = None;
                                 for (i, name) in self.body.get().keys().enumerate() {
                                     if i == body_index {
@@ -149,20 +151,23 @@ impl Screen for BodyScreen {
                                         break;
                                     }
                                 }
-                                
-                                if let Some(selected_key) = selected_key {            
-                                    if let Some(body_slot) = self.body.get().get_mut(&selected_key) {
+
+                                if let Some(selected_key) = selected_key {
+                                    if let Some(body_slot) = self.body.get().get_mut(&selected_key)
+                                    {
                                         if let Some(item) = body_slot.hold_item(item) {
                                             self.inventory.push(item)
                                         }
                                     } else {
-                                        panic!("Named body slot disappeared while we were using it!");
+                                        panic!(
+                                            "Named body slot disappeared while we were using it!"
+                                        );
                                     }
                                 }
                             }
                         }
                     }
-                    
+
                     self.inventory_screen =
                         Arc::new(Mutex::new(InventoryScreen::new(self.inventory.clone())));
 

@@ -80,8 +80,10 @@ impl<'a> System<'a> for LogicPlayerSystem {
                 'b' => {
                     if let Some(body) = bodies.get(entity) {
                         if let Some(inventory) = inventory.get(entity) {
-                            let body_screen_ref =
-                                Arc::new(Mutex::new(BodyScreen::new(body.clone(), inventory.clone())));
+                            let body_screen_ref = Arc::new(Mutex::new(BodyScreen::new(
+                                body.clone(),
+                                inventory.clone(),
+                            )));
                             game_state.lock_new_screens().push(body_screen_ref);
                             Command::Move(Displacement::new(0, 0))
                         } else {

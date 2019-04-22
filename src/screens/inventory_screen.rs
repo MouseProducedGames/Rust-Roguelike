@@ -31,7 +31,7 @@ impl InventoryScreen {
             selected_index: None,
         }
     }
-    
+
     pub fn selected_index(&self) -> Option<usize> {
         self.selected_index
     }
@@ -86,22 +86,26 @@ impl Screen for InventoryScreen {
                 self.state = ScreenState::Stopped;
                 return;
             }
-            
+
             self.selected_index = if (ch >= 'a') && (ch <= 'z') {
-                    let index = (ch as usize) - ('a' as usize);
-                    if index < self.inventory.get().len() {
-                        self.state = ScreenState::Stopped;
-                        Some(index)
-                    } else { None }
-                } else if (ch >= 'A') && (ch <= 'Z') {
-                    let index = ((ch as usize) - ('A' as usize)) + 26;
-                    if index < self.inventory.get().len() {
-                        self.state = ScreenState::Stopped;
-                        Some(index)
-                    } else { None }
+                let index = (ch as usize) - ('a' as usize);
+                if index < self.inventory.get().len() {
+                    self.state = ScreenState::Stopped;
+                    Some(index)
                 } else {
                     None
-                };
+                }
+            } else if (ch >= 'A') && (ch <= 'Z') {
+                let index = ((ch as usize) - ('A' as usize)) + 26;
+                if index < self.inventory.get().len() {
+                    self.state = ScreenState::Stopped;
+                    Some(index)
+                } else {
+                    None
+                }
+            } else {
+                None
+            };
         }
     }
 
