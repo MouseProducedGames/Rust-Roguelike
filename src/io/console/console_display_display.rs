@@ -15,7 +15,7 @@ use specs::ReadStorage;
 use super::{ConsoleChar, ConsoleDisplay, Darker};
 use crate::background::{OriginType, SpeciesType};
 use crate::factions::Faction;
-use crate::io::Display;
+use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::rrl_math::{Displacement, Position};
 use crate::stats::{CreatureStats, Stat};
@@ -35,6 +35,10 @@ impl Display for ConsoleDisplay {
         }
 
         self.present();
+    }
+
+    fn choose_display_option(&mut self, options: &'static [DisplayOption]) -> DisplayOption {
+        self.choose("Select display option:", options)
     }
 
     fn choose_origin(&mut self, options: &'static [OriginType]) -> OriginType {

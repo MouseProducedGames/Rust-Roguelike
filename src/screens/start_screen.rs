@@ -13,15 +13,14 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{
-    CharacterCreationScreen, GameScreen, MapInitScreen, MaslowInitScreen, Screen,
-    ScreenPushWrapper, ScreenState, WorldInitScreen,
+    CharacterCreationScreen, DisplayInitScreen, GameScreen, MapInitScreen, MaslowInitScreen,
+    Screen, ScreenPushWrapper, ScreenState, WorldInitScreen,
 };
 use crate::ai::maslow::MaslowTreeLookup;
 use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
-use crate::io::{Display, Input};
 use crate::items::{Inventory, WeaponType};
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
@@ -88,16 +87,6 @@ impl StartScreen {
             .with(VisibilityMapLookup::new())
             .build();
     }
-
-    fn setup_display(&mut self, world: &mut World) {
-        let display: Arc<Mutex<dyn Display>> =
-            Arc::new(Mutex::new(crate::io::console::ConsoleDisplay::new()));
-
-        // Window::init();
-
-        world.add_resource(display);
-        world.add_resource(Arc::new(Mutex::new(Input::new())));
-    }
 }
 
 impl Screen for StartScreen {
@@ -132,7 +121,8 @@ impl Screen for StartScreen {
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
         self.start_state = match self.start_state {
             StartState::SetupDisplay => {
-                self.setup_display(world);
+                let display_init_screen = Arc::new(Mutex::new(DisplayInitScreen::new()));
+                screen_push_wrapper.push(display_init_screen);
 
                 StartState::InitializeAI
             }
