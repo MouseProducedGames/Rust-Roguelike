@@ -29,7 +29,15 @@ impl Display for ConsoleDisplay {
 
         for (i, entity) in inventory.get().iter().enumerate() {
             if let Some(item) = item_data.get(*entity) {
-                let formatted = format!("{}) {}", (1 + i), item.name());
+                let formatted = format!(
+                    "{}) {}",
+                    if i < 26 {
+                        (b'a' + (i as u8)) as char
+                    } else {
+                        (b'A' + ((i - 26) as u8)) as char
+                    },
+                    item.name()
+                );
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
         }
