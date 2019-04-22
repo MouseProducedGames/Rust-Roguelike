@@ -16,7 +16,6 @@ use super::{EventHandler, RefEventFn};
 use crate::dice::roll_attack;
 use crate::game::combat::{AttackData, DamageData, DamageValue, InjuryData, InjuryValue};
 use crate::game::Time;
-use crate::items::WeaponType;
 use crate::stats::{CreatureStats, Stat};
 
 #[derive(Clone)]
