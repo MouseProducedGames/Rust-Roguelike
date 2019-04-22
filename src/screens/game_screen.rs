@@ -15,6 +15,7 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
+use crate::bodies::BodySystem;
 use crate::events::EventManager;
 use crate::game::{GameState, LastUpdateSystem, Time};
 use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
@@ -23,6 +24,7 @@ use crate::world::{Lightmap, VisibilitySystem};
 
 pub struct GameScreen {
     ability_system: AbilitySystem,
+    body_system: BodySystem,
     command_system: CommandSystem,
     creature_display_system: CreatureDisplaySystem,
     inventory_system: InventorySystem,
@@ -40,6 +42,7 @@ impl GameScreen {
     pub fn new() -> Self {
         Self {
             ability_system: AbilitySystem,
+            body_system: BodySystem,
             command_system: CommandSystem,
             creature_display_system: CreatureDisplaySystem,
             inventory_system: InventorySystem,
@@ -157,6 +160,10 @@ impl Screen for GameScreen {
     }
 
     fn post_update(&mut self, world: &mut World) {
+        self.body_system.run_now(&world.res);
+
+        world.maintain();
+
         self.inventory_system.run_now(&world.res);
 
         world.maintain();

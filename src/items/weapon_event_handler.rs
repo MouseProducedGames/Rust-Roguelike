@@ -12,7 +12,8 @@ use specs::World;
 use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
-use super::{Inventory, Weapon, WeaponType};
+use super::Weapon;
+use crate::bodies::Body;
 use crate::events::{Event, EventManager};
 use crate::game::combat::{AttackData, DamageData};
 
@@ -32,11 +33,11 @@ impl WeaponEventHandler {
 
     fn attack_event_handler(event: &mut Event<AttackData>, world: &mut World) {
         let mut event_data = *event.data();
-        let creature_inventories = world.read_storage::<Inventory>();
+        let creature_bodies = world.read_storage::<Body>();
         let weapons = world.read_storage::<Weapon>();
-        if let Some(inventory) = creature_inventories.get(event_data.attacker()) {
-            for item in inventory.get().iter() {
-                let item = *item;
+        if let Some(body) = creature_bodies.get(event_data.attacker()) {
+            for body_slot in body.get().values() {
+                let item = body_slot.item();
                 if let Some(weapon) = weapons.get(item) {
                     *event_data.attack_modifier_mut() += weapon.attack_value();
                     *event_data.weapon_type_mut() = weapon.weapon_type();
@@ -45,14 +46,12 @@ impl WeaponEventHandler {
             }
         }
 
-        if let Some(inventory) = creature_inventories.get(event_data.defender()) {
-            for item in inventory.get().iter() {
-                let item = *item;
+        if let Some(body) = creature_bodies.get(event_data.defender()) {
+            for body_slot in body.get().values() {
+                let item = body_slot.item();
                 if let Some(weapon) = weapons.get(item) {
-                    if weapon.weapon_type() == WeaponType::Unarmed {
-                        *event_data.defence_modifier_mut() += weapon.defence_value();
-                        break;
-                    }
+                    *event_data.defence_modifier_mut() += weapon.defence_value();
+                    break;
                 }
             }
         }
@@ -62,11 +61,11 @@ impl WeaponEventHandler {
 
     fn damage_event_handler(event: &mut Event<DamageData>, world: &mut World) {
         let mut event_data = *event.data();
-        let creature_inventories = world.read_storage::<Inventory>();
+        let creature_bodies = world.read_storage::<Body>();
         let weapons = world.read_storage::<Weapon>();
-        if let Some(inventory) = creature_inventories.get(event_data.attacker()) {
-            for item in inventory.get().iter() {
-                let item = *item;
+        if let Some(body) = creature_bodies.get(event_data.attacker()) {
+            for body_slot in body.get().values() {
+                let item = body_slot.item();
                 if let Some(weapon) = weapons.get(item) {
                     if weapon.weapon_type() == event_data.weapon_type() {
                         *event_data.damage_mut() += weapon.damage_value();

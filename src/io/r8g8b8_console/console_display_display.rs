@@ -14,6 +14,7 @@ use specs::ReadStorage;
 // Internal includes.
 use super::{ConsoleChar, ConsoleDisplay, Darker};
 use crate::background::{OriginType, SpeciesType};
+use crate::bodies::Body;
 use crate::factions::Faction;
 use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
@@ -22,6 +23,30 @@ use crate::stats::{CreatureStats, Stat};
 use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {
+    fn blit_body(&mut self, item_data: ReadStorage<Item>, body: &Body) {
+        self.clear();
+
+        self.put_string(1, 1, "Body:", Color::Grey, Color::Black);
+
+        for (i, body_slot) in body.get().values().enumerate() {
+            if let Some(item) = item_data.get(body_slot.item()) {
+                let formatted = format!(
+                    "{}) {}: {}",
+                    if i < 26 {
+                        (b'a' + (i as u8)) as char
+                    } else {
+                        (b'A' + ((i - 26) as u8)) as char
+                    },
+                    body_slot.name(),
+                    item.name()
+                );
+                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+            }
+        }
+
+        self.present();
+    }
+
     fn blit_inventory(&mut self, item_data: ReadStorage<Item>, inventory: &Inventory) {
         self.clear();
 

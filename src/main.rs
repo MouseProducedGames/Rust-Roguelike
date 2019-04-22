@@ -35,6 +35,7 @@ extern crate rust_dice;
 mod abilities;
 mod ai;
 mod background;
+mod bodies;
 mod creatures;
 mod data_types;
 mod dice;

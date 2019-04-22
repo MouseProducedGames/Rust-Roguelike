@@ -16,6 +16,7 @@ use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::maslow::MaslowTree;
 use crate::ai::systems::{LogicMaslow, LogicPlayer};
 use crate::ai::{Command, PlayerMarker, ViewpointMarker};
+use crate::bodies::Body;
 use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState, Time};
@@ -82,6 +83,7 @@ impl Screen for WorldInitScreen {
         world.add_resource(Arc::new(Mutex::new(PatternLookup::new())));
         world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
         world.add_resource(Time::new(0));
+        world.register::<Body>();
         world.register::<Command>();
         world.register::<CreatureStats>();
         world.register::<Faction>();

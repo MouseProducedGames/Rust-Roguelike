@@ -18,6 +18,7 @@ use crate::abilities::{Ability, AbilityActivation, AbilityActivationOp, AbilityR
 use crate::ai::systems::LogicPlayer;
 use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
+use crate::bodies::{Body, BodySlot};
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
 use crate::io::Display;
@@ -131,6 +132,28 @@ impl Screen for CharacterCreationScreen {
 
             let species = Species::create(species_type);
 
+            let hand = world
+                .create_entity()
+                .with(Item::new("Hand", 1))
+                .with(Weapon::new(
+                    WeaponType::Unarmed,
+                    AttackValue::from(0),
+                    DamageValue::from(0),
+                    DefenceValue::from(0),
+                ))
+                .build();
+
+            let longsword = world
+                .create_entity()
+                .with(Item::new("Longsword", 1))
+                .with(Weapon::new(
+                    WeaponType::Swords,
+                    AttackValue::from(2),
+                    DamageValue::from(5),
+                    DefenceValue::from(2),
+                ))
+                .build();
+
             let torch = world
                 .create_entity()
                 .with(Item::new("Torch", 0))
@@ -138,23 +161,16 @@ impl Screen for CharacterCreationScreen {
                 .build();
 
             let mut inventory = Inventory::new();
-            inventory.push(torch);
-            inventory.push(
-                world
-                    .create_entity()
-                    .with(Item::new("Longsword", 1))
-                    .with(Weapon::new(
-                        WeaponType::Swords,
-                        AttackValue::from(2),
-                        DamageValue::from(50),
-                        DefenceValue::from(2),
-                    ))
-                    .build(),
-            );
             let inventory = inventory;
+
+            let body = Body::new(&[
+                BodySlot::with_held_item("Left Hand", hand, torch),
+                BodySlot::with_held_item("Right Hand", hand, longsword),
+            ]);
 
             world
                 .create_entity()
+                .with(body)
                 .with(Command::None)
                 .with(LogicPlayer {})
                 .with(Faction::new(0))
