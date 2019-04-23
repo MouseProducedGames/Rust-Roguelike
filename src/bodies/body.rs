@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use linked_hash_map::LinkedHashMap;
 use specs::{Component, Entities, System, VecStorage, WriteStorage};
 
 // Standard includes.
@@ -18,13 +19,13 @@ use crate::rrl_math::Position;
 
 #[derive(Clone)]
 pub struct Body {
-    values: Arc<Mutex<HashMap<String, BodySlot>>>,
+    values: Arc<Mutex<LinkedHashMap<String, BodySlot>>>,
 }
 
 impl Body {
     pub fn new(body_slots: &[BodySlot]) -> Self {
         let output = Self {
-            values: Arc::new(Mutex::new(HashMap::new())),
+            values: Arc::new(Mutex::new(LinkedHashMap::new())),
         };
 
         {
@@ -37,7 +38,7 @@ impl Body {
         output
     }
 
-    pub fn get(&self) -> MutexGuard<HashMap<String, BodySlot>> {
+    pub fn get(&self) -> MutexGuard<LinkedHashMap<String, BodySlot>> {
         self.values.lock().unwrap()
     }
 }
