@@ -10,6 +10,7 @@ use rand::{thread_rng, Rng};
 use rust_dice::{Die, Roll, RollSet};
 
 // Standard includes.
+use std::ops::Deref;
 
 // Internal includes.
 use crate::game::combat::{AttackValue, DefenceValue};
@@ -40,10 +41,22 @@ fn random_wander_command() -> u32 {
     thread_rng().gen_range(1, 10)
 }
 
-pub fn roll_attack(attack_value: AttackValue, defence_value: DefenceValue) -> bool {
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub struct SuccessResult(pub bool, pub i64);
+
+impl Deref for SuccessResult {
+    type Target = bool;
+
+    fn deref(&self) -> &bool {
+        &self.0
+    }
+}
+
+pub fn roll_attack(attack_value: AttackValue, defence_value: DefenceValue) -> SuccessResult {
     roll_success(i64::from(i32::from(attack_value)) - i64::from(i32::from(defence_value)))
 }
 
-pub fn roll_success(skill_bonus: i64) -> bool {
-    SuccessRoll::new(3, Die::new(6), 0).roll().total() + skill_bonus > 10
+pub fn roll_success(skill_bonus: i64) -> SuccessResult {
+    let result = SuccessRoll::new(3, Die::new(6), 0).roll().total() + skill_bonus;
+    SuccessResult(result > 10, result - 10)
 }

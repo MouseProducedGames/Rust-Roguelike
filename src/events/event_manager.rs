@@ -58,14 +58,15 @@ impl EventManager {
             let mut attack_events = self.attack_events.lock().unwrap();
             let mut damage_events = self.damage_events.lock().unwrap();
             while let Some(event) = attack_events.run_once(current_time, world) {
-                if roll_attack(
+                let result = roll_attack(
                     event.data().attack_modifier(),
                     event.data().defence_modifier(),
-                ) {
+                );
+                if result.0 {
                     let damage_data = DamageData::new(
                         event.data().attacker(),
                         event.data().defender(),
-                        DamageValue::from(5),
+                        DamageValue::from(result.1 as i32),
                         event.data().weapon_group(),
                     );
                     damage_events.push_event(current_time, damage_data);

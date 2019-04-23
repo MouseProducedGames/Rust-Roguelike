@@ -59,13 +59,13 @@ pub fn execute_tile_func(
         TileFunc::None => (),
         TileFunc::OnEnterTile(tile_func_op) => match tile_func_op {
             TileFuncOp::ChangeTileType(new_tile_type, new_tile_func_type) => {
-                if harmless == false && roll_success(skill_bonus) {
+                if harmless == false && *roll_success(skill_bonus) {
                     *map.tile_type_mut(map_pos) = new_tile_type;
                     *map.tile_func_type_mut(map_pos) = new_tile_func_type;
                 }
             }
             TileFuncOp::DiscoverTileType(new_tile_type, new_tile_func_type) => {
-                if visibility_type == VisibilityType::Visible && roll_success(skill_bonus) {
+                if visibility_type == VisibilityType::Visible && *roll_success(skill_bonus) {
                     *map.tile_type_mut(map_pos) = new_tile_type;
                     *map.tile_func_type_mut(map_pos) = new_tile_func_type;
                 }

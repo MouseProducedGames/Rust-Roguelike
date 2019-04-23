@@ -27,7 +27,7 @@ impl BattleAxeFactory {
                 Weapon::new(
                     WeaponGroup::Swords,
                     AttackValue::from(1),
-                    DamageValue::from(7),
+                    DamageValue::from(11),
                     DefenceValue::from(1),
                 ),
             ),

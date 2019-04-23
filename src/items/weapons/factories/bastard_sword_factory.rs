@@ -27,7 +27,7 @@ impl BastardSwordFactory {
                 Weapon::new(
                     WeaponGroup::Swords,
                     AttackValue::from(3),
-                    DamageValue::from(4),
+                    DamageValue::from(5),
                     DefenceValue::from(2),
                 ),
             ),

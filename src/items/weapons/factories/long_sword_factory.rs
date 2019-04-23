@@ -27,7 +27,7 @@ impl LongSwordFactory {
                 Weapon::new(
                     WeaponGroup::Swords,
                     AttackValue::from(2),
-                    DamageValue::from(5),
+                    DamageValue::from(7),
                     DefenceValue::from(2),
                 ),
             ),
