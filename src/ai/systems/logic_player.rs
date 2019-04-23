@@ -18,8 +18,9 @@ use std::sync::{Arc, Mutex};
 use crate::ai::{Command, PlayerMarker};
 use crate::game::GameState;
 use crate::io::Input;
+use crate::items::TransferItem;
 use crate::rrl_math::Displacement;
-use crate::screens::{BodyScreen, InventoryScreen};
+use crate::screens::{BodyScreen, InventoryScreen, PickupScreen};
 
 pub struct LogicPlayer {}
 
@@ -37,6 +38,7 @@ pub struct SystemDataT<'a> {
     player_marker: ReadStorage<'a, PlayerMarker>,
     commands: WriteStorage<'a, Command>,
     logic: WriteStorage<'a, LogicPlayer>,
+    transfer_items: WriteStorage<'a, TransferItem>,
 }
 
 impl<'a> System<'a> for LogicPlayerSystem {
@@ -48,11 +50,12 @@ impl<'a> System<'a> for LogicPlayerSystem {
         let input = data.input.lock().unwrap();
         let mut game_state = data.game_state;
 
-        for (_, entity, command, _) in (
+        for (_, entity, command, _, transfer_item) in (
             &mut data.logic,
             &data.entities,
             &mut data.commands,
             &data.player_marker,
+            &mut data.transfer_items,
         )
             .join()
         {
@@ -68,14 +71,27 @@ impl<'a> System<'a> for LogicPlayerSystem {
                 '8' => Command::Move(Displacement::new(0, -1)),
                 '9' => Command::Move(Displacement::new(1, -1)),
                 'b' => {
+                    *transfer_item = TransferItem::None;
+
                     let body_screen_ref = Arc::new(Mutex::new(BodyScreen::new(entity)));
                     game_state.lock_new_screens().push(body_screen_ref);
 
                     Command::Move(Displacement::new(0, 0))
                 }
                 'i' => {
+                    *transfer_item = TransferItem::None;
+
                     let inventory_screen_ref = Arc::new(Mutex::new(InventoryScreen::new(entity)));
                     game_state.lock_new_screens().push(inventory_screen_ref);
+
+                    Command::Move(Displacement::new(0, 0))
+                }
+                'p' => {
+                    *transfer_item = TransferItem::None;
+
+                    let pickup_screen_ref = Arc::new(Mutex::new(PickupScreen::new(entity)));
+                    game_state.lock_new_screens().push(pickup_screen_ref);
+
                     Command::Move(Displacement::new(0, 0))
                 }
                 _ => Command::Move(Displacement::new(0, 0)),

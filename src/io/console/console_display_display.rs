@@ -7,7 +7,7 @@ Documentation:
  **/
 // External includes.
 use crossterm_style::Color;
-use specs::ReadStorage;
+use specs::{Entity, ReadStorage};
 
 // Standard includes.
 
@@ -53,6 +53,29 @@ impl Display for ConsoleDisplay {
         self.put_string(1, 1, "Inventory:", Color::Grey, Color::Black);
 
         for (i, entity) in inventory.get().iter().enumerate() {
+            if let Some(item) = item_data.get(*entity) {
+                let formatted = format!(
+                    "{}) {}",
+                    if i < 26 {
+                        (b'a' + (i as u8)) as char
+                    } else {
+                        (b'A' + ((i - 26) as u8)) as char
+                    },
+                    item.name()
+                );
+                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+            }
+        }
+
+        self.present();
+    }
+
+    fn blit_items(&mut self, item_data: ReadStorage<Item>, items: &[Entity]) {
+        self.clear();
+
+        self.put_string(1, 1, "Items:", Color::Grey, Color::Black);
+
+        for (i, entity) in items.iter().enumerate() {
             if let Some(item) = item_data.get(*entity) {
                 let formatted = format!(
                     "{}) {}",

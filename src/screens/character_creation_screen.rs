@@ -134,7 +134,7 @@ impl Screen for CharacterCreationScreen {
 
             let hand = world
                 .create_entity()
-                .with(Item::new("Hand", 1))
+                .with(Item::new("Hand", 1, true))
                 .with(Weapon::new(
                     WeaponType::Unarmed,
                     AttackValue::from(0),
@@ -145,7 +145,7 @@ impl Screen for CharacterCreationScreen {
 
             let longsword = world
                 .create_entity()
-                .with(Item::new("Longsword", 1))
+                .with(Item::new("Longsword", 1, true))
                 .with(Weapon::new(
                     WeaponType::Swords,
                     AttackValue::from(2),
@@ -156,7 +156,7 @@ impl Screen for CharacterCreationScreen {
 
             let torch = world
                 .create_entity()
-                .with(Item::new("Torch", 0))
+                .with(Item::new("Torch", 0, true))
                 .with(LightSource::new(5.0))
                 .build();
 

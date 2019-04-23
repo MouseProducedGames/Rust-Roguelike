@@ -84,6 +84,11 @@ impl Screen for InventoryScreen {
         let mut inventory: Inventory = self.get_storage_item(world);
         let transfer_item: TransferItem = self.get_storage_item(world);
         if let TransferItem::ToInventory(item) = transfer_item {
+            world
+                .write_storage::<Item>()
+                .get_mut(item)
+                .unwrap()
+                .owned_mut(true);
             inventory.push(item);
 
             if let Some(transfer_item) =
@@ -105,7 +110,6 @@ impl Screen for InventoryScreen {
             self.selected_index = if (ch >= 'a') && (ch <= 'z') {
                 let index = (ch as usize) - ('a' as usize);
                 if index < inventory.get().len() {
-                    self.state = ScreenState::Stopped;
                     Some(index)
                 } else {
                     None
@@ -113,7 +117,6 @@ impl Screen for InventoryScreen {
             } else if (ch >= 'A') && (ch <= 'Z') {
                 let index = ((ch as usize) - ('A' as usize)) + 26;
                 if index < inventory.get().len() {
-                    self.state = ScreenState::Stopped;
                     Some(index)
                 } else {
                     None
@@ -126,8 +129,16 @@ impl Screen for InventoryScreen {
                 if let Some(transfer_item) =
                     world.write_storage::<TransferItem>().get_mut(self.creature)
                 {
-                    *transfer_item = TransferItem::FromInventory(inventory.remove(selected_index));
-                    self.state = ScreenState::Stopped;
+                    let item = inventory.remove(selected_index);
+                    world
+                        .write_storage::<Item>()
+                        .get_mut(item)
+                        .unwrap()
+                        .owned_mut(false);
+                    if TransferItem::Fetch == *transfer_item {
+                        *transfer_item = TransferItem::FromInventory(item);
+                        self.state = ScreenState::Stopped;
+                    }
                     return;
                 }
             }

@@ -6,7 +6,7 @@ Documentation:
 
 **/
 // External includes.
-use specs::ReadStorage;
+use specs::{Entity, ReadStorage};
 
 // Standard includes.
 use std::marker::{Send, Sync};
@@ -26,6 +26,8 @@ pub trait Display: Drop + Send + Sync {
     fn blit_body(&mut self, item_data: ReadStorage<Item>, body: &Body);
 
     fn blit_inventory(&mut self, item_data: ReadStorage<Item>, inventory: &Inventory);
+
+    fn blit_items(&mut self, item_data: ReadStorage<Item>, items: &[Entity]);
 
     fn choose_display_option(&mut self, options: &'static [DisplayOption]) -> DisplayOption;
 

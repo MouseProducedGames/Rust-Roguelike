@@ -16,13 +16,15 @@ use specs::{Component, VecStorage};
 pub struct Item {
     name: String,
     icon_id: u32,
+    owned: bool,
 }
 
 impl Item {
-    pub fn new(name: &str, icon_id: u32) -> Self {
+    pub fn new(name: &str, icon_id: u32, owned: bool) -> Self {
         Self {
             name: String::from(name),
             icon_id,
+            owned,
         }
     }
 
@@ -42,6 +44,17 @@ impl Item {
     pub fn icon_id_mut(&mut self, icon_id: u32) -> u32 {
         self.icon_id = icon_id;
         self.icon_id()
+    }
+
+    pub fn owned(&self) -> bool {
+        self.owned
+    }
+
+    /// False if not previously owned.
+    pub fn owned_mut(&mut self, owned: bool) -> bool {
+        let output = self.owned();
+        self.owned = owned;
+        output
     }
 }
 
