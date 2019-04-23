@@ -20,7 +20,7 @@ use crate::bodies::Body;
 use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState, Time};
-use crate::items::{Inventory, Item, LightSource, Weapon, WeaponEventHandler};
+use crate::items::{Inventory, Item, LightSource, TransferItem, Weapon, WeaponEventHandler};
 use crate::rrl_math::Position;
 use crate::skills::{SkillEventHandler, SkillLookup};
 use crate::stats::{CreatureStats, StatEventHandler};
@@ -97,6 +97,7 @@ impl Screen for WorldInitScreen {
         world.register::<Position>();
         world.register::<SkillLookup>();
         world.register::<TalentLookup>();
+        world.register::<TransferItem>();
         world.register::<ViewpointMarker>();
         world.register::<VisibilityMapLookup>();
         world.register::<Weapon>();

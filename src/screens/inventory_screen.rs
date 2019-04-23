@@ -6,7 +6,7 @@ Documentation:
 
 **/
 // External includes.
-use specs::World;
+use specs::{Component, Entity, World};
 
 // Standard includes.
 use std::sync::{Arc, Mutex};
@@ -15,25 +15,28 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::game::GameState;
 use crate::io::{Display, Input};
-use crate::items::{Inventory, Item};
+use crate::items::{Inventory, Item, TransferItem};
 
 pub struct InventoryScreen {
-    inventory: Inventory,
+    creature: Entity,
     state: ScreenState,
     selected_index: Option<usize>,
 }
 
 impl InventoryScreen {
-    pub fn new(inventory: Inventory) -> Self {
+    pub fn new(creature: Entity) -> Self {
         Self {
-            inventory,
+            creature,
             state: ScreenState::Started,
             selected_index: None,
         }
     }
 
-    pub fn selected_index(&self) -> Option<usize> {
-        self.selected_index
+    fn get_storage_item<T: Clone + Component>(&self, world: &mut World) -> T {
+        let mut items = world.write_storage::<T>();
+        let item_option = items.get_mut(self.creature);;
+
+        item_option.unwrap().clone()
     }
 }
 
@@ -65,11 +68,11 @@ impl Screen for InventoryScreen {
     }
 
     fn draw(&mut self, world: &mut World) {
-        {
-            let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
-            let mut display = mutex_display.lock().unwrap();
-            display.blit_inventory(world.read_storage::<Item>(), &self.inventory);
-        }
+        let inventory: Inventory = self.get_storage_item(world);
+
+        let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
+        let mut display = mutex_display.lock().unwrap();
+        display.blit_inventory(world.read_storage::<Item>(), &inventory);
     }
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
@@ -78,18 +81,30 @@ impl Screen for InventoryScreen {
             return;
         }
 
+        let mut inventory: Inventory = self.get_storage_item(world);
+        let transfer_item: TransferItem = self.get_storage_item(world);
+        if let TransferItem::ToInventory(item) = transfer_item {
+            inventory.push(item);
+
+            if let Some(transfer_item) =
+                world.write_storage::<TransferItem>().get_mut(self.creature)
+            {
+                *transfer_item = TransferItem::None;
+            }
+        }
+
         {
-            let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>();
+            let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>().clone();
             let mut input = arc_mutex_input.lock().unwrap();
             let ch = input.instance_mut().consume_char();
             if ch == 13 as char {
                 self.state = ScreenState::Stopped;
                 return;
-            }
+            };
 
             self.selected_index = if (ch >= 'a') && (ch <= 'z') {
                 let index = (ch as usize) - ('a' as usize);
-                if index < self.inventory.get().len() {
+                if index < inventory.get().len() {
                     self.state = ScreenState::Stopped;
                     Some(index)
                 } else {
@@ -97,7 +112,7 @@ impl Screen for InventoryScreen {
                 }
             } else if (ch >= 'A') && (ch <= 'Z') {
                 let index = ((ch as usize) - ('A' as usize)) + 26;
-                if index < self.inventory.get().len() {
+                if index < inventory.get().len() {
                     self.state = ScreenState::Stopped;
                     Some(index)
                 } else {
@@ -106,6 +121,16 @@ impl Screen for InventoryScreen {
             } else {
                 None
             };
+
+            if let Some(selected_index) = self.selected_index {
+                if let Some(transfer_item) =
+                    world.write_storage::<TransferItem>().get_mut(self.creature)
+                {
+                    *transfer_item = TransferItem::FromInventory(inventory.remove(selected_index));
+                    self.state = ScreenState::Stopped;
+                    return;
+                }
+            }
         }
     }
 

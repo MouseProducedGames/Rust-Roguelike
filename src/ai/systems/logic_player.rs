@@ -16,10 +16,8 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use crate::ai::{Command, PlayerMarker};
-use crate::bodies::Body;
 use crate::game::GameState;
 use crate::io::Input;
-use crate::items::Inventory;
 use crate::rrl_math::Displacement;
 use crate::screens::{BodyScreen, InventoryScreen};
 
@@ -37,13 +35,7 @@ pub struct SystemDataT<'a> {
     game_state: WriteExpect<'a, GameState>,
     entities: Entities<'a>,
     player_marker: ReadStorage<'a, PlayerMarker>,
-    // Technically could be ReadStorage, but stored as WriteStorage for
-    // clarity.
-    bodies: WriteStorage<'a, Body>,
     commands: WriteStorage<'a, Command>,
-    // Technically could be ReadStorage, but stored as WriteStorage for
-    // clarity.
-    inventory: WriteStorage<'a, Inventory>,
     logic: WriteStorage<'a, LogicPlayer>,
 }
 
@@ -53,10 +45,8 @@ impl<'a> System<'a> for LogicPlayerSystem {
     fn run(&mut self, mut data: SystemDataT) {
         use specs::Join;
 
-        let bodies = data.bodies;
         let input = data.input.lock().unwrap();
         let mut game_state = data.game_state;
-        let inventory = data.inventory;
 
         for (_, entity, command, _) in (
             &mut data.logic,
@@ -78,30 +68,15 @@ impl<'a> System<'a> for LogicPlayerSystem {
                 '8' => Command::Move(Displacement::new(0, -1)),
                 '9' => Command::Move(Displacement::new(1, -1)),
                 'b' => {
-                    if let Some(body) = bodies.get(entity) {
-                        if let Some(inventory) = inventory.get(entity) {
-                            let body_screen_ref = Arc::new(Mutex::new(BodyScreen::new(
-                                body.clone(),
-                                inventory.clone(),
-                            )));
-                            game_state.lock_new_screens().push(body_screen_ref);
-                            Command::Move(Displacement::new(0, 0))
-                        } else {
-                            panic!("Where's our inventory?!");
-                        }
-                    } else {
-                        panic!("Where's our body?!");
-                    }
+                    let body_screen_ref = Arc::new(Mutex::new(BodyScreen::new(entity)));
+                    game_state.lock_new_screens().push(body_screen_ref);
+
+                    Command::Move(Displacement::new(0, 0))
                 }
                 'i' => {
-                    if let Some(inventory) = inventory.get(entity) {
-                        let inventory_screen_ref =
-                            Arc::new(Mutex::new(InventoryScreen::new(inventory.clone())));
-                        game_state.lock_new_screens().push(inventory_screen_ref);
-                        Command::Move(Displacement::new(0, 0))
-                    } else {
-                        panic!("Where's our inventory?!");
-                    }
+                    let inventory_screen_ref = Arc::new(Mutex::new(InventoryScreen::new(entity)));
+                    game_state.lock_new_screens().push(inventory_screen_ref);
+                    Command::Move(Displacement::new(0, 0))
                 }
                 _ => Command::Move(Displacement::new(0, 0)),
             }

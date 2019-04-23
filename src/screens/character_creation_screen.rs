@@ -22,7 +22,7 @@ use crate::bodies::{Body, BodySlot};
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
 use crate::io::Display;
-use crate::items::{Inventory, Item, LightSource, Weapon, WeaponType};
+use crate::items::{Inventory, Item, LightSource, TransferItem, Weapon, WeaponType};
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
@@ -184,6 +184,7 @@ impl Screen for CharacterCreationScreen {
                 .with(PlayerMarker)
                 .with(skills)
                 .with(talents)
+                .with(TransferItem::None)
                 .with(ViewpointMarker)
                 .with(VisibilityMapLookup::new())
                 .build();

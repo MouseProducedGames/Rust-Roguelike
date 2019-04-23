@@ -6,7 +6,7 @@ Documentation:
 
 **/
 // External includes.
-use specs::World;
+use specs::{Component, Entity, World};
 
 // Standard includes.
 use std::sync::{Arc, Mutex};
@@ -16,32 +16,40 @@ use super::{InventoryScreen, Screen, ScreenPushWrapper, ScreenState};
 use crate::bodies::Body;
 use crate::game::GameState;
 use crate::io::{Display, Input};
-use crate::items::{Inventory, Item};
-
-enum BodyScreenState {
-    Viewing,
-    SelectingItemFromInventory,
-}
+use crate::items::{Inventory, Item, TransferItem};
 
 pub struct BodyScreen {
-    body: Body,
     body_index: Option<usize>,
-    body_screen_state: BodyScreenState,
-    inventory: Inventory,
-    inventory_screen: Arc<Mutex<InventoryScreen>>,
+    creature: Entity,
     state: ScreenState,
 }
 
 impl BodyScreen {
-    pub fn new(body: Body, inventory: Inventory) -> Self {
+    pub fn new(creature: Entity) -> Self {
         Self {
-            body,
             body_index: None,
-            body_screen_state: BodyScreenState::Viewing,
-            inventory: inventory.clone(),
-            inventory_screen: Arc::new(Mutex::new(InventoryScreen::new(inventory))),
+            creature,
             state: ScreenState::Started,
         }
+    }
+
+    fn get_selected_key(&self, body: &Body, body_index: usize) -> Option<String> {
+        let mut selected_key: Option<String> = None;
+        for (i, name) in body.get().keys().enumerate() {
+            if i == body_index {
+                selected_key = Some(name.clone());
+                break;
+            }
+        }
+
+        selected_key
+    }
+
+    fn get_storage_item<T: Clone + Component>(&self, world: &mut World) -> T {
+        let mut items = world.write_storage::<T>();
+        let item_option = items.get_mut(self.creature);;
+
+        item_option.unwrap().clone()
     }
 }
 
@@ -73,11 +81,11 @@ impl Screen for BodyScreen {
     }
 
     fn draw(&mut self, world: &mut World) {
-        {
-            let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
-            let mut display = mutex_display.lock().unwrap();
-            display.blit_body(world.read_storage::<Item>(), &self.body);
-        }
+        let body: Body = self.get_storage_item(world);
+
+        let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
+        let mut display = mutex_display.lock().unwrap();
+        display.blit_body(world.read_storage::<Item>(), &body);
     }
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {
@@ -86,93 +94,60 @@ impl Screen for BodyScreen {
             return;
         }
 
-        match self.body_screen_state {
-            BodyScreenState::Viewing => {
-                let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>();
-                let mut input = arc_mutex_input.lock().unwrap();
-                let ch = input.instance_mut().consume_char();
-                if ch == 13 as char {
-                    self.state = ScreenState::Stopped;
-                    return;
-                };
+        let body: Body = self.get_storage_item(world);
 
-                self.body_index = if (ch >= 'a') && (ch <= 'z') {
-                    Some((ch as usize) - ('a' as usize))
-                } else if (ch >= 'A') && (ch <= 'Z') {
-                    Some(((ch as usize) - ('A' as usize)) + 26)
-                } else {
-                    None
-                };
+        let transfer_item: TransferItem = self.get_storage_item(world);
 
-                if let Some(body_index) = self.body_index {
-                    let mut selected_key: Option<String> = None;
-                    for (i, name) in self.body.get().keys().enumerate() {
-                        if i == body_index {
-                            selected_key = Some(name.clone());
-                            break;
+        let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>().clone();
+        let mut input = arc_mutex_input.lock().unwrap();
+        let ch = input.instance_mut().consume_char();
+        if ch == 13 as char {
+            self.state = ScreenState::Stopped;
+            return;
+        };
+
+        self.body_index = if (ch >= 'a') && (ch <= 'z') {
+            Some((ch as usize) - ('a' as usize))
+        } else if (ch >= 'A') && (ch <= 'Z') {
+            Some(((ch as usize) - ('A' as usize)) + 26)
+        } else {
+            self.body_index
+        };
+
+        if let Some(body_index) = self.body_index {
+            if let Some(selected_key) = self.get_selected_key(&body, body_index) {
+                if let Some(body_slot) = body.get().get_mut(&selected_key) {
+                    match transfer_item {
+                        TransferItem::FromInventory(item) => {
+                            if let Some(item) = body_slot.hold_item(item) {
+                                self.get_storage_item::<Inventory>(world).push(item);
+                            }
+
+                            self.body_index = None;
+                            if let Some(transfer_item) =
+                                world.write_storage::<TransferItem>().get_mut(self.creature)
+                            {
+                                *transfer_item = TransferItem::None;
+                            }
                         }
-                    }
-
-                    if let Some(selected_key) = selected_key {
-                        if let Some(body_slot) = self.body.get().get_mut(&selected_key) {
+                        TransferItem::None => {
                             if let Some(item) = body_slot.drop_item() {
+                                self.get_storage_item::<Inventory>(world).push(item);
                                 self.body_index = None;
-                                self.inventory.push(item);
                             } else {
-                                self.inventory_screen = Arc::new(Mutex::new(InventoryScreen::new(
-                                    self.inventory.clone(),
-                                )));
-                                screen_push_wrapper.push(self.inventory_screen.clone());
+                                let inventory_screen =
+                                    Arc::new(Mutex::new(InventoryScreen::new(self.creature)));
+                                screen_push_wrapper.push(inventory_screen);
 
-                                self.body_screen_state =
-                                    BodyScreenState::SelectingItemFromInventory;
-                            }
-                        } else {
-                            panic!("Named body slot disappeared while we were using it!");
-                        }
-                    }
-                }
-            }
-            BodyScreenState::SelectingItemFromInventory => {
-                let inventory_screen = self.inventory_screen.clone();
-                let inventory_screen = inventory_screen.lock().unwrap();
-                if (inventory_screen.state() == ScreenState::Stopped)
-                    || (inventory_screen.state() == ScreenState::Inactive)
-                {
-                    if let Some(selected_index) = inventory_screen.selected_index() {
-                        if let Some(body_index) = self.body_index {
-                            if selected_index < self.inventory.get().len() {
-                                let item = self.inventory.get().remove(selected_index);
-
-                                let mut selected_key: Option<String> = None;
-                                for (i, name) in self.body.get().keys().enumerate() {
-                                    if i == body_index {
-                                        selected_key = Some(name.clone());
-                                        break;
-                                    }
-                                }
-
-                                if let Some(selected_key) = selected_key {
-                                    if let Some(body_slot) = self.body.get().get_mut(&selected_key)
-                                    {
-                                        if let Some(item) = body_slot.hold_item(item) {
-                                            self.inventory.push(item)
-                                        }
-                                    } else {
-                                        panic!(
-                                            "Named body slot disappeared while we were using it!"
-                                        );
-                                    }
+                                if let Some(transfer_item) =
+                                    world.write_storage::<TransferItem>().get_mut(self.creature)
+                                {
+                                    *transfer_item = TransferItem::Fetch;
                                 }
                             }
                         }
+                        _ => (),
                     }
-
-                    self.inventory_screen =
-                        Arc::new(Mutex::new(InventoryScreen::new(self.inventory.clone())));
-
-                    self.body_screen_state = BodyScreenState::Viewing;
-                    self.body_index = None;
                 }
             }
         }

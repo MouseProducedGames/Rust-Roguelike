@@ -13,12 +13,14 @@ Documentation:
 mod inventory;
 mod item;
 mod light_source;
+mod transfer_item;
 mod weapon;
 mod weapon_event_handler;
 mod weapon_type;
 pub use inventory::{Inventory, InventorySystem};
 pub use item::Item;
 pub use light_source::{LightSource, LightSourceSystem};
+pub use transfer_item::TransferItem;
 pub use weapon::Weapon;
 pub use weapon_event_handler::WeaponEventHandler;
 pub use weapon_type::WeaponType;
