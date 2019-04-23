@@ -12,29 +12,15 @@ use specs::{Component, VecStorage};
 
 // Internal includes.
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Item {
-    name: String,
     icon_id: u32,
     owned: bool,
 }
 
 impl Item {
-    pub fn new(name: &str, icon_id: u32, owned: bool) -> Self {
-        Self {
-            name: String::from(name),
-            icon_id,
-            owned,
-        }
-    }
-
-    pub fn name(&self) -> &String {
-        &self.name
-    }
-
-    pub fn name_mut(&mut self, name: String) -> &String {
-        self.name = name;
-        self.name()
+    pub fn new(icon_id: u32, owned: bool) -> Self {
+        Self { icon_id, owned }
     }
 
     pub fn icon_id(&self) -> u32 {

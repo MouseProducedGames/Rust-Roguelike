@@ -17,6 +17,7 @@ use crate::ai::maslow::MaslowTree;
 use crate::ai::systems::{LogicMaslow, LogicPlayer};
 use crate::ai::{Command, PlayerMarker, ViewpointMarker};
 use crate::bodies::Body;
+use crate::data_types::Name;
 use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState, Time};
@@ -93,6 +94,7 @@ impl Screen for WorldInitScreen {
         world.register::<LogicMaslow>();
         world.register::<LogicPlayer>();
         world.register::<MaslowTree>();
+        world.register::<Name>();
         world.register::<PlayerMarker>();
         world.register::<Position>();
         world.register::<SkillLookup>();

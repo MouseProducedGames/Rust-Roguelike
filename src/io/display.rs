@@ -16,6 +16,7 @@ use std::sync::MutexGuard;
 use super::{DisplayOption, Input, InputData};
 use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
+use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::items::{Inventory, Item};
 use crate::rrl_math::Position;
@@ -23,11 +24,11 @@ use crate::stats::CreatureStats;
 use crate::world::{Tilemap, VisibilityMap};
 
 pub trait Display: Drop + Send + Sync {
-    fn blit_body(&mut self, item_data: ReadStorage<Item>, body: &Body);
+    fn blit_body(&mut self, names: ReadStorage<Name>, body: &Body);
 
-    fn blit_inventory(&mut self, item_data: ReadStorage<Item>, inventory: &Inventory);
+    fn blit_inventory(&mut self, names: ReadStorage<Name>, inventory: &Inventory);
 
-    fn blit_items(&mut self, item_data: ReadStorage<Item>, items: &[Entity]);
+    fn blit_items(&mut self, names: ReadStorage<Name>, items: &[Entity]);
 
     fn choose_display_option(&mut self, options: &'static [DisplayOption]) -> DisplayOption;
 

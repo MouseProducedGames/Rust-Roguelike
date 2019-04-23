@@ -19,6 +19,7 @@ use crate::ai::systems::LogicPlayer;
 use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
 use crate::bodies::{Body, BodySlot};
+use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
 use crate::io::Display;
@@ -134,7 +135,8 @@ impl Screen for CharacterCreationScreen {
 
             let hand = world
                 .create_entity()
-                .with(Item::new("Hand", 1, true))
+                .with(Item::new(1, true))
+                .with(Name::new("Hand"))
                 .with(Weapon::new(
                     WeaponType::Unarmed,
                     AttackValue::from(0),
@@ -145,7 +147,8 @@ impl Screen for CharacterCreationScreen {
 
             let longsword = world
                 .create_entity()
-                .with(Item::new("Longsword", 1, true))
+                .with(Item::new(1, true))
+                .with(Name::new("Longsword"))
                 .with(Weapon::new(
                     WeaponType::Swords,
                     AttackValue::from(2),
@@ -156,7 +159,8 @@ impl Screen for CharacterCreationScreen {
 
             let torch = world
                 .create_entity()
-                .with(Item::new("Torch", 0, true))
+                .with(Item::new(0, true))
+                .with(Name::new("Torch"))
                 .with(LightSource::new(5.0))
                 .build();
 

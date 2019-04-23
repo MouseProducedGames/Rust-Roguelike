@@ -11,6 +11,8 @@ Documentation:
 
 // Internal include.
 mod immut;
+mod name;
 mod range;
 pub use immut::Immut;
+pub use name::Name;
 pub use range::Range;
