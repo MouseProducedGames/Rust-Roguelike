@@ -15,17 +15,12 @@ mod item;
 mod item_display_system;
 mod light_source;
 mod transfer_item;
-mod weapon;
-mod weapon_event_handler;
-mod weapon_type;
+pub mod weapons;
 pub use inventory::{Inventory, InventorySystem};
 pub use item::Item;
 pub use item_display_system::ItemDisplaySystem;
 pub use light_source::{LightSource, LightSourceSystem};
 pub use transfer_item::TransferItem;
-pub use weapon::Weapon;
-pub use weapon_event_handler::WeaponEventHandler;
-pub use weapon_type::WeaponType;
 
 pub static ITEM_ICON_INDEX_TORCH: usize = 0;
 pub static ITEM_ICON_INDEX_WEAPON: usize = 1;

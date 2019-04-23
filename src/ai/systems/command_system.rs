@@ -17,7 +17,7 @@ use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::combat::{AttackData, AttackValue, DefenceValue};
 use crate::game::{EntityPositionTracker, Time};
-use crate::items::WeaponType;
+use crate::items::weapons::WeaponType;
 use crate::rrl_math::Position;
 use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 

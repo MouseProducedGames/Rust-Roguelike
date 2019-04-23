@@ -12,7 +12,7 @@ use specs::Entity;
 
 // Internal includes.
 use super::DamageValue;
-use crate::items::WeaponType;
+use crate::items::weapons::WeaponType;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct DamageData {

@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 // Internal includes.
 use crate::events::{Event, EventManager};
 use crate::game::combat::AttackData;
-use crate::items::WeaponType;
+use crate::items::weapons::WeaponType;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 
 pub struct SkillEventHandler;
