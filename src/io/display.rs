@@ -47,5 +47,7 @@ pub trait Display: Drop + Send + Sync {
 
     fn write_creature(&mut self, faction: Faction, creature_pos: Position, view_pos: Position);
 
+    fn write_item(&mut self, item: Item, item_pos: Position, view_pos: Position);
+
     fn write_map(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap);
 }

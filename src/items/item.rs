@@ -12,6 +12,7 @@ use specs::{Component, VecStorage};
 
 // Internal includes.
 
+#[derive(Clone, Eq, PartialEq)]
 pub struct Item {
     name: String,
     icon_id: u32,

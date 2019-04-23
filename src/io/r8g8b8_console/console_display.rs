@@ -28,6 +28,7 @@ pub struct ConsoleDisplay {
     buffers: [Multidim<ConsoleChar>; 2],
     back_buffer_index: usize,
     // map_graphics: [ConsoleChar; 8],
+    item_graphics: Vec<ConsoleChar>,
     map_graphics: Vec<ConsoleChar>,
     // Ensure we get an unchanged value.
     window_resized: Immut<bool>,
@@ -73,6 +74,28 @@ impl ConsoleDisplay {
             term_window,
             buffers: [Multidim::new(40, 80), Multidim::new(40, 80)],
             back_buffer_index: 0,
+            item_graphics: vec![
+                // Torch.
+                ConsoleChar::new(
+                    '/',
+                    Color::Rgb {
+                        r: 193,
+                        g: 69,
+                        b: 47,
+                    },
+                    Color::Rgb { r: 0, g: 0, b: 0 },
+                ),
+                // Weapon.
+                ConsoleChar::new(
+                    '/',
+                    Color::Rgb {
+                        r: 192,
+                        g: 195,
+                        b: 198,
+                    },
+                    Color::Rgb { r: 0, g: 0, b: 0 },
+                ),
+            ],
             map_graphics: vec![
                 // Void.
                 ConsoleChar::new(
@@ -284,6 +307,10 @@ impl ConsoleDisplay {
             &self.map_graphics,
             &mut self.buffers[self.back_buffer_index],
         )
+    }
+
+    pub(crate) fn get_item_graphics(&self, index: u32) -> ConsoleChar {
+        self.item_graphics[index as usize]
     }
 
     pub(crate) fn move_cursor(&self, x: i32, y: i32) {

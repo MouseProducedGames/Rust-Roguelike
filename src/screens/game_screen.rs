@@ -20,7 +20,7 @@ use crate::creatures::{CreatureDisplaySystem, PlayerDisplaySystem};
 use crate::events::EventManager;
 use crate::game::{GameState, LastUpdateSystem, Time};
 use crate::io::{Display, Input};
-use crate::items::{InventorySystem, LightSourceSystem};
+use crate::items::{InventorySystem, ItemDisplaySystem, LightSourceSystem};
 use crate::world::{Lightmap, VisibilitySystem};
 
 pub struct GameScreen {
@@ -29,6 +29,7 @@ pub struct GameScreen {
     command_system: CommandSystem,
     creature_display_system: CreatureDisplaySystem,
     inventory_system: InventorySystem,
+    item_display_system: ItemDisplaySystem,
     last_update_system: LastUpdateSystem,
     light_source_system: LightSourceSystem,
     logic_maslow_systems: LogicMaslowSystem,
@@ -47,6 +48,7 @@ impl GameScreen {
             command_system: CommandSystem,
             creature_display_system: CreatureDisplaySystem,
             inventory_system: InventorySystem,
+            item_display_system: ItemDisplaySystem,
             last_update_system: LastUpdateSystem,
             light_source_system: LightSourceSystem,
             logic_maslow_systems: LogicMaslowSystem,
@@ -88,6 +90,8 @@ impl Screen for GameScreen {
 
     fn draw(&mut self, world: &mut World) {
         self.player_display_system.run_now(&world.res);
+
+        self.item_display_system.run_now(&world.res);
 
         self.creature_display_system.run_now(&world.res);
 

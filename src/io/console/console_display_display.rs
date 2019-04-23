@@ -113,6 +113,16 @@ impl Display for ConsoleDisplay {
         self.put_console_char(display_pos_x, display_pos_y, ch);
     }
 
+    fn write_item(&mut self, item: Item, item_pos: Position, view_pos: Position) {
+        let disp = item_pos - view_pos;
+        if (disp.x < -17) || (disp.x > 17) || (disp.y < -17) || (disp.y > 17) {
+            return;
+        }
+        let (display_pos_x, display_pos_y) = (18 + disp.x, 18 + disp.y);
+        let ch = self.get_item_graphics(item.icon_id());
+        self.put_console_char(display_pos_x, display_pos_y, ch);
+    }
+
     fn write_map(&mut self, view_pos: Position, map: &Tilemap, vis: &VisibilityMap) {
         let (map_graphics, back_buffer) = self.get_draw_info();
         for view_addend_y in -17..18_i32 {
