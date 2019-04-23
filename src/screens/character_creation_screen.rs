@@ -23,6 +23,10 @@ use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
 use crate::io::Display;
+use crate::items::weapons::factories::{
+    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, HandFactory, LongSwordFactory,
+    WeaponFactory,
+};
 use crate::items::weapons::{Weapon, WeaponGroup};
 use crate::items::{Inventory, Item, LightSource, TransferItem};
 use crate::rrl_math::Position;
@@ -134,29 +138,15 @@ impl Screen for CharacterCreationScreen {
 
             let species = Species::create(species_type);
 
-            let hand = world
-                .create_entity()
-                .with(Item::new(1, true))
-                .with(Name::new("Hand"))
-                .with(Weapon::new(
-                    WeaponGroup::Unarmed,
-                    AttackValue::from(0),
-                    DamageValue::from(0),
-                    DefenceValue::from(0),
-                ))
-                .build();
+            let hand_factory = HandFactory::new();
 
-            let longsword = world
-                .create_entity()
-                .with(Item::new(1, true))
-                .with(Name::new("Longsword"))
-                .with(Weapon::new(
-                    WeaponGroup::Swords,
-                    AttackValue::from(2),
-                    DamageValue::from(5),
-                    DefenceValue::from(2),
-                ))
-                .build();
+            let arming_sword_factory = ArmingSwordFactory::new();
+
+            let bastard_sword_factory = BastardSwordFactory::new();
+
+            let battle_axe_factory = BattleAxeFactory::new();
+
+            let long_sword_factory = LongSwordFactory::new();
 
             let torch = world
                 .create_entity()
@@ -166,11 +156,15 @@ impl Screen for CharacterCreationScreen {
                 .build();
 
             let mut inventory = Inventory::new();
+            inventory.push(arming_sword_factory.create_owned(world));
+            inventory.push(bastard_sword_factory.create_owned(world));
+            inventory.push(battle_axe_factory.create_owned(world));
+            inventory.push(long_sword_factory.create_owned(world));
             let inventory = inventory;
 
             let body = Body::new(&[
-                BodySlot::with_held_item("Left Hand", hand, torch),
-                BodySlot::with_held_item("Right Hand", hand, longsword),
+                BodySlot::with_held_item("Left Hand", hand_factory.create_owned(world), torch),
+                BodySlot::new("Right Hand", hand_factory.create_owned(world)),
             ]);
 
             world

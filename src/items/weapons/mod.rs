@@ -10,6 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+pub mod factories;
 mod weapon;
 mod weapon_event_handler;
 mod weapon_group;
