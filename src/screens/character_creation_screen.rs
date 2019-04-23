@@ -21,14 +21,14 @@ use crate::background::{OriginType, Species, SpeciesType};
 use crate::bodies::{Body, BodySlot};
 use crate::data_types::Name;
 use crate::factions::Faction;
-use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
+use crate::game::combat::{AttackValue, DefenceValue};
 use crate::io::Display;
 use crate::items::weapons::factories::{
     ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, HandFactory, LongSwordFactory,
     WeaponFactory,
 };
-use crate::items::weapons::{Weapon, WeaponGroup};
-use crate::items::{Inventory, Item, LightSource, TransferItem};
+use crate::items::weapons::WeaponGroup;
+use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_TORCH};
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
@@ -150,7 +150,7 @@ impl Screen for CharacterCreationScreen {
 
             let torch = world
                 .create_entity()
-                .with(Item::new(0, true))
+                .with(Item::new(ITEM_ICON_INDEX_TORCH, true))
                 .with(Name::new("Torch"))
                 .with(LightSource::new(5.0))
                 .build();

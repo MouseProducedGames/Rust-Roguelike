@@ -23,16 +23,11 @@ impl Item {
         Self { icon_id, owned }
     }
 
-    pub fn icon_id(&self) -> u32 {
+    pub fn icon_id(self) -> u32 {
         self.icon_id
     }
 
-    pub fn icon_id_mut(&mut self, icon_id: u32) -> u32 {
-        self.icon_id = icon_id;
-        self.icon_id()
-    }
-
-    pub fn owned(&self) -> bool {
+    pub fn owned(self) -> bool {
         self.owned
     }
 

@@ -10,7 +10,6 @@ use linked_hash_map::LinkedHashMap;
 use specs::{Component, Entities, System, VecStorage, WriteStorage};
 
 // Standard includes.
-use std::collections::HashMap;
 use std::sync::{Arc, Mutex, MutexGuard};
 
 // internal includes.

@@ -48,8 +48,4 @@ impl<'a> Arg<'a> {
     pub fn consume_char(&mut self) -> char {
         self.value.consume_char()
     }
-
-    pub fn get_char(&self) -> char {
-        self.value.get_char()
-    }
 }
