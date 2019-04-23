@@ -40,7 +40,7 @@ impl WeaponEventHandler {
                 let item = body_slot.item();
                 if let Some(weapon) = weapons.get(item) {
                     *event_data.attack_modifier_mut() += weapon.attack_value();
-                    *event_data.weapon_type_mut() = weapon.weapon_type();
+                    *event_data.weapon_group_mut() = weapon.weapon_group();
                     break;
                 }
             }
@@ -67,9 +67,9 @@ impl WeaponEventHandler {
             for body_slot in body.get().values() {
                 let item = body_slot.item();
                 if let Some(weapon) = weapons.get(item) {
-                    if weapon.weapon_type() == event_data.weapon_type() {
+                    if weapon.weapon_group() == event_data.weapon_group() {
                         *event_data.damage_mut() += weapon.damage_value();
-                        *event_data.weapon_type_mut() = weapon.weapon_type();
+                        *event_data.weapon_group_mut() = weapon.weapon_group();
                         break;
                     }
                 }

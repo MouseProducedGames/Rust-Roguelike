@@ -66,7 +66,7 @@ impl EventManager {
                         event.data().attacker(),
                         event.data().defender(),
                         DamageValue::from(5),
-                        event.data().weapon_type(),
+                        event.data().weapon_group(),
                     );
                     damage_events.push_event(current_time, damage_data);
                 }
@@ -82,7 +82,7 @@ impl EventManager {
                         event.data().attacker(),
                         event.data().defender(),
                         InjuryValue::from(event.data().damage()),
-                        event.data().weapon_type(),
+                        event.data().weapon_group(),
                     );
                     injury_events.push_event(current_time, injury_data);
                 }

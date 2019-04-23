@@ -12,7 +12,7 @@ Documentation:
 // Internal includes.
 mod weapon;
 mod weapon_event_handler;
-mod weapon_type;
+mod weapon_group;
 pub use weapon::Weapon;
 pub use weapon_event_handler::WeaponEventHandler;
-pub use weapon_type::WeaponType;
+pub use weapon_group::WeaponGroup;

@@ -12,7 +12,7 @@ use specs::Entity;
 
 // Internal includes.
 use super::{AttackValue, DefenceValue};
-use crate::items::weapons::WeaponType;
+use crate::items::weapons::WeaponGroup;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct AttackData {
@@ -20,7 +20,7 @@ pub struct AttackData {
     defender: Entity,
     attack_modifier: AttackValue,
     defence_modifier: DefenceValue,
-    weapon_type: WeaponType,
+    weapon_group: WeaponGroup,
 }
 
 impl AttackData {
@@ -29,14 +29,14 @@ impl AttackData {
         defender: Entity,
         attack_modifier: AttackValue,
         defence_modifier: DefenceValue,
-        weapon_type: WeaponType,
+        weapon_group: WeaponGroup,
     ) -> Self {
         Self {
             attacker,
             defender,
             attack_modifier,
             defence_modifier,
-            weapon_type,
+            weapon_group,
         }
     }
 
@@ -64,11 +64,11 @@ impl AttackData {
         &mut self.defence_modifier
     }
 
-    pub fn weapon_type(&self) -> WeaponType {
-        self.weapon_type
+    pub fn weapon_group(&self) -> WeaponGroup {
+        self.weapon_group
     }
 
-    pub fn weapon_type_mut(&mut self) -> &mut WeaponType {
-        &mut self.weapon_type
+    pub fn weapon_group_mut(&mut self) -> &mut WeaponGroup {
+        &mut self.weapon_group
     }
 }

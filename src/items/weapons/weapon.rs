@@ -11,12 +11,12 @@ use specs::{Component, VecStorage};
 // Standard includes.
 
 // Internal includes.
-use super::WeaponType;
+use super::WeaponGroup;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
 
 #[derive(Clone, Copy)]
 pub struct Weapon {
-    weapon_type: WeaponType,
+    weapon_type: WeaponGroup,
     attack_value: AttackValue,
     damage_value: DamageValue,
     defence_value: DefenceValue,
@@ -24,7 +24,7 @@ pub struct Weapon {
 
 impl Weapon {
     pub fn new(
-        weapon_type: WeaponType,
+        weapon_type: WeaponGroup,
         attack_value: AttackValue,
         damage_value: DamageValue,
         defence_value: DefenceValue,
@@ -37,7 +37,7 @@ impl Weapon {
         }
     }
 
-    pub fn weapon_type(&self) -> WeaponType {
+    pub fn weapon_group(&self) -> WeaponGroup {
         self.weapon_type
     }
 

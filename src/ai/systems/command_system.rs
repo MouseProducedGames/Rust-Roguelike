@@ -17,7 +17,7 @@ use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::combat::{AttackData, AttackValue, DefenceValue};
 use crate::game::{EntityPositionTracker, Time};
-use crate::items::weapons::WeaponType;
+use crate::items::weapons::WeaponGroup;
 use crate::rrl_math::Position;
 use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 
@@ -114,7 +114,7 @@ fn impassable_movement<'a>(
                     other_entity,
                     AttackValue::from(0),
                     DefenceValue::from(0),
-                    WeaponType::Unarmed,
+                    WeaponGroup::Unarmed,
                 ),
             );
         }

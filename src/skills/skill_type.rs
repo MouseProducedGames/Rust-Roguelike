@@ -11,7 +11,7 @@ Documentation:
 
 // Internal includes.
 use crate::game::combat::{AttackValue, DefenceValue};
-use crate::items::weapons::WeaponType;
+use crate::items::weapons::WeaponGroup;
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillActivation {
@@ -38,7 +38,7 @@ pub enum SkillTag {
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillType {
-    Weapon(WeaponType, AttackValue, DefenceValue),
+    Weapon(WeaponGroup, AttackValue, DefenceValue),
     Skill(i32),
 }
 

@@ -21,7 +21,7 @@ use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
-use crate::items::weapons::WeaponType;
+use crate::items::weapons::WeaponGroup;
 use crate::items::Inventory;
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
@@ -68,7 +68,7 @@ impl StartScreen {
         skills.insert(
             SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
             SkillType::Weapon(
-                WeaponType::Unarmed,
+                WeaponGroup::Unarmed,
                 AttackValue::from(2),
                 DefenceValue::from(2),
             ),

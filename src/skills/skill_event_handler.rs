@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 // Internal includes.
 use crate::events::{Event, EventManager};
 use crate::game::combat::AttackData;
-use crate::items::weapons::WeaponType;
+use crate::items::weapons::WeaponGroup;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 
 pub struct SkillEventHandler;
@@ -34,8 +34,8 @@ impl SkillEventHandler {
             SkillPassiveOp::OnUse,
         ));
         for combat_skill in passive_combat_skills.iter() {
-            if let SkillType::Weapon(weapon_type, attack_value, _) = *combat_skill {
-                if weapon_type == event_data.weapon_type() {
+            if let SkillType::Weapon(weapon_group, attack_value, _) = *combat_skill {
+                if weapon_group == event_data.weapon_group() {
                     *event_data.attack_modifier_mut() += attack_value
                 }
             }
@@ -48,8 +48,8 @@ impl SkillEventHandler {
             SkillPassiveOp::OnUse,
         ));
         for combat_skill in passive_combat_skills.iter() {
-            if let SkillType::Weapon(weapon_type, _, defence_value) = *combat_skill {
-                if weapon_type == WeaponType::Unarmed {
+            if let SkillType::Weapon(weapon_group, _, defence_value) = *combat_skill {
+                if weapon_group == WeaponGroup::Unarmed {
                     *event_data.defence_modifier_mut() += defence_value
                 }
             }

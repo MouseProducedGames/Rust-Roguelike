@@ -23,7 +23,7 @@ use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
 use crate::io::Display;
-use crate::items::weapons::{Weapon, WeaponType};
+use crate::items::weapons::{Weapon, WeaponGroup};
 use crate::items::{Inventory, Item, LightSource, TransferItem};
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
@@ -110,7 +110,7 @@ impl Screen for CharacterCreationScreen {
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
-                    WeaponType::Unarmed,
+                    WeaponGroup::Unarmed,
                     AttackValue::from(2),
                     DefenceValue::from(2),
                 ),
@@ -119,7 +119,7 @@ impl Screen for CharacterCreationScreen {
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
-                    WeaponType::Swords,
+                    WeaponGroup::Swords,
                     AttackValue::from(2),
                     DefenceValue::from(2),
                 ),
@@ -139,7 +139,7 @@ impl Screen for CharacterCreationScreen {
                 .with(Item::new(1, true))
                 .with(Name::new("Hand"))
                 .with(Weapon::new(
-                    WeaponType::Unarmed,
+                    WeaponGroup::Unarmed,
                     AttackValue::from(0),
                     DamageValue::from(0),
                     DefenceValue::from(0),
@@ -151,7 +151,7 @@ impl Screen for CharacterCreationScreen {
                 .with(Item::new(1, true))
                 .with(Name::new("Longsword"))
                 .with(Weapon::new(
-                    WeaponType::Swords,
+                    WeaponGroup::Swords,
                     AttackValue::from(2),
                     DamageValue::from(5),
                     DefenceValue::from(2),

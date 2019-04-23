@@ -13,7 +13,7 @@ Documentation:
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 #[repr(C)]
-pub enum WeaponType {
+pub enum WeaponGroup {
     Swords,
     Unarmed,
 }
