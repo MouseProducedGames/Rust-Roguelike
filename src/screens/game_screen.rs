@@ -16,9 +16,10 @@ use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
 use crate::bodies::BodySystem;
+use crate::creatures::{CreatureDisplaySystem, PlayerDisplaySystem};
 use crate::events::EventManager;
 use crate::game::{GameState, LastUpdateSystem, Time};
-use crate::io::{CreatureDisplaySystem, Display, Input, PlayerDisplaySystem};
+use crate::io::{Display, Input};
 use crate::items::{InventorySystem, LightSourceSystem};
 use crate::world::{Lightmap, VisibilitySystem};
 
