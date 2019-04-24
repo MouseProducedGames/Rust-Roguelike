@@ -12,6 +12,7 @@ use specs::{Builder, Entity, World};
 
 // Internal includes.
 use super::WeaponFactory;
+use crate::bodies::BodySlotType;
 use crate::data_types::Name;
 use crate::items::weapons::Weapon;
 use crate::items::{Item, ITEM_ICON_INDEX_WEAPON};
@@ -35,7 +36,7 @@ impl WeaponFactory for TemplateWeaponFactory {
     fn create(&self, world: &mut World) -> Entity {
         world
             .create_entity()
-            .with(Item::new(ITEM_ICON_INDEX_WEAPON, false))
+            .with(Item::new(ITEM_ICON_INDEX_WEAPON, false, BodySlotType::Hand))
             .with(self.name.clone())
             .with(self.weapon_template)
             .build()

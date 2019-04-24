@@ -18,7 +18,7 @@ use crate::abilities::{Ability, AbilityActivation, AbilityActivationOp, AbilityR
 use crate::ai::systems::LogicPlayer;
 use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
-use crate::bodies::{Body, BodySlot};
+use crate::bodies::{Body, BodySlot, BodySlotType};
 use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
@@ -150,7 +150,7 @@ impl Screen for CharacterCreationScreen {
 
             let torch = world
                 .create_entity()
-                .with(Item::new(ITEM_ICON_INDEX_TORCH, true))
+                .with(Item::new(ITEM_ICON_INDEX_TORCH, true, BodySlotType::Hand))
                 .with(Name::new("Torch"))
                 .with(LightSource::new(5.0))
                 .build();
@@ -163,8 +163,17 @@ impl Screen for CharacterCreationScreen {
             let inventory = inventory;
 
             let body = Body::new(&[
-                BodySlot::with_held_item("Left Hand", hand_factory.create_owned(world), torch),
-                BodySlot::new("Right Hand", hand_factory.create_owned(world)),
+                BodySlot::with_held_item(
+                    "Left Hand",
+                    BodySlotType::Hand,
+                    hand_factory.create_owned(world),
+                    torch,
+                ),
+                BodySlot::new(
+                    "Right Hand",
+                    BodySlotType::Hand,
+                    hand_factory.create_owned(world),
+                ),
             ]);
 
             world

@@ -11,16 +11,22 @@ use specs::{Component, VecStorage};
 // Standard includes.
 
 // Internal includes.
+use crate::bodies::BodySlotType;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Item {
     icon_id: u32,
     owned: bool,
+    body_slot_type: BodySlotType,
 }
 
 impl Item {
-    pub fn new(icon_id: u32, owned: bool) -> Self {
-        Self { icon_id, owned }
+    pub fn new(icon_id: u32, owned: bool, body_slot_type: BodySlotType) -> Self {
+        Self {
+            icon_id,
+            owned,
+            body_slot_type,
+        }
     }
 
     pub fn icon_id(self) -> u32 {
@@ -36,6 +42,10 @@ impl Item {
         let output = self.owned();
         self.owned = owned;
         output
+    }
+
+    pub fn body_slot_type(self) -> BodySlotType {
+        self.body_slot_type
     }
 }
 

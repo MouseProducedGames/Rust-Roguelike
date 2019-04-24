@@ -11,25 +11,33 @@ use specs::Entity;
 // Standard includes.
 
 // Internal includes.
+use super::BodySlotType;
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct BodySlot {
     name: String,
+    slot_type: BodySlotType,
     default_item: Entity,
     held_item: Option<Entity>,
 }
 
 impl BodySlot {
-    pub fn new(name: &str, default_item: Entity) -> Self {
+    pub fn new(name: &str, slot_type: BodySlotType, default_item: Entity) -> Self {
         Self {
             name: String::from(name),
+            slot_type,
             default_item,
             held_item: None,
         }
     }
 
-    pub fn with_held_item(name: &str, default_item: Entity, held_item: Entity) -> Self {
-        let mut output = Self::new(name, default_item);
+    pub fn with_held_item(
+        name: &str,
+        slot_type: BodySlotType,
+        default_item: Entity,
+        held_item: Entity,
+    ) -> Self {
+        let mut output = Self::new(name, slot_type, default_item);
         output.hold_item(held_item);
 
         output
@@ -67,5 +75,9 @@ impl BodySlot {
         self.held_item = None;
 
         output
+    }
+
+    pub fn slot_type(&self) -> BodySlotType {
+        self.slot_type
     }
 }

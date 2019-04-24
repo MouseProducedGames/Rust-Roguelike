@@ -120,6 +120,17 @@ impl Screen for BodyScreen {
                 if let Some(body_slot) = body.get().get_mut(&selected_key) {
                     match transfer_item {
                         TransferItem::FromInventory(item) => {
+                            if world
+                                .read_storage::<Item>()
+                                .get(item)
+                                .unwrap()
+                                .body_slot_type()
+                                != body_slot.slot_type()
+                            {
+                                self.get_storage_item::<Inventory>(world).push(item);
+                                return;
+                            }
+
                             world
                                 .write_storage::<Item>()
                                 .get_mut(item)

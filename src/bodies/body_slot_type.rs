@@ -10,9 +10,9 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-mod body;
-mod body_slot;
-mod body_slot_type;
-pub use body::{Body, BodySystem};
-pub use body_slot::BodySlot;
-pub use body_slot_type::BodySlotType;
+
+#[derive(Copy, Clone, Eq, PartialEq)]
+#[repr(u8)]
+pub enum BodySlotType {
+    Hand,
+}
