@@ -31,7 +31,7 @@ impl BodySlot {
         }
     }
 
-    pub fn with_held_item(
+    pub fn _with_held_item(
         name: &str,
         slot_type: BodySlotType,
         default_item: Entity,

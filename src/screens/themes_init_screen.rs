@@ -17,6 +17,8 @@ use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::ai::maslow::MaslowTreeLookup;
 use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
+use crate::background::SpeciesType;
+use crate::bodies::BodyFactory;
 use crate::creatures::CreatureFactory;
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
@@ -108,8 +110,11 @@ impl Screen for ThemeInitScreen {
                         .clone();
                     let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
 
+                    let body = SpeciesType::Human.create_body(world);
+
                     world
                         .create_entity()
+                        .with(body)
                         .with(Command::None)
                         .with(LogicMaslow)
                         .with(CreatureStats::default())
@@ -220,8 +225,11 @@ impl Screen for ThemeInitScreen {
                                         .clone();
                                     let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
 
+                                    let body = SpeciesType::Human.create_body(world);
+
                                     world
                                         .create_entity()
+                                        .with(body)
                                         .with(Command::None)
                                         .with(LogicMaslow)
                                         .with(CreatureStats::default())

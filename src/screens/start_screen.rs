@@ -19,6 +19,8 @@ use super::{
 use crate::ai::maslow::MaslowTreeLookup;
 use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
+use crate::background::SpeciesType;
+use crate::bodies::BodyFactory;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
 use crate::items::weapons::WeaponGroup;
@@ -74,8 +76,11 @@ impl StartScreen {
             ),
         );
 
+        let body = SpeciesType::Human.create_body(world);
+
         world
             .create_entity()
+            .with(body)
             .with(Command::None)
             .with(LogicMaslow)
             .with(Faction::new(0))

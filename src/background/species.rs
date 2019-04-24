@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use specs::World;
 
 // Standard includes.
 use std::convert::From;
@@ -13,7 +14,10 @@ use std::default::Default;
 use std::fmt;
 
 // internal includes.
+use crate::bodies::{Body, BodyFactory, BodySlot, BodySlotType};
 use crate::io::{LongDescription, ShortDescription};
+use crate::items::armours::factories::{ArmourFactory, TorsoFactory};
+use crate::items::weapons::factories::{HandFactory, WeaponFactory};
 use crate::stats::CreatureStats;
 
 #[derive(Copy, Clone)]
@@ -24,7 +28,91 @@ pub enum SpeciesType {
     Human,
 }
 
-impl SpeciesType {}
+impl SpeciesType {
+    fn create_dwarf_body(world: &mut World) -> Body {
+        let hand_factory = HandFactory::new();
+        Body::new(&[
+            BodySlot::new(
+                "Torso",
+                BodySlotType::Torso,
+                TorsoFactory::new().create_owned(world),
+            ),
+            BodySlot::new(
+                "Left Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+        ])
+    }
+
+    fn create_elf_body(world: &mut World) -> Body {
+        let hand_factory = HandFactory::new();
+        Body::new(&[
+            BodySlot::new(
+                "Torso",
+                BodySlotType::Torso,
+                TorsoFactory::new().create_owned(world),
+            ),
+            BodySlot::new(
+                "Left Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+        ])
+    }
+
+    fn create_halfling_body(world: &mut World) -> Body {
+        let hand_factory = HandFactory::new();
+        Body::new(&[
+            BodySlot::new(
+                "Torso",
+                BodySlotType::Torso,
+                TorsoFactory::new().create_owned(world),
+            ),
+            BodySlot::new(
+                "Left Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+        ])
+    }
+
+    fn create_human_body(world: &mut World) -> Body {
+        let hand_factory = HandFactory::new();
+        Body::new(&[
+            BodySlot::new(
+                "Torso",
+                BodySlotType::Torso,
+                TorsoFactory::new().create_owned(world),
+            ),
+            BodySlot::new(
+                "Left Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Hand",
+                BodySlotType::Hand,
+                hand_factory.create_owned(world),
+            ),
+        ])
+    }
+}
 
 #[derive(Copy, Clone)]
 pub struct Species {
@@ -95,6 +183,17 @@ impl Species {
 
     pub fn _stats_mut(&mut self) -> &mut CreatureStats {
         &mut self.stats
+    }
+}
+
+impl BodyFactory for SpeciesType {
+    fn create_body(&self, world: &mut World) -> Body {
+        match *self {
+            SpeciesType::Dwarf => Self::create_dwarf_body(world),
+            SpeciesType::Elf => Self::create_elf_body(world),
+            SpeciesType::Halfling => Self::create_halfling_body(world),
+            SpeciesType::Human => Self::create_human_body(world),
+        }
     }
 }
 

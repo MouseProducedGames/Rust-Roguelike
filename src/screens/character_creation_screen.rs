@@ -18,15 +18,14 @@ use crate::abilities::{Ability, AbilityActivation, AbilityActivationOp, AbilityR
 use crate::ai::systems::LogicPlayer;
 use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
 use crate::background::{OriginType, Species, SpeciesType};
-use crate::bodies::{Body, BodySlot, BodySlotType};
+use crate::bodies::{BodyFactory, BodySlotType};
 use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
 use crate::io::Display;
-use crate::items::armours::factories::{ArmourFactory, ChainCuirassFactory, TorsoFactory};
+use crate::items::armours::factories::{ArmourFactory, ChainCuirassFactory};
 use crate::items::weapons::factories::{
-    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, HandFactory, LongSwordFactory,
-    WeaponFactory,
+    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, LongSwordFactory, WeaponFactory,
 };
 use crate::items::weapons::WeaponGroup;
 use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_TORCH};
@@ -139,9 +138,6 @@ impl Screen for CharacterCreationScreen {
 
             let species = Species::create(species_type);
 
-            let hand_factory = HandFactory::new();
-            let torso_factory = TorsoFactory::new();
-
             let chain_cuirass_factory = ChainCuirassFactory::new();
 
             let arming_sword_factory = ArmingSwordFactory::new();
@@ -162,26 +158,16 @@ impl Screen for CharacterCreationScreen {
             inventory.push(long_sword_factory.create_owned(world));
             let inventory = inventory;
 
-            let body = Body::new(&[
-                BodySlot::with_held_item(
-                    "Torso",
-                    BodySlotType::Torso,
-                    torso_factory.create_owned(world),
-                    chain_cuirass_factory.create_owned(world),
-                ),
-                BodySlot::with_held_item(
-                    "Left Hand",
-                    BodySlotType::Hand,
-                    hand_factory.create_owned(world),
-                    torch,
-                ),
-                BodySlot::with_held_item(
-                    "Right Hand",
-                    BodySlotType::Hand,
-                    hand_factory.create_owned(world),
-                    arming_sword_factory.create_owned(world),
-                ),
-            ]);
+            let body = species_type.create_body(world);
+            body.get()
+                .get_mut("Torso")
+                .unwrap()
+                .hold_item(chain_cuirass_factory.create_owned(world));
+            body.get().get_mut("Left Hand").unwrap().hold_item(torch);
+            body.get()
+                .get_mut("Right Hand")
+                .unwrap()
+                .hold_item(arming_sword_factory.create_owned(world));
 
             world
                 .create_entity()
