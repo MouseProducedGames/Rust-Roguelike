@@ -15,5 +15,6 @@ Documentation:
 #[repr(u8)]
 pub enum BodySlotType {
     Hand,
+    Palm,
     Torso,
 }

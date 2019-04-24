@@ -16,8 +16,8 @@ use std::fmt;
 // internal includes.
 use crate::bodies::{Body, BodyFactory, BodySlot, BodySlotType};
 use crate::io::{LongDescription, ShortDescription};
-use crate::items::armours::factories::{ArmourFactory, TorsoFactory};
-use crate::items::weapons::factories::{HandFactory, WeaponFactory};
+use crate::items::armours::factories::{ArmourFactory, HandFactory, TorsoFactory};
+use crate::items::weapons::factories::{PalmFactory, WeaponFactory};
 use crate::stats::CreatureStats;
 
 #[derive(Copy, Clone)]
@@ -31,6 +31,7 @@ pub enum SpeciesType {
 impl SpeciesType {
     fn create_dwarf_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
+        let palm_factory = PalmFactory::new();
         Body::new(&[
             BodySlot::new(
                 "Torso",
@@ -40,21 +41,34 @@ impl SpeciesType {
             ),
             BodySlot::new(
                 "Left Hand",
-                105,
+                84,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
+                "Left Palm",
+                21,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
+            ),
+            BodySlot::new(
                 "Right Hand",
-                105,
+                84,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Palm",
+                21,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
             ),
         ])
     }
 
     fn create_elf_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
+        let palm_factory = PalmFactory::new();
         Body::new(&[
             BodySlot::new(
                 "Torso",
@@ -64,21 +78,34 @@ impl SpeciesType {
             ),
             BodySlot::new(
                 "Left Hand",
-                133,
+                108,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
+                "Left Palm",
+                27,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
+            ),
+            BodySlot::new(
                 "Right Hand",
-                133,
+                108,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Palm",
+                27,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
             ),
         ])
     }
 
     fn create_halfling_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
+        let palm_factory = PalmFactory::new();
         Body::new(&[
             BodySlot::new(
                 "Torso",
@@ -88,21 +115,34 @@ impl SpeciesType {
             ),
             BodySlot::new(
                 "Left Hand",
-                75,
+                60,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
+                "Left Palm",
+                15,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
+            ),
+            BodySlot::new(
                 "Right Hand",
-                75,
+                60,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Palm",
+                15,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
             ),
         ])
     }
 
     fn create_human_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
+        let palm_factory = PalmFactory::new();
         Body::new(&[
             BodySlot::new(
                 "Torso",
@@ -112,15 +152,27 @@ impl SpeciesType {
             ),
             BodySlot::new(
                 "Left Hand",
-                150,
+                120,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
+                "Left Palm",
+                30,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
+            ),
+            BodySlot::new(
                 "Right Hand",
-                150,
+                120,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
+            ),
+            BodySlot::new(
+                "Right Palm",
+                30,
+                BodySlotType::Palm,
+                palm_factory.create_owned(world),
             ),
         ])
     }

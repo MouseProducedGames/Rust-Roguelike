@@ -17,13 +17,13 @@ use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
 use crate::items::weapons::{Weapon, WeaponGroup};
 
 #[derive(Clone)]
-pub struct HandFactory(TemplateWeaponFactory);
+pub struct PalmFactory(TemplateWeaponFactory);
 
-impl HandFactory {
+impl PalmFactory {
     pub fn new() -> Self {
         Self {
             0: TemplateWeaponFactory::new(
-                Name::new("Hand"),
+                Name::new("Palm"),
                 Weapon::new(
                     WeaponGroup::Unarmed,
                     AttackValue::from(0),
@@ -35,7 +35,7 @@ impl HandFactory {
     }
 }
 
-impl WeaponFactory for HandFactory {
+impl WeaponFactory for PalmFactory {
     fn create(&self, world: &mut World) -> Entity {
         self.0.create(world)
     }

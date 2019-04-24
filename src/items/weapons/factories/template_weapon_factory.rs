@@ -36,7 +36,7 @@ impl WeaponFactory for TemplateWeaponFactory {
     fn create(&self, world: &mut World) -> Entity {
         world
             .create_entity()
-            .with(Item::new(ITEM_ICON_INDEX_WEAPON, false, BodySlotType::Hand))
+            .with(Item::new(ITEM_ICON_INDEX_WEAPON, false, BodySlotType::Palm))
             .with(self.name.clone())
             .with(self.weapon_template)
             .build()
