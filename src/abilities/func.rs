@@ -80,21 +80,21 @@ fn scan_for_secrets(
         SkillPassiveOp::EveryRound,
     ));
 
-    let mut skill_bonus = i64::from(ability_modifier);
+    let mut skill_bonus: i32 = ability_modifier;
     for skill in set {
         if let SkillType::Skill(v) = skill {
-            skill_bonus += i64::from(*v)
+            skill_bonus += *v
         }
     }
 
-    let skill_bonus = skill_bonus + i64::from(stats.perception().modifier());
+    let skill_bonus = skill_bonus + stats.perception().modifier();
 
     ability_range_func(
         ability_range,
         &skill_bonus,
         &mut (map, pos, visibility_map),
         |disp: Displacement,
-         data: &i64,
+         data: &i32,
          data_mut: &mut (&mut Tilemap, &mut Position, &mut VisibilityMap)| {
             let skill_bonus = data;
             let (map, pos, visibility_map) = data_mut;

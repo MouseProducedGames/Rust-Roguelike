@@ -62,11 +62,11 @@ impl EventManager {
                     event.data().attack_modifier(),
                     event.data().defence_modifier(),
                 );
-                if result.0 {
+                if result.is_success() {
                     let damage_data = DamageData::new(
                         event.data().attacker(),
                         event.data().defender(),
-                        DamageValue::from(result.1 as i32),
+                        DamageValue::from(result.margin_of_success()),
                         event.data().weapon_group(),
                     );
                     damage_events.push_event(current_time, damage_data);

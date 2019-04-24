@@ -42,7 +42,29 @@ fn random_wander_command() -> u32 {
 }
 
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct SuccessResult(pub bool, pub i64);
+pub struct SuccessResult(bool, i32);
+
+impl SuccessResult {
+    pub fn new(roll: i32) -> Self {
+        SuccessResult(roll > 10, roll)
+    }
+
+    pub fn is_failure(self) -> bool {
+        self.is_success() == false
+    }
+
+    pub fn is_success(self) -> bool {
+        self.0
+    }
+
+    pub fn margin_of_success(self) -> i32 {
+        self.roll() - 10
+    }
+
+    pub fn roll(self) -> i32 {
+        self.1
+    }
+}
 
 impl Deref for SuccessResult {
     type Target = bool;
@@ -53,10 +75,10 @@ impl Deref for SuccessResult {
 }
 
 pub fn roll_attack(attack_value: AttackValue, defence_value: DefenceValue) -> SuccessResult {
-    roll_success(i64::from(i32::from(attack_value)) - i64::from(i32::from(defence_value)))
+    roll_success(i32::from(attack_value) - i32::from(defence_value))
 }
 
-pub fn roll_success(skill_bonus: i64) -> SuccessResult {
-    let result = SuccessRoll::new(3, Die::new(6), 0).roll().total() + skill_bonus;
-    SuccessResult(result > 10, result - 10)
+pub fn roll_success(skill_bonus: i32) -> SuccessResult {
+    let result = SuccessRoll::new(3, Die::new(6), 0).roll().total() + i64::from(skill_bonus);
+    SuccessResult::new(result as i32)
 }
