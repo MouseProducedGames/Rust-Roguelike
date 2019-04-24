@@ -34,16 +34,19 @@ impl SpeciesType {
         Body::new(&[
             BodySlot::new(
                 "Torso",
+                700,
                 BodySlotType::Torso,
                 TorsoFactory::new().create_owned(world),
             ),
             BodySlot::new(
                 "Left Hand",
+                105,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
                 "Right Hand",
+                105,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
@@ -55,16 +58,19 @@ impl SpeciesType {
         Body::new(&[
             BodySlot::new(
                 "Torso",
+                800,
                 BodySlotType::Torso,
                 TorsoFactory::new().create_owned(world),
             ),
             BodySlot::new(
                 "Left Hand",
+                133,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
                 "Right Hand",
+                133,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
@@ -76,16 +82,19 @@ impl SpeciesType {
         Body::new(&[
             BodySlot::new(
                 "Torso",
+                500,
                 BodySlotType::Torso,
                 TorsoFactory::new().create_owned(world),
             ),
             BodySlot::new(
                 "Left Hand",
+                75,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
                 "Right Hand",
+                75,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
@@ -97,16 +106,19 @@ impl SpeciesType {
         Body::new(&[
             BodySlot::new(
                 "Torso",
+                1000,
                 BodySlotType::Torso,
                 TorsoFactory::new().create_owned(world),
             ),
             BodySlot::new(
                 "Left Hand",
+                150,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
             BodySlot::new(
                 "Right Hand",
+                150,
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),

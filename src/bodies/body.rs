@@ -7,6 +7,7 @@ Documentation:
 **/
 // External includes.
 use linked_hash_map::LinkedHashMap;
+use rand::{thread_rng, Rng};
 use specs::{Component, Entities, System, VecStorage, WriteStorage};
 
 // Standard includes.
@@ -39,6 +40,25 @@ impl Body {
 
     pub fn get(&self) -> MutexGuard<LinkedHashMap<String, BodySlot>> {
         self.values.lock().unwrap()
+    }
+
+    pub fn get_random_by_size(&self) -> BodySlot {
+        let values = self.values.lock().unwrap();
+        let mut total_size: u32 = 0;
+        for body_slot in values.values() {
+            total_size += body_slot.size();
+        }
+        let total_size = total_size;
+
+        let mut roll = i64::from(thread_rng().gen_range(0, total_size));
+        for body_slot in values.values() {
+            roll -= i64::from(body_slot.size());
+            if roll <= 0 {
+                return body_slot.clone();
+            }
+        }
+
+        panic!("BodySlot selection size roll escaped bounds!");
     }
 }
 

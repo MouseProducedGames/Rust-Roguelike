@@ -16,15 +16,17 @@ use super::BodySlotType;
 #[derive(Clone, Eq, PartialEq)]
 pub struct BodySlot {
     name: String,
+    size: u32,
     slot_type: BodySlotType,
     default_item: Entity,
     held_item: Option<Entity>,
 }
 
 impl BodySlot {
-    pub fn new(name: &str, slot_type: BodySlotType, default_item: Entity) -> Self {
+    pub fn new(name: &str, size: u32, slot_type: BodySlotType, default_item: Entity) -> Self {
         Self {
             name: String::from(name),
+            size,
             slot_type,
             default_item,
             held_item: None,
@@ -33,11 +35,12 @@ impl BodySlot {
 
     pub fn _with_held_item(
         name: &str,
+        size: u32,
         slot_type: BodySlotType,
         default_item: Entity,
         held_item: Entity,
     ) -> Self {
-        let mut output = Self::new(name, slot_type, default_item);
+        let mut output = Self::new(name, size, slot_type, default_item);
         output.hold_item(held_item);
 
         output
@@ -75,6 +78,10 @@ impl BodySlot {
         self.held_item = None;
 
         output
+    }
+
+    pub fn size(&self) -> u32 {
+        self.size
     }
 
     pub fn slot_type(&self) -> BodySlotType {

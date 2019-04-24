@@ -50,13 +50,11 @@ impl ArmourEventHandler {
         let creature_bodies = world.read_storage::<Body>();
         let armours = world.read_storage::<Armour>();
         if let Some(body) = creature_bodies.get(event_data.defender()) {
-            for body_slot in body.get().values() {
-                let item = body_slot.item();
-                if let Some(armour) = armours.get(item) {
-                    *event_data.protection_mut() += armour.protection_value();
-                    *event_data.armour_group_mut() = armour.armour_group();
-                    break;
-                }
+            let body_slot = body.get_random_by_size();
+            let item = body_slot.item();
+            if let Some(armour) = armours.get(item) {
+                *event_data.protection_mut() += armour.protection_value();
+                *event_data.armour_group_mut() = armour.armour_group();
             }
         }
 
