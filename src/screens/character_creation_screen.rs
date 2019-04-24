@@ -25,8 +25,7 @@ use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
 use crate::io::Display;
 use crate::items::armours::factories::{
-    ArmourFactory, ChainArmourProcessor, CuirassFactory, GauntletFactory, LeatherArmourProcessor,
-    ProcessArmourFactory,
+    ArmourFactory, ChainArmourFactory, CuirassFactory, GauntletFactory, LeatherArmourFactory,
 };
 use crate::items::weapons::factories::{
     ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, LongSwordFactory, WeaponFactory,
@@ -142,12 +141,9 @@ impl Screen for CharacterCreationScreen {
 
             let species = Species::create(species_type);
 
-            let chain_cuirass_factory: ProcessArmourFactory<CuirassFactory, ChainArmourProcessor> =
+            let chain_cuirass_factory: ChainArmourFactory<CuirassFactory> = Default::default();
+            let leather_gauntlet_factory: LeatherArmourFactory<GauntletFactory> =
                 Default::default();
-            let leather_gauntlet_factory: ProcessArmourFactory<
-                GauntletFactory,
-                LeatherArmourProcessor,
-            > = Default::default();
 
             let arming_sword_factory = ArmingSwordFactory::new();
             let bastard_sword_factory = BastardSwordFactory::new();
