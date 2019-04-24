@@ -42,8 +42,16 @@ impl Armour {
         self.defence_value
     }
 
+    pub fn defence_value_mut(&mut self) -> &mut DefenceValue {
+        &mut self.defence_value
+    }
+
     pub fn protection_value(&self) -> ProtectionValue {
         self.protection_value
+    }
+
+    pub fn protection_value_mut(&mut self) -> &mut ProtectionValue {
+        &mut self.protection_value
     }
 }
 

@@ -9,6 +9,7 @@ Documentation:
 use specs::{Entity, World};
 
 // Standard includes.
+use std::default::Default;
 
 // Internal includes.
 use super::{ArmourFactory, TemplateArmourFactory};
@@ -18,25 +19,27 @@ use crate::game::combat::{DefenceValue, ProtectionValue};
 use crate::items::armours::{Armour, ArmourGroup};
 
 #[derive(Clone)]
-pub struct ChainCuirassFactory(TemplateArmourFactory);
+pub struct CuirassFactory(TemplateArmourFactory);
 
-impl ChainCuirassFactory {
-    pub fn new() -> Self {
+impl CuirassFactory {}
+
+impl Default for CuirassFactory {
+    fn default() -> Self {
         Self {
             0: TemplateArmourFactory::new(
-                Name::new("Chain Cuirass"),
+                Name::new("Cuirass"),
                 BodySlotType::Torso,
                 Armour::new(
                     ArmourGroup::Default,
                     DefenceValue::from(0),
-                    ProtectionValue::from(3),
+                    ProtectionValue::from(0),
                 ),
             ),
         }
     }
 }
 
-impl ArmourFactory for ChainCuirassFactory {
+impl ArmourFactory for CuirassFactory {
     fn create(&self, world: &mut World) -> Entity {
         self.0.create(world)
     }
