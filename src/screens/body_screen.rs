@@ -128,6 +128,13 @@ impl Screen for BodyScreen {
                                 != body_slot.slot_type()
                             {
                                 self.get_storage_item::<Inventory>(world).push(item);
+                                self.body_index = None;
+                                if let Some(transfer_item) =
+                                    world.write_storage::<TransferItem>().get_mut(self.creature)
+                                {
+                                    *transfer_item = TransferItem::None;
+                                }
+
                                 return;
                             }
 
