@@ -11,9 +11,9 @@ Documentation:
 
 // Internal includes.
 
-#[derive(Copy, Clone, Eq, PartialEq)]
-#[repr(u8)]
-pub enum BodySlotType {
-    Hand,
-    Torso,
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[repr(C)]
+/// Figure this out later. Flags enum?
+pub enum ArmourGroup {
+    Default,
 }

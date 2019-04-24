@@ -23,6 +23,7 @@ use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
 use crate::io::Display;
+use crate::items::armours::factories::{ArmourFactory, ChainCuirassFactory, TorsoFactory};
 use crate::items::weapons::factories::{
     ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, HandFactory, LongSwordFactory,
     WeaponFactory,
@@ -139,13 +140,13 @@ impl Screen for CharacterCreationScreen {
             let species = Species::create(species_type);
 
             let hand_factory = HandFactory::new();
+            let torso_factory = TorsoFactory::new();
+
+            let chain_cuirass_factory = ChainCuirassFactory::new();
 
             let arming_sword_factory = ArmingSwordFactory::new();
-
             let bastard_sword_factory = BastardSwordFactory::new();
-
             let battle_axe_factory = BattleAxeFactory::new();
-
             let long_sword_factory = LongSwordFactory::new();
 
             let torch = world
@@ -156,7 +157,6 @@ impl Screen for CharacterCreationScreen {
                 .build();
 
             let mut inventory = Inventory::new();
-            inventory.push(arming_sword_factory.create_owned(world));
             inventory.push(bastard_sword_factory.create_owned(world));
             inventory.push(battle_axe_factory.create_owned(world));
             inventory.push(long_sword_factory.create_owned(world));
@@ -164,15 +164,22 @@ impl Screen for CharacterCreationScreen {
 
             let body = Body::new(&[
                 BodySlot::with_held_item(
+                    "Torso",
+                    BodySlotType::Torso,
+                    torso_factory.create_owned(world),
+                    chain_cuirass_factory.create_owned(world),
+                ),
+                BodySlot::with_held_item(
                     "Left Hand",
                     BodySlotType::Hand,
                     hand_factory.create_owned(world),
                     torch,
                 ),
-                BodySlot::new(
+                BodySlot::with_held_item(
                     "Right Hand",
                     BodySlotType::Hand,
                     hand_factory.create_owned(world),
+                    arming_sword_factory.create_owned(world),
                 ),
             ]);
 

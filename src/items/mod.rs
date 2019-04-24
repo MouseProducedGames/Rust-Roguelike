@@ -10,6 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+pub mod armours;
 mod inventory;
 mod item;
 mod item_display_system;
@@ -24,3 +25,4 @@ pub use transfer_item::TransferItem;
 
 pub static ITEM_ICON_INDEX_TORCH: u32 = 0;
 pub static ITEM_ICON_INDEX_WEAPON: u32 = 1;
+pub static ITEM_ICON_INDEX_ARMOUR: u32 = 2;

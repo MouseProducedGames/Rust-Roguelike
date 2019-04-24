@@ -21,6 +21,7 @@ use crate::data_types::Name;
 use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::{EntityPositionTracker, GameState, Time};
+use crate::items::armours::{Armour, ArmourEventHandler};
 use crate::items::weapons::{Weapon, WeaponEventHandler};
 use crate::items::{Inventory, Item, LightSource, TransferItem};
 use crate::rrl_math::Position;
@@ -80,11 +81,13 @@ impl Screen for WorldInitScreen {
             world.add_resource(WeaponEventHandler::new(&mut event_manager));
             world.add_resource(SkillEventHandler::new(&mut event_manager));
             world.add_resource(StatEventHandler::new(&mut event_manager));
+            world.add_resource(ArmourEventHandler::new(&mut event_manager));
         }
         world.add_resource(GameState::new());
         world.add_resource(Arc::new(Mutex::new(PatternLookup::new())));
         world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
         world.add_resource(Time::new(0));
+        world.register::<Armour>();
         world.register::<Body>();
         world.register::<Command>();
         world.register::<CreatureStats>();

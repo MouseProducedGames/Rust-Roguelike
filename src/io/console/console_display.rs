@@ -79,6 +79,8 @@ impl ConsoleDisplay {
                 ConsoleChar::new('/', Color::Red, Color::Black),
                 // Weapon.
                 ConsoleChar::new('/', Color::White, Color::Black),
+                // Armour.
+                ConsoleChar::new('&', Color::White, Color::Black),
             ],
             map_graphics: vec![
                 // Void.

@@ -95,6 +95,16 @@ impl ConsoleDisplay {
                     },
                     Color::Rgb { r: 0, g: 0, b: 0 },
                 ),
+                // Armour.
+                ConsoleChar::new(
+                    '&',
+                    Color::Rgb {
+                        r: 192,
+                        g: 195,
+                        b: 198,
+                    },
+                    Color::Rgb { r: 0, g: 0, b: 0 },
+                ),
             ],
             map_graphics: vec![
                 // Void.

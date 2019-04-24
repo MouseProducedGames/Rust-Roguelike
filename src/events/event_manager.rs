@@ -14,8 +14,11 @@ use std::sync::{Arc, Mutex};
 // internal includes.
 use super::{EventHandler, RefEventFn};
 use crate::dice::roll_attack;
-use crate::game::combat::{AttackData, DamageData, DamageValue, InjuryData, InjuryValue};
+use crate::game::combat::{
+    AttackData, DamageData, DamageValue, InjuryData, InjuryValue, ProtectionData, ProtectionValue,
+};
 use crate::game::Time;
+use crate::items::armours::ArmourGroup;
 use crate::stats::{CreatureStats, Stat};
 
 #[derive(Clone)]
@@ -23,6 +26,7 @@ pub struct EventManager {
     attack_events: Arc<Mutex<EventHandler<AttackData>>>,
     damage_events: Arc<Mutex<EventHandler<DamageData>>>,
     injury_events: Arc<Mutex<EventHandler<InjuryData>>>,
+    protection_events: Arc<Mutex<EventHandler<ProtectionData>>>,
 }
 
 impl EventManager {
@@ -31,6 +35,7 @@ impl EventManager {
             attack_events: Arc::new(Mutex::new(EventHandler::new())),
             damage_events: Arc::new(Mutex::new(EventHandler::new())),
             injury_events: Arc::new(Mutex::new(EventHandler::new())),
+            protection_events: Arc::new(Mutex::new(EventHandler::new())),
         }
     }
 
@@ -44,6 +49,10 @@ impl EventManager {
 
     pub fn push_injury_handler(&mut self, handler: RefEventFn<InjuryData>) {
         self.injury_events.lock().unwrap().push_handler(handler);
+    }
+
+    pub fn push_protection_handler(&mut self, handler: RefEventFn<ProtectionData>) {
+        self.protection_events.lock().unwrap().push_handler(handler);
     }
 
     pub fn push_attack_event(&mut self, time: Time, attack_data: AttackData) {
@@ -76,13 +85,32 @@ impl EventManager {
 
         {
             let mut damage_events = self.damage_events.lock().unwrap();
-            let mut injury_events = self.injury_events.lock().unwrap();
+            let mut protection_events = self.protection_events.lock().unwrap();
             while let Some(event) = damage_events.run_once(current_time, world) {
                 if event.data().damage() > 0 {
+                    let protection_data = ProtectionData::new(
+                        event.data().attacker(),
+                        event.data().defender(),
+                        event.data().damage(),
+                        ProtectionValue::from(0),
+                        ArmourGroup::Default,
+                        event.data().weapon_group(),
+                    );
+                    protection_events.push_event(current_time, protection_data);
+                }
+            }
+        }
+
+        {
+            let mut protection_events = self.protection_events.lock().unwrap();
+            let mut injury_events = self.injury_events.lock().unwrap();
+            while let Some(event) = protection_events.run_once(current_time, world) {
+                let injury_total = event.data().damage() - event.data().protection();
+                if injury_total > 0 {
                     let injury_data = InjuryData::new(
                         event.data().attacker(),
                         event.data().defender(),
-                        InjuryValue::from(event.data().damage()),
+                        InjuryValue::from(injury_total),
                         event.data().weapon_group(),
                     );
                     injury_events.push_event(current_time, injury_data);
