@@ -25,7 +25,8 @@ use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue};
 use crate::io::Display;
 use crate::items::armours::factories::{
-    ArmourFactory, ChainArmourFactory, CuirassFactory, GauntletFactory, LeatherArmourFactory,
+    ArmourFactory, ChainArmourFactory, CuirassFactory, FineArmourFactory, GauntletFactory,
+    LeatherArmourFactory,
 };
 use crate::items::weapons::factories::{
     ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, LongSwordFactory, WeaponFactory,
@@ -142,8 +143,9 @@ impl Screen for CharacterCreationScreen {
             let species = Species::create(species_type);
 
             let chain_cuirass_factory: ChainArmourFactory<CuirassFactory> = Default::default();
-            let leather_gauntlet_factory: LeatherArmourFactory<GauntletFactory> =
-                Default::default();
+            let fine_leather_gauntlet_factory: FineArmourFactory<
+                LeatherArmourFactory<GauntletFactory>,
+            > = Default::default();
 
             let arming_sword_factory = ArmingSwordFactory::new();
             let bastard_sword_factory = BastardSwordFactory::new();
@@ -171,12 +173,12 @@ impl Screen for CharacterCreationScreen {
             body.get()
                 .get_mut("Left Hand")
                 .unwrap()
-                .hold_item(leather_gauntlet_factory.create_owned(world));
+                .hold_item(fine_leather_gauntlet_factory.create_owned(world));
             body.get().get_mut("Left Palm").unwrap().hold_item(torch);
             body.get()
                 .get_mut("Right Hand")
                 .unwrap()
-                .hold_item(leather_gauntlet_factory.create_owned(world));
+                .hold_item(fine_leather_gauntlet_factory.create_owned(world));
             body.get()
                 .get_mut("Right Palm")
                 .unwrap()
