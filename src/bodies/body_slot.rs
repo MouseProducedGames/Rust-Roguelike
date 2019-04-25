@@ -6,18 +6,21 @@ Documentation:
 
 **/
 // External includes.
+use enumflags2::BitFlags;
 use specs::Entity;
 
 // Standard includes.
 
 // Internal includes.
+use super::BodySlotFlags;
 use super::BodySlotType;
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct BodySlot {
     name: String,
     size: u32,
     slot_type: BodySlotType,
+    flags: BitFlags<BodySlotFlags>,
     default_item: Entity,
     held_item: Option<Entity>,
 }
@@ -28,6 +31,23 @@ impl BodySlot {
             name: String::from(name),
             size,
             slot_type,
+            flags: BitFlags::<BodySlotFlags>::empty(),
+            default_item,
+            held_item: None,
+        }
+    }
+    pub fn with_flags(
+        name: &str,
+        size: u32,
+        slot_type: BodySlotType,
+        flags: BitFlags<BodySlotFlags>,
+        default_item: Entity,
+    ) -> Self {
+        Self {
+            name: String::from(name),
+            size,
+            slot_type,
+            flags,
             default_item,
             held_item: None,
         }
@@ -86,5 +106,35 @@ impl BodySlot {
 
     pub fn slot_type(&self) -> BodySlotType {
         self.slot_type
+    }
+
+    pub fn attack_slot(&self) -> bool {
+        self.flags.contains(BodySlotFlags::IsAttack)
+    }
+
+    pub fn attack_slot_mut(&mut self, value: bool) -> bool {
+        let output = self.attack_slot();
+        if value {
+            self.flags |= BodySlotFlags::IsAttack;
+        } else {
+            self.flags.remove(BodySlotFlags::IsAttack);
+        }
+
+        output
+    }
+
+    pub fn defence_slot(&self) -> bool {
+        self.flags.contains(BodySlotFlags::IsDefence)
+    }
+
+    pub fn defence_slot_mut(&mut self, value: bool) -> bool {
+        let output = self.defence_slot();
+        if value {
+            self.flags |= BodySlotFlags::IsDefence;
+        } else {
+            self.flags.remove(BodySlotFlags::IsDefence);
+        }
+
+        output
     }
 }

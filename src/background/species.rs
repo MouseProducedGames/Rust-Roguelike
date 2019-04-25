@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use enumflags2::BitFlags;
 use specs::World;
 
 // Standard includes.
@@ -14,7 +15,7 @@ use std::default::Default;
 use std::fmt;
 
 // internal includes.
-use crate::bodies::{Body, BodyFactory, BodySlot, BodySlotType};
+use crate::bodies::{Body, BodyFactory, BodySlot, BodySlotFlags, BodySlotType};
 use crate::io::{LongDescription, ShortDescription};
 use crate::items::armours::factories::{ArmourFactory, HandFactory, TorsoFactory};
 use crate::items::weapons::factories::{PalmFactory, WeaponFactory};
@@ -45,10 +46,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Left Palm",
                 21,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -57,10 +59,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Right Palm",
                 21,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
                 palm_factory.create_owned(world),
             ),
         ])
@@ -82,10 +85,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Left Palm",
                 27,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -94,10 +98,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Right Palm",
                 27,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
                 palm_factory.create_owned(world),
             ),
         ])
@@ -119,10 +124,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Left Palm",
                 15,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -131,10 +137,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Right Palm",
                 15,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
                 palm_factory.create_owned(world),
             ),
         ])
@@ -156,10 +163,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Left Palm",
                 30,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -168,10 +176,11 @@ impl SpeciesType {
                 BodySlotType::Hand,
                 hand_factory.create_owned(world),
             ),
-            BodySlot::new(
+            BodySlot::with_flags(
                 "Right Palm",
                 30,
                 BodySlotType::Palm,
+                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
                 palm_factory.create_owned(world),
             ),
         ])

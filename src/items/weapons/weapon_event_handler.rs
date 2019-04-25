@@ -35,7 +35,7 @@ impl WeaponEventHandler {
         let mut event_data = *event.data();
         let creature_bodies = world.read_storage::<Body>();
         let weapons = world.read_storage::<Weapon>();
-        if let Some(body) = creature_bodies.get(event_data.attacker()) {
+        /* if let Some(body) = creature_bodies.get(event_data.attacker()) {
             for body_slot in body.get().values() {
                 let item = body_slot.item();
                 if let Some(weapon) = weapons.get(item) {
@@ -44,7 +44,7 @@ impl WeaponEventHandler {
                     break;
                 }
             }
-        }
+        } */
 
         if let Some(body) = creature_bodies.get(event_data.defender()) {
             for body_slot in body.get().values() {
