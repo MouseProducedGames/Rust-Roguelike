@@ -22,7 +22,7 @@ use crate::ai::Command;
 use crate::background::SpeciesType;
 use crate::bodies::BodyFactory;
 use crate::factions::Faction;
-use crate::game::combat::{AttackValue, DefenceValue};
+use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
 use crate::items::weapons::WeaponGroup;
 use crate::items::Inventory;
 use crate::rrl_math::Position;
@@ -87,6 +87,7 @@ impl StartScreen {
             .with(CreatureStats::default() + CreatureStats::new(4, 0, 0, 4, 4, 4))
             .with(Inventory::new())
             .with(maslow_tree)
+            .with(MultiAttackPenalty::new(AttackValue::from(0)))
             .with(Position::new(12, 8))
             .with(skills)
             .with(TalentLookup::new())

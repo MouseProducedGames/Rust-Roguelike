@@ -22,6 +22,7 @@ use crate::bodies::BodyFactory;
 use crate::creatures::CreatureFactory;
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 use crate::factions::Faction;
+use crate::game::combat::{AttackValue, MultiAttackPenalty};
 #[allow(unused_imports)]
 use crate::items::{Inventory, Item, LightSource};
 use crate::rrl_math::{Bounds, Position};
@@ -121,6 +122,7 @@ impl Screen for ThemeInitScreen {
                         .with(Faction::new(1))
                         .with(Inventory::new())
                         .with(maslow_tree_lookup.get("Faction/Wander").unwrap().clone())
+                        .with(MultiAttackPenalty::new(AttackValue::from(0)))
                         .with(position)
                         .with(SkillLookup::new())
                         .with(TalentLookup::new())
@@ -241,6 +243,7 @@ impl Screen for ThemeInitScreen {
                                                 .unwrap()
                                                 .clone(),
                                         )
+                                        .with(MultiAttackPenalty::new(AttackValue::from(0)))
                                         .with(creature_position)
                                         .with(SkillLookup::new())
                                         .with(TalentLookup::new())

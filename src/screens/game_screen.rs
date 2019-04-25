@@ -18,7 +18,7 @@ use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
 use crate::bodies::BodySystem;
 use crate::creatures::{CreatureDisplaySystem, PlayerDisplaySystem};
 use crate::events::EventManager;
-use crate::game::{GameState, LastUpdateSystem, Time};
+use crate::game::{FirstUpdateSystem, GameState, LastUpdateSystem, Time};
 use crate::io::{Display, Input};
 use crate::items::{InventorySystem, ItemDisplaySystem, LightSourceSystem};
 use crate::world::{Lightmap, VisibilitySystem};
@@ -28,6 +28,7 @@ pub struct GameScreen {
     body_system: BodySystem,
     command_system: CommandSystem,
     creature_display_system: CreatureDisplaySystem,
+    first_update_system: FirstUpdateSystem,
     inventory_system: InventorySystem,
     item_display_system: ItemDisplaySystem,
     last_update_system: LastUpdateSystem,
@@ -47,6 +48,7 @@ impl GameScreen {
             body_system: BodySystem,
             command_system: CommandSystem,
             creature_display_system: CreatureDisplaySystem,
+            first_update_system: FirstUpdateSystem,
             inventory_system: InventorySystem,
             item_display_system: ItemDisplaySystem,
             last_update_system: LastUpdateSystem,
@@ -114,6 +116,8 @@ impl Screen for GameScreen {
         if input.instance().get_char() == 'Q' {
             world.write_resource::<GameState>().kill();
         }
+
+        self.first_update_system.run_now(&world.res);
     }
 
     fn update(&mut self, world: &mut World, screen_push_wrapper: &mut ScreenPushWrapper) {

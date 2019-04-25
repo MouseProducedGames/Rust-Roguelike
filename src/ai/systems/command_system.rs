@@ -115,11 +115,10 @@ fn impassable_movement<'a>(
                 }
             }
 
-            let mut multi_action_penalty: AttackValue = AttackValue::from(0);
             for body_slot in body.get().values() {
                 if body_slot.attack_slot() {
                     let item_entity = body_slot.item();
-                    let mut attack_modifier = multi_action_penalty;
+                    let mut attack_modifier = AttackValue::from(0);
                     let mut weapon_group = WeaponGroup::Unarmed;
                     if let Some(weapon) = weapons.get(item_entity) {
                         attack_modifier += weapon.attack_value();
@@ -137,8 +136,6 @@ fn impassable_movement<'a>(
                             weapon_group,
                         ),
                     );
-
-                    multi_action_penalty += AttackValue::from(-4);
                 }
             }
         }

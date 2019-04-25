@@ -22,7 +22,7 @@ use crate::background::{OriginType, Species, SpeciesType};
 use crate::bodies::{BodyFactory, BodySlotType};
 use crate::data_types::Name;
 use crate::factions::Faction;
-use crate::game::combat::{AttackValue, DefenceValue};
+use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
 use crate::io::Display;
 use crate::items::armours::factories::{
     ArmourFactory, ChainArmourFactory, CuirassFactory, FineArmourFactory, GauntletFactory,
@@ -196,6 +196,7 @@ impl Screen for CharacterCreationScreen {
                         + CreatureStats::from(origin_type)
                         + CreatureStats::new(0, 0, 0, 4, 4, 4),
                 )
+                .with(MultiAttackPenalty::new(AttackValue::from(0)))
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)
                 .with(skills)
