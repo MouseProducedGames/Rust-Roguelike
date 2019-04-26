@@ -13,12 +13,10 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use crate::ai::Command;
-use crate::bodies::Body;
 use crate::events::EventManager;
 use crate::factions::Faction;
-use crate::game::combat::{AttackData, AttackValue, DefenceValue};
+use crate::game::combat::AttackActionData;
 use crate::game::{EntityPositionTracker, Time};
-use crate::items::weapons::{Weapon, WeaponGroup};
 use crate::rrl_math::Position;
 use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 
@@ -31,10 +29,8 @@ pub struct SystemDataT<'a> {
     entities: Entities<'a>,
     event_manager: ReadExpect<'a, Arc<Mutex<EventManager>>>,
     map: WriteExpect<'a, Tilemap>,
-    bodies: ReadStorage<'a, Body>,
     command: ReadStorage<'a, Command>,
     factions: ReadStorage<'a, Faction>,
-    weapons: ReadStorage<'a, Weapon>,
     visibility_map_lookup: WriteStorage<'a, VisibilityMapLookup>,
     pos: WriteStorage<'a, Position>,
 }
@@ -51,9 +47,8 @@ impl<'a> System<'a> for CommandSystem {
         let factions = data.factions;
         let map = &mut *data.map;
 
-        for (entity, body, command, pos, visibility_map_lookup) in (
+        for (entity, command, pos, visibility_map_lookup) in (
             &data.entities,
-            &data.bodies,
             &data.command,
             &mut data.pos,
             &mut data.visibility_map_lookup,
@@ -71,7 +66,6 @@ impl<'a> System<'a> for CommandSystem {
 
                     if map.passable_pos(new_pos) {
                         impassable_movement(
-                            body.clone(),
                             current_time,
                             entity,
                             event_manager.clone(),
@@ -79,7 +73,6 @@ impl<'a> System<'a> for CommandSystem {
                             pos,
                             entity_position_tracker,
                             &factions,
-                            &data.weapons,
                         );
                     }
 
@@ -95,7 +88,6 @@ impl<'a> System<'a> for CommandSystem {
 
 #[allow(clippy::too_many_arguments)]
 fn impassable_movement<'a>(
-    body: Body,
     current_time: Time,
     entity: Entity,
     event_manager: Arc<Mutex<EventManager>>,
@@ -103,7 +95,6 @@ fn impassable_movement<'a>(
     pos: &mut Position,
     entity_position_tracker: &EntityPositionTracker,
     factions: &ReadStorage<'a, Faction>,
-    weapons: &ReadStorage<'a, Weapon>,
 ) {
     match entity_position_tracker.check_collision(entity, new_pos) {
         Some(other_entity) => {
@@ -115,29 +106,10 @@ fn impassable_movement<'a>(
                 }
             }
 
-            for body_slot in body.get().values() {
-                if body_slot.attack_slot() {
-                    let item_entity = body_slot.item();
-                    let mut attack_modifier = AttackValue::from(0);
-                    let mut weapon_group = WeaponGroup::Unarmed;
-                    if let Some(weapon) = weapons.get(item_entity) {
-                        attack_modifier += weapon.attack_value();
-                        weapon_group = weapon.weapon_group();
-                    }
-                    let attack_modifier = attack_modifier;
-                    let weapon_group = weapon_group;
-                    event_manager.lock().unwrap().push_attack_event(
-                        current_time,
-                        AttackData::new(
-                            entity,
-                            other_entity,
-                            attack_modifier,
-                            DefenceValue::from(0),
-                            weapon_group,
-                        ),
-                    );
-                }
-            }
+            event_manager.lock().unwrap().push_attack_action_event(
+                current_time,
+                AttackActionData::new(entity, other_entity),
+            );
         }
         None => *pos = new_pos,
     }

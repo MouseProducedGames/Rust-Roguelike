@@ -10,6 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+mod attack_action_data;
 mod attack_data;
 mod attack_penalty_event_handler;
 mod attack_value;
@@ -21,6 +22,7 @@ mod injury_value;
 mod multi_attack_penalty;
 mod protection_data;
 mod protection_value;
+pub use attack_action_data::AttackActionData;
 pub use attack_data::AttackData;
 pub use attack_penalty_event_handler::AttackPenaltyEventHandler;
 pub use attack_value::{AttackMarker, AttackValue};

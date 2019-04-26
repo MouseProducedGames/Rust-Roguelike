@@ -13,17 +13,21 @@ use std::sync::{Arc, Mutex};
 
 // internal includes.
 use super::{EventHandler, RefEventFn};
+use crate::bodies::Body;
 use crate::dice::roll_attack;
 use crate::game::combat::{
-    AttackData, DamageData, DamageValue, InjuryData, InjuryValue, ProtectionData, ProtectionValue,
+    AttackActionData, AttackData, AttackValue, DamageData, DamageValue, DefenceValue, InjuryData,
+    InjuryValue, ProtectionData, ProtectionValue,
 };
 use crate::game::Time;
 use crate::items::armours::ArmourGroup;
+use crate::items::weapons::{Weapon, WeaponGroup};
 use crate::stats::{CreatureStats, Stat};
 
 #[derive(Clone)]
 pub struct EventManager {
     attack_events: Arc<Mutex<EventHandler<AttackData>>>,
+    attack_action_events: Arc<Mutex<EventHandler<AttackActionData>>>,
     damage_events: Arc<Mutex<EventHandler<DamageData>>>,
     injury_events: Arc<Mutex<EventHandler<InjuryData>>>,
     protection_events: Arc<Mutex<EventHandler<ProtectionData>>>,
@@ -33,6 +37,7 @@ impl EventManager {
     pub fn new() -> Self {
         Self {
             attack_events: Arc::new(Mutex::new(EventHandler::new())),
+            attack_action_events: Arc::new(Mutex::new(EventHandler::new())),
             damage_events: Arc::new(Mutex::new(EventHandler::new())),
             injury_events: Arc::new(Mutex::new(EventHandler::new())),
             protection_events: Arc::new(Mutex::new(EventHandler::new())),
@@ -41,6 +46,13 @@ impl EventManager {
 
     pub fn push_attack_handler(&mut self, handler: RefEventFn<AttackData>) {
         self.attack_events.lock().unwrap().push_handler(handler);
+    }
+
+    pub fn _push_attack_action_handler(&mut self, handler: RefEventFn<AttackActionData>) {
+        self.attack_action_events
+            .lock()
+            .unwrap()
+            .push_handler(handler);
     }
 
     pub fn push_damage_handler(&mut self, handler: RefEventFn<DamageData>) {
@@ -55,14 +67,56 @@ impl EventManager {
         self.protection_events.lock().unwrap().push_handler(handler);
     }
 
-    pub fn push_attack_event(&mut self, time: Time, attack_data: AttackData) {
+    pub fn push_attack_action_event(&mut self, time: Time, attack_action_data: AttackActionData) {
+        self.attack_action_events
+            .lock()
+            .unwrap()
+            .push_event(time, attack_action_data)
+    }
+
+    /* pub fn push_attack_event(&mut self, time: Time, attack_data: AttackData) {
         self.attack_events
             .lock()
             .unwrap()
             .push_event(time, attack_data)
-    }
+    } */
 
     pub fn run_now(&mut self, current_time: Time, world: &mut World) {
+        {
+            let mut attack_action_events = self.attack_action_events.lock().unwrap();
+            let mut attack_events = self.attack_events.lock().unwrap();
+            while let Some(event) = attack_action_events.run_once(current_time, world) {
+                let bodies = world.read_storage::<Body>();
+                let weapons = world.read_storage::<Weapon>();
+                let event_data = event.data();
+                if let Some(body) = bodies.get(event_data.attacker()) {
+                    for body_slot in body.get().values() {
+                        if body_slot.attack_slot() {
+                            let item_entity = body_slot.item();
+                            let mut attack_modifier = AttackValue::from(0);
+                            let mut weapon_group = WeaponGroup::Unarmed;
+                            if let Some(weapon) = weapons.get(item_entity) {
+                                attack_modifier += weapon.attack_value();
+                                weapon_group = weapon.weapon_group();
+                            }
+                            let attack_modifier = attack_modifier;
+                            let weapon_group = weapon_group;
+                            attack_events.push_event(
+                                current_time,
+                                AttackData::new(
+                                    event_data.attacker(),
+                                    event_data.defender(),
+                                    attack_modifier,
+                                    DefenceValue::from(0),
+                                    weapon_group,
+                                ),
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
         {
             let mut attack_events = self.attack_events.lock().unwrap();
             let mut damage_events = self.damage_events.lock().unwrap();
