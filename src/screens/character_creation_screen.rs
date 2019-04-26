@@ -28,8 +28,9 @@ use crate::items::armours::factories::{
     ArmourFactory, ChainArmourFactory, CuirassFactory, FineArmourFactory, GauntletFactory,
     LeatherArmourFactory,
 };
+use crate::items::weapons::factories::specific::axes::BattleAxeFactory;
 use crate::items::weapons::factories::specific::swords::{
-    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, LongSwordFactory,
+    ArmingSwordFactory, BastardSwordFactory, LongSwordFactory,
 };
 use crate::items::weapons::factories::traits::FineWeaponFactory;
 use crate::items::weapons::factories::WeaponFactory;
@@ -120,7 +121,7 @@ impl Screen for CharacterCreationScreen {
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
-                    WeaponGroup::Unarmed,
+                    WeaponGroup::Axes,
                     AttackValue::from(2),
                     DefenceValue::from(2),
                 ),
@@ -130,6 +131,15 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Swords,
+                    AttackValue::from(2),
+                    DefenceValue::from(2),
+                ),
+            );
+
+            skills.insert(
+                SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
+                SkillType::Weapon(
+                    WeaponGroup::Unarmed,
                     AttackValue::from(2),
                     DefenceValue::from(2),
                 ),

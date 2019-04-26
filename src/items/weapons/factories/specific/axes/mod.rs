@@ -1,3 +1,4 @@
+mod axe_factory;
 /** Copyright (C) 2019 MouseProducedGames
 
 See license in the LICENSE file
@@ -10,6 +11,6 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-pub mod axes;
-pub mod body_parts;
-pub mod swords;
+mod battle_axe_factory;
+pub use axe_factory::AxeFactory;
+pub use battle_axe_factory::BattleAxeFactory;

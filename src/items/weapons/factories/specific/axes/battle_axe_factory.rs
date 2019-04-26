@@ -28,7 +28,7 @@ impl Default for BattleAxeFactory {
             0: TemplateWeaponFactory::new(
                 Name::new("Battle Axe"),
                 Weapon::new(
-                    WeaponGroup::Swords,
+                    WeaponGroup::Axes,
                     AttackValue::from(1),
                     DamageValue::from(11),
                     DefenceValue::from(1),

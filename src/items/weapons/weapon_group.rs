@@ -14,6 +14,7 @@ Documentation:
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 #[repr(C)]
 pub enum WeaponGroup {
+    Axes,
     Swords,
     Unarmed,
 }
