@@ -32,7 +32,7 @@ pub enum SpeciesType {
 impl SpeciesType {
     fn create_dwarf_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
-        let palm_factory = PalmFactory::new();
+        let palm_factory: PalmFactory = Default::default();
         Body::new(&[
             BodySlot::new(
                 "Torso",
@@ -71,7 +71,7 @@ impl SpeciesType {
 
     fn create_elf_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
-        let palm_factory = PalmFactory::new();
+        let palm_factory: PalmFactory = Default::default();
         Body::new(&[
             BodySlot::new(
                 "Torso",
@@ -110,7 +110,7 @@ impl SpeciesType {
 
     fn create_halfling_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
-        let palm_factory = PalmFactory::new();
+        let palm_factory: PalmFactory = Default::default();
         Body::new(&[
             BodySlot::new(
                 "Torso",
@@ -149,7 +149,7 @@ impl SpeciesType {
 
     fn create_human_body(world: &mut World) -> Body {
         let hand_factory = HandFactory::new();
-        let palm_factory = PalmFactory::new();
+        let palm_factory: PalmFactory = Default::default();
         Body::new(&[
             BodySlot::new(
                 "Torso",

@@ -29,7 +29,8 @@ use crate::items::armours::factories::{
     LeatherArmourFactory,
 };
 use crate::items::weapons::factories::{
-    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, LongSwordFactory, WeaponFactory,
+    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, FineWeaponFactory, LongSwordFactory,
+    WeaponFactory,
 };
 use crate::items::weapons::WeaponGroup;
 use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_TORCH};
@@ -147,10 +148,10 @@ impl Screen for CharacterCreationScreen {
                 LeatherArmourFactory<GauntletFactory>,
             > = Default::default();
 
-            let arming_sword_factory = ArmingSwordFactory::new();
-            let bastard_sword_factory = BastardSwordFactory::new();
-            let battle_axe_factory = BattleAxeFactory::new();
-            let long_sword_factory = LongSwordFactory::new();
+            let arming_sword_factory: FineWeaponFactory<ArmingSwordFactory> = Default::default();
+            let bastard_sword_factory: FineWeaponFactory<BastardSwordFactory> = Default::default();
+            let battle_axe_factory: FineWeaponFactory<BattleAxeFactory> = Default::default();
+            let long_sword_factory: FineWeaponFactory<LongSwordFactory> = Default::default();
 
             let torch = world
                 .create_entity()

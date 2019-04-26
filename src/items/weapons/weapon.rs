@@ -45,7 +45,7 @@ impl Weapon {
         self.attack_value
     }
 
-    pub fn _attack_value_mut(&mut self) -> &mut AttackValue {
+    pub fn attack_value_mut(&mut self) -> &mut AttackValue {
         &mut self.attack_value
     }
 
@@ -53,7 +53,7 @@ impl Weapon {
         self.damage_value
     }
 
-    pub fn _damage_value_mut(&mut self) -> &mut DamageValue {
+    pub fn damage_value_mut(&mut self) -> &mut DamageValue {
         &mut self.damage_value
     }
 

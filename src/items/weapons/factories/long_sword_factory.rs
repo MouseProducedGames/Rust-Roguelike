@@ -9,6 +9,7 @@ Documentation:
 use specs::{Entity, World};
 
 // Standard includes.
+use std::default::Default;
 
 // Internal includes.
 use super::{TemplateWeaponFactory, WeaponFactory};
@@ -19,8 +20,10 @@ use crate::items::weapons::{Weapon, WeaponGroup};
 #[derive(Clone)]
 pub struct LongSwordFactory(TemplateWeaponFactory);
 
-impl LongSwordFactory {
-    pub fn new() -> Self {
+impl LongSwordFactory {}
+
+impl Default for LongSwordFactory {
+    fn default() -> Self {
         Self {
             0: TemplateWeaponFactory::new(
                 Name::new("Long Sword"),
