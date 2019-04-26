@@ -17,12 +17,14 @@ use crate::io::{Display, DisplayOption, Input};
 
 enum DisplayInitState {
     ChoosingDisplay,
+    InitializingDisplay,
     Finished,
 }
 
 pub struct DisplayInitScreen {
     state: ScreenState,
     display_init_state: DisplayInitState,
+    display_option: DisplayOption,
 }
 
 impl DisplayInitScreen {
@@ -30,6 +32,7 @@ impl DisplayInitScreen {
         Self {
             state: ScreenState::Started,
             display_init_state: DisplayInitState::ChoosingDisplay,
+            display_option: DisplayOption::Console,
         }
     }
 }
@@ -68,30 +71,28 @@ impl Screen for DisplayInitScreen {
             DisplayInitState::ChoosingDisplay => {
                 world.add_resource(Arc::new(Mutex::new(Input::new())));
 
-                {
-                    let mut display = crate::io::console::ConsoleDisplay::new();
+                let mut display = crate::io::console::ConsoleDisplay::new();
 
-                    world.add_resource::<Arc<Mutex<dyn Display>>>(
-                        match display.choose_display_option(&[
-                            DisplayOption::Console,
-                            DisplayOption::R8G8B8Console,
-                        ]) {
-                            DisplayOption::Console => {
-                                let display: Arc<Mutex<dyn Display>> =
-                                    Arc::new(Mutex::new(crate::io::console::ConsoleDisplay::new()));
+                self.display_option = display
+                    .choose_display_option(&[DisplayOption::Console, DisplayOption::R8G8B8Console]);
 
-                                display
-                            }
-                            DisplayOption::R8G8B8Console => {
-                                let display: Arc<Mutex<dyn Display>> = Arc::new(Mutex::new(
-                                    crate::io::r8g8b8_console::ConsoleDisplay::new(),
-                                ));
+                DisplayInitState::InitializingDisplay
+            }
+            DisplayInitState::InitializingDisplay => {
+                world.add_resource::<Arc<Mutex<dyn Display>>>(match self.display_option {
+                    DisplayOption::Console => {
+                        let display: Arc<Mutex<dyn Display>> =
+                            Arc::new(Mutex::new(crate::io::console::ConsoleDisplay::new()));
 
-                                display
-                            }
-                        },
-                    );
-                }
+                        display
+                    }
+                    DisplayOption::R8G8B8Console => {
+                        let display: Arc<Mutex<dyn Display>> =
+                            Arc::new(Mutex::new(crate::io::r8g8b8_console::ConsoleDisplay::new()));
+
+                        display
+                    }
+                });
 
                 self.state = ScreenState::Stopped;
 
