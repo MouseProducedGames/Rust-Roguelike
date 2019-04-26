@@ -18,7 +18,7 @@ use std::fmt;
 use crate::bodies::{Body, BodyFactory, BodySlot, BodySlotFlags, BodySlotType};
 use crate::io::{LongDescription, ShortDescription};
 use crate::items::armours::factories::{ArmourFactory, HandFactory, TorsoFactory};
-use crate::items::weapons::factories::specific::PalmFactory;
+use crate::items::weapons::factories::specific::body_parts::PalmFactory;
 use crate::items::weapons::factories::WeaponFactory;
 use crate::stats::CreatureStats;
 

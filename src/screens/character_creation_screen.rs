@@ -28,7 +28,7 @@ use crate::items::armours::factories::{
     ArmourFactory, ChainArmourFactory, CuirassFactory, FineArmourFactory, GauntletFactory,
     LeatherArmourFactory,
 };
-use crate::items::weapons::factories::specific::{
+use crate::items::weapons::factories::specific::swords::{
     ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, LongSwordFactory,
 };
 use crate::items::weapons::factories::traits::FineWeaponFactory;

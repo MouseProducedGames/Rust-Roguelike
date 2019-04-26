@@ -10,5 +10,5 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-pub mod body_parts;
-pub mod swords;
+mod palm_factory;
+pub use palm_factory::PalmFactory;
