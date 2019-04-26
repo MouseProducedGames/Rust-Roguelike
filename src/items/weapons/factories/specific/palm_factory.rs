@@ -12,33 +12,33 @@ use specs::{Entity, World};
 use std::default::Default;
 
 // Internal includes.
-use super::{TemplateWeaponFactory, WeaponFactory};
 use crate::data_types::Name;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
+use crate::items::weapons::factories::{TemplateWeaponFactory, WeaponFactory};
 use crate::items::weapons::{Weapon, WeaponGroup};
 
 #[derive(Clone)]
-pub struct LongSwordFactory(TemplateWeaponFactory);
+pub struct PalmFactory(TemplateWeaponFactory);
 
-impl LongSwordFactory {}
+impl PalmFactory {}
 
-impl Default for LongSwordFactory {
+impl Default for PalmFactory {
     fn default() -> Self {
         Self {
             0: TemplateWeaponFactory::new(
-                Name::new("Long Sword"),
+                Name::new("Palm"),
                 Weapon::new(
-                    WeaponGroup::Swords,
-                    AttackValue::from(2),
-                    DamageValue::from(7),
-                    DefenceValue::from(2),
+                    WeaponGroup::Unarmed,
+                    AttackValue::from(0),
+                    DamageValue::from(0),
+                    DefenceValue::from(0),
                 ),
             ),
         }
     }
 }
 
-impl WeaponFactory for LongSwordFactory {
+impl WeaponFactory for PalmFactory {
     fn create(&self, world: &mut World) -> Entity {
         self.0.create(world)
     }

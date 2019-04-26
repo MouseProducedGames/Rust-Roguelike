@@ -28,10 +28,11 @@ use crate::items::armours::factories::{
     ArmourFactory, ChainArmourFactory, CuirassFactory, FineArmourFactory, GauntletFactory,
     LeatherArmourFactory,
 };
-use crate::items::weapons::factories::{
-    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, FineWeaponFactory, LongSwordFactory,
-    WeaponFactory,
+use crate::items::weapons::factories::specific::{
+    ArmingSwordFactory, BastardSwordFactory, BattleAxeFactory, LongSwordFactory,
 };
+use crate::items::weapons::factories::traits::FineWeaponFactory;
+use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::WeaponGroup;
 use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_TORCH};
 use crate::rrl_math::Position;
