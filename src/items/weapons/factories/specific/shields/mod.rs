@@ -10,12 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
-#[repr(C)]
-pub enum WeaponGroup {
-    Axes,
-    Shields,
-    Swords,
-    Unarmed,
-}
+mod round_shield_factory;
+mod shield_factory;
+pub use round_shield_factory::RoundShieldFactory;
+pub use shield_factory::ShieldFactory;

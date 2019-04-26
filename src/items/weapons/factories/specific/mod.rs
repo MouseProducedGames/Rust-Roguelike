@@ -12,4 +12,5 @@ Documentation:
 // Internal includes.
 pub mod axes;
 pub mod body_parts;
+pub mod shields;
 pub mod swords;

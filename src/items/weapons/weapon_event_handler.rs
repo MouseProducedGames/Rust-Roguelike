@@ -48,10 +48,12 @@ impl WeaponEventHandler {
 
         if let Some(body) = creature_bodies.get(event_data.defender()) {
             for body_slot in body.get().values() {
-                let item = body_slot.item();
-                if let Some(weapon) = weapons.get(item) {
-                    *event_data.defence_modifier_mut() += weapon.defence_value();
-                    break;
+                if body_slot.defence_slot() {
+                    let item = body_slot.item();
+                    if let Some(weapon) = weapons.get(item) {
+                        *event_data.defence_modifier_mut() += weapon.defence_value();
+                        break;
+                    }
                 }
             }
         }

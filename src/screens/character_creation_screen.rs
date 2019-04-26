@@ -29,10 +29,13 @@ use crate::items::armours::factories::{
     LeatherArmourFactory,
 };
 use crate::items::weapons::factories::specific::axes::BattleAxeFactory;
+use crate::items::weapons::factories::specific::shields::RoundShieldFactory;
 use crate::items::weapons::factories::specific::swords::{
     ArmingSwordFactory, BastardSwordFactory, LongSwordFactory,
 };
-use crate::items::weapons::factories::traits::FineWeaponFactory;
+use crate::items::weapons::factories::traits::{
+    FineWeaponFactory, LargeShieldFactory, MediumShieldFactory, SmallShieldFactory,
+};
 use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::WeaponGroup;
 use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_TORCH};
@@ -130,6 +133,15 @@ impl Screen for CharacterCreationScreen {
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
+                    WeaponGroup::Shields,
+                    AttackValue::from(2),
+                    DefenceValue::from(2),
+                ),
+            );
+
+            skills.insert(
+                SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
+                SkillType::Weapon(
                     WeaponGroup::Swords,
                     AttackValue::from(2),
                     DefenceValue::from(2),
@@ -164,6 +176,13 @@ impl Screen for CharacterCreationScreen {
             let battle_axe_factory: FineWeaponFactory<BattleAxeFactory> = Default::default();
             let long_sword_factory: FineWeaponFactory<LongSwordFactory> = Default::default();
 
+            let large_round_shield_factory: LargeShieldFactory<RoundShieldFactory> =
+                Default::default();
+            let medium_round_shield_factory: MediumShieldFactory<RoundShieldFactory> =
+                Default::default();
+            let small_round_shield_factory: SmallShieldFactory<RoundShieldFactory> =
+                Default::default();
+
             let torch = world
                 .create_entity()
                 .with(Item::new(ITEM_ICON_INDEX_TORCH, true, BodySlotType::Hand))
@@ -174,7 +193,10 @@ impl Screen for CharacterCreationScreen {
             let mut inventory = Inventory::new();
             inventory.push(bastard_sword_factory.create_owned(world));
             inventory.push(battle_axe_factory.create_owned(world));
+            inventory.push(large_round_shield_factory.create_owned(world));
             inventory.push(long_sword_factory.create_owned(world));
+            inventory.push(small_round_shield_factory.create_owned(world));
+            inventory.push(torch);
             let inventory = inventory;
 
             let body = species_type.create_body(world);
@@ -186,7 +208,10 @@ impl Screen for CharacterCreationScreen {
                 .get_mut("Left Hand")
                 .unwrap()
                 .hold_item(fine_leather_gauntlet_factory.create_owned(world));
-            body.get().get_mut("Left Palm").unwrap().hold_item(torch);
+            body.get()
+                .get_mut("Left Palm")
+                .unwrap()
+                .hold_item(medium_round_shield_factory.create_owned(world));
             body.get()
                 .get_mut("Right Hand")
                 .unwrap()

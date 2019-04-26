@@ -61,7 +61,7 @@ impl Weapon {
         self.defence_value
     }
 
-    pub fn _defence_value_mut(&mut self) -> &mut DefenceValue {
+    pub fn defence_value_mut(&mut self) -> &mut DefenceValue {
         &mut self.defence_value
     }
 }
