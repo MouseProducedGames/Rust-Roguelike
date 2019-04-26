@@ -196,7 +196,7 @@ impl Screen for CharacterCreationScreen {
                 .with(
                     species.stats()
                         + CreatureStats::from(origin_type)
-                        + CreatureStats::new(0, 0, 0, 4, 4, 4),
+                        + CreatureStats::new(0, 0, 0, 0, 4, 0),
                 )
                 .with(MultiAttackPenalty::new(AttackValue::from(0)))
                 .with(Position::new(8, 5))
