@@ -12,8 +12,7 @@ use specs::Entity;
 // Standard includes.
 
 // Internal includes.
-use super::BodySlotFlags;
-use super::BodySlotType;
+use super::{BodySlotFlags, BodySlotType, ImplementBodySlotFlags};
 
 #[derive(Clone, PartialEq)]
 pub struct BodySlot {
@@ -107,13 +106,15 @@ impl BodySlot {
     pub fn slot_type(&self) -> BodySlotType {
         self.slot_type
     }
+}
 
-    pub fn attack_slot(&self) -> bool {
+impl ImplementBodySlotFlags for BodySlot {
+    fn is_attack(&self) -> bool {
         self.flags.contains(BodySlotFlags::IsAttack)
     }
 
-    pub fn attack_slot_mut(&mut self, value: bool) -> bool {
-        let output = self.attack_slot();
+    fn make_attack(&mut self, value: bool) -> bool {
+        let output = self.is_attack();
         if value {
             self.flags |= BodySlotFlags::IsAttack;
         } else {
@@ -123,12 +124,27 @@ impl BodySlot {
         output
     }
 
-    pub fn defence_slot(&self) -> bool {
+    fn is_default(&self) -> bool {
+        self.flags.contains(BodySlotFlags::IsDefault)
+    }
+
+    fn make_default(&mut self, value: bool) -> bool {
+        let output = self.is_default();
+        if value {
+            self.flags |= BodySlotFlags::IsDefault;
+        } else {
+            self.flags.remove(BodySlotFlags::IsDefault);
+        }
+
+        output
+    }
+
+    fn is_defence(&self) -> bool {
         self.flags.contains(BodySlotFlags::IsDefence)
     }
 
-    pub fn defence_slot_mut(&mut self, value: bool) -> bool {
-        let output = self.defence_slot();
+    fn make_defence(&mut self, value: bool) -> bool {
+        let output = self.is_defence();
         if value {
             self.flags |= BodySlotFlags::IsDefence;
         } else {

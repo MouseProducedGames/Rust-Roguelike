@@ -6,7 +6,6 @@ Documentation:
 
 **/
 // External includes.
-use enumflags2::BitFlags;
 use specs::World;
 
 // Standard includes.
@@ -51,7 +50,7 @@ impl SpeciesType {
                 "Left Palm",
                 21,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsDefence,
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -64,7 +63,7 @@ impl SpeciesType {
                 "Right Palm",
                 21,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsAttack,
                 palm_factory.create_owned(world),
             ),
         ])
@@ -90,7 +89,7 @@ impl SpeciesType {
                 "Left Palm",
                 27,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsDefence,
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -103,7 +102,7 @@ impl SpeciesType {
                 "Right Palm",
                 27,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsAttack,
                 palm_factory.create_owned(world),
             ),
         ])
@@ -129,7 +128,7 @@ impl SpeciesType {
                 "Left Palm",
                 15,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsDefence,
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -142,7 +141,7 @@ impl SpeciesType {
                 "Right Palm",
                 15,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsAttack,
                 palm_factory.create_owned(world),
             ),
         ])
@@ -168,7 +167,7 @@ impl SpeciesType {
                 "Left Palm",
                 30,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsDefence),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsDefence,
                 palm_factory.create_owned(world),
             ),
             BodySlot::new(
@@ -181,7 +180,7 @@ impl SpeciesType {
                 "Right Palm",
                 30,
                 BodySlotType::Palm,
-                BitFlags::<BodySlotFlags>::from(BodySlotFlags::IsAttack),
+                BodySlotFlags::IsDefault | BodySlotFlags::IsAttack,
                 palm_factory.create_owned(world),
             ),
         ])

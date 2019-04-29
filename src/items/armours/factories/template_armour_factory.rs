@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use enumflags2::BitFlags;
 use specs::{Builder, Entity, World};
 
 // Standard includes.
@@ -41,6 +42,7 @@ impl ArmourFactory for TemplateArmourFactory {
             .with(Item::new(
                 ITEM_ICON_INDEX_ARMOUR,
                 false,
+                BitFlags::empty(),
                 self.body_slot_type,
             ))
             .with(self.name.clone())

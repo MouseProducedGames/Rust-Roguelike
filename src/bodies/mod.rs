@@ -18,5 +18,5 @@ mod body_slot_type;
 pub use body::{Body, BodySystem};
 pub use body_factory::BodyFactory;
 pub use body_slot::BodySlot;
-pub use body_slot_flags::BodySlotFlags;
+pub use body_slot_flags::{BodySlotFlags, ImplementBodySlotFlags};
 pub use body_slot_type::BodySlotType;

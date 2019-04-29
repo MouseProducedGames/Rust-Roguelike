@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
 use super::Weapon;
-use crate::bodies::Body;
+use crate::bodies::{Body, ImplementBodySlotFlags};
 use crate::events::{Event, EventManager};
 use crate::game::combat::{AttackData, DamageData};
 
@@ -48,7 +48,7 @@ impl WeaponEventHandler {
 
         if let Some(body) = creature_bodies.get(event_data.defender()) {
             for body_slot in body.get().values() {
-                if body_slot.defence_slot() {
+                if body_slot.is_defence() {
                     let item = body_slot.item();
                     if let Some(weapon) = weapons.get(item) {
                         *event_data.defence_modifier_mut() += weapon.defence_value();

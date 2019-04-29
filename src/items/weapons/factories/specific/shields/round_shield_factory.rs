@@ -12,20 +12,21 @@ use specs::{Entity, World};
 use std::default::Default;
 
 // Internal includes.
+use super::TemplateShieldFactory;
 use crate::data_types::Name;
 use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
-use crate::items::weapons::factories::{TemplateWeaponFactory, WeaponFactory};
+use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::{Weapon, WeaponGroup};
 
 #[derive(Clone)]
-pub struct RoundShieldFactory(TemplateWeaponFactory);
+pub struct RoundShieldFactory(TemplateShieldFactory);
 
 impl RoundShieldFactory {}
 
 impl Default for RoundShieldFactory {
     fn default() -> Self {
         Self {
-            0: TemplateWeaponFactory::new(
+            0: TemplateShieldFactory::new(
                 Name::new("Round Shield"),
                 Weapon::new(
                     WeaponGroup::Shields,

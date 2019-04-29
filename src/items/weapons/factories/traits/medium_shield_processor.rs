@@ -14,7 +14,6 @@ use std::default::Default;
 // Internal includes.
 use crate::data_types::Name;
 use crate::items::weapons::factories::{ProcessWeaponFactory, WeaponProcessor};
-use crate::items::weapons::Weapon;
 
 #[allow(dead_code)]
 pub type MediumShieldFactory<TWeaponFactory> =

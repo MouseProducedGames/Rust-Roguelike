@@ -12,39 +12,39 @@ use specs::{Builder, Entity, World};
 // Standard includes.
 
 // Internal includes.
-use super::WeaponFactory;
 use crate::bodies::{BodySlotFlags, BodySlotType};
 use crate::data_types::Name;
+use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::Weapon;
 use crate::items::{Item, ITEM_ICON_INDEX_WEAPON};
 
 #[derive(Clone)]
-pub struct TemplateWeaponFactory {
+pub struct TemplateShieldFactory {
     name: Name,
-    weapon_template: Weapon,
+    shield_template: Weapon,
 }
 
-impl TemplateWeaponFactory {
-    pub fn new(name: Name, weapon_template: Weapon) -> Self {
+impl TemplateShieldFactory {
+    pub fn new(name: Name, shield_template: Weapon) -> Self {
         Self {
             name,
-            weapon_template,
+            shield_template,
         }
     }
 }
 
-impl WeaponFactory for TemplateWeaponFactory {
+impl WeaponFactory for TemplateShieldFactory {
     fn create(&self, world: &mut World) -> Entity {
         world
             .create_entity()
             .with(Item::new(
                 ITEM_ICON_INDEX_WEAPON,
                 false,
-                BitFlags::from(BodySlotFlags::IsAttack),
+                BitFlags::from(BodySlotFlags::IsDefence),
                 BodySlotType::Palm,
             ))
             .with(self.name.clone())
-            .with(self.weapon_template)
+            .with(self.shield_template)
             .build()
     }
 }

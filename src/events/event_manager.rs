@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex};
 
 // internal includes.
 use super::{EventHandler, RefEventFn};
-use crate::bodies::Body;
+use crate::bodies::{Body, ImplementBodySlotFlags};
 use crate::dice::roll_attack;
 use crate::game::combat::{
     AttackActionData, AttackData, AttackValue, DamageData, DamageValue, DefenceValue, InjuryData,
@@ -91,7 +91,7 @@ impl EventManager {
                 let event_data = event.data();
                 if let Some(body) = bodies.get(event_data.attacker()) {
                     for body_slot in body.get().values() {
-                        if body_slot.attack_slot() {
+                        if body_slot.is_attack() {
                             let item_entity = body_slot.item();
                             let mut attack_modifier = AttackValue::from(0);
                             let mut weapon_group = WeaponGroup::Unarmed;
@@ -99,6 +99,7 @@ impl EventManager {
                                 attack_modifier += weapon.attack_value();
                                 weapon_group = weapon.weapon_group();
                             }
+
                             let attack_modifier = attack_modifier;
                             let weapon_group = weapon_group;
                             attack_events.push_event(

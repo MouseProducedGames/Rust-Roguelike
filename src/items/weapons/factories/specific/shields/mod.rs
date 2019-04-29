@@ -12,5 +12,7 @@ Documentation:
 // Internal includes.
 mod round_shield_factory;
 mod shield_factory;
+mod template_shield_factory;
 pub use round_shield_factory::RoundShieldFactory;
 pub use shield_factory::ShieldFactory;
+pub use template_shield_factory::TemplateShieldFactory;

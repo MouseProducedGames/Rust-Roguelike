@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use enumflags2::BitFlags;
 use specs::{Builder, World};
 
 // Standard includes.
@@ -185,7 +186,12 @@ impl Screen for CharacterCreationScreen {
 
             let torch = world
                 .create_entity()
-                .with(Item::new(ITEM_ICON_INDEX_TORCH, true, BodySlotType::Hand))
+                .with(Item::new(
+                    ITEM_ICON_INDEX_TORCH,
+                    true,
+                    BitFlags::empty(),
+                    BodySlotType::Hand,
+                ))
                 .with(Name::new("Torch"))
                 .with(LightSource::new(5.0))
                 .build();
