@@ -38,7 +38,7 @@ impl ArmourProcessor for LeatherArmourProcessor {
             let mut storage = world.write_storage::<Armour>();
             let armour = storage.get_mut(item_entity).unwrap();
             *armour.defence_value_mut() += DefenceValue::from(-1);
-            *armour.protection_value_mut() += ProtectionValue::from(2);
+            *armour.protection_value_mut() += ProtectionValue::from(3);
         }
 
         {
