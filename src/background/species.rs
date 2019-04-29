@@ -16,7 +16,8 @@ use std::fmt;
 // internal includes.
 use crate::bodies::{Body, BodyFactory, BodySlot, BodySlotFlags, BodySlotType};
 use crate::io::{LongDescription, ShortDescription};
-use crate::items::armours::factories::{ArmourFactory, HandFactory, TorsoFactory};
+use crate::items::armours::factories::specific::body_parts::{HandFactory, TorsoFactory};
+use crate::items::armours::factories::ArmourFactory;
 use crate::items::weapons::factories::specific::body_parts::PalmFactory;
 use crate::items::weapons::factories::WeaponFactory;
 use crate::stats::CreatureStats;

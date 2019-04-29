@@ -12,39 +12,38 @@ use specs::{Entity, World};
 use std::default::Default;
 
 // Internal includes.
-use super::{ArmourProcessor, ProcessArmourFactory};
 use crate::data_types::Name;
-use crate::game::combat::{DefenceValue, ProtectionValue};
+use crate::game::combat::ProtectionValue;
+use crate::items::armours::factories::{ArmourProcessor, ProcessArmourFactory};
 use crate::items::armours::Armour;
 
 #[allow(dead_code)]
-pub type PlateArmourFactory<TArmourFactory> =
-    ProcessArmourFactory<TArmourFactory, PlateArmourProcessor>;
+pub type RustyArmourFactory<TArmourFactory> =
+    ProcessArmourFactory<TArmourFactory, RustyArmourProcessor>;
 
 #[derive(Clone)]
-pub struct PlateArmourProcessor;
+pub struct RustyArmourProcessor;
 
-impl PlateArmourProcessor {}
+impl RustyArmourProcessor {}
 
-impl Default for PlateArmourProcessor {
+impl Default for RustyArmourProcessor {
     fn default() -> Self {
         Self {}
     }
 }
 
-impl ArmourProcessor for PlateArmourProcessor {
+impl ArmourProcessor for RustyArmourProcessor {
     fn process(&self, world: &mut World, item_entity: Entity) -> Entity {
         {
             let mut storage = world.write_storage::<Armour>();
             let armour = storage.get_mut(item_entity).unwrap();
-            *armour.defence_value_mut() += DefenceValue::from(-3);
-            *armour.protection_value_mut() += ProtectionValue::from(6);
+            *armour.protection_value_mut() += ProtectionValue::from(-1);
         }
 
         {
             let mut storage = world.write_storage::<Name>();
             let name = storage.get_mut(item_entity).unwrap();
-            name.insert_str(0, "Plate ");
+            name.insert_str(0, "Rusty ");
         }
 
         item_entity

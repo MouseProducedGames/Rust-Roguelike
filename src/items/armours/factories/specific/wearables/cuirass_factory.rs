@@ -12,10 +12,10 @@ use specs::{Entity, World};
 use std::default::Default;
 
 // Internal includes.
-use super::{ArmourFactory, TemplateArmourFactory};
 use crate::bodies::BodySlotType;
 use crate::data_types::Name;
 use crate::game::combat::{DefenceValue, ProtectionValue};
+use crate::items::armours::factories::{ArmourFactory, TemplateArmourFactory};
 use crate::items::armours::{Armour, ArmourGroup};
 
 #[derive(Clone)]

@@ -12,9 +12,9 @@ use specs::{Entity, World};
 use std::default::Default;
 
 // Internal includes.
-use super::{ArmourProcessor, ProcessArmourFactory};
 use crate::data_types::Name;
 use crate::game::combat::{DefenceValue, ProtectionValue};
+use crate::items::armours::factories::{ArmourProcessor, ProcessArmourFactory};
 use crate::items::armours::Armour;
 
 #[allow(dead_code)]

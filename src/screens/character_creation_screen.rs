@@ -25,10 +25,12 @@ use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
 use crate::io::Display;
-use crate::items::armours::factories::{
-    ArmourFactory, ChainArmourFactory, CuirassFactory, FineArmourFactory, GauntletFactory,
-    LeatherArmourFactory,
+use crate::items::armours::factories::specific::wearables::{CuirassFactory, GauntletFactory};
+use crate::items::armours::factories::traits::construction::{
+    ChainArmourFactory, LeatherArmourFactory,
 };
+use crate::items::armours::factories::traits::quality::FineArmourFactory;
+use crate::items::armours::factories::ArmourFactory;
 use crate::items::weapons::factories::specific::axes::BattleAxeFactory;
 use crate::items::weapons::factories::specific::shields::RoundShieldFactory;
 use crate::items::weapons::factories::specific::swords::{

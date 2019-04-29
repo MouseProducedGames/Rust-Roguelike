@@ -9,23 +9,26 @@ Documentation:
 use specs::{Entity, World};
 
 // Standard includes.
+use std::default::Default;
 
 // Internal includes.
-use super::{ArmourFactory, TemplateArmourFactory};
 use crate::bodies::BodySlotType;
 use crate::data_types::Name;
 use crate::game::combat::{DefenceValue, ProtectionValue};
+use crate::items::armours::factories::{ArmourFactory, TemplateArmourFactory};
 use crate::items::armours::{Armour, ArmourGroup};
 
 #[derive(Clone)]
-pub struct TorsoFactory(TemplateArmourFactory);
+pub struct GauntletFactory(TemplateArmourFactory);
 
-impl TorsoFactory {
-    pub fn new() -> Self {
+impl GauntletFactory {}
+
+impl Default for GauntletFactory {
+    fn default() -> Self {
         Self {
             0: TemplateArmourFactory::new(
-                Name::new("Torso"),
-                BodySlotType::Torso,
+                Name::new("Gauntlet"),
+                BodySlotType::Hand,
                 Armour::new(
                     ArmourGroup::Default,
                     DefenceValue::from(0),
@@ -36,7 +39,7 @@ impl TorsoFactory {
     }
 }
 
-impl ArmourFactory for TorsoFactory {
+impl ArmourFactory for GauntletFactory {
     fn create(&self, world: &mut World) -> Entity {
         self.0.create(world)
     }
