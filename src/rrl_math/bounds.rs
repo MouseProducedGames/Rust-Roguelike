@@ -10,7 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use crate::world::Mapping;
+use crate::maps::Mapping;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Bounds {

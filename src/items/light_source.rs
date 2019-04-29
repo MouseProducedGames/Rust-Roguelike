@@ -12,8 +12,8 @@ pub use specs::{Entities, ReadExpect, ReadStorage, System, WriteExpect};
 // Standard includes.
 
 // Internal includes.
+use crate::maps::{calculate_light_level, Lightmap, Tilemap};
 use crate::rrl_math::Position;
-use crate::world::{calculate_light_level, Lightmap, Tilemap};
 
 #[derive(Clone, Copy)]
 pub struct LightSource {

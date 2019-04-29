@@ -11,10 +11,10 @@ Documentation:
 
 // Internal includes.
 use super::DungeonGenerator;
-use crate::rrl_math::{Displacement, Position};
-use crate::world::{
+use crate::maps::{
     Mapping, TiledArea, TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR, TILE_TYPE_INDEX_WALL,
 };
+use crate::rrl_math::{Displacement, Position};
 pub struct Catacombs {}
 
 impl Catacombs {

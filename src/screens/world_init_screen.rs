@@ -25,12 +25,12 @@ use crate::game::{EntityPositionTracker, GameState, Time};
 use crate::items::armours::{Armour, ArmourEventHandler};
 use crate::items::weapons::{Weapon, WeaponEventHandler};
 use crate::items::{Inventory, Item, LightSource, TransferItem};
+use crate::maps::{PatternLookup, VisibilityMapLookup};
 use crate::rrl_math::Position;
 use crate::skills::{SkillEventHandler, SkillLookup};
 use crate::stats::{CreatureStats, StatEventHandler};
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
-use crate::world::{PatternLookup, VisibilityMapLookup};
 
 pub struct WorldInitScreen {
     state: ScreenState,

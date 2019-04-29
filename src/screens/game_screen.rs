@@ -21,7 +21,7 @@ use crate::events::EventManager;
 use crate::game::{FirstUpdateSystem, GameState, LastUpdateSystem, Time};
 use crate::io::{Display, Input};
 use crate::items::{InventorySystem, ItemDisplaySystem, LightSourceSystem};
-use crate::world::{Lightmap, VisibilitySystem};
+use crate::maps::{Lightmap, VisibilitySystem};
 
 pub struct GameScreen {
     ability_system: AbilitySystem,

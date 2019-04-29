@@ -12,8 +12,8 @@ use specs::{Component, VecStorage};
 use std::collections::hash_map::HashMap;
 
 // Internal includes.
+use super::{Tilemap, VisibilityMap};
 use crate::rrl_math::calculate_hash;
-use crate::world::{Tilemap, VisibilityMap};
 
 pub struct VisibilityMapLookup {
     values: HashMap<u64, VisibilityMap>,

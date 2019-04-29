@@ -13,8 +13,8 @@ use std::collections::HashMap;
 
 // Internal includes.
 use crate::factions::Faction;
+use crate::maps::{VisibilityMap, VisibilityType};
 use crate::rrl_math::Position;
-use crate::world::{VisibilityMap, VisibilityType};
 
 pub struct _CreatureData {
     pos: Position,

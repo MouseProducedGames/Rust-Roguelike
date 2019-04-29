@@ -16,11 +16,11 @@ use crate::ai::Command;
 use crate::factions::Faction;
 use crate::game::EntityPositionTracker;
 use crate::items::Inventory;
+use crate::maps::{Tilemap, VisibilityMapLookup};
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
-use crate::world::{Tilemap, VisibilityMapLookup};
 
 #[derive(Default)]
 pub struct LogicMaslow;

@@ -13,10 +13,9 @@ use std::cmp::{Eq, PartialEq};
 use std::hash::{Hash, Hasher};
 
 // Internal includes.
-use super::Mapping;
+use super::{MapPosition, Mapping};
 use crate::multimap::Multimap;
 use crate::rrl_math::Position;
-use crate::world::MapPosition;
 
 type LightLevel = f64;
 type Width = u16;

@@ -17,11 +17,11 @@ use crate::ai::Command;
 use crate::factions::Faction;
 use crate::game::EntityPositionTracker;
 use crate::items::Inventory;
+use crate::maps::{Tilemap, VisibilityMap};
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
-use crate::world::{Tilemap, VisibilityMap};
 
 #[derive(Clone)]
 pub struct MaslowFuncWrapper {

@@ -12,8 +12,8 @@ use rand::{thread_rng, Rng};
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
+use crate::maps::TiledArea;
 use crate::rrl_math::Position;
-use crate::world::TiledArea;
 
 pub struct FillTileShapeRandRange {
     start_range: u32,

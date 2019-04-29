@@ -45,6 +45,7 @@ mod factions;
 mod game;
 mod io;
 mod items;
+mod maps;
 mod multidim;
 mod multimap;
 mod rrl_math;
@@ -54,7 +55,6 @@ mod stats;
 mod talents;
 mod themes;
 mod tiled_shapes_2d;
-mod world;
 use screens::{ScreenManager, StartScreen};
 
 fn main() {

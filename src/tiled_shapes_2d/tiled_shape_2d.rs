@@ -10,7 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use crate::world::MapPosition;
+use crate::maps::MapPosition;
 
 pub trait TiledShape2D {
     fn bottom(&self) -> u16;

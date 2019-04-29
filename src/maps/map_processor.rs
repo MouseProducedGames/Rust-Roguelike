@@ -13,7 +13,7 @@ use std::marker::Send;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use crate::world::Tilemap;
+use super::Tilemap;
 
 pub struct MapProcessor {
     gen_func: Arc<Mutex<FnMut(&Tilemap, &mut World) -> Tilemap + Send>>,

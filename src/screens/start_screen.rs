@@ -25,11 +25,11 @@ use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
 use crate::items::weapons::WeaponGroup;
 use crate::items::Inventory;
+use crate::maps::VisibilityMapLookup;
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
-use crate::world::VisibilityMapLookup;
 
 enum StartState {
     SetupDisplay,

@@ -10,8 +10,8 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use crate::tiled_shapes_2d::TiledShape2D;
-use crate::world::{MapPosition, Mapping};
+use super::TiledShape2D;
+use crate::maps::{MapPosition, Mapping};
 
 pub struct TiledRect {
     left: u16,

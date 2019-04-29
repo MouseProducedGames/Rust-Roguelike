@@ -17,8 +17,8 @@ use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::combat::AttackActionData;
 use crate::game::{EntityPositionTracker, Time};
+use crate::maps::{execute_tile_func, Tilemap, VisibilityMapLookup};
 use crate::rrl_math::Position;
-use crate::world::{execute_tile_func, Tilemap, VisibilityMapLookup};
 
 pub struct CommandSystem;
 

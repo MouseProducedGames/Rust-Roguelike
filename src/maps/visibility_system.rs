@@ -11,10 +11,10 @@ pub use specs::{Entities, ReadStorage, System, WriteExpect, WriteStorage};
 // Standard includes.
 
 // Internal includes.
+use super::{calculate_visibility, Lightmap, Tilemap, VisibilityMapLookup};
 use crate::game::EntityPositionTracker;
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
-use crate::world::{calculate_visibility, Lightmap, Tilemap, VisibilityMapLookup};
 
 pub struct VisibilitySystem;
 

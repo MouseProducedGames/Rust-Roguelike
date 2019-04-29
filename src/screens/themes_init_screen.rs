@@ -25,16 +25,16 @@ use crate::factions::Faction;
 use crate::game::combat::{AttackValue, MultiAttackPenalty};
 #[allow(unused_imports)]
 use crate::items::{Inventory, Item, LightSource};
+use crate::maps::{
+    match_pattern, MapProcessor, Mapping, PatternFlags, PatternLookup, Tilemap,
+    VisibilityMapLookup, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR, TILE_FUNC_INDEX_VOID,
+    TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR, TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
+};
 use crate::rrl_math::{Bounds, Position};
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
-use crate::world::{
-    match_pattern, MapProcessor, Mapping, PatternFlags, PatternLookup, Tilemap,
-    VisibilityMapLookup, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR, TILE_FUNC_INDEX_VOID,
-    TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR, TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
-};
 
 pub struct ThemeInitScreen {
     state: ScreenState,

@@ -12,9 +12,9 @@ Documentation:
 // Internal includes.
 use super::DungeonGenerator;
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape, FillTileShapeRandRange};
+use crate::maps::{Mapping, TiledArea, TiledAreaFilter};
 use crate::rrl_math::Position;
 use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{Mapping, TiledArea, TiledAreaFilter};
 
 pub struct _RandomlyTileDungeon {
     start_range: u32,

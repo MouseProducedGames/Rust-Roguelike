@@ -11,10 +11,10 @@ Documentation:
 
 // Internal includes.
 use super::ability::{Ability, AbilityRange};
+use crate::maps::{calculate_light_level, execute_tile_func, Lightmap, Tilemap, VisibilityMap};
 use crate::rrl_math::{Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, StatModifier};
-use crate::world::{calculate_light_level, execute_tile_func, Lightmap, Tilemap, VisibilityMap};
 
 pub fn ability_func(
     ability: Ability,

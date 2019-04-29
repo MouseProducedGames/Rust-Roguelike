@@ -12,11 +12,11 @@ use specs::{System, WriteExpect, WriteStorage};
 
 // Internal includes.
 use crate::abilities::{AbilityActivation, AbilityActivationOp};
+use crate::maps::{Lightmap, Tilemap, VisibilityMapLookup};
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
-use crate::world::{Lightmap, Tilemap, VisibilityMapLookup};
 
 pub struct AbilitySystem;
 

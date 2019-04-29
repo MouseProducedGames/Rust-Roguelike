@@ -42,11 +42,11 @@ use crate::items::weapons::factories::traits::{
 use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::WeaponGroup;
 use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_TORCH};
+use crate::maps::VisibilityMapLookup;
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
-use crate::world::VisibilityMapLookup;
 
 pub struct CharacterCreationScreen {
     state: ScreenState,

@@ -11,10 +11,10 @@ Documentation:
 
 // internal includes.
 use super::func::ability_func;
+use crate::maps::{Lightmap, Tilemap, VisibilityMap};
 use crate::rrl_math::Position;
 use crate::skills::SkillLookup;
 use crate::stats::CreatureStats;
-use crate::world::{Lightmap, Tilemap, VisibilityMap};
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum AbilityActivation {

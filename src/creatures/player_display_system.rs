@@ -14,9 +14,9 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use crate::ai::PlayerMarker;
 use crate::io::Display;
+use crate::maps::{Tilemap, VisibilityMapLookup};
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
-use crate::world::{Tilemap, VisibilityMapLookup};
 
 pub struct PlayerDisplaySystem;
 

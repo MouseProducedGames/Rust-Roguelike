@@ -19,9 +19,9 @@ use crate::bodies::Body;
 use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::items::{Inventory, Item};
+use crate::maps::{Tilemap, VisibilityMap};
 use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
-use crate::world::{Tilemap, VisibilityMap};
 
 pub trait Display: Drop + Send + Sync {
     fn blit_body(&mut self, names: ReadStorage<Name>, body: &Body);

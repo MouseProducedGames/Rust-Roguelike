@@ -13,12 +13,12 @@ use rand::{thread_rng, Rng};
 // Internal includes.
 use super::DungeonGenerator;
 use crate::dungen::draw_funcs::{DrawTileShape, FillTileShape};
-use crate::rrl_math::{Bounds, Position};
-use crate::tiled_shapes_2d::TiledRect;
-use crate::world::{
+use crate::maps::{
     MapPosition, Mapping, TiledArea, TiledAreaFilter, TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR,
     TILE_TYPE_INDEX_WALL,
 };
+use crate::rrl_math::{Bounds, Position};
+use crate::tiled_shapes_2d::TiledRect;
 
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum SplitType {

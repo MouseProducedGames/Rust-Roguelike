@@ -19,9 +19,9 @@ use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
+use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
 use crate::rrl_math::{Displacement, Position};
 use crate::stats::{CreatureStats, Stat};
-use crate::world::{Tilemap, VisibilityMap, VisibilityType};
 
 impl Display for ConsoleDisplay {
     fn blit_body(&mut self, names: ReadStorage<Name>, body: &Body) {

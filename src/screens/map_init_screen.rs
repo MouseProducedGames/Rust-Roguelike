@@ -15,10 +15,10 @@ use std::sync::{Arc, Mutex};
 use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::creatures::CreatureFactory;
 use crate::dungen::{DungenCommon, DungeonGenerator};
+use crate::maps::{Lightmap, MapProcessor, Mapping, Tilemap};
 use crate::rrl_math::Position;
 use crate::screens::{PatternsInitScreen, ThemeInitScreen};
 use crate::themes::{ThemeHelper, ThemeLookup};
-use crate::world::{Lightmap, MapProcessor, Mapping, Tilemap};
 
 enum MapInitState {
     InitializingPatterns,

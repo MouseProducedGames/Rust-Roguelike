@@ -11,8 +11,8 @@ Documentation:
 use std::marker::Send;
 
 // Internal includes.
+use crate::maps::TiledArea;
 use crate::rrl_math::Position;
-use crate::world::TiledArea;
 
 pub trait DungeonGenerator: Send {
     fn apply(&mut self, area: &mut dyn TiledArea, generation_areas: &mut Vec<(Position, Position)>);

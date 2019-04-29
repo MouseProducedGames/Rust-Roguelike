@@ -16,7 +16,7 @@ use std::sync::{Arc, Mutex};
 use super::Theme;
 use crate::creatures::CreatureFactory;
 use crate::dungen::DungeonGenerator;
-use crate::world::MapProcessor;
+use crate::maps::MapProcessor;
 
 pub struct ThemeLookup {
     values: HashMap<String, Arc<Mutex<Theme>>>,

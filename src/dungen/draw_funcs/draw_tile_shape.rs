@@ -11,8 +11,8 @@ Documentation:
 
 // Internal includes.
 use crate::dungen::DungeonGenerator;
+use crate::maps::TiledArea;
 use crate::rrl_math::Position;
-use crate::world::TiledArea;
 
 pub struct DrawTileShape {
     tile_type: u32,

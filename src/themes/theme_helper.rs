@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 use super::Theme;
 use crate::creatures::CreatureFactory;
 use crate::dungen::DungeonGenerator;
-use crate::world::MapProcessor;
+use crate::maps::MapProcessor;
 
 pub trait ThemeHelper {
     fn get_random_creature_factory<TFunc>(&self, call: &mut TFunc)

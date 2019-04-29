@@ -11,8 +11,8 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+use crate::maps::TiledArea;
 use crate::rrl_math::Position;
-use crate::world::TiledArea;
 
 pub struct FillTileShape {
     tile_type: u32,

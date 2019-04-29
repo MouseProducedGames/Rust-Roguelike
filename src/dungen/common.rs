@@ -10,7 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use crate::world::{Mapping, Tilemap};
+use crate::maps::{Mapping, Tilemap};
 
 pub trait DungenCommon {
     fn create_new(width: u16, height: u16) -> Tilemap {

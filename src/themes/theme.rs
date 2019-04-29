@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use crate::creatures::CreatureFactory;
 use crate::dungen::DungeonGenerator;
-use crate::world::MapProcessor;
+use crate::maps::MapProcessor;
 
 pub struct Theme {
     name: String,
