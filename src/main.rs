@@ -47,7 +47,6 @@ mod io;
 mod items;
 mod maps;
 mod multidim;
-mod multimap;
 mod rrl_math;
 mod screens;
 mod skills;

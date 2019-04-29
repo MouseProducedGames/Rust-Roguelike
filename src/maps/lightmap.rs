@@ -13,8 +13,7 @@ use std::cmp::{Eq, PartialEq};
 use std::hash::{Hash, Hasher};
 
 // Internal includes.
-use super::{MapPosition, Mapping};
-use crate::multimap::Multimap;
+use super::{MapPosition, Mapping, Multimap};
 use crate::rrl_math::Position;
 
 type LightLevel = f64;

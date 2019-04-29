@@ -24,8 +24,8 @@ Multimap is implemented as a thin wrapper over Multidim.
 // Standard includes.
 
 // Internal includes.
-use super::multidim::Multidim;
-use crate::maps::{MapPosition, Mapping};
+use super::{MapPosition, Mapping};
+use crate::multidim::Multidim;
 
 pub struct Multimap<T>
 where
