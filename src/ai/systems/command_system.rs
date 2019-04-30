@@ -17,7 +17,7 @@ use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::combat::AttackActionData;
 use crate::game::{EntityPositionTracker, Time};
-use crate::maps::{execute_tile_func, Tilemap, VisibilityMapLookup};
+use crate::maps::{execute_tile_func, Mapping, Tilemap, VisibilityMapLookup};
 use crate::rrl_math::Position;
 
 pub struct CommandSystem;
@@ -64,7 +64,7 @@ impl<'a> System<'a> for CommandSystem {
                 Command::Move(displacement) => {
                     let new_position = *position + displacement;
 
-                    if map.passable_pos(new_position) {
+                    if map.is_pos_in_bounds(new_position) && map.passable_pos(new_position) {
                         impassable_movement(
                             current_time,
                             entity,
@@ -74,11 +74,11 @@ impl<'a> System<'a> for CommandSystem {
                             entity_position_tracker,
                             &factions,
                         );
+
+                        let visibility_type = visibility_map.value_pos(new_position);
+
+                        execute_tile_func(false, 100, map, visibility_type, new_position);
                     }
-
-                    let visibility_type = visibility_map.value_pos(new_position);
-
-                    execute_tile_func(false, 100, map, visibility_type, new_position);
                 }
                 _ => (),
             }

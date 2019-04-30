@@ -103,7 +103,7 @@ impl Screen for ThemeInitScreen {
             }),
         ))));
 
-        let _generic = theme_lookup.add_theme(
+        let generic = theme_lookup.add_theme(
             String::from("Generic"),
             &[split_rooms.clone()],
             &[creature_factory.clone()],
@@ -140,7 +140,7 @@ impl Screen for ThemeInitScreen {
             ))))],
         );
 
-        let undead = theme_lookup.add_theme(
+        let _undead = theme_lookup.add_theme(
             String::from("Undead"),
             &[catacombs.clone()],
             &[creature_factory.clone()],
@@ -213,8 +213,8 @@ impl Screen for ThemeInitScreen {
             ))))],
         );
 
-        // theme_lookup.make_theme_top_level(generic.lock().unwrap().name());
-        theme_lookup.make_theme_top_level(undead.lock().unwrap().name());
+        theme_lookup.make_theme_top_level(generic.lock().unwrap().name());
+        // theme_lookup.make_theme_top_level(undead.lock().unwrap().name());
 
         self.state = ScreenState::Stopped;
     }
