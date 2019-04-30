@@ -12,12 +12,13 @@ use specs::{Component, VecStorage};
 
 // Internal includes.
 use super::WeaponGroup;
-use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
+use crate::game::combat::{AttackValue, DamageType, DamageValue, DefenceValue};
 
 #[derive(Clone, Copy)]
 pub struct Weapon {
     weapon_type: WeaponGroup,
     attack_value: AttackValue,
+    damage_type: DamageType,
     damage_value: DamageValue,
     defence_value: DefenceValue,
 }
@@ -26,12 +27,14 @@ impl Weapon {
     pub fn new(
         weapon_type: WeaponGroup,
         attack_value: AttackValue,
+        damage_type: DamageType,
         damage_value: DamageValue,
         defence_value: DefenceValue,
     ) -> Self {
         Self {
             weapon_type,
             attack_value,
+            damage_type,
             damage_value,
             defence_value,
         }
@@ -47,6 +50,14 @@ impl Weapon {
 
     pub fn attack_value_mut(&mut self) -> &mut AttackValue {
         &mut self.attack_value
+    }
+
+    pub fn damage_type(&self) -> DamageType {
+        self.damage_type
+    }
+
+    pub fn _damage_type_mut(&mut self) -> &mut DamageType {
+        &mut self.damage_type
     }
 
     pub fn damage_value(&self) -> DamageValue {

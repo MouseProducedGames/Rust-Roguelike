@@ -13,7 +13,7 @@ use std::default::Default;
 
 // Internal includes.
 use crate::data_types::Name;
-use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
+use crate::game::combat::{AttackValue, DamageType, DamageValue, DefenceValue};
 use crate::items::weapons::factories::{TemplateWeaponFactory, WeaponFactory};
 use crate::items::weapons::{Weapon, WeaponGroup};
 
@@ -30,6 +30,7 @@ impl Default for PalmFactory {
                 Weapon::new(
                     WeaponGroup::Unarmed,
                     AttackValue::from(0),
+                    DamageType::Blunt,
                     DamageValue::from(0),
                     DefenceValue::from(0),
                 ),

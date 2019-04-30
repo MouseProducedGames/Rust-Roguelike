@@ -11,7 +11,7 @@ use specs::Entity;
 // Standard includes.
 
 // Internal includes.
-use super::{DamageValue, ProtectionValue};
+use super::{DamageType, DamageValue, ProtectionValue};
 use crate::items::armours::ArmourGroup;
 use crate::items::weapons::WeaponGroup;
 
@@ -23,6 +23,7 @@ pub struct ProtectionData {
     protection: ProtectionValue,
     armour_group: ArmourGroup,
     weapon_group: WeaponGroup,
+    damage_type: DamageType,
 }
 
 impl ProtectionData {
@@ -33,6 +34,7 @@ impl ProtectionData {
         protection: ProtectionValue,
         armour_group: ArmourGroup,
         weapon_group: WeaponGroup,
+        damage_type: DamageType,
     ) -> Self {
         Self {
             attacker,
@@ -41,6 +43,7 @@ impl ProtectionData {
             protection,
             armour_group,
             weapon_group,
+            damage_type,
         }
     }
 
@@ -74,5 +77,13 @@ impl ProtectionData {
 
     pub fn weapon_group(&self) -> WeaponGroup {
         self.weapon_group
+    }
+
+    pub fn damage_type(&self) -> DamageType {
+        self.damage_type
+    }
+
+    pub fn _damage_type_mut(&mut self) -> &mut DamageType {
+        &mut self.damage_type
     }
 }

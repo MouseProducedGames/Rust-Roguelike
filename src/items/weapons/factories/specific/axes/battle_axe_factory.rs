@@ -13,7 +13,7 @@ use std::default::Default;
 
 // Internal includes.
 use crate::data_types::Name;
-use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
+use crate::game::combat::{AttackValue, DamageType, DamageValue, DefenceValue};
 use crate::items::weapons::factories::{TemplateWeaponFactory, WeaponFactory};
 use crate::items::weapons::{Weapon, WeaponGroup};
 
@@ -30,6 +30,7 @@ impl Default for BattleAxeFactory {
                 Weapon::new(
                     WeaponGroup::Axes,
                     AttackValue::from(1),
+                    DamageType::Slashing,
                     DamageValue::from(11),
                     DefenceValue::from(1),
                 ),

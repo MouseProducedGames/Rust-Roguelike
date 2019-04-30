@@ -13,7 +13,7 @@ use std::default::Default;
 
 // Internal includes.
 use crate::data_types::Name;
-use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
+use crate::game::combat::{AttackValue, DamageType, DamageValue, DefenceValue};
 use crate::items::weapons::factories::{TemplateWeaponFactory, WeaponFactory};
 use crate::items::weapons::{Weapon, WeaponGroup};
 
@@ -30,6 +30,7 @@ impl Default for LongSwordFactory {
                 Weapon::new(
                     WeaponGroup::Swords,
                     AttackValue::from(2),
+                    DamageType::Slashing,
                     DamageValue::from(7),
                     DefenceValue::from(2),
                 ),

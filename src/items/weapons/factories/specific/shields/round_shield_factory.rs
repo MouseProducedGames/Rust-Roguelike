@@ -14,7 +14,7 @@ use std::default::Default;
 // Internal includes.
 use super::TemplateShieldFactory;
 use crate::data_types::Name;
-use crate::game::combat::{AttackValue, DamageValue, DefenceValue};
+use crate::game::combat::{AttackValue, DamageType, DamageValue, DefenceValue};
 use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::{Weapon, WeaponGroup};
 
@@ -31,6 +31,7 @@ impl Default for RoundShieldFactory {
                 Weapon::new(
                     WeaponGroup::Shields,
                     AttackValue::from(2),
+                    DamageType::Crushing,
                     DamageValue::from(1),
                     DefenceValue::from(5),
                 ),

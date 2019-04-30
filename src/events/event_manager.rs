@@ -16,8 +16,8 @@ use super::{EventHandler, RefEventFn};
 use crate::bodies::{Body, ImplementBodySlotFlags};
 use crate::dice::roll_attack;
 use crate::game::combat::{
-    AttackActionData, AttackData, AttackValue, DamageData, DamageValue, DefenceValue, InjuryData,
-    InjuryValue, ProtectionData, ProtectionValue,
+    AttackActionData, AttackData, AttackValue, DamageData, DamageType, DamageValue, DefenceValue,
+    InjuryData, ProtectionData, ProtectionValue,
 };
 use crate::game::Time;
 use crate::items::armours::ArmourGroup;
@@ -95,8 +95,10 @@ impl EventManager {
                             let item_entity = body_slot.item();
                             let mut attack_modifier = AttackValue::from(0);
                             let mut weapon_group = WeaponGroup::Unarmed;
+                            let mut damage_type = DamageType::Blunt;
                             if let Some(weapon) = weapons.get(item_entity) {
                                 attack_modifier += weapon.attack_value();
+                                damage_type = weapon.damage_type();
                                 weapon_group = weapon.weapon_group();
                             }
 
@@ -110,6 +112,7 @@ impl EventManager {
                                     attack_modifier,
                                     DefenceValue::from(0),
                                     weapon_group,
+                                    damage_type,
                                 ),
                             );
                         }
@@ -132,6 +135,7 @@ impl EventManager {
                         event.data().defender(),
                         DamageValue::from(result.margin_of_success()),
                         event.data().weapon_group(),
+                        event.data().damage_type(),
                     );
                     damage_events.push_event(current_time, damage_data);
                 }
@@ -142,14 +146,18 @@ impl EventManager {
             let mut damage_events = self.damage_events.lock().unwrap();
             let mut protection_events = self.protection_events.lock().unwrap();
             while let Some(event) = damage_events.run_once(current_time, world) {
-                if event.data().damage() > 0 {
+                let event_data = *event.data();
+                let damage_type = event_data.damage_type();
+                let damage = damage_type.damage_to_damage(event_data.damage());
+                if damage > 0 {
                     let protection_data = ProtectionData::new(
-                        event.data().attacker(),
-                        event.data().defender(),
-                        event.data().damage(),
+                        event_data.attacker(),
+                        event_data.defender(),
+                        damage,
                         ProtectionValue::from(0),
                         ArmourGroup::Default,
-                        event.data().weapon_group(),
+                        event_data.weapon_group(),
+                        damage_type,
                     );
                     protection_events.push_event(current_time, protection_data);
                 }
@@ -160,13 +168,19 @@ impl EventManager {
             let mut protection_events = self.protection_events.lock().unwrap();
             let mut injury_events = self.injury_events.lock().unwrap();
             while let Some(event) = protection_events.run_once(current_time, world) {
-                let injury_total = event.data().damage() - event.data().protection();
+                let event_data = *event.data();
+                let damage = event_data.damage();
+                let damage_type = event_data.damage_type();
+                let protection = event_data.protection();
+                let injury_total = damage_type.damage_to_injury(damage - protection);
+
                 if injury_total > 0 {
                     let injury_data = InjuryData::new(
-                        event.data().attacker(),
-                        event.data().defender(),
-                        InjuryValue::from(injury_total),
-                        event.data().weapon_group(),
+                        event_data.attacker(),
+                        event_data.defender(),
+                        injury_total,
+                        event_data.weapon_group(),
+                        damage_type,
                     );
                     injury_events.push_event(current_time, injury_data);
                 }

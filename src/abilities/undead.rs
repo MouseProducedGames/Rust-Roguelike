@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex, MutexGuard};
 
 // Internal includes.
 use crate::events::{Event, EventManager};
-use crate::game::combat::{InjuryData, InjuryValue};
+use crate::game::combat::{DamageType, InjuryData, InjuryValue};
 
 #[derive(Clone, Copy, Default)]
 pub struct Undead;
@@ -38,9 +38,14 @@ impl UndeadEventHandler {
         let mut event_data = *event.data();
         let undead_lookup = world.read_storage::<Undead>();
         if undead_lookup.get(event_data.defender()).is_some() {
-            let mut injury_value = event_data.injury();
-            injury_value = InjuryValue::from(i32::from(injury_value) / 2);
-            *event_data.injury_mut() = injury_value;
+            let injury_value = i32::from(event_data.injury());
+            *event_data.injury_mut() = InjuryValue::from(match event_data.damage_type() {
+                DamageType::Blunt => (injury_value * 2) / 3,
+                DamageType::Crushing => injury_value / 2,
+                // The value-relative spillover of Blunt and Slashing, rounded to the tens place.
+                DamageType::Piercing => (injury_value * 7) / 2,
+                DamageType::Slashing => (injury_value * 2) / 3,
+            });
         }
 
         *event.data_mut() = event_data;
