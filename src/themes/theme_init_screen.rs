@@ -140,7 +140,7 @@ impl Screen for ThemeInitScreen {
             ))))],
         );
 
-        let _undead = theme_lookup.add_theme(
+        let undead = theme_lookup.add_theme(
             String::from("Undead"),
             &[catacombs.clone()],
             &[creature_factory.clone()],
@@ -214,7 +214,7 @@ impl Screen for ThemeInitScreen {
         );
 
         theme_lookup.make_theme_top_level(generic.lock().unwrap().name());
-        // theme_lookup.make_theme_top_level(undead.lock().unwrap().name());
+        theme_lookup.make_theme_top_level(undead.lock().unwrap().name());
 
         self.state = ScreenState::Stopped;
     }
