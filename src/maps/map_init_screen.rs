@@ -12,13 +12,12 @@ use specs::World;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
+use super::{Lightmap, MapProcessor, Mapping, PatternsInitScreen, Tilemap};
 use crate::creatures::CreatureFactoryWrapper;
 use crate::dungen::{DungenCommon, DungeonGenerator};
-use crate::maps::{Lightmap, MapProcessor, Mapping, Tilemap};
 use crate::rrl_math::Position;
-use crate::screens::{PatternsInitScreen, ThemeInitScreen};
-use crate::themes::{ThemeHelper, ThemeLookup};
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
+use crate::themes::{ThemeHelper, ThemeInitScreen, ThemeLookup};
 
 enum MapInitState {
     InitializingPatterns,

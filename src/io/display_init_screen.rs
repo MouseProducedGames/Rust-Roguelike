@@ -12,8 +12,8 @@ use specs::World;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::io::{Display, DisplayOption, Input};
+use super::{Display, DisplayOption, Input};
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
 enum DisplayInitState {
     ChoosingDisplay,

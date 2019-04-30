@@ -13,12 +13,14 @@ Documentation:
 pub mod console;
 mod description;
 mod display;
+mod display_init_screen;
 mod display_option;
 mod input;
 mod input_instance;
 pub mod r8g8b8_console;
 pub use description::{LongDescription, ShortDescription};
 pub use display::Display;
+pub use display_init_screen::DisplayInitScreen;
 pub use display_option::DisplayOption;
 pub use input::Input;
 use input_instance::InputData;

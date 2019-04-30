@@ -12,11 +12,13 @@ Documentation:
 // Internal includes.
 mod body;
 mod body_factory;
+mod body_screen;
 mod body_slot;
 mod body_slot_flags;
 mod body_slot_type;
 pub use body::{Body, BodySystem};
 pub use body_factory::BodyFactory;
+pub use body_screen::BodyScreen;
 pub use body_slot::BodySlot;
 pub use body_slot_flags::{BodySlotFlags, ImplementBodySlotFlags};
 pub use body_slot_type::BodySlotType;

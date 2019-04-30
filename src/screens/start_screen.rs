@@ -12,20 +12,20 @@ use specs::{Builder, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{
-    CharacterCreationScreen, DisplayInitScreen, GameScreen, MapInitScreen, MaslowInitScreen,
-    Screen, ScreenPushWrapper, ScreenState, WorldInitScreen,
-};
-use crate::ai::maslow::MaslowTreeLookup;
+use super::{Screen, ScreenPushWrapper, ScreenState, WorldInitScreen};
+use crate::ai::maslow::{MaslowInitScreen, MaslowTreeLookup};
 use crate::ai::systems::LogicMaslow;
 use crate::ai::Command;
 use crate::background::SpeciesType;
 use crate::bodies::BodyFactory;
+use crate::creatures::CharacterCreationScreen;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
+use crate::game::GameScreen;
+use crate::io::DisplayInitScreen;
 use crate::items::weapons::WeaponGroup;
 use crate::items::Inventory;
-use crate::maps::VisibilityMapLookup;
+use crate::maps::{MapInitScreen, VisibilityMapLookup};
 use crate::rrl_math::Position;
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;

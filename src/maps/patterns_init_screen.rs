@@ -12,12 +12,12 @@ use specs::World;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
 #[allow(unused_imports)]
-use crate::maps::{
+use super::{
     Mapping, PatternFlags, PatternLookup, Tilemap, TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR,
     TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
 };
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
 pub struct PatternsInitScreen {
     state: ScreenState,

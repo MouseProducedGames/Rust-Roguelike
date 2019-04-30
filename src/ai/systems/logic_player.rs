@@ -16,11 +16,12 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use crate::ai::{Command, PlayerMarker};
+use crate::bodies::BodyScreen;
 use crate::game::GameState;
 use crate::io::Input;
-use crate::items::TransferItem;
+use crate::items::{InventoryScreen, TransferItem};
 use crate::rrl_math::Displacement;
-use crate::screens::{BodyScreen, InventoryScreen, PickupScreen};
+use crate::screens::PickupScreen;
 
 pub struct LogicPlayer {}
 

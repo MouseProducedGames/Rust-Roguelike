@@ -14,7 +14,7 @@ use std::default::Default;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
+use super::ThemeLookup;
 use crate::creatures::factories::specific::ZombieFactory;
 use crate::creatures::factories::CreatureFactory;
 use crate::creatures::CreatureFactoryWrapper;
@@ -27,7 +27,7 @@ use crate::maps::{
     TILE_TYPE_INDEX_FLOOR, TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
 };
 use crate::rrl_math::{Bounds, Position};
-use crate::themes::ThemeLookup;
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
 pub struct ThemeInitScreen {
     state: ScreenState,

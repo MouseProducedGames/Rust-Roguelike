@@ -12,16 +12,16 @@ use specs::{RunNow, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
+use super::{FirstUpdateSystem, GameState, LastUpdateSystem, Time};
 use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
 use crate::bodies::BodySystem;
 use crate::creatures::{CreatureDisplaySystem, PlayerDisplaySystem};
 use crate::events::EventManager;
-use crate::game::{FirstUpdateSystem, GameState, LastUpdateSystem, Time};
 use crate::io::{Display, Input};
 use crate::items::{InventorySystem, ItemDisplaySystem, LightSourceSystem};
 use crate::maps::{Lightmap, VisibilitySystem};
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
 pub struct GameScreen {
     ability_system: AbilitySystem,

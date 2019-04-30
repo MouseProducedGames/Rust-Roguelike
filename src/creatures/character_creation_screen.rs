@@ -15,7 +15,6 @@ use std::default::Default;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
 use crate::abilities::{Ability, AbilityActivation, AbilityActivationOp, AbilityRange};
 use crate::ai::systems::LogicPlayer;
 use crate::ai::{Command, PlayerMarker, PlayerPosition, ViewpointMarker};
@@ -44,6 +43,7 @@ use crate::items::weapons::WeaponGroup;
 use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_TORCH};
 use crate::maps::VisibilityMapLookup;
 use crate::rrl_math::Position;
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;

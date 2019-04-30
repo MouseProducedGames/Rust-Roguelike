@@ -12,11 +12,11 @@ use specs::World;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::ai::maslow::{
+use super::{
     faction_reaction, random_wander, MaslowFuncWrapper, MaslowFuncWrapperLookup, MaslowNode,
     MaslowNodeLookup, MaslowTree, MaslowTreeLookup,
 };
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
 enum MaslowInitState {
     World,

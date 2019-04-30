@@ -12,11 +12,11 @@ use specs::{Component, Entity, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{Screen, ScreenPushWrapper, ScreenState};
+use super::{Inventory, Item, TransferItem};
 use crate::data_types::Name;
 use crate::game::GameState;
 use crate::io::{Display, Input};
-use crate::items::{Inventory, Item, TransferItem};
+use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
 pub struct InventoryScreen {
     creature: Entity,

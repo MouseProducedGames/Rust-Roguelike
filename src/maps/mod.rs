@@ -14,12 +14,14 @@ mod calculate_light;
 mod lightmap;
 mod line_of_sight;
 mod map_displacement;
+mod map_init_screen;
 mod map_position;
 mod map_processor;
 mod map_scan_position;
 mod mapping;
 mod multimap;
 mod pattern_matching;
+mod patterns_init_screen;
 mod tile_func_type;
 mod tile_type;
 mod tilemap;
@@ -31,12 +33,14 @@ pub use calculate_light::calculate_light_level;
 pub use lightmap::Lightmap;
 pub use line_of_sight::calculate_visibility;
 pub use map_displacement::MapDisplacement;
+pub use map_init_screen::MapInitScreen;
 pub use map_position::MapPosition;
 pub use map_processor::MapProcessor;
 pub use map_scan_position::MapScanPosition;
 pub use mapping::Mapping;
 pub use multimap::Multimap;
 pub use pattern_matching::{match_pattern, PatternFlags, PatternLookup};
+use patterns_init_screen::PatternsInitScreen;
 pub use tile_func_type::{
     execute_tile_func, TileFunc, TileFuncOp, TILE_FUNC_DATA, TILE_FUNC_INDEX_DOOR,
     TILE_FUNC_INDEX_SECRET_DOOR, TILE_FUNC_INDEX_VOID,

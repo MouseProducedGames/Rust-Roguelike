@@ -12,12 +12,14 @@ Documentation:
 // Internal includes.
 pub mod armours;
 mod inventory;
+mod inventory_screen;
 mod item;
 mod item_display_system;
 mod light_source;
 mod transfer_item;
 pub mod weapons;
 pub use inventory::{Inventory, InventorySystem};
+pub use inventory_screen::InventoryScreen;
 pub use item::Item;
 pub use item_display_system::ItemDisplaySystem;
 pub use light_source::{LightSource, LightSourceSystem};
