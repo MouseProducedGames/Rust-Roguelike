@@ -31,9 +31,13 @@ use crate::items::armours::factories::traits::construction::{
 use crate::items::armours::factories::traits::quality::FineArmourFactory;
 use crate::items::armours::factories::ArmourFactory;
 use crate::items::weapons::factories::specific::axes::BattleAxeFactory;
+use crate::items::weapons::factories::specific::maces::RoundMaceFactory;
 use crate::items::weapons::factories::specific::shields::RoundShieldFactory;
+use crate::items::weapons::factories::specific::spears::{
+    LongSpearFactory, MediumSpearFactory, ShortSpearFactory,
+};
 use crate::items::weapons::factories::specific::swords::{
-    ArmingSwordFactory, BastardSwordFactory, LongSwordFactory,
+    ArmingSwordFactory, BastardSwordFactory, LongSwordFactory, RapierFactory,
 };
 use crate::items::weapons::factories::traits::{
     FineWeaponFactory, LargeShieldFactory, MediumShieldFactory, SmallShieldFactory,
@@ -136,7 +140,25 @@ impl Screen for CharacterCreationScreen {
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
+                    WeaponGroup::Maces,
+                    AttackValue::from(2),
+                    DefenceValue::from(2),
+                ),
+            );
+
+            skills.insert(
+                SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
+                SkillType::Weapon(
                     WeaponGroup::Shields,
+                    AttackValue::from(2),
+                    DefenceValue::from(2),
+                ),
+            );
+
+            skills.insert(
+                SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
+                SkillType::Weapon(
+                    WeaponGroup::Spears,
                     AttackValue::from(2),
                     DefenceValue::from(2),
                 ),
@@ -174,10 +196,13 @@ impl Screen for CharacterCreationScreen {
                 LeatherArmourFactory<GauntletFactory>,
             > = Default::default();
 
-            let arming_sword_factory: FineWeaponFactory<ArmingSwordFactory> = Default::default();
-            let bastard_sword_factory: FineWeaponFactory<BastardSwordFactory> = Default::default();
             let battle_axe_factory: FineWeaponFactory<BattleAxeFactory> = Default::default();
-            let long_sword_factory: FineWeaponFactory<LongSwordFactory> = Default::default();
+
+            let round_mace_factory: FineWeaponFactory<RoundMaceFactory> = Default::default();
+
+            let short_spear_factory: FineWeaponFactory<ShortSpearFactory> = Default::default();
+            let medium_spear_factory: FineWeaponFactory<MediumSpearFactory> = Default::default();
+            let long_spear_factory: FineWeaponFactory<LongSpearFactory> = Default::default();
 
             let large_round_shield_factory: LargeShieldFactory<RoundShieldFactory> =
                 Default::default();
@@ -185,6 +210,11 @@ impl Screen for CharacterCreationScreen {
                 Default::default();
             let small_round_shield_factory: SmallShieldFactory<RoundShieldFactory> =
                 Default::default();
+
+            let arming_sword_factory: FineWeaponFactory<ArmingSwordFactory> = Default::default();
+            let bastard_sword_factory: FineWeaponFactory<BastardSwordFactory> = Default::default();
+            let long_sword_factory: FineWeaponFactory<LongSwordFactory> = Default::default();
+            let rapier_factory: FineWeaponFactory<RapierFactory> = Default::default();
 
             let torch = world
                 .create_entity()
@@ -199,11 +229,16 @@ impl Screen for CharacterCreationScreen {
                 .build();
 
             let mut inventory = Inventory::new();
-            inventory.push(bastard_sword_factory.create_owned(world));
             inventory.push(battle_axe_factory.create_owned(world));
+            inventory.push(round_mace_factory.create_owned(world));
+            inventory.push(short_spear_factory.create_owned(world));
+            inventory.push(medium_spear_factory.create_owned(world));
+            inventory.push(long_spear_factory.create_owned(world));
             inventory.push(large_round_shield_factory.create_owned(world));
-            inventory.push(long_sword_factory.create_owned(world));
             inventory.push(small_round_shield_factory.create_owned(world));
+            inventory.push(bastard_sword_factory.create_owned(world));
+            inventory.push(long_sword_factory.create_owned(world));
+            inventory.push(rapier_factory.create_owned(world));
             inventory.push(torch);
             let inventory = inventory;
 

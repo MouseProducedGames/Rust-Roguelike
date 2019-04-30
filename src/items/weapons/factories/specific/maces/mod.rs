@@ -10,14 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
-#[repr(C)]
-pub enum WeaponGroup {
-    Axes,
-    Maces,
-    Shields,
-    Spears,
-    Swords,
-    Unarmed,
-}
+mod mace_factory;
+mod round_mace_factory;
+pub use mace_factory::MaceFactory;
+pub use round_mace_factory::RoundMaceFactory;

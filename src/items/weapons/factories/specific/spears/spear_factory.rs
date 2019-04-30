@@ -14,30 +14,29 @@ use std::default::Default;
 use std::sync::Arc;
 
 // Internal includes.
-use super::{ArmingSwordFactory, BastardSwordFactory, LongSwordFactory, RapierFactory};
+use super::{LongSpearFactory, MediumSpearFactory, ShortSpearFactory};
 use crate::items::weapons::factories::WeaponFactory;
 
 #[derive(Clone)]
-pub struct SwordFactory {
+pub struct SpearFactory {
     weapon_factories: Arc<Vec<Arc<dyn WeaponFactory>>>,
 }
 
-impl SwordFactory {}
+impl SpearFactory {}
 
-impl Default for SwordFactory {
+impl Default for SpearFactory {
     fn default() -> Self {
         Self {
             weapon_factories: Arc::new(vec![
-                Arc::new(ArmingSwordFactory::default()),
-                Arc::new(BastardSwordFactory::default()),
-                Arc::new(LongSwordFactory::default()),
-                Arc::new(RapierFactory::default()),
+                Arc::new(ShortSpearFactory::default()),
+                Arc::new(MediumSpearFactory::default()),
+                Arc::new(LongSpearFactory::default()),
             ]),
         }
     }
 }
 
-impl WeaponFactory for SwordFactory {
+impl WeaponFactory for SpearFactory {
     fn create(&self, world: &mut World) -> Entity {
         let index = thread_rng().gen_range(0, self.weapon_factories.len());
         self.weapon_factories[index].create(world)
