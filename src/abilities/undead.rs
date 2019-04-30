@@ -43,7 +43,7 @@ impl UndeadEventHandler {
                 DamageType::Blunt => (injury_value * 2) / 3,
                 DamageType::Crushing => injury_value / 2,
                 // The value-relative spillover of Blunt and Slashing, rounded to the tens place.
-                DamageType::Piercing => (injury_value * 7) / 2,
+                DamageType::Piercing => (injury_value * 2) / 7,
                 DamageType::Slashing => (injury_value * 2) / 3,
             });
         }
