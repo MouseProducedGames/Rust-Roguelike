@@ -48,6 +48,7 @@ pub fn roll_attack(attack_value: AttackValue, defence_value: DefenceValue) -> Su
 }
 
 pub fn roll_success(skill_bonus: i32) -> SuccessResult {
-    let result = SuccessRoll::new(3, Die::new(6), 0).roll().total() + i64::from(skill_bonus);
-    SuccessResult::new(result as i32)
+    let natural_roll = SuccessRoll::new(3, Die::new(6), 0).roll().total();
+    let roll = natural_roll + i64::from(skill_bonus);
+    SuccessResult::new(roll as i32, natural_roll as i32)
 }

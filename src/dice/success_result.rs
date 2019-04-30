@@ -16,8 +16,8 @@ use std::ops::Deref;
 pub struct SuccessResult(bool, i32);
 
 impl SuccessResult {
-    pub fn new(roll: i32) -> Self {
-        SuccessResult(roll > 10, roll)
+    pub fn new(roll: i32, natural_roll: i32) -> Self {
+        SuccessResult((roll > 10) || (natural_roll >= 17), roll)
     }
 
     pub fn is_failure(self) -> bool {
