@@ -10,5 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+mod bandit_factory;
 mod zombie_factory;
+pub use bandit_factory::BanditFactory;
 pub use zombie_factory::ZombieFactory;

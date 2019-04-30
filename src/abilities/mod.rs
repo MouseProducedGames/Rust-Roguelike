@@ -13,5 +13,7 @@ Documentation:
 mod ability;
 mod ability_system;
 mod func;
+mod undead;
 pub use ability::{Ability, AbilityActivation, AbilityActivationOp, AbilityRange};
 pub use ability_system::AbilitySystem;
+pub use undead::{Undead, UndeadEventHandler};

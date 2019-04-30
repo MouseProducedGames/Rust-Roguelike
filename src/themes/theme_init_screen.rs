@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::ThemeLookup;
-use crate::creatures::factories::specific::ZombieFactory;
+use crate::creatures::factories::specific::{BanditFactory, ZombieFactory};
 use crate::creatures::factories::CreatureFactory;
 use crate::creatures::{CreatureFactoryWrapper, CreaturePlot};
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
@@ -96,7 +96,14 @@ impl Screen for ThemeInitScreen {
             &[],
         );
 
-        let creature_factory = Arc::new(Mutex::new(CreatureFactoryWrapper::new(Arc::new(
+        let bandit_factory = Arc::new(Mutex::new(CreatureFactoryWrapper::new(Arc::new(
+            Mutex::new(|position: Position, world: &mut World| {
+                let bandit_factory = BanditFactory::default();
+                bandit_factory.create_with_position(world, position);
+            }),
+        ))));
+
+        let zombie_factory = Arc::new(Mutex::new(CreatureFactoryWrapper::new(Arc::new(
             Mutex::new(|position: Position, world: &mut World| {
                 let zombie_factory = ZombieFactory::default();
                 zombie_factory.create_with_position(world, position);
@@ -106,7 +113,7 @@ impl Screen for ThemeInitScreen {
         let generic = theme_lookup.add_theme(
             String::from("Generic"),
             &[split_rooms.clone()],
-            &[creature_factory.clone()],
+            &[bandit_factory.clone()],
             &[],
             &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
                 Mutex::new(|meta_tile_map: &Tilemap, _world: &mut World| {
@@ -143,7 +150,7 @@ impl Screen for ThemeInitScreen {
         let undead = theme_lookup.add_theme(
             String::from("Undead"),
             &[catacombs.clone()],
-            &[creature_factory.clone()],
+            &[zombie_factory.clone()],
             &[],
             &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
                 Mutex::new(|meta_tile_map: &Tilemap, world: &mut World| {

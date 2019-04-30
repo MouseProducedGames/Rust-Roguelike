@@ -13,6 +13,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
+use crate::abilities::{Undead, UndeadEventHandler};
 use crate::ai::maslow::MaslowTree;
 use crate::ai::systems::{LogicMaslow, LogicPlayer};
 use crate::ai::{Command, PlayerMarker, ViewpointMarker};
@@ -84,6 +85,7 @@ impl Screen for WorldInitScreen {
             world.add_resource(SkillEventHandler::new(&mut event_manager));
             world.add_resource(StatEventHandler::new(&mut event_manager));
             world.add_resource(ArmourEventHandler::new(&mut event_manager));
+            world.add_resource(UndeadEventHandler::new(&mut event_manager));
         }
         world.add_resource(GameState::new());
         world.add_resource(Arc::new(Mutex::new(PatternLookup::new())));
@@ -107,6 +109,7 @@ impl Screen for WorldInitScreen {
         world.register::<SkillLookup>();
         world.register::<TalentLookup>();
         world.register::<TransferItem>();
+        world.register::<Undead>();
         world.register::<ViewpointMarker>();
         world.register::<VisibilityMapLookup>();
         world.register::<Weapon>();
