@@ -26,8 +26,8 @@ impl StatEventHandler {
             .push_attack_handler(Arc::new(Mutex::new(StatEventHandler::attack_event_handler)));
         event_manager
             .push_damage_handler(Arc::new(Mutex::new(StatEventHandler::damage_event_handler)));
-        event_manager
-            .push_injury_handler(Arc::new(Mutex::new(StatEventHandler::injury_event_handler)));
+        /* event_manager
+        .push_injury_handler(Arc::new(Mutex::new(StatEventHandler::injury_event_handler))); */
 
         Self {}
     }
