@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::creatures::CreatureFactory;
+use crate::creatures::CreatureFactoryWrapper;
 use crate::dungen::{DungenCommon, DungeonGenerator};
 use crate::maps::{Lightmap, MapProcessor, Mapping, Tilemap};
 use crate::rrl_math::Position;
@@ -83,7 +83,7 @@ impl MapInitScreen {
                         // println!("({} {})", position.x, position.y);
                         theme.get_random_creature_factory(&mut |_index: usize,
                                                                 creature_factory: &Arc<
-                            Mutex<CreatureFactory>,
+                            Mutex<CreatureFactoryWrapper>,
                         >| {
                             creature_factory.lock().unwrap().gen_once(position, world);
                         });

@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::Theme;
-use crate::creatures::CreatureFactory;
+use crate::creatures::CreatureFactoryWrapper;
 use crate::dungen::DungeonGenerator;
 use crate::maps::MapProcessor;
 
@@ -35,7 +35,7 @@ impl ThemeLookup {
         &mut self,
         name: String,
         sub_themes: &[Arc<Mutex<Theme>>],
-        creature_factories: &[Arc<Mutex<CreatureFactory>>],
+        creature_factories: &[Arc<Mutex<CreatureFactoryWrapper>>],
         dungeon_generators: &[Arc<Mutex<dyn DungeonGenerator>>],
         map_processors: &[Arc<Mutex<MapProcessor>>],
     ) -> Arc<Mutex<Theme>> {

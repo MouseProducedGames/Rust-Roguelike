@@ -7,33 +7,26 @@ Documentation:
 **/
 // External includes.
 use rand::{thread_rng, Rng};
-use specs::{Builder, World};
+use specs::World;
 
 // Standard includes.
+use std::default::Default;
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Screen, ScreenPushWrapper, ScreenState};
-use crate::ai::maslow::MaslowTreeLookup;
-use crate::ai::systems::LogicMaslow;
-use crate::ai::Command;
-use crate::background::SpeciesType;
-use crate::bodies::BodyFactory;
-use crate::creatures::CreatureFactory;
+use crate::creatures::factories::specific::ZombieFactory;
+use crate::creatures::factories::CreatureFactory;
+use crate::creatures::CreatureFactoryWrapper;
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
-use crate::factions::Faction;
-use crate::game::combat::{AttackValue, MultiAttackPenalty};
 #[allow(unused_imports)]
 use crate::items::{Inventory, Item, LightSource};
 use crate::maps::{
     match_pattern, MapProcessor, Mapping, PatternFlags, PatternLookup, Tilemap,
-    VisibilityMapLookup, TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR, TILE_FUNC_INDEX_VOID,
-    TILE_TYPE_INDEX_DOOR, TILE_TYPE_INDEX_FLOOR, TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
+    TILE_FUNC_INDEX_DOOR, TILE_FUNC_INDEX_SECRET_DOOR, TILE_FUNC_INDEX_VOID, TILE_TYPE_INDEX_DOOR,
+    TILE_TYPE_INDEX_FLOOR, TILE_TYPE_INDEX_VOID, TILE_TYPE_INDEX_WALL,
 };
 use crate::rrl_math::{Bounds, Position};
-use crate::skills::SkillLookup;
-use crate::stats::CreatureStats;
-use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
 
 pub struct ThemeInitScreen {
@@ -103,36 +96,16 @@ impl Screen for ThemeInitScreen {
             &[],
         );
 
-        let creature_factory = Arc::new(Mutex::new(CreatureFactory::new(Arc::new(Mutex::new(
-            |position: Position, world: &mut World| {
+        let creature_factory = Arc::new(Mutex::new(CreatureFactoryWrapper::new(Arc::new(
+            Mutex::new(|position: Position, world: &mut World| {
                 if thread_rng().gen_range(1, 300) == 1 {
-                    let maslow_tree_lookup = world
-                        .read_resource::<Arc<Mutex<MaslowTreeLookup>>>()
-                        .clone();
-                    let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
-
-                    let body = SpeciesType::Human.create_body(world);
-
-                    world
-                        .create_entity()
-                        .with(body)
-                        .with(Command::None)
-                        .with(LogicMaslow)
-                        .with(CreatureStats::default())
-                        .with(Faction::new(1))
-                        .with(Inventory::new())
-                        .with(maslow_tree_lookup.get("Faction/Wander").unwrap().clone())
-                        .with(MultiAttackPenalty::new(AttackValue::from(0)))
-                        .with(position)
-                        .with(SkillLookup::new())
-                        .with(TalentLookup::new())
-                        .with(VisibilityMapLookup::new())
-                        .build();
+                    let zombie_factory = ZombieFactory::default();
+                    zombie_factory.create_with_position(world, position);
                 }
-            },
-        )))));
+            }),
+        ))));
 
-        let generic = theme_lookup.add_theme(
+        let _generic = theme_lookup.add_theme(
             String::from("Generic"),
             &[split_rooms.clone()],
             &[creature_factory.clone()],
@@ -222,33 +195,8 @@ impl Screen for ThemeInitScreen {
                                         i32::from(creature_map_position.y()),
                                     );
 
-                                    let maslow_tree_lookup = world
-                                        .read_resource::<Arc<Mutex<MaslowTreeLookup>>>()
-                                        .clone();
-                                    let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
-
-                                    let body = SpeciesType::Human.create_body(world);
-
-                                    world
-                                        .create_entity()
-                                        .with(body)
-                                        .with(Command::None)
-                                        .with(LogicMaslow)
-                                        .with(CreatureStats::default())
-                                        .with(Faction::new(1))
-                                        .with(Inventory::new())
-                                        .with(
-                                            maslow_tree_lookup
-                                                .get("Faction/Wander")
-                                                .unwrap()
-                                                .clone(),
-                                        )
-                                        .with(MultiAttackPenalty::new(AttackValue::from(0)))
-                                        .with(creature_position)
-                                        .with(SkillLookup::new())
-                                        .with(TalentLookup::new())
-                                        .with(VisibilityMapLookup::new())
-                                        .build();
+                                    let zombie_factory = ZombieFactory::default();
+                                    zombie_factory.create_with_position(world, creature_position);
                                 }
                             }
                         }

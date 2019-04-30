@@ -15,11 +15,11 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use crate::rrl_math::Position;
 
-pub struct CreatureFactory {
+pub struct CreatureFactoryWrapper {
     gen_func: Arc<Mutex<FnMut(Position, &mut World) + Send>>,
 }
 
-impl CreatureFactory {
+impl CreatureFactoryWrapper {
     pub fn new(gen_func: Arc<Mutex<FnMut(Position, &mut World) + Send>>) -> Self {
         Self { gen_func }
     }

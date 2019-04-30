@@ -188,6 +188,12 @@ impl SpeciesType {
     }
 }
 
+impl From<SpeciesType> for CreatureStats {
+    fn from(species_type: SpeciesType) -> Self {
+        Species::create(species_type).stats()
+    }
+}
+
 #[derive(Copy, Clone)]
 pub struct Species {
     stats: CreatureStats,

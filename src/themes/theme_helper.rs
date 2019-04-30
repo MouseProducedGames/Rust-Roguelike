@@ -13,14 +13,14 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::Theme;
-use crate::creatures::CreatureFactory;
+use crate::creatures::CreatureFactoryWrapper;
 use crate::dungen::DungeonGenerator;
 use crate::maps::MapProcessor;
 
 pub trait ThemeHelper {
     fn get_random_creature_factory<TFunc>(&self, call: &mut TFunc)
     where
-        TFunc: FnMut(usize, &Arc<Mutex<CreatureFactory>>);
+        TFunc: FnMut(usize, &Arc<Mutex<CreatureFactoryWrapper>>);
 
     fn get_random_dungeon_generator<TFunc>(&self, call: &mut TFunc)
     where
@@ -34,11 +34,11 @@ pub trait ThemeHelper {
 impl ThemeHelper for Theme {
     fn get_random_creature_factory<TFunc>(&self, call: &mut TFunc)
     where
-        TFunc: FnMut(usize, &Arc<Mutex<CreatureFactory>>),
+        TFunc: FnMut(usize, &Arc<Mutex<CreatureFactoryWrapper>>),
     {
         let index = thread_rng().gen_range(0, self.creature_factory_count());
         self.for_all_creature_factories(
-            &mut |current_index: usize, dungen: &Arc<Mutex<CreatureFactory>>| {
+            &mut |current_index: usize, dungen: &Arc<Mutex<CreatureFactoryWrapper>>| {
                 if current_index == index {
                     // let dungen = dungen.clone();
                     call(current_index, &dungen);

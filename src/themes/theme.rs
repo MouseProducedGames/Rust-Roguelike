@@ -11,7 +11,7 @@ Documentation:
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use crate::creatures::CreatureFactory;
+use crate::creatures::CreatureFactoryWrapper;
 use crate::dungen::DungeonGenerator;
 use crate::maps::MapProcessor;
 
@@ -21,7 +21,7 @@ pub struct Theme {
     dungeon_generator_count: usize,
     map_processor_count: usize,
     sub_themes: Vec<Arc<Mutex<Theme>>>,
-    creature_factories: Vec<Arc<Mutex<CreatureFactory>>>,
+    creature_factories: Vec<Arc<Mutex<CreatureFactoryWrapper>>>,
     dungeon_generators: Vec<Arc<Mutex<dyn DungeonGenerator>>>,
     map_processors: Vec<Arc<Mutex<MapProcessor>>>,
 }
@@ -30,7 +30,7 @@ impl Theme {
     pub(crate) fn new(
         name: String,
         sub_themes: &[Arc<Mutex<Theme>>],
-        creature_factories: &[Arc<Mutex<CreatureFactory>>],
+        creature_factories: &[Arc<Mutex<CreatureFactoryWrapper>>],
         dungeon_generators: &[Arc<Mutex<dyn DungeonGenerator>>],
         map_processors: &[Arc<Mutex<MapProcessor>>],
     ) -> Self {
@@ -89,7 +89,7 @@ impl Theme {
 
     pub fn for_all_creature_factories<TFunc>(&self, call: &mut TFunc)
     where
-        TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactory)>>),
+        TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactoryWrapper)>>),
     {
         let mut index: usize = 0;
         self.for_all_creature_factories_impl(&mut index, call);
@@ -117,7 +117,7 @@ impl Theme {
 
     fn for_all_creature_factories_impl<TFunc>(&self, index: &mut usize, call: &mut TFunc)
     where
-        TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactory)>>),
+        TFunc: FnMut(usize, &Arc<Mutex<(CreatureFactoryWrapper)>>),
     {
         for dungen in self.creature_factories.iter() {
             call(*index, dungen);
