@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Lightmap, MapProcessor, Mapping, PatternsInitScreen, Tilemap};
-use crate::creatures::CreatureFactoryWrapper;
+use crate::creatures::{CreatureFactoryWrapper, CreaturePlot};
 use crate::dungen::{DungenCommon, DungeonGenerator};
 use crate::rrl_math::Position;
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
@@ -68,24 +68,24 @@ impl MapInitScreen {
             }
 
             {
+                let mut creature_plots: Vec<CreaturePlot> = vec![];
                 theme.get_random_map_processor(
                     &mut |_index: usize, dungen: &Arc<Mutex<MapProcessor>>| {
-                        map = dungen.lock().unwrap().gen_once(&map, world);
+                        let result = dungen.lock().unwrap().gen_once(&map, world);
+                        map = result.0;
+                        creature_plots = result.1;
                     },
                 );
-            }
 
-            for (top_left, bottom_right) in generation_areas.iter() {
-                for y in top_left.y..bottom_right.y {
-                    for x in top_left.x..bottom_right.x {
-                        let position = Position::new(x, y);
-                        // println!("({} {})", position.x, position.y);
+                let creature_plots = creature_plots;
+                for creature_plot in creature_plots {
+                    if let Some(position) = creature_plot.check() {
                         theme.get_random_creature_factory(&mut |_index: usize,
                                                                 creature_factory: &Arc<
                             Mutex<CreatureFactoryWrapper>,
                         >| {
                             creature_factory.lock().unwrap().gen_once(position, world);
-                        });
+                        })
                     }
                 }
             }

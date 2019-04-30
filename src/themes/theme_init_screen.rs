@@ -17,7 +17,7 @@ use std::sync::{Arc, Mutex};
 use super::ThemeLookup;
 use crate::creatures::factories::specific::ZombieFactory;
 use crate::creatures::factories::CreatureFactory;
-use crate::creatures::CreatureFactoryWrapper;
+use crate::creatures::{CreatureFactoryWrapper, CreaturePlot};
 use crate::dungen::{Catacombs, SplitDungeon, /* RandomlyTileDungeon, */ SplitType};
 #[allow(unused_imports)]
 use crate::items::{Inventory, Item, LightSource};
@@ -98,10 +98,8 @@ impl Screen for ThemeInitScreen {
 
         let creature_factory = Arc::new(Mutex::new(CreatureFactoryWrapper::new(Arc::new(
             Mutex::new(|position: Position, world: &mut World| {
-                if thread_rng().gen_range(1, 300) == 1 {
-                    let zombie_factory = ZombieFactory::default();
-                    zombie_factory.create_with_position(world, position);
-                }
+                let zombie_factory = ZombieFactory::default();
+                zombie_factory.create_with_position(world, position);
             }),
         ))));
 
@@ -113,6 +111,7 @@ impl Screen for ThemeInitScreen {
             &[Arc::new(Mutex::new(MapProcessor::new(Arc::new(
                 Mutex::new(|meta_tile_map: &Tilemap, _world: &mut World| {
                     let mut output = Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
+                    let mut creature_plots: Vec<CreaturePlot> = vec![];
                     for pos in meta_tile_map.get_position(0, 0) {
                         let (tile_type, tile_func_type) = match meta_tile_map.tile_type(pos) {
                             TILE_TYPE_INDEX_DOOR => {
@@ -131,8 +130,12 @@ impl Screen for ThemeInitScreen {
                         };
                         *output.tile_type_mut(pos) = tile_type;
                         *output.tile_func_type_mut(pos) = tile_func_type;
+
+                        let creature_position =
+                            Position::new(i32::from(pos.x()), i32::from(pos.y()));
+                        creature_plots.push(CreaturePlot::new(creature_position, 1, 300));
                     }
-                    output
+                    (output, creature_plots)
                 }),
             ))))],
         );
@@ -154,6 +157,7 @@ impl Screen for ThemeInitScreen {
                     let crypt_niche = pattern_lookup.get("Crypt Niche");
                     let crypt_niche = crypt_niche.unwrap();
 
+                    let mut creature_plots: Vec<CreaturePlot> = vec![];
                     let mut output = Tilemap::new(meta_tile_map.width(), meta_tile_map.height());
                     for y in 0..meta_tile_map.height() {
                         for x in 0..meta_tile_map.width() {
@@ -182,7 +186,7 @@ impl Screen for ThemeInitScreen {
                             *output.tile_type_mut(pos) = tile_type;
                             *output.tile_func_type_mut(pos) = tile_func_type;
 
-                            if thread_rng().gen_range(1, 300) == 1 {
+                            {
                                 let flags = PatternFlags::Rotate0
                                     | PatternFlags::Rotate90
                                     | PatternFlags::Rotate180
@@ -195,13 +199,16 @@ impl Screen for ThemeInitScreen {
                                         i32::from(creature_map_position.y()),
                                     );
 
-                                    let zombie_factory = ZombieFactory::default();
-                                    zombie_factory.create_with_position(world, creature_position);
+                                    creature_plots.push(CreaturePlot::new(
+                                        creature_position,
+                                        10,
+                                        100,
+                                    ));
                                 }
                             }
                         }
                     }
-                    output
+                    (output, creature_plots)
                 }),
             ))))],
         );

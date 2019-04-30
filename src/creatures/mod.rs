@@ -13,9 +13,11 @@ Documentation:
 mod character_creation_screen;
 mod creature_display_system;
 mod creature_factory_wrapper;
+mod creature_plot;
 pub mod factories;
 mod player_display_system;
 pub use character_creation_screen::CharacterCreationScreen;
 pub use creature_display_system::CreatureDisplaySystem;
 pub use creature_factory_wrapper::CreatureFactoryWrapper;
+pub use creature_plot::CreaturePlot;
 pub use player_display_system::PlayerDisplaySystem;
