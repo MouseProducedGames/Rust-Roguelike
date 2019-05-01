@@ -10,6 +10,7 @@ Documentation:
 // Standard includes.
 use std::cmp::{Ord, Ordering, PartialOrd};
 use std::convert::From;
+use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
 use std::ops::{Add, AddAssign, Sub, SubAssign};
@@ -20,6 +21,15 @@ use std::ops::{Add, AddAssign, Sub, SubAssign};
 pub struct GameValue<T>(i32, PhantomData<T>)
 where
     T: Copy + Clone + Default;
+
+impl<T> GameValue<T>
+where
+    T: Copy + Clone + Default,
+{
+    fn new(value: i32) -> Self {
+        Self(value, PhantomData)
+    }
+}
 
 impl<T> Add for GameValue<T>
 where
@@ -41,12 +51,12 @@ where
     }
 }
 
-impl<T> GameValue<T>
+impl<T> fmt::Display for GameValue<T>
 where
     T: Copy + Clone + Default,
 {
-    fn new(value: i32) -> Self {
-        Self(value, PhantomData)
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
 
@@ -76,6 +86,15 @@ where
 {
     fn from(value: GameValue<T>) -> Self {
         value.0
+    }
+}
+
+impl<T> From<&GameValue<T>> for i32
+where
+    T: Copy + Clone + Default,
+{
+    fn from(value: &GameValue<T>) -> Self {
+        Self::from(*value)
     }
 }
 

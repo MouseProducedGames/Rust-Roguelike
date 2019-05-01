@@ -13,7 +13,6 @@ use std::sync::{Arc, Mutex};
 
 // Internal includes.
 use super::{Inventory, Item, TransferItem};
-use crate::data_types::Name;
 use crate::game::GameState;
 use crate::io::{Display, Input};
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
@@ -73,7 +72,7 @@ impl Screen for InventoryScreen {
 
         let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
         let mut display = mutex_display.lock().unwrap();
-        display.blit_inventory(world.read_storage::<Name>(), &inventory);
+        display.blit_inventory(world, &inventory);
     }
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {

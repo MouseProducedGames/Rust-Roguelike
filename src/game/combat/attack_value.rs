@@ -6,18 +6,26 @@ Documentation:
 
 **/
 // External includes.
+use specs::World;
 
 // Standard includes.
 use std::ops::{Sub, SubAssign};
 
 // Internal includes.
 use super::DefenceValue;
+use crate::game::points::{BuildPointsValue, CostsBuildPoints};
 use crate::game::GameValue;
 
 #[derive(Copy, Clone, Default)]
 pub struct AttackMarker;
 
 pub type AttackValue = GameValue<AttackMarker>;
+
+impl CostsBuildPoints for AttackValue {
+    fn build_points_total(&self, _world: &World) -> BuildPointsValue {
+        BuildPointsValue::from(i32::from(self) * 30)
+    }
+}
 
 impl Sub<DefenceValue> for AttackValue {
     type Output = AttackValue;

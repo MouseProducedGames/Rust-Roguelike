@@ -6,7 +6,7 @@ Documentation:
 
 **/
 // External includes.
-use specs::{Entity, ReadStorage};
+use specs::{Entity, ReadStorage, World};
 
 // Standard includes.
 use std::marker::{Send, Sync};
@@ -24,9 +24,9 @@ use crate::rrl_math::Position;
 use crate::stats::CreatureStats;
 
 pub trait Display: Drop + Send + Sync {
-    fn blit_body(&mut self, names: ReadStorage<Name>, body: &Body);
+    fn blit_body(&mut self, world: &World, body: &Body);
 
-    fn blit_inventory(&mut self, names: ReadStorage<Name>, inventory: &Inventory);
+    fn blit_inventory(&mut self, world: &World, inventory: &Inventory);
 
     fn blit_items(&mut self, names: ReadStorage<Name>, items: &[Entity]);
 

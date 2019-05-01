@@ -15,6 +15,7 @@ use specs::{Builder, Entity, World};
 use super::ArmourFactory;
 use crate::bodies::BodySlotType;
 use crate::data_types::Name;
+use crate::game::points::CostsBuildPoints;
 use crate::items::armours::Armour;
 use crate::items::{Item, ITEM_ICON_INDEX_ARMOUR};
 
@@ -37,6 +38,7 @@ impl TemplateArmourFactory {
 
 impl ArmourFactory for TemplateArmourFactory {
     fn create(&self, world: &mut World) -> Entity {
+        let build_points_total = self.armour_template.build_points_total(world);
         world
             .create_entity()
             .with(Item::new(
@@ -45,6 +47,7 @@ impl ArmourFactory for TemplateArmourFactory {
                 BitFlags::empty(),
                 self.body_slot_type,
             ))
+            .with(build_points_total)
             .with(self.name.clone())
             .with(self.armour_template)
             .build()

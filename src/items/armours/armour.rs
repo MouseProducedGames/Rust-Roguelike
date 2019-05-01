@@ -6,13 +6,14 @@ Documentation:
 
 **/
 // External includes.
-use specs::{Component, VecStorage};
+use specs::{Component, VecStorage, World};
 
 // Standard includes.
 
 // Internal includes.
 use super::ArmourGroup;
 use crate::game::combat::{DefenceValue, ProtectionValue};
+use crate::game::points::{BuildPointsValue, CostsBuildPoints};
 
 #[derive(Clone, Copy)]
 pub struct Armour {
@@ -57,4 +58,11 @@ impl Armour {
 
 impl Component for Armour {
     type Storage = VecStorage<Self>;
+}
+
+impl CostsBuildPoints for Armour {
+    fn build_points_total(&self, world: &World) -> BuildPointsValue {
+        self.defence_value().build_points_total(world)
+            + self.protection_value().build_points_total(world)
+    }
 }

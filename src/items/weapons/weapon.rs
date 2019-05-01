@@ -6,13 +6,14 @@ Documentation:
 
 **/
 // External includes.
-use specs::{Component, VecStorage};
+use specs::{Component, VecStorage, World};
 
 // Standard includes.
 
 // Internal includes.
 use super::WeaponGroup;
 use crate::game::combat::{AttackValue, DamageType, DamageValue, DefenceValue};
+use crate::game::points::{BuildPointsValue, CostsBuildPoints};
 
 #[derive(Clone, Copy)]
 pub struct Weapon {
@@ -79,4 +80,12 @@ impl Weapon {
 
 impl Component for Weapon {
     type Storage = VecStorage<Self>;
+}
+
+impl CostsBuildPoints for Weapon {
+    fn build_points_total(&self, world: &World) -> BuildPointsValue {
+        self.attack_value().build_points_total(world)
+            + self.damage_value().build_points_total(world)
+            + self.defence_value().build_points_total(world)
+    }
 }

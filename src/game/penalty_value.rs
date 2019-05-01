@@ -134,6 +134,16 @@ where
     }
 }
 
+impl<T, TPenalty> From<&PenaltyValue<T, TPenalty>> for i32
+where
+    T: Copy + Clone + Default,
+    TPenalty: Copy + Clone + Default,
+{
+    fn from(value: &PenaltyValue<T, TPenalty>) -> Self {
+        Self::from(*value)
+    }
+}
+
 impl<T, TPenalty> Hash for PenaltyValue<T, TPenalty>
 where
     T: Copy + Clone + Default,

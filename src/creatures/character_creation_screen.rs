@@ -26,9 +26,9 @@ use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
 use crate::io::Display;
 use crate::items::armours::factories::specific::wearables::{CuirassFactory, GauntletFactory};
 use crate::items::armours::factories::traits::construction::{
-    ChainArmourFactory, LeatherArmourFactory,
+    ChainArmourFactory, LeatherArmourFactory, PlateArmourFactory,
 };
-use crate::items::armours::factories::traits::quality::FineArmourFactory;
+use crate::items::armours::factories::traits::quality::{FineArmourFactory, RustyArmourFactory};
 use crate::items::armours::factories::ArmourFactory;
 use crate::items::weapons::factories::specific::axes::BattleAxeFactory;
 use crate::items::weapons::factories::specific::maces::RoundMaceFactory;
@@ -40,7 +40,8 @@ use crate::items::weapons::factories::specific::swords::{
     ArmingSwordFactory, BastardSwordFactory, LongSwordFactory, RapierFactory,
 };
 use crate::items::weapons::factories::traits::{
-    FineWeaponFactory, LargeShieldFactory, MediumShieldFactory, SmallShieldFactory,
+    FineShieldFactory, FineWeaponFactory, LargeShieldFactory, MediumShieldFactory,
+    SmallShieldFactory,
 };
 use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::WeaponGroup;
@@ -192,9 +193,10 @@ impl Screen for CharacterCreationScreen {
             let species = Species::create(species_type);
 
             let chain_cuirass_factory: ChainArmourFactory<CuirassFactory> = Default::default();
-            let fine_leather_gauntlet_factory: FineArmourFactory<
-                LeatherArmourFactory<GauntletFactory>,
-            > = Default::default();
+            let leather_gauntlet_factory: FineArmourFactory<LeatherArmourFactory<GauntletFactory>> =
+                Default::default();
+            let plate_cuirass_factory: RustyArmourFactory<PlateArmourFactory<CuirassFactory>> =
+                Default::default();
 
             let battle_axe_factory: FineWeaponFactory<BattleAxeFactory> = Default::default();
 
@@ -204,12 +206,15 @@ impl Screen for CharacterCreationScreen {
             let medium_spear_factory: FineWeaponFactory<MediumSpearFactory> = Default::default();
             let long_spear_factory: FineWeaponFactory<LongSpearFactory> = Default::default();
 
-            let large_round_shield_factory: LargeShieldFactory<RoundShieldFactory> =
-                Default::default();
-            let medium_round_shield_factory: MediumShieldFactory<RoundShieldFactory> =
-                Default::default();
-            let small_round_shield_factory: SmallShieldFactory<RoundShieldFactory> =
-                Default::default();
+            let large_round_shield_factory: FineShieldFactory<
+                LargeShieldFactory<RoundShieldFactory>,
+            > = Default::default();
+            let medium_round_shield_factory: FineShieldFactory<
+                MediumShieldFactory<RoundShieldFactory>,
+            > = Default::default();
+            let small_round_shield_factory: FineShieldFactory<
+                SmallShieldFactory<RoundShieldFactory>,
+            > = Default::default();
 
             let arming_sword_factory: FineWeaponFactory<ArmingSwordFactory> = Default::default();
             let bastard_sword_factory: FineWeaponFactory<BastardSwordFactory> = Default::default();
@@ -229,6 +234,7 @@ impl Screen for CharacterCreationScreen {
                 .build();
 
             let mut inventory = Inventory::new();
+            inventory.push(plate_cuirass_factory.create_owned(world));
             inventory.push(battle_axe_factory.create_owned(world));
             inventory.push(round_mace_factory.create_owned(world));
             inventory.push(short_spear_factory.create_owned(world));
@@ -250,7 +256,7 @@ impl Screen for CharacterCreationScreen {
             body.get()
                 .get_mut("Left Hand")
                 .unwrap()
-                .hold_item(fine_leather_gauntlet_factory.create_owned(world));
+                .hold_item(leather_gauntlet_factory.create_owned(world));
             body.get()
                 .get_mut("Left Palm")
                 .unwrap()
@@ -258,7 +264,7 @@ impl Screen for CharacterCreationScreen {
             body.get()
                 .get_mut("Right Hand")
                 .unwrap()
-                .hold_item(fine_leather_gauntlet_factory.create_owned(world));
+                .hold_item(leather_gauntlet_factory.create_owned(world));
             body.get()
                 .get_mut("Right Palm")
                 .unwrap()

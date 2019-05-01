@@ -15,6 +15,7 @@ use specs::{Builder, Entity, World};
 use super::WeaponFactory;
 use crate::bodies::{BodySlotFlags, BodySlotType};
 use crate::data_types::Name;
+use crate::game::points::CostsBuildPoints;
 use crate::items::weapons::Weapon;
 use crate::items::{Item, ITEM_ICON_INDEX_WEAPON};
 
@@ -35,6 +36,7 @@ impl TemplateWeaponFactory {
 
 impl WeaponFactory for TemplateWeaponFactory {
     fn create(&self, world: &mut World) -> Entity {
+        let build_points_total = self.weapon_template.build_points_total(world);
         world
             .create_entity()
             .with(Item::new(
@@ -43,6 +45,7 @@ impl WeaponFactory for TemplateWeaponFactory {
                 BitFlags::from(BodySlotFlags::IsAttack),
                 BodySlotType::Palm,
             ))
+            .with(build_points_total)
             .with(self.name.clone())
             .with(self.weapon_template)
             .build()

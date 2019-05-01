@@ -18,6 +18,7 @@ mod game_state;
 mod game_value;
 mod last_update_system;
 mod penalty_value;
+pub mod points;
 mod time;
 pub use combat::{AttackData, DamageData, InjuryData};
 pub use entity_position_tracker::EntityPositionTracker;
