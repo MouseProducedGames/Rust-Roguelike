@@ -10,7 +10,6 @@ Documentation:
 // Standard includes.
 use std::cmp::{Ord, Ordering, PartialOrd};
 use std::convert::From;
-use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
 use std::ops::{Add, AddAssign, Sub, SubAssign};
@@ -48,15 +47,6 @@ where
 {
     fn add_assign(&mut self, other: GameValue<T>) {
         self.0 += other.0;
-    }
-}
-
-impl<T> fmt::Display for GameValue<T>
-where
-    T: Copy + Clone + Default,
-{
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.0)
     }
 }
 

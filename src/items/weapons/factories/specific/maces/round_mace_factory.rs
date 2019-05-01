@@ -31,7 +31,7 @@ impl Default for RoundMaceFactory {
                     WeaponGroup::Maces,
                     AttackValue::from(1),
                     DamageType::Crushing,
-                    DamageValue::from(11),
+                    DamageValue::from(7),
                     DefenceValue::from(1),
                 ),
             ),

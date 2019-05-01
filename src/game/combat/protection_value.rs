@@ -21,6 +21,6 @@ pub type ProtectionValue = GameValue<ProtectionMarker>;
 
 impl CostsBuildPoints for ProtectionValue {
     fn build_points_total(&self, _world: &World) -> BuildPointsValue {
-        BuildPointsValue::from(i32::from(self) * 15)
+        BuildPointsValue::from(i32::from(self) * 20)
     }
 }

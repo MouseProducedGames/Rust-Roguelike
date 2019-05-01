@@ -23,7 +23,7 @@ pub type DamageValue = GameValue<DamageMarker>;
 
 impl CostsBuildPoints for DamageValue {
     fn build_points_total(&self, _world: &World) -> BuildPointsValue {
-        BuildPointsValue::from(i32::from(self) * 15)
+        BuildPointsValue::from(i32::from(self) * 20)
     }
 }
 

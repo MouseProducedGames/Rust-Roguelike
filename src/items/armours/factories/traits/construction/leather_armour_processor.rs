@@ -45,7 +45,7 @@ impl ArmourProcessor for LeatherArmourProcessor {
         {
             let mut storage = world.write_storage::<BuildPointsValue>();
             let build_points_value = storage.get_mut(item_entity).unwrap();
-            *build_points_value += DefenceValue::from(-1).build_points_total(world)
+            *build_points_value += DefenceValue::from(1).build_points_total(world)
                 + ProtectionValue::from(4).build_points_total(world);
         }
 

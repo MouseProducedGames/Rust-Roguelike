@@ -31,8 +31,8 @@ impl Default for BattleAxeFactory {
                     WeaponGroup::Axes,
                     AttackValue::from(1),
                     DamageType::Slashing,
-                    DamageValue::from(11),
-                    DefenceValue::from(1),
+                    DamageValue::from(7),
+                    DefenceValue::from(2),
                 ),
             ),
         }

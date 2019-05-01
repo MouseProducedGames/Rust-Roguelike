@@ -13,7 +13,7 @@ use specs::{Component, VecStorage, World};
 // Internal includes.
 use super::ArmourGroup;
 use crate::game::combat::{DefenceValue, ProtectionValue};
-use crate::game::points::{BuildPointsValue, CostsBuildPoints};
+use crate::game::points::{BuildPointsValue, CostsBuildPoints, CostsCurrency, CurrencyValue};
 
 #[derive(Clone, Copy)]
 pub struct Armour {
@@ -64,5 +64,12 @@ impl CostsBuildPoints for Armour {
     fn build_points_total(&self, world: &World) -> BuildPointsValue {
         self.defence_value().build_points_total(world)
             + self.protection_value().build_points_total(world)
+    }
+}
+
+impl CostsCurrency for Armour {
+    fn currency_total(&self, world: &World) -> CurrencyValue {
+        CurrencyValue::from(self.defence_value().build_points_total(world))
+            + CurrencyValue::from(self.protection_value().build_points_total(world))
     }
 }

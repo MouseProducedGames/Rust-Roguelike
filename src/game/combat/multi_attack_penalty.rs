@@ -26,6 +26,6 @@ impl Component for MultiAttackPenalty {
 
 impl CostsBuildPoints for MultiAttackPenalty {
     fn build_points_total(&self, _world: &World) -> BuildPointsValue {
-        BuildPointsValue::from(i32::from(self) * 20)
+        BuildPointsValue::from(i32::from(self) * 25)
     }
 }

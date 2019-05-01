@@ -13,6 +13,8 @@ use std::default::Default;
 
 // Internal includes.
 use super::{WeaponFactory, WeaponProcessor};
+use crate::game::points::{BuildPointsValue, CostsBuildPoints, CostsCurrency, CurrencyValue};
+use crate::items::weapons::Weapon;
 
 #[derive(Clone)]
 pub struct ProcessWeaponFactory<TWeaponFactory, TWeaponProcessor>(TWeaponFactory, TWeaponProcessor)
@@ -49,6 +51,19 @@ where
 {
     fn create(&self, world: &mut World) -> Entity {
         let item_entity = self.0.create(world);
-        self.1.process(world, item_entity)
+        let item_entity = self.1.process(world, item_entity);
+        let weapon = *world.read_storage::<Weapon>().get(item_entity).unwrap();
+        let build_points_total = weapon.build_points_total(world);
+        let currency_total = weapon.currency_total(world);
+        *world
+            .write_storage::<BuildPointsValue>()
+            .get_mut(item_entity)
+            .unwrap() = build_points_total;
+        *world
+            .write_storage::<CurrencyValue>()
+            .get_mut(item_entity)
+            .unwrap() = currency_total;
+
+        item_entity
     }
 }
