@@ -13,7 +13,7 @@ use std::default::Default;
 
 // Internal includes.
 use super::{WeaponFactory, WeaponProcessor};
-use crate::game::points::{BuildPointsValue, CostsBuildPoints, CostsCurrency, CurrencyValue};
+use crate::game::points::{BuildPoints, CostsBuildPoints, CostsCurrency, CurrencyValue};
 use crate::items::weapons::Weapon;
 
 #[derive(Clone)]
@@ -56,7 +56,7 @@ where
         let build_points_total = weapon.build_points_total(world);
         let currency_total = weapon.currency_total(world);
         *world
-            .write_storage::<BuildPointsValue>()
+            .write_storage::<BuildPoints>()
             .get_mut(item_entity)
             .unwrap() = build_points_total;
         *world

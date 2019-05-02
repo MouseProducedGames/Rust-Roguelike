@@ -12,7 +12,7 @@ use specs::{Component, VecStorage, World};
 
 // Internal includes.
 use super::AttackMarker;
-use crate::game::points::{BuildPointsValue, CostsBuildPoints};
+use crate::game::points::{BuildLevel, HasBuildLevel};
 use crate::game::PenaltyValue;
 
 #[derive(Copy, Clone, Default)]
@@ -24,8 +24,8 @@ impl Component for MultiAttackPenalty {
     type Storage = VecStorage<Self>;
 }
 
-impl CostsBuildPoints for MultiAttackPenalty {
-    fn build_points_total(&self, _world: &World) -> BuildPointsValue {
-        BuildPointsValue::from(i32::from(self) * 25)
+impl HasBuildLevel for MultiAttackPenalty {
+    fn build_level_total(&self, _world: &World) -> BuildLevel {
+        BuildLevel::from(i32::from(self) * 25)
     }
 }

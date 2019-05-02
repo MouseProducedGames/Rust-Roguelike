@@ -9,10 +9,11 @@ Documentation:
 use specs::{Component, VecStorage};
 
 // Standard includes.
+use std::convert::From;
 use std::fmt;
 
 // Internal includes.
-use super::BuildPointsValue;
+use super::{BuildLevel, BuildPoints};
 use crate::game::GameValue;
 
 #[derive(Copy, Clone, Default)]
@@ -65,18 +66,29 @@ impl fmt::Display for CurrencyValue {
     }
 }
 
-impl From<BuildPointsValue> for CurrencyValue {
-    fn from(build_points_value: BuildPointsValue) -> Self {
-        let raw_build_level = i32::from(build_points_value);
-        let raw_built_points_total =
-            1.259_921_049_894_873_2_f64.powf(f64::from(raw_build_level) / 30.0) * 6.0;
-        let raw_currency_value = raw_built_points_total.powi(2);
-        CurrencyValue::from(raw_currency_value as i32)
+impl From<BuildLevel> for CurrencyValue {
+    fn from(build_level: BuildLevel) -> Self {
+        let build_points = BuildPoints::from(build_level);
+        CurrencyValue::from(build_points)
     }
 }
 
-impl From<&BuildPointsValue> for CurrencyValue {
-    fn from(build_points_value: &BuildPointsValue) -> Self {
-        CurrencyValue::from(*build_points_value)
+impl From<&BuildLevel> for CurrencyValue {
+    fn from(build_level: &BuildLevel) -> Self {
+        Self::from(*build_level)
+    }
+}
+
+impl From<BuildPoints> for CurrencyValue {
+    fn from(build_points: BuildPoints) -> Self {
+        let raw_build_points = i32::from(build_points);
+        let raw_currency_value = raw_build_points.pow(2);
+        CurrencyValue::from(raw_currency_value as i32 / 100)
+    }
+}
+
+impl From<&BuildPoints> for CurrencyValue {
+    fn from(build_points: &BuildPoints) -> Self {
+        CurrencyValue::from(*build_points)
     }
 }

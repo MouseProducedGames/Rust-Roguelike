@@ -13,7 +13,7 @@ use std::convert::From;
 
 // Internal includes.
 use super::DamageValue;
-use crate::game::points::{BuildPointsValue, CostsBuildPoints};
+use crate::game::points::{BuildLevel, HasBuildLevel};
 use crate::game::GameValue;
 
 #[derive(Copy, Clone, Default)]
@@ -21,9 +21,9 @@ pub struct InjuryMarker;
 
 pub type InjuryValue = GameValue<InjuryMarker>;
 
-impl CostsBuildPoints for InjuryValue {
-    fn build_points_total(&self, _world: &World) -> BuildPointsValue {
-        BuildPointsValue::from(i32::from(self) * 30)
+impl HasBuildLevel for InjuryValue {
+    fn build_level_total(&self, _world: &World) -> BuildLevel {
+        BuildLevel::from(i32::from(self) * 30)
     }
 }
 

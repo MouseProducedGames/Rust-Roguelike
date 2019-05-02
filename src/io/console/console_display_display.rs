@@ -17,7 +17,7 @@ use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
 use crate::data_types::Name;
 use crate::factions::Faction;
-use crate::game::points::{BuildPointsValue, CurrencyValue};
+use crate::game::points::{BuildPoints, CurrencyValue};
 use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
@@ -31,22 +31,24 @@ impl Display for ConsoleDisplay {
         self.put_string(1, 1, "Body:", Color::Grey, Color::Black);
 
         let name_storage = world.read_storage::<Name>();
-        let build_points_storage = world.read_storage::<BuildPointsValue>();
+        let build_points_storage = world.read_storage::<BuildPoints>();
         let currency_storage = world.read_storage::<CurrencyValue>();
         for (i, body_slot) in body.get().values().enumerate() {
             let item_entity = body_slot.item();
             #[allow(unused_variables)]
-            let mut use_build_points_total = BuildPointsValue::from(0);
-            if let Some(build_points_value) = build_points_storage.get(item_entity) {
-                use_build_points_total = *build_points_value;
+            let mut use_build_points = BuildPoints::from(0);
+            if let Some(build_points) = build_points_storage.get(item_entity) {
+                use_build_points = *build_points;
             }
             #[allow(unused_variables)]
-            let use_build_points_total = use_build_points_total;
+            let use_build_points = use_build_points;
 
+            #[allow(unused_variables)]
             let mut use_currency_total = CurrencyValue::from(0);
             if let Some(currency_value) = currency_storage.get(item_entity) {
                 use_currency_total = *currency_value;
             }
+            #[allow(unused_variables)]
             let use_currency_total = use_currency_total;
 
             if let Some(name) = name_storage.get(item_entity) {
@@ -60,7 +62,7 @@ impl Display for ConsoleDisplay {
                     body_slot.name(),
                     name,
                     use_currency_total,
-                    // use_build_points_total,
+                    // use_build_points,
                 );
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }
@@ -75,22 +77,24 @@ impl Display for ConsoleDisplay {
         self.put_string(1, 1, "Inventory:", Color::Grey, Color::Black);
 
         let name_storage = world.read_storage::<Name>();
-        let build_points_storage = world.read_storage::<BuildPointsValue>();
+        let build_points_storage = world.read_storage::<BuildPoints>();
         let currency_storage = world.read_storage::<CurrencyValue>();
         for (i, item_entity) in inventory.get().iter().enumerate() {
             let item_entity = *item_entity;
             #[allow(unused_variables)]
-            let mut use_build_points_total = BuildPointsValue::from(0);
-            if let Some(build_points_value) = build_points_storage.get(item_entity) {
-                use_build_points_total = *build_points_value;
+            let mut use_build_points = BuildPoints::from(0);
+            if let Some(build_points) = build_points_storage.get(item_entity) {
+                use_build_points = *build_points;
             }
             #[allow(unused_variables)]
-            let use_build_points_total = use_build_points_total;
+            let use_build_points = use_build_points;
 
+            #[allow(unused_variables)]
             let mut use_currency_total = CurrencyValue::from(0);
             if let Some(currency_value) = currency_storage.get(item_entity) {
                 use_currency_total = *currency_value;
             }
+            #[allow(unused_variables)]
             let use_currency_total = use_currency_total;
 
             if let Some(name) = name_storage.get(item_entity) {
@@ -103,7 +107,7 @@ impl Display for ConsoleDisplay {
                     },
                     name,
                     use_currency_total,
-                    // use_build_points_total,
+                    // use_build_points,
                 );
                 self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
             }

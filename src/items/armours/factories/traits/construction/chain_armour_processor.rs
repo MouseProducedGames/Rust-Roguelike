@@ -14,7 +14,6 @@ use std::default::Default;
 // Internal includes.
 use crate::data_types::Name;
 use crate::game::combat::{DefenceValue, ProtectionValue};
-use crate::game::points::{BuildPointsValue, CostsBuildPoints};
 use crate::items::armours::factories::{ArmourProcessor, ProcessArmourFactory};
 use crate::items::armours::Armour;
 
@@ -40,13 +39,6 @@ impl ArmourProcessor for ChainArmourProcessor {
             let armour = storage.get_mut(item_entity).unwrap();
             *armour.defence_value_mut() += DefenceValue::from(-2);
             *armour.protection_value_mut() += ProtectionValue::from(8);
-        }
-
-        {
-            let mut storage = world.write_storage::<BuildPointsValue>();
-            let build_points_value = storage.get_mut(item_entity).unwrap();
-            *build_points_value += DefenceValue::from(-2).build_points_total(world)
-                + ProtectionValue::from(8).build_points_total(world);
         }
 
         {

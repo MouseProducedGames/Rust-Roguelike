@@ -13,7 +13,9 @@ use specs::{Component, VecStorage, World};
 // Internal includes.
 use super::ArmourGroup;
 use crate::game::combat::{DefenceValue, ProtectionValue};
-use crate::game::points::{BuildPointsValue, CostsBuildPoints, CostsCurrency, CurrencyValue};
+use crate::game::points::{
+    BuildLevel, BuildPoints, CostsBuildPoints, CostsCurrency, CurrencyValue, HasBuildLevel,
+};
 
 #[derive(Clone, Copy)]
 pub struct Armour {
@@ -61,15 +63,23 @@ impl Component for Armour {
 }
 
 impl CostsBuildPoints for Armour {
-    fn build_points_total(&self, world: &World) -> BuildPointsValue {
-        self.defence_value().build_points_total(world)
-            + self.protection_value().build_points_total(world)
+    fn build_points_total(&self, world: &World) -> BuildPoints {
+        BuildPoints::from(self.build_level_total(world))
     }
 }
 
 impl CostsCurrency for Armour {
     fn currency_total(&self, world: &World) -> CurrencyValue {
-        CurrencyValue::from(self.defence_value().build_points_total(world))
-            + CurrencyValue::from(self.protection_value().build_points_total(world))
+        CurrencyValue::from(self.build_points_total(world))
+    }
+}
+
+impl HasBuildLevel for Armour {
+    fn build_level_total(&self, world: &World) -> BuildLevel {
+        let base_level = self.protection_value().build_level_total(world);
+        let raw_base_level = i32::from(base_level);
+        let raw_defence_level = self.defence_value().build_level_total(world);
+        let raw_restriction_level = i32::from(raw_defence_level) / 3;
+        BuildLevel::from(raw_base_level - raw_restriction_level)
     }
 }

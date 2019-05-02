@@ -11,16 +11,16 @@ use specs::Entity;
 // Standard includes.
 
 // Internal includes.
-use super::BuildPointsValue;
+use super::BuildPoints;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct _BuildPointsData {
     evaluate_entity: Entity,
-    build_points_value: BuildPointsValue,
+    build_points_value: BuildPoints,
 }
 
 impl _BuildPointsData {
-    pub fn _new(evaluate_entity: Entity, build_points_value: BuildPointsValue) -> Self {
+    pub fn _new(evaluate_entity: Entity, build_points_value: BuildPoints) -> Self {
         Self {
             evaluate_entity,
             build_points_value,
@@ -31,11 +31,11 @@ impl _BuildPointsData {
         self.evaluate_entity
     }
 
-    pub fn _build_points_value(&self) -> BuildPointsValue {
+    pub fn _build_points_value(&self) -> BuildPoints {
         self.build_points_value
     }
 
-    pub fn _build_points_value_mut(&mut self) -> &mut BuildPointsValue {
+    pub fn _build_points_value_mut(&mut self) -> &mut BuildPoints {
         &mut self.build_points_value
     }
 }

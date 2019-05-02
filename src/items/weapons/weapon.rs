@@ -13,7 +13,9 @@ use specs::{Component, VecStorage, World};
 // Internal includes.
 use super::WeaponGroup;
 use crate::game::combat::{AttackValue, DamageType, DamageValue, DefenceValue};
-use crate::game::points::{BuildPointsValue, CostsBuildPoints, CostsCurrency, CurrencyValue};
+use crate::game::points::{
+    BuildLevel, BuildPoints, CostsBuildPoints, CostsCurrency, CurrencyValue, HasBuildLevel,
+};
 
 #[derive(Clone, Copy)]
 pub struct Weapon {
@@ -83,7 +85,7 @@ impl Component for Weapon {
 }
 
 impl CostsBuildPoints for Weapon {
-    fn build_points_total(&self, world: &World) -> BuildPointsValue {
+    fn build_points_total(&self, world: &World) -> BuildPoints {
         self.attack_value().build_points_total(world)
             + self.damage_value().build_points_total(world)
             + self.defence_value().build_points_total(world)
@@ -92,8 +94,12 @@ impl CostsBuildPoints for Weapon {
 
 impl CostsCurrency for Weapon {
     fn currency_total(&self, world: &World) -> CurrencyValue {
-        CurrencyValue::from(self.attack_value().build_points_total(world))
-            + CurrencyValue::from(self.damage_value().build_points_total(world))
-            + CurrencyValue::from(self.defence_value().build_points_total(world))
+        CurrencyValue::from(self.build_points_total(world))
+    }
+}
+
+impl HasBuildLevel for Weapon {
+    fn build_level_total(&self, world: &World) -> BuildLevel {
+        BuildLevel::from(self.build_points_total(world))
     }
 }

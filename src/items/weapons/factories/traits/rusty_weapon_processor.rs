@@ -14,7 +14,6 @@ use std::default::Default;
 // Internal includes.
 use crate::data_types::Name;
 use crate::game::combat::DamageValue;
-use crate::game::points::{BuildPointsValue, CostsBuildPoints};
 use crate::items::weapons::factories::{ProcessWeaponFactory, WeaponProcessor};
 use crate::items::weapons::Weapon;
 
@@ -39,12 +38,6 @@ impl WeaponProcessor for RustyWeaponProcessor {
             let mut storage = world.write_storage::<Weapon>();
             let weapon = storage.get_mut(item_entity).unwrap();
             *weapon.damage_value_mut() += DamageValue::from(-1);
-        }
-
-        {
-            let mut storage = world.write_storage::<BuildPointsValue>();
-            let build_points_value = storage.get_mut(item_entity).unwrap();
-            *build_points_value += DamageValue::from(-1).build_points_total(world);
         }
 
         {

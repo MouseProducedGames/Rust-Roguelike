@@ -22,7 +22,7 @@ use crate::data_types::Name;
 use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::combat::{AttackPenaltyEventHandler, MultiAttackPenalty};
-use crate::game::points::{BuildPointsValue, CurrencyValue};
+use crate::game::points::{BuildPoints, CurrencyValue};
 use crate::game::{EntityPositionTracker, GameState, Time};
 use crate::items::armours::{Armour, ArmourEventHandler};
 use crate::items::weapons::{Weapon, WeaponEventHandler};
@@ -94,7 +94,7 @@ impl Screen for WorldInitScreen {
         world.add_resource(Time::new(0));
         world.register::<Armour>();
         world.register::<Body>();
-        world.register::<BuildPointsValue>();
+        world.register::<BuildPoints>();
         world.register::<Command>();
         world.register::<CreatureStats>();
         world.register::<CurrencyValue>();
