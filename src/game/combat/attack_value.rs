@@ -29,7 +29,7 @@ impl CostsBuildPoints for AttackValue {
 
 impl HasBuildLevel for AttackValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from(i32::from(self) * 30)
+        BuildLevel::from(i32::from(self) * 10)
     }
 }
 

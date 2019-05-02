@@ -82,8 +82,8 @@ impl From<&BuildLevel> for CurrencyValue {
 impl From<BuildPoints> for CurrencyValue {
     fn from(build_points: BuildPoints) -> Self {
         let raw_build_points = i32::from(build_points);
-        let raw_currency_value = raw_build_points.pow(2);
-        CurrencyValue::from(raw_currency_value as i32 / 100)
+        let raw_currency_value = raw_build_points.pow(2) / 5;
+        CurrencyValue::from(raw_currency_value as i32)
     }
 }
 

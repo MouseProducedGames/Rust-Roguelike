@@ -23,7 +23,7 @@ pub type InjuryValue = GameValue<InjuryMarker>;
 
 impl HasBuildLevel for InjuryValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from(i32::from(self) * 30)
+        BuildLevel::from(i32::from(self) * 10)
     }
 }
 
