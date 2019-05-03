@@ -22,7 +22,9 @@ use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
 use crate::rrl_math::{Displacement, Position};
-use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use crate::skills::{
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType,
+};
 use crate::stats::{CreatureStats, Stat};
 
 impl Display for ConsoleDisplay {
@@ -140,10 +142,21 @@ impl Display for ConsoleDisplay {
         self.present();
     }
 
-    fn blit_skills(&mut self, world: &World, skill_lookup: &SkillLookup) {
+    fn blit_skills(
+        &mut self,
+        world: &World,
+        skill_lookup: &SkillLookup,
+        skill_points: SkillPoints,
+    ) {
         self.clear();
 
-        self.put_string(1, 1, "Skills:", Color::Grey, Color::Black);
+        self.put_string(
+            1,
+            1,
+            &format!("{}: [{}]", "Skills", skill_points),
+            Color::Grey,
+            Color::Black,
+        );
 
         if let Some(skills) = skill_lookup.get_set(SkillActivation::Passive(
             SkillTag::Combat,

@@ -12,7 +12,7 @@ use specs::{Component, Entity, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::SkillLookup;
+use super::{SkillLookup, SkillPoints};
 use crate::game::GameState;
 use crate::io::{Display, Input};
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
@@ -66,12 +66,15 @@ impl Screen for SkillScreen {
     }
 
     fn draw(&mut self, world: &mut World) {
-        let skill_storage = world.read_storage::<SkillLookup>();
-        let skill_lookup = skill_storage.get(self.creature).unwrap();
+        let skill_lookup_storage = world.read_storage::<SkillLookup>();
+        let skill_lookup = skill_lookup_storage.get(self.creature).unwrap();
+
+        let skill_points_storage = world.read_storage::<SkillPoints>();
+        let skill_points = *skill_points_storage.get(self.creature).unwrap();
 
         let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
         let mut display = mutex_display.lock().unwrap();
-        display.blit_skills(world, skill_lookup);
+        display.blit_skills(world, skill_lookup, skill_points);
     }
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {

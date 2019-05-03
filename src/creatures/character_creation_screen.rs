@@ -50,7 +50,7 @@ use crate::maps::VisibilityMapLookup;
 use crate::rrl_math::Position;
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 use crate::skills::{
-    SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType, SkillValue,
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType, SkillValue,
 };
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
@@ -294,6 +294,7 @@ impl Screen for CharacterCreationScreen {
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)
                 .with(skills)
+                .with(SkillPoints::from(44))
                 .with(talents)
                 .with(TransferItem::None)
                 .with(ViewpointMarker)

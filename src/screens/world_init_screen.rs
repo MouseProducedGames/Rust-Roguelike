@@ -29,7 +29,7 @@ use crate::items::weapons::{Weapon, WeaponEventHandler};
 use crate::items::{Inventory, Item, LightSource, TransferItem};
 use crate::maps::{PatternLookup, VisibilityMapLookup};
 use crate::rrl_math::Position;
-use crate::skills::{SkillEventHandler, SkillLookup};
+use crate::skills::{SkillEventHandler, SkillLookup, SkillPoints};
 use crate::stats::{CreatureStats, StatEventHandler};
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
@@ -110,6 +110,7 @@ impl Screen for WorldInitScreen {
         world.register::<PlayerMarker>();
         world.register::<Position>();
         world.register::<SkillLookup>();
+        world.register::<SkillPoints>();
         world.register::<TalentLookup>();
         world.register::<TransferItem>();
         world.register::<Undead>();

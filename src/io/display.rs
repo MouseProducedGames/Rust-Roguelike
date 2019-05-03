@@ -21,7 +21,7 @@ use crate::factions::Faction;
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap};
 use crate::rrl_math::Position;
-use crate::skills::SkillLookup;
+use crate::skills::{SkillLookup, SkillPoints};
 use crate::stats::CreatureStats;
 
 pub trait Display: Drop + Send + Sync {
@@ -31,7 +31,7 @@ pub trait Display: Drop + Send + Sync {
 
     fn blit_items(&mut self, names: ReadStorage<Name>, items: &[Entity]);
 
-    fn blit_skills(&mut self, world: &World, skill_lookup: &SkillLookup);
+    fn blit_skills(&mut self, world: &World, skill_lookup: &SkillLookup, skill_points: SkillPoints);
 
     fn choose_display_option(&mut self, options: &'static [DisplayOption]) -> DisplayOption;
 
