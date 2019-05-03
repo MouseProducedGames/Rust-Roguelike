@@ -12,7 +12,10 @@ use specs::{Component, Entity, World};
 use std::sync::{Arc, Mutex};
 
 // Internal includes.
-use super::{SkillLookup, SkillPoints};
+use super::{
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType, SkillValue,
+};
+use crate::game::points::CostsBuildPoints;
 use crate::game::GameState;
 use crate::io::{Display, Input};
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
@@ -20,6 +23,7 @@ use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 pub struct SkillScreen {
     creature: Entity,
     state: ScreenState,
+    skill_index: usize,
 }
 
 impl SkillScreen {
@@ -27,6 +31,7 @@ impl SkillScreen {
         Self {
             creature,
             state: ScreenState::Started,
+            skill_index: 0,
         }
     }
 
@@ -74,7 +79,7 @@ impl Screen for SkillScreen {
 
         let mutex_display = world.write_resource::<Arc<Mutex<Display>>>();
         let mut display = mutex_display.lock().unwrap();
-        display.blit_skills(world, skill_lookup, skill_points);
+        display.blit_skills(world, skill_lookup, skill_points, self.skill_index);
     }
 
     fn update(&mut self, world: &mut World, _screen_push_wrapper: &mut ScreenPushWrapper) {
@@ -83,13 +88,61 @@ impl Screen for SkillScreen {
             return;
         }
 
+        let mut skill_lookup_storage = world.write_storage::<SkillLookup>();
+        let skill_lookup = skill_lookup_storage.get_mut(self.creature).unwrap();
+        let skills = skill_lookup.get_set_mut(SkillActivation::Passive(
+            SkillTag::Combat,
+            SkillPassiveOp::OnUse,
+        ));
+        let skills_len = skills.len();
+
+        let mut skill_points_storage = world.write_storage::<SkillPoints>();
+        let skill_points = skill_points_storage.get_mut(self.creature).unwrap();
+
         let arc_mutex_input = world.read_resource::<Arc<Mutex<Input>>>().clone();
         let mut input = arc_mutex_input.lock().unwrap();
         let ch = input.instance_mut().consume_char();
-        if ch == 13 as char {
-            self.state = ScreenState::Stopped;
-            return;
-        };
+        match ch {
+            '8' => {
+                if skills_len > 0 {
+                    self.skill_index = self.skill_index.wrapping_sub(1);
+
+                    if self.skill_index >= skills_len {
+                        self.skill_index = skills_len - 1;
+                    }
+                }
+            }
+            '2' => {
+                if skills_len > 0 {
+                    self.skill_index = self.skill_index.wrapping_add(1);
+
+                    if self.skill_index >= skills_len {
+                        self.skill_index = 0;
+                    }
+                }
+            }
+            '+' => {
+                if skills_len > 0 {
+                    if let SkillType::Weapon(_, skill_value, _, _) = &mut skills[self.skill_index] {
+                        let current_build_points = skill_value.build_points_total(world);
+                        let raised_skill = *skill_value + SkillValue::from(1);
+                        let raised_build_points = raised_skill.build_points_total(world);
+                        let build_points_difference = raised_build_points - current_build_points;
+                        let skill_points_difference = SkillPoints::from(build_points_difference);
+
+                        if skill_points_difference <= *skill_points {
+                            *skill_points -= skill_points_difference;
+                            *skill_value += SkillValue::from(1);
+                        }
+                    }
+                }
+            }
+            '\r' => {
+                self.state = ScreenState::Stopped;
+                return;
+            }
+            _ => (),
+        }
     }
 
     fn state(&self) -> ScreenState {

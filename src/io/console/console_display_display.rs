@@ -23,7 +23,7 @@ use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
 use crate::rrl_math::{Displacement, Position};
 use crate::skills::{
-    SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType,
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType, SkillValue,
 };
 use crate::stats::{CreatureStats, Stat};
 
@@ -147,6 +147,7 @@ impl Display for ConsoleDisplay {
         world: &World,
         skill_lookup: &SkillLookup,
         skill_points: SkillPoints,
+        index: usize,
     ) {
         self.clear();
 
@@ -166,27 +167,24 @@ impl Display for ConsoleDisplay {
                 let name = match skill {
                     SkillType::Weapon(weapon_group, skill_value, attack_value, defence_value) => {
                         format!(
-                            "{}: Skill: {} (Attack: {}, Defence: {}) [{}]",
+                            "{}: Skill: {} (Attack: {}, Defence: {}) [{} -> {} = {}]",
                             weapon_group,
                             skill_value,
                             *attack_value + skill_value,
                             *defence_value + skill_value,
                             skill_value.build_points_total(world),
+                            (*skill_value + SkillValue::from(1)).build_points_total(world)
+                                - skill_value.build_points_total(world),
+                            (*skill_value + SkillValue::from(1)).build_points_total(world),
                         )
                     }
                     SkillType::Skill(skill_value) => format!("UNKNOWN: {}", skill_value),
                 };
 
-                let formatted = format!(
-                    "{}) {}",
-                    if i < 26 {
-                        (b'a' + (i as u8)) as char
-                    } else {
-                        (b'A' + ((i - 26) as u8)) as char
-                    },
-                    name
-                );
-                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+                if i == index {
+                    self.put_string(1, 3_i32 + i as i32, "->", Color::Yellow, Color::Black);
+                }
+                self.put_string(4, 3_i32 + i as i32, &name, Color::Grey, Color::Black);
             }
         }
 

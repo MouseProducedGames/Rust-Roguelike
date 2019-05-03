@@ -31,7 +31,13 @@ pub trait Display: Drop + Send + Sync {
 
     fn blit_items(&mut self, names: ReadStorage<Name>, items: &[Entity]);
 
-    fn blit_skills(&mut self, world: &World, skill_lookup: &SkillLookup, skill_points: SkillPoints);
+    fn blit_skills(
+        &mut self,
+        world: &World,
+        skill_lookup: &SkillLookup,
+        skill_points: SkillPoints,
+        index: usize,
+    );
 
     fn choose_display_option(&mut self, options: &'static [DisplayOption]) -> DisplayOption;
 
