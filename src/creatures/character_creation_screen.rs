@@ -135,7 +135,7 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Axes,
-                    SkillValue::from(2),
+                    SkillValue::from(0),
                     AttackValue::from(-1),
                     DefenceValue::from(1),
                 ),
@@ -145,7 +145,7 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Maces,
-                    SkillValue::from(2),
+                    SkillValue::from(0),
                     AttackValue::from(1),
                     DefenceValue::from(-1),
                 ),
@@ -155,7 +155,7 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Shields,
-                    SkillValue::from(2),
+                    SkillValue::from(0),
                     AttackValue::from(-1),
                     DefenceValue::from(1),
                 ),
@@ -165,7 +165,7 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Spears,
-                    SkillValue::from(2),
+                    SkillValue::from(0),
                     AttackValue::from(1),
                     DefenceValue::from(-1),
                 ),
@@ -175,7 +175,7 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Swords,
-                    SkillValue::from(2),
+                    SkillValue::from(0),
                     AttackValue::from(0),
                     DefenceValue::from(0),
                 ),
@@ -185,7 +185,7 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Unarmed,
-                    SkillValue::from(2),
+                    SkillValue::from(0),
                     AttackValue::from(0),
                     DefenceValue::from(0),
                 ),
@@ -294,7 +294,7 @@ impl Screen for CharacterCreationScreen {
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)
                 .with(skills)
-                .with(SkillPoints::from(44))
+                .with(SkillPoints::from(120))
                 .with(talents)
                 .with(TransferItem::None)
                 .with(ViewpointMarker)
