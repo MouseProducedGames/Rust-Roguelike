@@ -22,6 +22,7 @@ use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
 use crate::rrl_math::{Displacement, Position};
+use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, Stat};
 
 impl Display for ConsoleDisplay {
@@ -123,6 +124,40 @@ impl Display for ConsoleDisplay {
 
         for (i, entity) in items.iter().enumerate() {
             if let Some(name) = names.get(*entity) {
+                let formatted = format!(
+                    "{}) {}",
+                    if i < 26 {
+                        (b'a' + (i as u8)) as char
+                    } else {
+                        (b'A' + ((i - 26) as u8)) as char
+                    },
+                    name
+                );
+                self.put_string(1, 3_i32 + i as i32, &formatted, Color::Grey, Color::Black);
+            }
+        }
+
+        self.present();
+    }
+
+    fn blit_skills(&mut self, _world: &World, skill_lookup: &SkillLookup) {
+        self.clear();
+
+        self.put_string(1, 1, "Skills:", Color::Grey, Color::Black);
+
+        if let Some(skills) = skill_lookup.get_set(SkillActivation::Passive(
+            SkillTag::Combat,
+            SkillPassiveOp::OnUse,
+        )) {
+            for (i, skill) in skills.iter().enumerate() {
+                let name = match skill {
+                    SkillType::Weapon(weapon_group, attack_value, defence_value) => format!(
+                        "{}: Attack: {}, Defence: {}",
+                        weapon_group, attack_value, defence_value,
+                    ),
+                    SkillType::Skill(skill_value) => format!("UNKNOWN: {}", skill_value),
+                };
+
                 let formatted = format!(
                     "{}) {}",
                     if i < 26 {

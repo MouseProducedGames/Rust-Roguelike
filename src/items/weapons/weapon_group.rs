@@ -8,6 +8,7 @@ Documentation:
 // External includes.
 
 // Standard includes.
+use std::fmt;
 
 // Internal includes.
 
@@ -20,4 +21,21 @@ pub enum WeaponGroup {
     Spears,
     Swords,
     Unarmed,
+}
+
+impl fmt::Display for WeaponGroup {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                WeaponGroup::Axes => "Axes",
+                WeaponGroup::Maces => "Maces",
+                WeaponGroup::Shields => "Shields",
+                WeaponGroup::Spears => "Spears",
+                WeaponGroup::Swords => "Swords",
+                WeaponGroup::Unarmed => "Unarmed",
+            },
+        )
+    }
 }

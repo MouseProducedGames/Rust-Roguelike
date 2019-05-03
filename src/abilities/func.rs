@@ -75,15 +75,15 @@ fn scan_for_secrets(
     map: &mut Tilemap,
     visibility_map: &mut VisibilityMap,
 ) {
-    let set = skills.get_set(SkillActivation::Passive(
+    let mut skill_bonus: i32 = ability_modifier;
+    if let Some(set) = skills.get_set(SkillActivation::Passive(
         SkillTag::Perception,
         SkillPassiveOp::EveryRound,
-    ));
-
-    let mut skill_bonus: i32 = ability_modifier;
-    for skill in set {
-        if let SkillType::Skill(v) = skill {
-            skill_bonus += *v
+    )) {
+        for skill in set {
+            if let SkillType::Skill(v) = skill {
+                skill_bonus += *v
+            }
         }
     }
 

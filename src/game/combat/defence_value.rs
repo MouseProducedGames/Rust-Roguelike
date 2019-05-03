@@ -9,6 +9,7 @@ Documentation:
 use specs::World;
 
 // Standard includes.
+use std::fmt;
 
 // Internal includes.
 use crate::game::points::{BuildLevel, BuildPoints, CostsBuildPoints, HasBuildLevel};
@@ -22,6 +23,12 @@ pub type DefenceValue = GameValue<DefenceMarker>;
 impl CostsBuildPoints for DefenceValue {
     fn build_points_total(&self, world: &World) -> BuildPoints {
         BuildPoints::from(self.build_level_total(world))
+    }
+}
+
+impl fmt::Display for DefenceValue {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", i32::from(self))
     }
 }
 

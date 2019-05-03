@@ -22,6 +22,7 @@ use crate::io::Input;
 use crate::items::{InventoryScreen, TransferItem};
 use crate::rrl_math::Displacement;
 use crate::screens::PickupScreen;
+use crate::skills::SkillScreen;
 
 pub struct LogicPlayer {}
 
@@ -95,8 +96,16 @@ impl<'a> System<'a> for LogicPlayerSystem {
 
                     Command::Move(Displacement::new(0, 0))
                 }
+                '/' => {
+                    *transfer_item = TransferItem::None;
+
+                    let skill_screen_ref = Arc::new(Mutex::new(SkillScreen::new(entity)));
+                    game_state.lock_new_screens().push(skill_screen_ref);
+
+                    Command::Move(Displacement::new(0, 0))
+                }
                 _ => Command::Move(Displacement::new(0, 0)),
-            }
+            };
         }
     }
 }

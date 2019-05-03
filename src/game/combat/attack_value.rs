@@ -9,6 +9,7 @@ Documentation:
 use specs::World;
 
 // Standard includes.
+use std::fmt;
 use std::ops::{Sub, SubAssign};
 
 // Internal includes.
@@ -24,6 +25,12 @@ pub type AttackValue = GameValue<AttackMarker>;
 impl CostsBuildPoints for AttackValue {
     fn build_points_total(&self, world: &World) -> BuildPoints {
         BuildPoints::from(self.build_level_total(world))
+    }
+}
+
+impl fmt::Display for AttackValue {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", i32::from(self))
     }
 }
 

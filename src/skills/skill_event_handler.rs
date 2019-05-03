@@ -29,28 +29,30 @@ impl SkillEventHandler {
     }
 
     fn apply_attack_skill(event_data: &mut AttackData, skill_lookup: &mut SkillLookup) {
-        let passive_combat_skills = skill_lookup.get_set(SkillActivation::Passive(
+        if let Some(passive_combat_skills) = skill_lookup.get_set(SkillActivation::Passive(
             SkillTag::Combat,
             SkillPassiveOp::OnUse,
-        ));
-        for combat_skill in passive_combat_skills.iter() {
-            if let SkillType::Weapon(weapon_group, attack_value, _) = *combat_skill {
-                if weapon_group == event_data.weapon_group() {
-                    *event_data.attack_modifier_mut() += attack_value
+        )) {
+            for combat_skill in passive_combat_skills.iter() {
+                if let SkillType::Weapon(weapon_group, attack_value, _) = *combat_skill {
+                    if weapon_group == event_data.weapon_group() {
+                        *event_data.attack_modifier_mut() += attack_value
+                    }
                 }
             }
         }
     }
 
     fn apply_defence_skill(event_data: &mut AttackData, skill_lookup: &mut SkillLookup) {
-        let passive_combat_skills = skill_lookup.get_set(SkillActivation::Passive(
+        if let Some(passive_combat_skills) = skill_lookup.get_set(SkillActivation::Passive(
             SkillTag::Combat,
             SkillPassiveOp::OnUse,
-        ));
-        for combat_skill in passive_combat_skills.iter() {
-            if let SkillType::Weapon(weapon_group, _, defence_value) = *combat_skill {
-                if weapon_group == WeaponGroup::Unarmed {
-                    *event_data.defence_modifier_mut() += defence_value
+        )) {
+            for combat_skill in passive_combat_skills.iter() {
+                if let SkillType::Weapon(weapon_group, _, defence_value) = *combat_skill {
+                    if weapon_group == WeaponGroup::Unarmed {
+                        *event_data.defence_modifier_mut() += defence_value
+                    }
                 }
             }
         }
