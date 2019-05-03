@@ -17,7 +17,7 @@ use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
 use crate::data_types::Name;
 use crate::factions::Faction;
-use crate::game::points::{BuildPoints, CurrencyValue};
+use crate::game::points::{BuildPoints, CostsBuildPoints, CurrencyValue};
 use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
@@ -140,7 +140,7 @@ impl Display for ConsoleDisplay {
         self.present();
     }
 
-    fn blit_skills(&mut self, _world: &World, skill_lookup: &SkillLookup) {
+    fn blit_skills(&mut self, world: &World, skill_lookup: &SkillLookup) {
         self.clear();
 
         self.put_string(1, 1, "Skills:", Color::Grey, Color::Black);
@@ -153,11 +153,12 @@ impl Display for ConsoleDisplay {
                 let name = match skill {
                     SkillType::Weapon(weapon_group, skill_value, attack_value, defence_value) => {
                         format!(
-                            "{}: Skill: {} (Attack: {}, Defence: {})",
+                            "{}: Skill: {} (Attack: {}, Defence: {}) [{}]",
                             weapon_group,
                             skill_value,
                             *attack_value + skill_value,
                             *defence_value + skill_value,
+                            skill_value.build_points_total(world),
                         )
                     }
                     SkillType::Skill(skill_value) => format!("UNKNOWN: {}", skill_value),

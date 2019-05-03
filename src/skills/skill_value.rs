@@ -34,6 +34,6 @@ impl fmt::Display for SkillValue {
 
 impl HasBuildLevel for SkillValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from(i32::from(self) * 10)
+        BuildLevel::from((i32::from(self) * 10) + 30)
     }
 }
