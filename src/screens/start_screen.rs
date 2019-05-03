@@ -27,7 +27,9 @@ use crate::items::weapons::WeaponGroup;
 use crate::items::Inventory;
 use crate::maps::{MapInitScreen, VisibilityMapLookup};
 use crate::rrl_math::Position;
-use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use crate::skills::{
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType, SkillValue,
+};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 
@@ -71,8 +73,9 @@ impl StartScreen {
             SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
             SkillType::Weapon(
                 WeaponGroup::Unarmed,
-                AttackValue::from(2),
-                DefenceValue::from(2),
+                SkillValue::from(2),
+                AttackValue::from(0),
+                DefenceValue::from(0),
             ),
         );
 

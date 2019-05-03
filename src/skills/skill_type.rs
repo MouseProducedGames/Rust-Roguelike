@@ -10,6 +10,7 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+use super::SkillValue;
 use crate::game::combat::{AttackValue, DefenceValue};
 use crate::items::weapons::WeaponGroup;
 
@@ -38,7 +39,7 @@ pub enum SkillTag {
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillType {
-    Weapon(WeaponGroup, AttackValue, DefenceValue),
+    Weapon(WeaponGroup, SkillValue, AttackValue, DefenceValue),
     Skill(i32),
 }
 

@@ -10,17 +10,46 @@ use specs::World;
 
 // Standard includes.
 use std::fmt;
-use std::ops::{Sub, SubAssign};
+use std::ops::{Add, AddAssign, Sub, SubAssign};
 
 // Internal includes.
 use super::DefenceValue;
 use crate::game::points::{BuildLevel, BuildPoints, CostsBuildPoints, HasBuildLevel};
 use crate::game::GameValue;
+use crate::skills::SkillValue;
 
 #[derive(Copy, Clone, Default)]
 pub struct AttackMarker;
 
 pub type AttackValue = GameValue<AttackMarker>;
+
+impl Add<SkillValue> for AttackValue {
+    type Output = AttackValue;
+
+    fn add(self, other: SkillValue) -> Self {
+        self + AttackValue::from(i32::from(other))
+    }
+}
+
+impl Add<&SkillValue> for AttackValue {
+    type Output = AttackValue;
+
+    fn add(self, other: &SkillValue) -> Self {
+        self + *other
+    }
+}
+
+impl AddAssign<SkillValue> for AttackValue {
+    fn add_assign(&mut self, other: SkillValue) {
+        *self += AttackValue::from(i32::from(other));
+    }
+}
+
+impl AddAssign<&SkillValue> for AttackValue {
+    fn add_assign(&mut self, other: &SkillValue) {
+        *self += *other;
+    }
+}
 
 impl CostsBuildPoints for AttackValue {
     fn build_points_total(&self, world: &World) -> BuildPoints {

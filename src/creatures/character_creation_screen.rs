@@ -49,7 +49,9 @@ use crate::items::{Inventory, Item, LightSource, TransferItem, ITEM_ICON_INDEX_T
 use crate::maps::VisibilityMapLookup;
 use crate::rrl_math::Position;
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
-use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use crate::skills::{
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType, SkillValue,
+};
 use crate::stats::CreatureStats;
 use crate::talents::TalentLookup;
 
@@ -133,8 +135,9 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Axes,
-                    AttackValue::from(2),
-                    DefenceValue::from(2),
+                    SkillValue::from(2),
+                    AttackValue::from(-1),
+                    DefenceValue::from(1),
                 ),
             );
 
@@ -142,8 +145,9 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Maces,
-                    AttackValue::from(2),
-                    DefenceValue::from(2),
+                    SkillValue::from(2),
+                    AttackValue::from(1),
+                    DefenceValue::from(-1),
                 ),
             );
 
@@ -151,8 +155,9 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Shields,
-                    AttackValue::from(2),
-                    DefenceValue::from(2),
+                    SkillValue::from(2),
+                    AttackValue::from(-1),
+                    DefenceValue::from(1),
                 ),
             );
 
@@ -160,8 +165,9 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Spears,
-                    AttackValue::from(2),
-                    DefenceValue::from(2),
+                    SkillValue::from(2),
+                    AttackValue::from(1),
+                    DefenceValue::from(-1),
                 ),
             );
 
@@ -169,8 +175,9 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Swords,
-                    AttackValue::from(2),
-                    DefenceValue::from(2),
+                    SkillValue::from(2),
+                    AttackValue::from(0),
+                    DefenceValue::from(0),
                 ),
             );
 
@@ -178,8 +185,9 @@ impl Screen for CharacterCreationScreen {
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
                 SkillType::Weapon(
                     WeaponGroup::Unarmed,
-                    AttackValue::from(2),
-                    DefenceValue::from(2),
+                    SkillValue::from(2),
+                    AttackValue::from(0),
+                    DefenceValue::from(0),
                 ),
             );
 

@@ -151,10 +151,15 @@ impl Display for ConsoleDisplay {
         )) {
             for (i, skill) in skills.iter().enumerate() {
                 let name = match skill {
-                    SkillType::Weapon(weapon_group, attack_value, defence_value) => format!(
-                        "{}: Attack: {}, Defence: {}",
-                        weapon_group, attack_value, defence_value,
-                    ),
+                    SkillType::Weapon(weapon_group, skill_value, attack_value, defence_value) => {
+                        format!(
+                            "{}: Skill: {} (Attack: {}, Defence: {})",
+                            weapon_group,
+                            skill_value,
+                            *attack_value + skill_value,
+                            *defence_value + skill_value,
+                        )
+                    }
                     SkillType::Skill(skill_value) => format!("UNKNOWN: {}", skill_value),
                 };
 
