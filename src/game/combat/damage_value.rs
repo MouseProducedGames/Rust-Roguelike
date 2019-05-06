@@ -29,7 +29,7 @@ impl CostsBuildPoints for DamageValue {
 
 impl HasBuildLevel for DamageValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from((i32::from(self) * 10) - 10)
+        BuildLevel::from((i32::from(self) * 10) - 30)
     }
 }
 

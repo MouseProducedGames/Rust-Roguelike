@@ -26,6 +26,6 @@ impl Component for MultiAttackPenalty {
 
 impl HasBuildLevel for MultiAttackPenalty {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from((i32::from(self) * 10) - 5)
+        BuildLevel::from((i32::from(self) * 10) - 10)
     }
 }
