@@ -6,6 +6,7 @@ Documentation:
 
 **/
 // External includes.
+use rand::{thread_rng, Rng};
 use specs::{Entity, World};
 
 // Standard includes.
@@ -17,8 +18,7 @@ use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
 use crate::creatures::factories::{CreatureFactory, TemplateCreatureFactory};
 use crate::factions::Faction;
-use crate::items::weapons::factories::specific::UnmodifiedWeaponFactory;
-use crate::items::weapons::factories::traits::RustyWeaponFactory;
+use crate::items::weapons::factories::specific::LeveledWeaponFactory;
 use crate::items::weapons::factories::WeaponFactory;
 use crate::stats::CreatureStats;
 
@@ -36,6 +36,19 @@ impl Default for ZombieFactory {
                 OriginType::Farmer,
             ),
         }
+    }
+}
+
+fn weapon_level_func() -> i32 {
+    let chance = thread_rng().gen_range(1, 9);
+    if chance <= 1 {
+        2
+    } else if chance <= 2 {
+        1
+    } else if chance <= 4 {
+        0
+    } else {
+        -1
     }
 }
 
@@ -60,8 +73,8 @@ impl CreatureFactory for ZombieFactory {
         }
 
         {
-            let weapon_entity =
-                RustyWeaponFactory::<UnmodifiedWeaponFactory>::default().create(world);
+            let weapon_level = weapon_level_func();
+            let weapon_entity = LeveledWeaponFactory::new(weapon_level).create(world);
 
             let mut body_storage = world.write_storage::<Body>();
             let body = body_storage.get_mut(creature_entity).unwrap();

@@ -31,7 +31,7 @@ pub struct LeveledWeaponFactory {
 }
 
 impl LeveledWeaponFactory {
-    fn new(level: i32) -> Self {
+    pub fn new(level: i32) -> Self {
         Self {
             level,
             weapon_factories: Arc::new(vec![Arc::new(UnmodifiedWeaponFactory::default())]),
