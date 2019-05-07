@@ -34,7 +34,8 @@ impl SkillEventHandler {
             SkillPassiveOp::OnUse,
         )) {
             for combat_skill in passive_combat_skills.iter() {
-                if let SkillType::Weapon(weapon_group, skill_value, attack_value, _) = *combat_skill
+                if let SkillType::Weapon(weapon_group, skill_value, _, attack_value, _) =
+                    *combat_skill
                 {
                     if weapon_group == event_data.weapon_group() {
                         *event_data.attack_modifier_mut() += attack_value + skill_value
@@ -50,7 +51,7 @@ impl SkillEventHandler {
             SkillPassiveOp::OnUse,
         )) {
             for combat_skill in passive_combat_skills.iter() {
-                if let SkillType::Weapon(weapon_group, skill_value, _, defence_value) =
+                if let SkillType::Weapon(weapon_group, skill_value, _, _, defence_value) =
                     *combat_skill
                 {
                     if weapon_group == WeaponGroup::Unarmed {

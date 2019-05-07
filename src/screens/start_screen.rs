@@ -21,6 +21,7 @@ use crate::bodies::BodyFactory;
 use crate::creatures::CharacterCreationScreen;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
+use crate::game::points::BuildLevel;
 use crate::game::GameScreen;
 use crate::io::DisplayInitScreen;
 use crate::items::weapons::WeaponGroup;
@@ -74,6 +75,7 @@ impl StartScreen {
             SkillType::Weapon(
                 WeaponGroup::Unarmed,
                 SkillValue::from(2),
+                BuildLevel::from(-30),
                 AttackValue::from(0),
                 DefenceValue::from(0),
             ),

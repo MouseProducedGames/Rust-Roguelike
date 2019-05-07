@@ -17,7 +17,9 @@ use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
 use crate::data_types::Name;
 use crate::factions::Faction;
-use crate::game::points::{BuildPoints, CostsBuildPoints, CurrencyValue};
+use crate::game::points::{
+    BuildLevel, BuildPoints, CostsBuildPoints, CurrencyValue, HasBuildLevel,
+};
 use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
@@ -165,17 +167,27 @@ impl Display for ConsoleDisplay {
         )) {
             for (i, skill) in skills.iter().enumerate() {
                 let name = match skill {
-                    SkillType::Weapon(weapon_group, skill_value, attack_value, defence_value) => {
+                    SkillType::Weapon(
+                        weapon_group,
+                        skill_value,
+                        skill_cost_modifier,
+                        attack_value,
+                        defence_value,
+                    ) => {
+                        let skill_level = skill_value.build_level_total(world);
+                        let skill_cost_level = skill_level + *skill_cost_modifier;
+                        let current_skill_cost = BuildPoints::from(skill_cost_level);
+                        let next_skill_cost_level = skill_cost_level + BuildLevel::from(10);
+                        let next_skill_cost = BuildPoints::from(next_skill_cost_level);
                         format!(
                             "{}: Skill: {} (Attack: {}, Defence: {}) [{} -> {} = {}]",
                             weapon_group,
                             skill_value,
                             *attack_value + skill_value,
                             *defence_value + skill_value,
-                            skill_value.build_points_total(world),
-                            (*skill_value + SkillValue::from(1)).build_points_total(world)
-                                - skill_value.build_points_total(world),
-                            (*skill_value + SkillValue::from(1)).build_points_total(world),
+                            current_skill_cost,
+                            next_skill_cost - current_skill_cost,
+                            next_skill_cost,
                         )
                     }
                     SkillType::Skill(skill_value) => format!("UNKNOWN: {}", skill_value),

@@ -23,6 +23,7 @@ use crate::bodies::{BodyFactory, BodySlotType};
 use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
+use crate::game::points::BuildLevel;
 use crate::io::Display;
 use crate::items::armours::factories::specific::wearables::{CuirassFactory, GauntletFactory};
 use crate::items::armours::factories::traits::construction::{
@@ -136,6 +137,7 @@ impl Screen for CharacterCreationScreen {
                 SkillType::Weapon(
                     WeaponGroup::Axes,
                     SkillValue::from(0),
+                    BuildLevel::from(0),
                     AttackValue::from(-1),
                     DefenceValue::from(1),
                 ),
@@ -146,6 +148,7 @@ impl Screen for CharacterCreationScreen {
                 SkillType::Weapon(
                     WeaponGroup::Maces,
                     SkillValue::from(0),
+                    BuildLevel::from(0),
                     AttackValue::from(1),
                     DefenceValue::from(-1),
                 ),
@@ -156,6 +159,7 @@ impl Screen for CharacterCreationScreen {
                 SkillType::Weapon(
                     WeaponGroup::Shields,
                     SkillValue::from(0),
+                    BuildLevel::from(0),
                     AttackValue::from(-1),
                     DefenceValue::from(1),
                 ),
@@ -166,6 +170,7 @@ impl Screen for CharacterCreationScreen {
                 SkillType::Weapon(
                     WeaponGroup::Spears,
                     SkillValue::from(0),
+                    BuildLevel::from(0),
                     AttackValue::from(1),
                     DefenceValue::from(-1),
                 ),
@@ -176,6 +181,7 @@ impl Screen for CharacterCreationScreen {
                 SkillType::Weapon(
                     WeaponGroup::Swords,
                     SkillValue::from(0),
+                    BuildLevel::from(0),
                     AttackValue::from(0),
                     DefenceValue::from(0),
                 ),
@@ -186,6 +192,7 @@ impl Screen for CharacterCreationScreen {
                 SkillType::Weapon(
                     WeaponGroup::Unarmed,
                     SkillValue::from(0),
+                    BuildLevel::from(-30),
                     AttackValue::from(0),
                     DefenceValue::from(0),
                 ),

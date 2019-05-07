@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 use super::{
     SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType, SkillValue,
 };
-use crate::game::points::CostsBuildPoints;
+use crate::game::points::{BuildLevel, BuildPoints, CostsBuildPoints, HasBuildLevel};
 use crate::game::GameState;
 use crate::io::{Display, Input};
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
@@ -123,11 +123,15 @@ impl Screen for SkillScreen {
             }
             '+' => {
                 if skills_len > 0 {
-                    if let SkillType::Weapon(_, skill_value, _, _) = &mut skills[self.skill_index] {
-                        let current_build_points = skill_value.build_points_total(world);
-                        let raised_skill = *skill_value + SkillValue::from(1);
-                        let raised_build_points = raised_skill.build_points_total(world);
-                        let build_points_difference = raised_build_points - current_build_points;
+                    if let SkillType::Weapon(_, skill_value, skill_cost_modifier, _, _) =
+                        &mut skills[self.skill_index]
+                    {
+                        let skill_level = skill_value.build_level_total(world);
+                        let skill_cost_level = skill_level + *skill_cost_modifier;
+                        let current_skill_cost = BuildPoints::from(skill_cost_level);
+                        let next_skill_cost_level = skill_cost_level + BuildLevel::from(10);
+                        let next_skill_cost = BuildPoints::from(next_skill_cost_level);
+                        let build_points_difference = next_skill_cost - current_skill_cost;
                         let skill_points_difference = SkillPoints::from(build_points_difference);
 
                         if skill_points_difference <= *skill_points {
