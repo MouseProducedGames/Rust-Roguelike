@@ -18,7 +18,7 @@ mod item_display_system;
 mod light_source;
 mod transfer_item;
 pub mod weapons;
-pub use inventory::{Inventory, InventorySystem};
+pub use inventory::{CreatureInventorySystem, Inventory, InventorySystem};
 pub use inventory_screen::InventoryScreen;
 pub use item::Item;
 pub use item_display_system::ItemDisplaySystem;

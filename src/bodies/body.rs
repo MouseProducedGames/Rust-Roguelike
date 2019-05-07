@@ -8,14 +8,16 @@ Documentation:
 // External includes.
 use linked_hash_map::LinkedHashMap;
 use rand::{thread_rng, Rng};
-use specs::{Component, Entities, System, VecStorage, WriteStorage};
+use specs::{Component, Entities, ReadStorage, System, VecStorage, WriteStorage};
 
 // Standard includes.
 use std::sync::{Arc, Mutex, MutexGuard};
 
 // internal includes.
 use super::BodySlot;
+use crate::items::Item;
 use crate::rrl_math::Position;
+use crate::stats::{CreatureStats, Stat};
 
 #[derive(Clone)]
 pub struct Body {
@@ -114,6 +116,47 @@ impl<'a> System<'a> for BodySystem {
                         };
                     }
                 }
+            }
+        }
+    }
+}
+
+pub struct CreatureBodySystem;
+
+#[derive(SystemData)]
+pub struct CreatureSystemData<'a> {
+    bodies: WriteStorage<'a, Body>,
+    items: WriteStorage<'a, Item>,
+    stats: ReadStorage<'a, CreatureStats>,
+}
+
+impl<'a> System<'a> for CreatureBodySystem {
+    type SystemData = CreatureSystemData<'a>;
+
+    fn run(&mut self, mut data: Self::SystemData) {
+        use specs::join::Join;
+
+        let mut items = data.items;
+
+        for (body, stats) in (&mut data.bodies, &data.stats).join() {
+            if stats.health().value() <= 0 {
+                for (_, body_slot) in body.get().iter_mut() {
+                    if let Some(item_entity) = body_slot.drop_item() {
+                        if let Some(item) = items.get_mut(item_entity) {
+                            item.owned_mut(false);
+                        } else {
+                            panic!("All item entities must have an Item component.");
+                        }
+                    }
+
+                    /* if let Some(body_part_item) = items.get_mut(body_slot.default_item()) {
+                        body_part_item.owned_mut(false);
+                    } else {
+                        panic!("All item entities must have an Item component.");
+                    } */
+                }
+
+                // body.get().clear();
             }
         }
     }

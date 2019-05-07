@@ -15,11 +15,13 @@ use std::sync::{Arc, Mutex};
 use super::{FirstUpdateSystem, GameState, LastUpdateSystem, Time};
 use crate::abilities::AbilitySystem;
 use crate::ai::systems::{CommandSystem, LogicMaslowSystem, LogicPlayerSystem};
-use crate::bodies::BodySystem;
+use crate::bodies::{BodySystem, CreatureBodySystem};
 use crate::creatures::{CreatureDisplaySystem, PlayerDisplaySystem};
 use crate::events::EventManager;
 use crate::io::{Display, Input};
-use crate::items::{InventorySystem, ItemDisplaySystem, LightSourceSystem};
+use crate::items::{
+    CreatureInventorySystem, InventorySystem, ItemDisplaySystem, LightSourceSystem,
+};
 use crate::maps::{Lightmap, VisibilitySystem};
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
@@ -27,7 +29,9 @@ pub struct GameScreen {
     ability_system: AbilitySystem,
     body_system: BodySystem,
     command_system: CommandSystem,
+    creature_body_system: CreatureBodySystem,
     creature_display_system: CreatureDisplaySystem,
+    creature_inventory_system: CreatureInventorySystem,
     first_update_system: FirstUpdateSystem,
     inventory_system: InventorySystem,
     item_display_system: ItemDisplaySystem,
@@ -47,7 +51,9 @@ impl GameScreen {
             ability_system: AbilitySystem,
             body_system: BodySystem,
             command_system: CommandSystem,
+            creature_body_system: CreatureBodySystem,
             creature_display_system: CreatureDisplaySystem,
+            creature_inventory_system: CreatureInventorySystem,
             first_update_system: FirstUpdateSystem,
             inventory_system: InventorySystem,
             item_display_system: ItemDisplaySystem,
@@ -142,6 +148,14 @@ impl Screen for GameScreen {
 
         world.write_resource::<Lightmap>().clear();
         self.ability_system.run_now(&world.res);
+
+        world.maintain();
+
+        self.creature_body_system.run_now(&world.res);
+
+        world.maintain();
+
+        self.creature_inventory_system.run_now(&world.res);
 
         world.maintain();
 

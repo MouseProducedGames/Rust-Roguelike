@@ -6,13 +6,15 @@ Documentation:
 
 **/
 // External includes.
-use specs::{Component, Entities, Entity, System, VecStorage, WriteStorage};
+use specs::{Component, Entities, Entity, ReadStorage, System, VecStorage, WriteStorage};
 
 // Standard includes.
 use std::sync::{Arc, Mutex, MutexGuard};
 
 // internal includes.
+use super::Item;
 use crate::rrl_math::Position;
+use crate::stats::{CreatureStats, Stat};
 
 #[derive(Clone)]
 pub struct Inventory {
@@ -77,6 +79,39 @@ impl<'a> System<'a> for InventorySystem {
                         panic!("Item position that was just added, does not exist!");
                     };
                 }
+            }
+        }
+    }
+}
+
+pub struct CreatureInventorySystem;
+
+#[derive(SystemData)]
+pub struct CreatureSystemData<'a> {
+    inventories: ReadStorage<'a, Inventory>,
+    items: WriteStorage<'a, Item>,
+    stats: ReadStorage<'a, CreatureStats>,
+}
+
+impl<'a> System<'a> for CreatureInventorySystem {
+    type SystemData = CreatureSystemData<'a>;
+
+    fn run(&mut self, data: Self::SystemData) {
+        use specs::join::Join;
+
+        let mut items = data.items;
+
+        for (inventory, stats) in (&data.inventories, &data.stats).join() {
+            if stats.health().value() <= 0 {
+                for item_entity in inventory.get().iter() {
+                    if let Some(item) = items.get_mut(*item_entity) {
+                        item.owned_mut(false);
+                    } else {
+                        panic!("All item entities must have an Item component.");
+                    }
+                }
+
+                inventory.get().clear();
             }
         }
     }
