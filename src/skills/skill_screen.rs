@@ -15,7 +15,7 @@ use std::sync::{Arc, Mutex};
 use super::{
     SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType, SkillValue,
 };
-use crate::game::points::{BuildLevel, BuildPoints, CostsBuildPoints, HasBuildLevel};
+use crate::game::points::{BuildLevel, BuildPoints, HasBuildLevel};
 use crate::game::GameState;
 use crate::io::{Display, Input};
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};

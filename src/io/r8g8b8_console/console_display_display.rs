@@ -17,15 +17,13 @@ use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
 use crate::data_types::Name;
 use crate::factions::Faction;
-use crate::game::points::{
-    BuildLevel, BuildPoints, CostsBuildPoints, CurrencyValue, HasBuildLevel,
-};
+use crate::game::points::{BuildLevel, BuildPoints, CurrencyValue, HasBuildLevel};
 use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
 use crate::rrl_math::{Displacement, Position};
 use crate::skills::{
-    SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType, SkillValue,
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType,
 };
 use crate::stats::{CreatureStats, Stat};
 
