@@ -75,9 +75,9 @@ impl StartScreen {
             SkillType::Weapon(
                 WeaponGroup::Unarmed,
                 SkillValue::from(2),
-                BuildLevel::from(-30),
-                AttackValue::from(0),
-                DefenceValue::from(0),
+                BuildLevel::from(20),
+                AttackValue::from(5),
+                DefenceValue::from(5),
             ),
         );
 

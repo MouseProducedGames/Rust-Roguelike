@@ -167,24 +167,16 @@ impl Display for ConsoleDisplay {
         )) {
             for (i, skill) in skills.iter().enumerate() {
                 let name = match skill {
-                    SkillType::Weapon(
-                        weapon_group,
-                        skill_value,
-                        skill_cost_modifier,
-                        attack_value,
-                        defence_value,
-                    ) => {
+                    SkillType::Weapon(weapon_group, skill_value, skill_cost_modifier, _, _) => {
                         let skill_level = skill_value.build_level_total(world);
                         let skill_cost_level = skill_level + *skill_cost_modifier;
                         let current_skill_cost = BuildPoints::from(skill_cost_level);
                         let next_skill_cost_level = skill_cost_level + BuildLevel::from(10);
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);
                         format!(
-                            "{}: Skill: {} (Attack: {}, Defence: {}) [{} -> {} = {}]",
+                            "{}: Skill: {} [{} -> {} = {}]",
                             weapon_group,
                             skill_value,
-                            *attack_value + skill_value,
-                            *defence_value + skill_value,
                             current_skill_cost,
                             next_skill_cost - current_skill_cost,
                             next_skill_cost,
