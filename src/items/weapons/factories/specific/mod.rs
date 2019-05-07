@@ -16,3 +16,5 @@ pub mod maces;
 pub mod shields;
 pub mod spears;
 pub mod swords;
+mod unmodified_weapon_factory;
+pub use unmodified_weapon_factory::UnmodifiedWeaponFactory;
