@@ -15,6 +15,7 @@ mod creature_processor;
 mod process_creature_factory;
 pub mod specific;
 mod template_creature_factory;
+pub mod traits;
 pub use creature_factory::CreatureFactory;
 pub use creature_processor::CreatureProcessor;
 pub use process_creature_factory::ProcessCreatureFactory;

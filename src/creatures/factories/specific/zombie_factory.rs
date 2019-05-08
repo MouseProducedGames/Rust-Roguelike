@@ -13,10 +13,10 @@ use specs::{Entity, World};
 use std::default::Default;
 
 // Internal includes.
-use crate::abilities::Undead;
 use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
-use crate::creatures::factories::{CreatureFactory, TemplateCreatureFactory};
+use crate::creatures::factories::traits::UndeadProcessor;
+use crate::creatures::factories::{CreatureFactory, CreatureProcessor, TemplateCreatureFactory};
 use crate::factions::Faction;
 use crate::game::points::BuildLevel;
 use crate::items::weapons::factories::specific::LeveledWeaponGenerator;
@@ -24,15 +24,23 @@ use crate::items::weapons::factories::WeaponGenerator;
 use crate::stats::CreatureStats;
 
 #[derive(Clone)]
-pub struct ZombieFactory(LeveledWeaponGenerator, TemplateCreatureFactory);
+pub struct ZombieFactory(
+    LeveledWeaponGenerator,
+    TemplateCreatureFactory,
+    UndeadProcessor,
+);
 
 impl ZombieFactory {
+    fn creature_factory(&self) -> &TemplateCreatureFactory {
+        &self.1
+    }
+
     fn generate_leveled_weapon(&self, world: &mut World) -> Entity {
         self.0.create(world, BuildLevel::from(weapon_level_func()))
     }
 
-    fn creature_factory(&self) -> &TemplateCreatureFactory {
-        &self.1
+    fn apply_undead(&self, world: &mut World, creature_entity: Entity) -> Entity {
+        self.2.process(world, creature_entity)
     }
 }
 
@@ -45,6 +53,7 @@ impl Default for ZombieFactory {
                 SpeciesType::Human,
                 OriginType::Farmer,
             ),
+            2: UndeadProcessor::default(),
         }
     }
 }
@@ -66,14 +75,7 @@ impl CreatureFactory for ZombieFactory {
     fn create(&self, world: &mut World) -> Entity {
         let creature_entity = self.creature_factory().create(world);
 
-        {
-            let mut undead_storage = world.write_storage::<Undead>();
-            if undead_storage.get(creature_entity).is_none() {
-                if let Err(e) = undead_storage.insert(creature_entity, Default::default()) {
-                    panic!(e);
-                }
-            }
-        }
+        let creature_entity = self.apply_undead(world, creature_entity);
 
         {
             *world
