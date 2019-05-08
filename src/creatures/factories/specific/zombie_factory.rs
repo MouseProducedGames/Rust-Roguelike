@@ -15,19 +15,18 @@ use std::default::Default;
 // Internal includes.
 use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
-use crate::creatures::factories::traits::UndeadProcessor;
+use crate::creatures::factories::traits::ZombieProcessor;
 use crate::creatures::factories::{CreatureFactory, CreatureProcessor, TemplateCreatureFactory};
 use crate::factions::Faction;
 use crate::game::points::BuildLevel;
 use crate::items::weapons::factories::specific::LeveledWeaponGenerator;
 use crate::items::weapons::factories::WeaponGenerator;
-use crate::stats::CreatureStats;
 
 #[derive(Clone)]
 pub struct ZombieFactory(
     LeveledWeaponGenerator,
     TemplateCreatureFactory,
-    UndeadProcessor,
+    ZombieProcessor,
 );
 
 impl ZombieFactory {
@@ -39,7 +38,7 @@ impl ZombieFactory {
         self.0.create(world, BuildLevel::from(weapon_level_func()))
     }
 
-    fn apply_undead(&self, world: &mut World, creature_entity: Entity) -> Entity {
+    fn apply_zombie(&self, world: &mut World, creature_entity: Entity) -> Entity {
         self.2.process(world, creature_entity)
     }
 }
@@ -53,7 +52,7 @@ impl Default for ZombieFactory {
                 SpeciesType::Human,
                 OriginType::Farmer,
             ),
-            2: UndeadProcessor::default(),
+            2: ZombieProcessor::default(),
         }
     }
 }
@@ -75,14 +74,7 @@ impl CreatureFactory for ZombieFactory {
     fn create(&self, world: &mut World) -> Entity {
         let creature_entity = self.creature_factory().create(world);
 
-        let creature_entity = self.apply_undead(world, creature_entity);
-
-        {
-            *world
-                .write_storage::<CreatureStats>()
-                .get_mut(creature_entity)
-                .unwrap() += CreatureStats::new(8, -4, -4, 0, -4, 0);
-        }
+        let creature_entity = self.apply_zombie(world, creature_entity);
 
         {
             let weapon_entity = self.generate_leveled_weapon(world);

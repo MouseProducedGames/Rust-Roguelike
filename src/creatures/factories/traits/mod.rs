@@ -11,4 +11,6 @@ Documentation:
 
 // Internal includes.
 mod undead_processor;
+mod zombie_processor;
 pub use undead_processor::UndeadProcessor;
+pub use zombie_processor::ZombieProcessor;
