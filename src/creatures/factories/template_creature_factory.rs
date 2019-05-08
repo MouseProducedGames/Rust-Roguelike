@@ -52,7 +52,7 @@ impl CreatureFactory for TemplateCreatureFactory {
             .clone();
         let maslow_tree_lookup = maslow_tree_lookup.lock().unwrap();
 
-        let body = SpeciesType::Human.create_body(world);
+        let body = self.species_type.create_body(world);
 
         world
             .create_entity()
