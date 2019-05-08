@@ -14,17 +14,17 @@ use std::default::Default;
 
 // Internal includes.
 use crate::background::{OriginType, SpeciesType};
-use crate::bodies::Body;
+use crate::creatures::factories::qualities::ArmedWeaponProcessor;
 use crate::creatures::factories::traits::ZombieProcessor;
-use crate::creatures::factories::{CreatureFactory, CreatureProcessor, TemplateCreatureFactory};
+use crate::creatures::factories::{
+    CreatureFactory, CreatureProcessor, LeveledCreatureProcessor, TemplateCreatureFactory,
+};
 use crate::factions::Faction;
 use crate::game::points::BuildLevel;
-use crate::items::weapons::factories::specific::LeveledWeaponGenerator;
-use crate::items::weapons::factories::WeaponGenerator;
 
 #[derive(Clone)]
 pub struct ZombieFactory(
-    LeveledWeaponGenerator,
+    ArmedWeaponProcessor,
     TemplateCreatureFactory,
     ZombieProcessor,
 );
@@ -34,8 +34,12 @@ impl ZombieFactory {
         &self.1
     }
 
-    fn generate_leveled_weapon(&self, world: &mut World) -> Entity {
-        self.0.create(world, BuildLevel::from(weapon_level_func()))
+    fn generate_leveled_weapon(&self, world: &mut World, creature_entity: Entity) -> Entity {
+        self.0.process(
+            world,
+            creature_entity,
+            BuildLevel::from(weapon_level_func()),
+        )
     }
 
     fn apply_zombie(&self, world: &mut World, creature_entity: Entity) -> Entity {
@@ -46,7 +50,7 @@ impl ZombieFactory {
 impl Default for ZombieFactory {
     fn default() -> Self {
         Self {
-            0: LeveledWeaponGenerator::default(),
+            0: ArmedWeaponProcessor::default(),
             1: TemplateCreatureFactory::new(
                 Faction::new(1),
                 SpeciesType::Human,
@@ -76,16 +80,6 @@ impl CreatureFactory for ZombieFactory {
 
         let creature_entity = self.apply_zombie(world, creature_entity);
 
-        {
-            let weapon_entity = self.generate_leveled_weapon(world);
-
-            let mut body_storage = world.write_storage::<Body>();
-            let body = body_storage.get_mut(creature_entity).unwrap();
-            let mut body_data = body.get();
-            let body_slot = body_data.get_mut("Right Palm").unwrap();
-            body_slot.hold_item(weapon_entity);
-        }
-
-        creature_entity
+        self.generate_leveled_weapon(world, creature_entity)
     }
 }
