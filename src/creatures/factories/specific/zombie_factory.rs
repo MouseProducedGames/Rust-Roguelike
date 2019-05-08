@@ -18,19 +18,29 @@ use crate::background::{OriginType, SpeciesType};
 use crate::bodies::Body;
 use crate::creatures::factories::{CreatureFactory, TemplateCreatureFactory};
 use crate::factions::Faction;
-use crate::items::weapons::factories::specific::LeveledWeaponFactory;
-use crate::items::weapons::factories::WeaponFactory;
+use crate::game::points::BuildLevel;
+use crate::items::weapons::factories::specific::LeveledWeaponGenerator;
+use crate::items::weapons::factories::WeaponGenerator;
 use crate::stats::CreatureStats;
 
 #[derive(Clone)]
-pub struct ZombieFactory(TemplateCreatureFactory);
+pub struct ZombieFactory(LeveledWeaponGenerator, TemplateCreatureFactory);
 
-impl ZombieFactory {}
+impl ZombieFactory {
+    fn generate_leveled_weapon(&self, world: &mut World) -> Entity {
+        self.0.create(world, BuildLevel::from(weapon_level_func()))
+    }
+
+    fn creature_factory(&self) -> &TemplateCreatureFactory {
+        &self.1
+    }
+}
 
 impl Default for ZombieFactory {
     fn default() -> Self {
         Self {
-            0: TemplateCreatureFactory::new(
+            0: LeveledWeaponGenerator::default(),
+            1: TemplateCreatureFactory::new(
                 Faction::new(1),
                 SpeciesType::Human,
                 OriginType::Farmer,
@@ -54,7 +64,7 @@ fn weapon_level_func() -> i32 {
 
 impl CreatureFactory for ZombieFactory {
     fn create(&self, world: &mut World) -> Entity {
-        let creature_entity = self.0.create(world);
+        let creature_entity = self.creature_factory().create(world);
 
         {
             let mut undead_storage = world.write_storage::<Undead>();
@@ -73,8 +83,7 @@ impl CreatureFactory for ZombieFactory {
         }
 
         {
-            let weapon_level = weapon_level_func();
-            let weapon_entity = LeveledWeaponFactory::new(weapon_level).create(world);
+            let weapon_entity = self.generate_leveled_weapon(world);
 
             let mut body_storage = world.write_storage::<Body>();
             let body = body_storage.get_mut(creature_entity).unwrap();

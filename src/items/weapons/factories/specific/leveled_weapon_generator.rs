@@ -17,23 +17,27 @@ use std::sync::Arc;
 use super::UnmodifiedWeaponFactory;
 use crate::data_types::Name;
 use crate::game::combat::AttackValue;
-use crate::game::points::{BuildPoints, CostsBuildPoints, CostsCurrency, CurrencyValue};
+use crate::game::points::BuildLevel;
 use crate::items::weapons::factories::traits::{FineWeaponProcessor, RustyWeaponProcessor};
-use crate::items::weapons::factories::{WeaponFactory, WeaponProcessor};
+use crate::items::weapons::factories::{
+    GenerateWeaponGenerator, WeaponFactory, WeaponGenerator, WeaponProcessor,
+};
 use crate::items::weapons::Weapon;
 
+pub type LeveledWeaponGenerator = GenerateWeaponGenerator<LeveledWeaponGeneratorImpl>;
+
 #[derive(Clone)]
-pub struct LeveledWeaponFactory {
-    level: i32,
+pub struct LeveledWeaponGeneratorImpl {
     weapon_factories: Arc<Vec<Arc<dyn WeaponFactory>>>,
     quality_processors: Arc<Vec<Arc<dyn WeaponProcessor>>>,
     flaw_processors: Arc<Vec<Arc<dyn WeaponProcessor>>>,
 }
 
-impl LeveledWeaponFactory {
-    pub fn new(level: i32) -> Self {
+impl LeveledWeaponGeneratorImpl {}
+
+impl Default for LeveledWeaponGeneratorImpl {
+    fn default() -> Self {
         Self {
-            level,
             weapon_factories: Arc::new(vec![Arc::new(UnmodifiedWeaponFactory::default())]),
             quality_processors: Arc::new(vec![Arc::new(FineWeaponProcessor::default())]),
             flaw_processors: Arc::new(vec![Arc::new(RustyWeaponProcessor::default())]),
@@ -41,16 +45,18 @@ impl LeveledWeaponFactory {
     }
 }
 
-impl WeaponFactory for LeveledWeaponFactory {
-    fn create(&self, world: &mut World) -> Entity {
+impl WeaponGenerator for LeveledWeaponGeneratorImpl {
+    fn create(&self, world: &mut World, level: BuildLevel) -> Entity {
+        let level = i32::from(level);
+
         let item_entity;
         {
             let index = thread_rng().gen_range(0, self.weapon_factories.len());
             item_entity = self.weapon_factories[index].create(world);
         }
 
-        if self.level > 0 {
-            let mut level = self.level;
+        if level > 0 {
+            let mut level = level;
             let mut quality_indices: Vec<usize> = (0..self.quality_processors.len()).collect();
             while level > 0 && quality_indices.is_empty() == false {
                 let quality_indices_index = thread_rng().gen_range(0, quality_indices.len());
@@ -76,8 +82,8 @@ impl WeaponFactory for LeveledWeaponFactory {
                     name.insert_str(0, "+");
                 }
             }
-        } else if self.level < 0 {
-            let mut level = self.level;
+        } else if level < 0 {
+            let mut level = level;
             let mut flaw_indices: Vec<usize> = (0..self.flaw_processors.len()).collect();
             while level < 0 && flaw_indices.is_empty() == false {
                 let flaw_indices_index = thread_rng().gen_range(0, flaw_indices.len());
@@ -102,21 +108,6 @@ impl WeaponFactory for LeveledWeaponFactory {
                     name.insert_str(0, &level.to_string());
                 }
             }
-        }
-
-        {
-            let weapon = *world.read_storage::<Weapon>().get(item_entity).unwrap();
-            let build_points = weapon.build_points_total(world);
-            let currency_value = weapon.currency_total(world);
-
-            *world
-                .write_storage::<BuildPoints>()
-                .get_mut(item_entity)
-                .unwrap() = build_points;
-            *world
-                .write_storage::<CurrencyValue>()
-                .get_mut(item_entity)
-                .unwrap() = currency_value;
         }
 
         item_entity
