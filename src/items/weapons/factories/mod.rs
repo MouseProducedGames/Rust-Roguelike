@@ -10,8 +10,10 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+pub mod flaws;
 mod generate_weapon_generator;
 mod process_weapon_factory;
+pub mod qualities;
 pub mod specific;
 mod template_weapon_factory;
 pub mod traits;

@@ -18,9 +18,8 @@ use super::UnmodifiedWeaponFactory;
 use crate::data_types::Name;
 use crate::game::combat::AttackValue;
 use crate::game::points::BuildLevel;
-use crate::items::weapons::factories::traits::{
-    DamagingWeaponProcessor, FineWeaponProcessor, RustyWeaponProcessor,
-};
+use crate::items::weapons::factories::flaws::RustyWeaponProcessor;
+use crate::items::weapons::factories::qualities::{DamagingWeaponProcessor, FineWeaponProcessor};
 use crate::items::weapons::factories::{
     GenerateWeaponGenerator, WeaponFactory, WeaponGenerator, WeaponProcessor,
 };

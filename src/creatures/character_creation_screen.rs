@@ -31,6 +31,7 @@ use crate::items::armours::factories::traits::construction::{
 };
 use crate::items::armours::factories::traits::quality::{FineArmourFactory, RustyArmourFactory};
 use crate::items::armours::factories::ArmourFactory;
+use crate::items::weapons::factories::qualities::{FineShieldFactory, FineWeaponFactory};
 use crate::items::weapons::factories::specific::axes::BattleAxeFactory;
 use crate::items::weapons::factories::specific::maces::RoundMaceFactory;
 use crate::items::weapons::factories::specific::shields::RoundShieldFactory;
@@ -41,8 +42,7 @@ use crate::items::weapons::factories::specific::swords::{
     ArmingSwordFactory, BastardSwordFactory, LongSwordFactory, RapierFactory,
 };
 use crate::items::weapons::factories::traits::{
-    FineShieldFactory, FineWeaponFactory, LargeShieldFactory, MediumShieldFactory,
-    SmallShieldFactory,
+    LargeShieldFactory, MediumShieldFactory, SmallShieldFactory,
 };
 use crate::items::weapons::factories::WeaponFactory;
 use crate::items::weapons::WeaponGroup;
