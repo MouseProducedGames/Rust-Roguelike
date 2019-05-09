@@ -14,7 +14,7 @@ use std::default::Default;
 
 // Internal includes.
 use crate::background::{OriginType, SpeciesType};
-use crate::creatures::factories::qualities::ArmedWeaponProcessor;
+use crate::creatures::factories::qualities::armaments::ArmedWeaponProcessor;
 use crate::creatures::factories::traits::ZombieProcessor;
 use crate::creatures::factories::{
     CreatureFactory, CreatureProcessor, LeveledCreatureProcessor, TemplateCreatureFactory,

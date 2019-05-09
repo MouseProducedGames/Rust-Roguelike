@@ -10,6 +10,5 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-pub mod armaments;
-pub mod professions;
-pub mod skills;
+mod profession_sword_and_shield_processor;
+pub use profession_sword_and_shield_processor::ProfessionSwordAndShieldProcessor;

@@ -90,7 +90,7 @@ impl Screen for SkillScreen {
 
         let mut skill_lookup_storage = world.write_storage::<SkillLookup>();
         let skill_lookup = skill_lookup_storage.get_mut(self.creature).unwrap();
-        let skills = skill_lookup.get_set_mut(SkillActivation::Passive(
+        let skills = skill_lookup.get_or_add_set_mut(SkillActivation::Passive(
             SkillTag::Combat,
             SkillPassiveOp::OnUse,
         ));
