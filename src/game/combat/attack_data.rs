@@ -79,7 +79,7 @@ impl AttackData {
         self.weapon_group
     }
 
-    pub fn weapon_group_mut(&mut self) -> &mut WeaponGroup {
+    pub fn _weapon_group_mut(&mut self) -> &mut WeaponGroup {
         &mut self.weapon_group
     }
 }
