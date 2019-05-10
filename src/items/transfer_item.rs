@@ -17,7 +17,7 @@ pub enum TransferItem {
     None,
     Fetch,
     FromInventory(Entity),
-    ToInventory(Entity),
+    _ToInventory(Entity),
 }
 
 impl Component for TransferItem {

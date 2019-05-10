@@ -83,7 +83,7 @@ impl Screen for InventoryScreen {
 
         let mut inventory: Inventory = self.get_storage_item(world);
         let transfer_item: TransferItem = self.get_storage_item(world);
-        if let TransferItem::ToInventory(item) = transfer_item {
+        if let TransferItem::_ToInventory(item) = transfer_item {
             world
                 .write_storage::<Item>()
                 .get_mut(item)
