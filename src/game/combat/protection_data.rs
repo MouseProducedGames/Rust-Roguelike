@@ -67,7 +67,7 @@ impl ProtectionData {
         &mut self.protection
     }
 
-    pub fn armour_group(&self) -> ArmourGroup {
+    pub fn _armour_group(&self) -> ArmourGroup {
         self.armour_group
     }
 
