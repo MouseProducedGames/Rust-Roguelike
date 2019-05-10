@@ -57,7 +57,7 @@ impl StatEventHandler {
         }
     }
 
-    fn injury_event_handler(event: &mut Event<InjuryData>, world: &mut World) {
+    fn _injury_event_handler(event: &mut Event<InjuryData>, world: &mut World) {
         let mut event_data = *event.data();
         let mut creature_stats = world.write_storage::<CreatureStats>();
         if let Some(defender_stats) = creature_stats.get_mut(event_data.defender()) {
