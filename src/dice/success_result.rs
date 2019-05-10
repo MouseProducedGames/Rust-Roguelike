@@ -20,7 +20,7 @@ impl SuccessResult {
         SuccessResult((roll > 10) || (natural_roll >= 17), roll)
     }
 
-    pub fn is_failure(self) -> bool {
+    pub fn _is_failure(self) -> bool {
         self.is_success() == false
     }
 
