@@ -23,7 +23,7 @@ pub enum SkillActivation {
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillActiveOp {
-    OnUse,
+    _OnUse,
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
