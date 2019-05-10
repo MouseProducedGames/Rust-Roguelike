@@ -29,7 +29,7 @@ impl fmt::Display for CurrencyValue {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let raw_value = i32::from(self);
         // CurrencyValue tracks down to 1 units.
-        let rrl_bucks = raw_value / 1;
+        let rrl_bucks = raw_value;
         /*
         // CurrencyValue tracks down to 0.05 units.
         let mut raw_integer_value = raw_value / 20;
