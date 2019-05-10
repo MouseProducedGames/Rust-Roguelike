@@ -52,7 +52,7 @@ impl ThemeLookup {
         output.clone()
     }
 
-    pub fn get_theme(&self, name: String) -> Option<&Arc<Mutex<Theme>>> {
+    pub fn _get_theme(&self, name: String) -> Option<&Arc<Mutex<Theme>>> {
         self.values.get(&name)
     }
 
