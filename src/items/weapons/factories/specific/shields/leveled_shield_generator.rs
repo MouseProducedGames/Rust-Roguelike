@@ -13,24 +13,22 @@ use std::default::Default;
 use std::sync::Arc;
 
 // Internal includes.
-use super::RoundShieldFactory;
+use super::{RoundShieldFactory, TemplatedLeveledShieldGenerator};
 use crate::game::points::BuildLevel;
 use crate::items::weapons::factories::flaws::DentedShieldProcessor;
 use crate::items::weapons::factories::qualities::FineShieldProcessor;
 use crate::items::weapons::factories::traits::{
     LargeShieldFactory, MediumShieldFactory, SmallShieldFactory,
 };
-use crate::items::weapons::factories::{
-    GenerateWeaponGenerator, TemplatedLeveledWeaponGenerator, WeaponGenerator,
-};
+use crate::items::weapons::factories::{GenerateWeaponGenerator, WeaponGenerator};
 
 pub type LeveledShieldGenerator = GenerateWeaponGenerator<LeveledShieldGeneratorImpl>;
 
 #[derive(Clone)]
-pub struct LeveledShieldGeneratorImpl(TemplatedLeveledWeaponGenerator);
+pub struct LeveledShieldGeneratorImpl(TemplatedLeveledShieldGenerator);
 
 impl LeveledShieldGeneratorImpl {
-    fn generator(&self) -> &TemplatedLeveledWeaponGenerator {
+    fn generator(&self) -> &TemplatedLeveledShieldGenerator {
         &self.0
     }
 }
@@ -38,7 +36,7 @@ impl LeveledShieldGeneratorImpl {
 impl Default for LeveledShieldGeneratorImpl {
     fn default() -> Self {
         Self {
-            0: TemplatedLeveledWeaponGenerator::new(
+            0: TemplatedLeveledShieldGenerator::new(
                 &[
                     Arc::new(LargeShieldFactory::<RoundShieldFactory>::default()),
                     Arc::new(MediumShieldFactory::<RoundShieldFactory>::default()),
