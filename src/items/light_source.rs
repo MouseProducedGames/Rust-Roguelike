@@ -29,7 +29,7 @@ impl LightSource {
         self.power
     }
 
-    fn power_mut(&mut self, value: f64) -> f64 {
+    fn _power_mut(&mut self, value: f64) -> f64 {
         self.power = value;
         self.power()
     }
