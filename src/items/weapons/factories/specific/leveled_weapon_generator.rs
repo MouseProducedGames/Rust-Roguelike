@@ -21,7 +21,7 @@ use crate::items::weapons::factories::{
     GenerateWeaponGenerator, TemplatedLeveledWeaponGenerator, WeaponGenerator,
 };
 
-pub type LeveledWeaponGenerator = GenerateWeaponGenerator<LeveledWeaponGeneratorImpl>;
+pub type _LeveledWeaponGenerator = GenerateWeaponGenerator<LeveledWeaponGeneratorImpl>;
 
 #[derive(Clone)]
 pub struct LeveledWeaponGeneratorImpl(TemplatedLeveledWeaponGenerator);
