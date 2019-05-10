@@ -12,31 +12,33 @@ use specs::{Entity, World};
 use std::default::Default;
 
 // Internal includes.
-use crate::creatures::factories::qualities::armaments::{
-    ArmedShieldProcessor, ArmedSwordProcessor,
-};
-use crate::creatures::factories::qualities::skills::{SkillShieldProcessor, SkillSwordProcessor};
+use super::{ProfessionShieldProcessor, ProfessionSwordProcessor};
 use crate::creatures::factories::LeveledCreatureProcessor;
 use crate::game::points::BuildLevel;
 
 #[derive(Clone)]
-pub struct ProfessionSwordAndShieldProcessor;
+pub struct ProfessionSwordAndShieldProcessor {
+    profession_shield_processor: ProfessionShieldProcessor,
+    profession_weapon_processor: ProfessionSwordProcessor,
+}
 
 impl ProfessionSwordAndShieldProcessor {}
 
 impl Default for ProfessionSwordAndShieldProcessor {
     fn default() -> Self {
-        Self {}
+        Self {
+            profession_shield_processor: ProfessionShieldProcessor::default(),
+            profession_weapon_processor: ProfessionSwordProcessor::default(),
+        }
     }
 }
 
 impl LeveledCreatureProcessor for ProfessionSwordAndShieldProcessor {
     fn process(&self, world: &mut World, creature_entity: Entity, level: BuildLevel) -> Entity {
         let creature_entity =
-            ArmedShieldProcessor::default().process(world, creature_entity, level);
-        let creature_entity = ArmedSwordProcessor::default().process(world, creature_entity, level);
-        let creature_entity =
-            SkillShieldProcessor::default().process(world, creature_entity, level);
-        SkillSwordProcessor::default().process(world, creature_entity, level)
+            self.profession_shield_processor
+                .process(world, creature_entity, level);
+        self.profession_weapon_processor
+            .process(world, creature_entity, level)
     }
 }
