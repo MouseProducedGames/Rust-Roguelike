@@ -14,7 +14,7 @@ use std::default::Default;
 
 // Internal includes.
 use crate::background::{OriginType, SpeciesType};
-use crate::creatures::factories::qualities::professions::ProfessionSwordAndShieldProcessor;
+use crate::creatures::factories::qualities::professions::ProfessionBanditProcessor;
 use crate::creatures::factories::{
     CreatureFactory, LeveledCreatureProcessor, TemplateCreatureFactory,
 };
@@ -22,7 +22,7 @@ use crate::factions::Faction;
 use crate::game::points::BuildLevel;
 
 #[derive(Clone)]
-pub struct BanditFactory(ProfessionSwordAndShieldProcessor, TemplateCreatureFactory);
+pub struct BanditFactory(ProfessionBanditProcessor, TemplateCreatureFactory);
 
 impl BanditFactory {
     fn apply_profession(&self, creature_entity: Entity, world: &mut World) -> Entity {
@@ -38,7 +38,7 @@ impl BanditFactory {
 impl Default for BanditFactory {
     fn default() -> Self {
         Self {
-            0: ProfessionSwordAndShieldProcessor::default(),
+            0: ProfessionBanditProcessor::default(),
             1: TemplateCreatureFactory::new(
                 Faction::new(1),
                 SpeciesType::Human,

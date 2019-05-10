@@ -10,9 +10,9 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
-use super::TemplateProfessionWeaponProcessor;
+use super::TemplateProfessionShieldProcessor;
 use crate::creatures::factories::qualities::armaments::ArmedShieldProcessor;
 use crate::creatures::factories::qualities::skills::SkillShieldProcessor;
 
 pub type ProfessionShieldProcessor =
-    TemplateProfessionWeaponProcessor<ArmedShieldProcessor, SkillShieldProcessor>;
+    TemplateProfessionShieldProcessor<ArmedShieldProcessor, SkillShieldProcessor>;
