@@ -17,7 +17,7 @@ use crate::items::weapons::WeaponGroup;
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillActivation {
-    Active(SkillTag, SkillActiveOp),
+    _Active(SkillTag, SkillActiveOp),
     Passive(SkillTag, SkillPassiveOp),
 }
 
