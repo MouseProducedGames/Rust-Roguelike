@@ -11,36 +11,30 @@ Documentation:
 
 // Internal includes.
 use super::ability::{Ability, AbilityRange};
-use crate::maps::{calculate_light_level, execute_tile_func, Lightmap, Tilemap, VisibilityMap};
+use crate::maps::{execute_tile_func, Lightmap, Tilemap, VisibilityMap};
 use crate::rrl_math::{Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
 use crate::stats::{CreatureStats, StatModifier};
 
 pub fn ability_func(
     ability: Ability,
-    lightmap: &mut Lightmap,
+    _lightmap: &mut Lightmap,
     pos: &mut Position,
     skills: &mut SkillLookup,
     stats: &mut CreatureStats,
     map: &mut Tilemap,
     visibility_map: &mut VisibilityMap,
 ) {
-    match ability {
-        Ability::Light(value) => {
-            calculate_light_level(lightmap, *pos, value, map);
-        }
-        Ability::ScanForSecrets(ability_modifier, ability_range) => {
-            scan_for_secrets(
-                ability_modifier,
-                ability_range,
-                pos,
-                skills,
-                stats,
-                map,
-                visibility_map,
-            );
-        }
-    }
+    let Ability::ScanForSecrets(ability_modifier, ability_range) = ability;
+    scan_for_secrets(
+        ability_modifier,
+        ability_range,
+        pos,
+        skills,
+        stats,
+        map,
+        visibility_map,
+    );
 }
 
 fn ability_range_func<TData, TDataMut>(

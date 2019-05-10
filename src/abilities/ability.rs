@@ -28,7 +28,6 @@ pub enum AbilityActivationOp {
 
 #[derive(Copy, Clone)]
 pub enum Ability {
-    Light(f64),
     ScanForSecrets(i32, AbilityRange),
 }
 
