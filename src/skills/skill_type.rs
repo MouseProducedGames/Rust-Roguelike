@@ -52,5 +52,5 @@ pub enum SkillType {
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillRange {
-    Radius(u32),
+    _Radius(u32),
 }
