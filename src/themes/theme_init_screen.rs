@@ -140,7 +140,7 @@ impl Screen for ThemeInitScreen {
 
                         let creature_position =
                             Position::new(i32::from(pos.x()), i32::from(pos.y()));
-                        creature_plots.push(CreaturePlot::new(creature_position, 1, 50));
+                        creature_plots.push(CreaturePlot::new(creature_position, 1, 100));
                     }
                     (output, creature_plots)
                 }),
