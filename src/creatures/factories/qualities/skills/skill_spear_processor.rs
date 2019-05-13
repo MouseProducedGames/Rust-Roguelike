@@ -13,7 +13,6 @@ use std::default::Default;
 
 // Internal includes.
 use crate::creatures::factories::LeveledCreatureProcessor;
-use crate::game::combat::{AttackValue, DefenceValue};
 use crate::game::points::BuildLevel;
 use crate::items::weapons::WeaponGroup;
 use crate::skills::{
@@ -46,7 +45,7 @@ impl LeveledCreatureProcessor for SkillSpearProcessor {
                 SkillPassiveOp::OnUse,
             )) {
                 for skill in skills {
-                    if let SkillType::Weapon(weapon_group, skill_value, _, _, _) = skill {
+                    if let SkillType::Weapon(weapon_group, skill_value) = skill {
                         if *weapon_group == WeaponGroup::Spears {
                             found = true;
                             // We do not add 1 here, because it was done when the skill was
@@ -65,9 +64,6 @@ impl LeveledCreatureProcessor for SkillSpearProcessor {
                         WeaponGroup::Spears,
                         // We add 1 here to apply the BuildLevel reduction.
                         SkillValue::from(i32::from(level) + 1),
-                        BuildLevel::from(-10),
-                        AttackValue::from(-1),
-                        DefenceValue::from(-1),
                     ),
                 );
             }

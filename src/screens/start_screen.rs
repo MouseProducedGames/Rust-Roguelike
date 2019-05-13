@@ -20,8 +20,7 @@ use crate::background::SpeciesType;
 use crate::bodies::BodyFactory;
 use crate::creatures::CharacterCreationScreen;
 use crate::factions::Faction;
-use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
-use crate::game::points::BuildLevel;
+use crate::game::combat::{AttackValue, MultiAttackPenalty};
 use crate::game::GameScreen;
 use crate::io::DisplayInitScreen;
 use crate::items::weapons::WeaponGroup;
@@ -72,13 +71,7 @@ impl StartScreen {
 
         skills.insert(
             SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-            SkillType::Weapon(
-                WeaponGroup::Unarmed,
-                SkillValue::from(2),
-                BuildLevel::from(20),
-                AttackValue::from(5),
-                DefenceValue::from(5),
-            ),
+            SkillType::Weapon(WeaponGroup::Unarmed, SkillValue::from(2)),
         );
 
         let body = SpeciesType::Human.create_body(world);

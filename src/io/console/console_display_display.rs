@@ -10,6 +10,7 @@ use crossterm_style::Color;
 use specs::{Entity, ReadStorage, World};
 
 // Standard includes.
+use std::sync::Arc;
 
 // Internal includes.
 use super::{ConsoleChar, ConsoleDisplay, Darker};
@@ -24,6 +25,7 @@ use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
 use crate::rrl_math::{Displacement, Position};
 use crate::skills::{
     SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType,
+    WeaponSkillTypeLookup,
 };
 use crate::stats::{CreatureStats, Stat};
 
@@ -159,15 +161,18 @@ impl Display for ConsoleDisplay {
             Color::Black,
         );
 
+        let weapon_skill_type_lookup = world.read_resource::<Arc<WeaponSkillTypeLookup>>();
         if let Some(skills) = skill_lookup.get_set(SkillActivation::Passive(
             SkillTag::Combat,
             SkillPassiveOp::OnUse,
         )) {
             for (i, skill) in skills.iter().enumerate() {
                 let name = match skill {
-                    SkillType::Weapon(weapon_group, skill_value, skill_cost_modifier, _, _) => {
+                    SkillType::Weapon(weapon_group, skill_value) => {
                         let skill_level = skill_value.build_level_total(world);
-                        let skill_cost_level = skill_level + *skill_cost_modifier;
+                        let skill_cost_modifier =
+                            weapon_skill_type_lookup.get(*weapon_group).cost_modifier();
+                        let skill_cost_level = skill_level + skill_cost_modifier;
                         let current_skill_cost = BuildPoints::from(skill_cost_level);
                         let next_skill_cost_level = skill_cost_level + BuildLevel::from(10);
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);

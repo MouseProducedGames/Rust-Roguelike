@@ -14,6 +14,7 @@ use std::sync::{Arc, Mutex};
 // Internal includes.
 use super::{
     SkillActivation, SkillLookup, SkillPassiveOp, SkillPoints, SkillTag, SkillType, SkillValue,
+    WeaponSkillTypeLookup,
 };
 use crate::game::points::{BuildLevel, BuildPoints, HasBuildLevel};
 use crate::game::GameState;
@@ -123,11 +124,15 @@ impl Screen for SkillScreen {
             }
             '+' => {
                 if skills_len > 0 {
-                    if let SkillType::Weapon(_, skill_value, skill_cost_modifier, _, _) =
+                    if let SkillType::Weapon(weapon_group, skill_value) =
                         &mut skills[self.skill_index]
                     {
                         let skill_level = skill_value.build_level_total(world);
-                        let skill_cost_level = skill_level + *skill_cost_modifier;
+                        let weapon_skill_type_lookup =
+                            world.read_resource::<Arc<WeaponSkillTypeLookup>>();
+                        let skill_cost_modifier =
+                            weapon_skill_type_lookup.get(*weapon_group).cost_modifier();
+                        let skill_cost_level = skill_level + skill_cost_modifier;
                         let current_skill_cost = BuildPoints::from(skill_cost_level);
                         let next_skill_cost_level = skill_cost_level + BuildLevel::from(10);
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);

@@ -22,8 +22,7 @@ use crate::background::{OriginType, Species, SpeciesType};
 use crate::bodies::{BodyFactory, BodySlotType};
 use crate::data_types::Name;
 use crate::factions::Faction;
-use crate::game::combat::{AttackValue, DefenceValue, MultiAttackPenalty};
-use crate::game::points::BuildLevel;
+use crate::game::combat::{AttackValue, MultiAttackPenalty};
 use crate::io::Display;
 use crate::items::armours::factories::specific::wearables::{CuirassFactory, GauntletFactory};
 use crate::items::armours::factories::traits::construction::{
@@ -134,68 +133,32 @@ impl Screen for CharacterCreationScreen {
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(
-                    WeaponGroup::Axes,
-                    SkillValue::from(0),
-                    BuildLevel::from(-5),
-                    AttackValue::from(-1),
-                    DefenceValue::from(0),
-                ),
+                SkillType::Weapon(WeaponGroup::Axes, SkillValue::from(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(
-                    WeaponGroup::Maces,
-                    SkillValue::from(0),
-                    BuildLevel::from(-5),
-                    AttackValue::from(0),
-                    DefenceValue::from(-1),
-                ),
+                SkillType::Weapon(WeaponGroup::Maces, SkillValue::from(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(
-                    WeaponGroup::Shields,
-                    SkillValue::from(0),
-                    BuildLevel::from(-10),
-                    AttackValue::from(-2),
-                    DefenceValue::from(0),
-                ),
+                SkillType::Weapon(WeaponGroup::Shields, SkillValue::from(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(
-                    WeaponGroup::Spears,
-                    SkillValue::from(0),
-                    BuildLevel::from(-10),
-                    AttackValue::from(-1),
-                    DefenceValue::from(-1),
-                ),
+                SkillType::Weapon(WeaponGroup::Spears, SkillValue::from(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(
-                    WeaponGroup::Swords,
-                    SkillValue::from(0),
-                    BuildLevel::from(10),
-                    AttackValue::from(1),
-                    DefenceValue::from(1),
-                ),
+                SkillType::Weapon(WeaponGroup::Swords, SkillValue::from(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(
-                    WeaponGroup::Unarmed,
-                    SkillValue::from(0),
-                    BuildLevel::from(20),
-                    AttackValue::from(5),
-                    DefenceValue::from(5),
-                ),
+                SkillType::Weapon(WeaponGroup::Unarmed, SkillValue::from(0)),
             );
 
             let mut talents = TalentLookup::new();

@@ -15,7 +15,9 @@ use std::sync::{Arc, Mutex, MutexGuard};
 use crate::events::{Event, EventManager};
 use crate::game::combat::AttackData;
 use crate::items::weapons::WeaponGroup;
-use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
+use crate::skills::{
+    SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType, WeaponSkillTypeLookup,
+};
 
 pub struct SkillEventHandler;
 
@@ -28,34 +30,43 @@ impl SkillEventHandler {
         Self {}
     }
 
-    fn apply_attack_skill(event_data: &mut AttackData, skill_lookup: &mut SkillLookup) {
+    fn apply_attack_skill(
+        event_data: &mut AttackData,
+        skill_lookup: &SkillLookup,
+        weapon_skill_type_lookup: &Arc<WeaponSkillTypeLookup>,
+    ) {
         if let Some(passive_combat_skills) = skill_lookup.get_set(SkillActivation::Passive(
             SkillTag::Combat,
             SkillPassiveOp::OnUse,
         )) {
             for combat_skill in passive_combat_skills.iter() {
-                if let SkillType::Weapon(weapon_group, skill_value, _, attack_value, _) =
-                    *combat_skill
-                {
+                if let SkillType::Weapon(weapon_group, skill_value) = *combat_skill {
                     if weapon_group == event_data.weapon_group() {
-                        *event_data.attack_modifier_mut() += attack_value + skill_value
+                        let attack_modifier =
+                            weapon_skill_type_lookup.get(weapon_group).attack_modifier();
+                        *event_data.attack_modifier_mut() += attack_modifier + skill_value;
                     }
                 }
             }
         }
     }
 
-    fn apply_defence_skill(event_data: &mut AttackData, skill_lookup: &mut SkillLookup) {
+    fn apply_defence_skill(
+        event_data: &mut AttackData,
+        skill_lookup: &SkillLookup,
+        weapon_skill_type_lookup: &Arc<WeaponSkillTypeLookup>,
+    ) {
         if let Some(passive_combat_skills) = skill_lookup.get_set(SkillActivation::Passive(
             SkillTag::Combat,
             SkillPassiveOp::OnUse,
         )) {
             for combat_skill in passive_combat_skills.iter() {
-                if let SkillType::Weapon(weapon_group, skill_value, _, _, defence_value) =
-                    *combat_skill
-                {
+                if let SkillType::Weapon(weapon_group, skill_value) = *combat_skill {
                     if weapon_group == WeaponGroup::Unarmed {
-                        *event_data.defence_modifier_mut() += defence_value + skill_value
+                        let defence_modifier = weapon_skill_type_lookup
+                            .get(weapon_group)
+                            .defence_modifier();
+                        *event_data.defence_modifier_mut() += defence_modifier + skill_value;
                     }
                 }
             }
@@ -64,14 +75,23 @@ impl SkillEventHandler {
 
     fn attack_event_handler(event: &mut Event<AttackData>, world: &mut World) {
         let mut event_data = *event.data();
-        let mut skill_storage = world.write_storage::<SkillLookup>();
+        let skill_storage = world.read_storage::<SkillLookup>();
+        let weapon_skill_type_lookup = world.read_resource::<Arc<WeaponSkillTypeLookup>>();
 
-        if let Some(skill_lookup) = skill_storage.get_mut(event_data.attacker()) {
-            SkillEventHandler::apply_attack_skill(&mut event_data, skill_lookup);
+        if let Some(skill_lookup) = skill_storage.get(event_data.attacker()) {
+            SkillEventHandler::apply_attack_skill(
+                &mut event_data,
+                skill_lookup,
+                &weapon_skill_type_lookup,
+            );
         }
 
-        if let Some(skill_lookup) = skill_storage.get_mut(event_data.defender()) {
-            SkillEventHandler::apply_defence_skill(&mut event_data, skill_lookup);
+        if let Some(skill_lookup) = skill_storage.get(event_data.defender()) {
+            SkillEventHandler::apply_defence_skill(
+                &mut event_data,
+                skill_lookup,
+                &weapon_skill_type_lookup,
+            );
         }
 
         *event.data_mut() = event_data;

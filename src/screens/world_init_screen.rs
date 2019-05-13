@@ -21,15 +21,19 @@ use crate::bodies::Body;
 use crate::data_types::Name;
 use crate::events::EventManager;
 use crate::factions::Faction;
-use crate::game::combat::{AttackPenaltyEventHandler, MultiAttackPenalty};
-use crate::game::points::{BuildPoints, CurrencyValue};
+use crate::game::combat::{
+    AttackPenaltyEventHandler, AttackValue, DefenceValue, MultiAttackPenalty,
+};
+use crate::game::points::{BuildLevel, BuildPoints, CurrencyValue};
 use crate::game::{EntityPositionTracker, GameState, Time};
 use crate::items::armours::{Armour, ArmourEventHandler};
-use crate::items::weapons::{Weapon, WeaponEventHandler};
+use crate::items::weapons::{Weapon, WeaponEventHandler, WeaponGroup};
 use crate::items::{Inventory, Item, LightSource, TransferItem};
 use crate::maps::{PatternLookup, VisibilityMapLookup};
 use crate::rrl_math::Position;
-use crate::skills::{SkillEventHandler, SkillLookup, SkillPoints};
+use crate::skills::{
+    SkillEventHandler, SkillLookup, SkillPoints, WeaponSkillTypeData, WeaponSkillTypeLookup,
+};
 use crate::stats::{CreatureStats, StatEventHandler};
 use crate::talents::TalentLookup;
 use crate::themes::ThemeLookup;
@@ -92,6 +96,58 @@ impl Screen for WorldInitScreen {
         world.add_resource(Arc::new(Mutex::new(PatternLookup::new())));
         world.add_resource(Arc::new(Mutex::new(ThemeLookup::new())));
         world.add_resource(Time::new(0));
+        {
+            world.add_resource(Arc::new(WeaponSkillTypeLookup::new(&[
+                (
+                    WeaponGroup::Axes,
+                    WeaponSkillTypeData::new(
+                        AttackValue::from(-1),
+                        BuildLevel::from(-5),
+                        DefenceValue::from(0),
+                    ),
+                ),
+                (
+                    WeaponGroup::Maces,
+                    WeaponSkillTypeData::new(
+                        AttackValue::from(0),
+                        BuildLevel::from(-5),
+                        DefenceValue::from(-1),
+                    ),
+                ),
+                (
+                    WeaponGroup::Shields,
+                    WeaponSkillTypeData::new(
+                        AttackValue::from(-2),
+                        BuildLevel::from(-10),
+                        DefenceValue::from(0),
+                    ),
+                ),
+                (
+                    WeaponGroup::Spears,
+                    WeaponSkillTypeData::new(
+                        AttackValue::from(-1),
+                        BuildLevel::from(-10),
+                        DefenceValue::from(-1),
+                    ),
+                ),
+                (
+                    WeaponGroup::Swords,
+                    WeaponSkillTypeData::new(
+                        AttackValue::from(1),
+                        BuildLevel::from(10),
+                        DefenceValue::from(1),
+                    ),
+                ),
+                (
+                    WeaponGroup::Unarmed,
+                    WeaponSkillTypeData::new(
+                        AttackValue::from(5),
+                        BuildLevel::from(20),
+                        DefenceValue::from(5),
+                    ),
+                ),
+            ])));
+        }
         world.register::<Armour>();
         world.register::<Body>();
         world.register::<BuildPoints>();
