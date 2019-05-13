@@ -31,8 +31,8 @@ impl Default for GauntletFactory {
                 BodySlotType::Hand,
                 Armour::new(
                     ArmourGroup::Default,
-                    DefenceValue::new(0),
-                    ProtectionValue::new(0),
+                    DefenceValue::from(0),
+                    ProtectionValue::from(0),
                 ),
             ),
         }

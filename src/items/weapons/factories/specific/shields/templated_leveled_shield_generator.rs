@@ -16,6 +16,7 @@ use std::sync::Arc;
 use crate::data_types::Name;
 use crate::game::combat::DefenceValue;
 use crate::game::points::BuildLevel;
+use crate::game::GameValueFixed;
 use crate::items::weapons::factories::{WeaponFactory, WeaponGenerator, WeaponProcessor};
 use crate::items::weapons::Weapon;
 
@@ -59,14 +60,14 @@ impl WeaponGenerator for TemplatedLeveledShieldGenerator {
                 self.quality_processors[quality_index].process(world, item_entity);
 
                 quality_indices.remove(quality_indices_index);
-                level -= 1;
+                level -= GameValueFixed::from_int(1);
             }
 
             if level > 0 {
                 {
                     let mut weapon_storage = world.write_storage::<Weapon>();
                     let weapon = weapon_storage.get_mut(item_entity).unwrap();
-                    *weapon.defence_value_mut() += DefenceValue::new(level);
+                    *weapon.defence_value_mut() += DefenceValue::from(level);
                 }
 
                 {
@@ -86,14 +87,14 @@ impl WeaponGenerator for TemplatedLeveledShieldGenerator {
                 self.flaw_processors[flaw_index].process(world, item_entity);
 
                 flaw_indices.remove(flaw_indices_index);
-                level += 1;
+                level += GameValueFixed::from_int(1);
             }
 
             if level < 0 {
                 {
                     let mut weapon_storage = world.write_storage::<Weapon>();
                     let weapon = weapon_storage.get_mut(item_entity).unwrap();
-                    *weapon.defence_value_mut() += DefenceValue::new(level);
+                    *weapon.defence_value_mut() += DefenceValue::from(level);
                 }
 
                 {

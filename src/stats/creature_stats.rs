@@ -14,6 +14,7 @@ use std::ops::{Add, AddAssign};
 
 // Internal includes.
 use super::{Attribute, Stat};
+use crate::game::GameValueFixed;
 
 #[derive(Copy, Clone)]
 pub struct CreatureStats {
@@ -27,12 +28,12 @@ pub struct CreatureStats {
 
 impl CreatureStats {
     pub fn new(
-        strength: i32,
-        agility: i32,
-        coordination: i32,
-        endurance: i32,
-        perception: i32,
-        health: i32,
+        strength: GameValueFixed,
+        agility: GameValueFixed,
+        coordination: GameValueFixed,
+        endurance: GameValueFixed,
+        perception: GameValueFixed,
+        health: GameValueFixed,
     ) -> Self {
         Self {
             strength: Attribute::new(strength),
@@ -41,6 +42,24 @@ impl CreatureStats {
             endurance: Attribute::new(endurance),
             perception: Attribute::new(perception),
             health: Attribute::new(health),
+        }
+    }
+    
+    pub fn from_ints(
+        strength: i32,
+        agility: i32,
+        coordination: i32,
+        endurance: i32,
+        perception: i32,
+        health: i32,
+    ) -> Self {
+        Self {
+            strength: Attribute::from(strength),
+            agility: Attribute::from(agility),
+            coordination: Attribute::from(coordination),
+            endurance: Attribute::from(endurance),
+            perception: Attribute::from(perception),
+            health: Attribute::from(health),
         }
     }
 
@@ -120,7 +139,7 @@ impl Component for CreatureStats {
 
 impl Default for CreatureStats {
     fn default() -> Self {
-        let ten = Attribute::new(10);
+        let ten = Attribute::from(10);
         Self {
             strength: ten,
             agility: ten,

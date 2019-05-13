@@ -26,7 +26,7 @@ pub use entity_position_tracker::EntityPositionTracker;
 pub use first_update_system::FirstUpdateSystem;
 pub use game_screen::GameScreen;
 pub use game_state::GameState;
-pub use game_value::GameValue;
+pub use game_value::{GameValue, GameValueFixed};
 pub use last_update_system::LastUpdateSystem;
 pub use penalty_value::PenaltyValue;
 pub use template_game_value::TemplateGameValue;

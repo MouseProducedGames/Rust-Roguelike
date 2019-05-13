@@ -13,7 +13,7 @@ use specs::{Component, VecStorage, World};
 // Internal includes.
 use super::AttackMarker;
 use crate::game::points::{BuildLevel, HasBuildLevel};
-use crate::game::PenaltyValue;
+use crate::game::{PenaltyValue, GameValueFixed};
 
 #[derive(Copy, Clone, Default)]
 pub struct MultiAttackMarker;
@@ -26,6 +26,6 @@ impl Component for MultiAttackPenalty {
 
 impl HasBuildLevel for MultiAttackPenalty {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::new((self.raw() * 10) - 10)
+        BuildLevel::new(self.raw() - GameValueFixed::from_int(1))
     }
 }

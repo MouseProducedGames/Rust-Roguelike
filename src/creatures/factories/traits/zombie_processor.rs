@@ -40,7 +40,7 @@ impl CreatureProcessor for ZombieProcessor {
         *world
             .write_storage::<CreatureStats>()
             .get_mut(creature_entity)
-            .unwrap() += CreatureStats::new(8, -4, -4, 4, -4, 4);
+            .unwrap() += CreatureStats::from_ints(8, -4, -4, 4, -4, 4);
 
         creature_entity
     }

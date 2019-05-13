@@ -25,19 +25,19 @@ pub enum OriginType {
 
 impl OriginType {
     fn create_stats_farmer() -> CreatureStats {
-        CreatureStats::new(2, 0, 0, 2, 0, 2)
+        CreatureStats::from_ints(2, 0, 0, 2, 0, 2)
     }
 
     fn create_stats_hunter() -> CreatureStats {
-        CreatureStats::new(0, 0, 0, 2, 2, 2)
+        CreatureStats::from_ints(0, 0, 0, 2, 2, 2)
     }
 
     fn create_stats_jack() -> CreatureStats {
-        CreatureStats::new(1, 1, 1, 1, 1, 1)
+        CreatureStats::from_ints(1, 1, 1, 1, 1, 1)
     }
 
     fn create_stats_rogue() -> CreatureStats {
-        CreatureStats::new(0, 0, 2, 0, 2, 0)
+        CreatureStats::from_ints(0, 0, 2, 0, 2, 0)
     }
 }
 

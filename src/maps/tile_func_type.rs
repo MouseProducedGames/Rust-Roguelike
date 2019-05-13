@@ -12,6 +12,7 @@ Documentation:
 // Internal includes.
 use super::{Mapping, Tilemap, VisibilityType};
 use crate::dice::roll_success;
+use crate::game::GameValueFixed;
 use crate::rrl_math::Position;
 
 pub static TILE_FUNC_DATA: [TileFunc; 4] = [
@@ -49,7 +50,7 @@ pub enum TileFuncOp {
 
 pub fn execute_tile_func(
     harmless: bool,
-    skill_bonus: i32,
+    skill_bonus: GameValueFixed,
     map: &mut Tilemap,
     visibility_type: VisibilityType,
     pos: Position,

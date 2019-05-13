@@ -29,10 +29,10 @@ impl Default for BastardSwordFactory {
                 Name::new("Bastard Sword"),
                 Weapon::new(
                     WeaponGroup::Swords,
-                    AttackValue::new(3),
+                    AttackValue::from(3),
                     DamageType::Slashing,
-                    DamageValue::new(5),
-                    DefenceValue::new(2),
+                    DamageValue::from(5),
+                    DefenceValue::from(2),
                 ),
             ),
         }

@@ -34,7 +34,7 @@ impl LeveledCreatureProcessor for SkillMaceProcessor {
     fn process(&self, world: &mut World, creature_entity: Entity, level: BuildLevel) -> Entity {
         // Only in non-delagating processors.
         // The general creature level is too low to use for skills.
-        let level = level + BuildLevel::new(2);
+        let level = level + BuildLevel::from(2);
         {
             let mut skill_lookup_storage = world.write_storage::<SkillLookup>();
             let skill_lookup = skill_lookup_storage.get_mut(creature_entity).unwrap();

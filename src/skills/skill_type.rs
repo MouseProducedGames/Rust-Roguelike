@@ -39,7 +39,7 @@ pub enum SkillTag {
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum SkillType {
     Weapon(WeaponGroup, SkillValue),
-    Skill(i32),
+    Skill(SkillValue),
 }
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]

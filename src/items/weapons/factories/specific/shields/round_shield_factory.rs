@@ -30,10 +30,10 @@ impl Default for RoundShieldFactory {
                 Name::new("Round Shield"),
                 Weapon::new(
                     WeaponGroup::Shields,
-                    AttackValue::new(2),
+                    AttackValue::from(2),
                     DamageType::Crushing,
-                    DamageValue::new(1),
-                    DefenceValue::new(5),
+                    DamageValue::from(1),
+                    DefenceValue::from(5),
                 ),
             ),
         }

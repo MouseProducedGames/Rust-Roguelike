@@ -29,10 +29,10 @@ impl Default for MediumSpearFactory {
                 Name::new("Medium Spear"),
                 Weapon::new(
                     WeaponGroup::Spears,
-                    AttackValue::new(4),
+                    AttackValue::from(4),
                     DamageType::Piercing,
-                    DamageValue::new(3),
-                    DefenceValue::new(2),
+                    DamageValue::from(3),
+                    DefenceValue::from(2),
                 ),
             ),
         }

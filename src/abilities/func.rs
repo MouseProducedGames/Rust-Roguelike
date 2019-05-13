@@ -11,6 +11,7 @@ Documentation:
 
 // Internal includes.
 use super::ability::{Ability, AbilityRange};
+use crate::game::GameValueFixed;
 use crate::maps::{execute_tile_func, Lightmap, Tilemap, VisibilityMap};
 use crate::rrl_math::{Displacement, Position};
 use crate::skills::{SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType};
@@ -69,14 +70,14 @@ fn scan_for_secrets(
     map: &mut Tilemap,
     visibility_map: &mut VisibilityMap,
 ) {
-    let mut skill_bonus: i32 = ability_modifier;
+    let mut skill_bonus = GameValueFixed::from_int(ability_modifier);
     if let Some(set) = skills.get_set(SkillActivation::Passive(
         SkillTag::Perception,
         SkillPassiveOp::EveryRound,
     )) {
         for skill in set {
-            if let SkillType::Skill(v) = skill {
-                skill_bonus += *v
+            if let SkillType::Skill(skill_value) = skill {
+                skill_bonus += skill_value.raw()
             }
         }
     }
@@ -88,7 +89,7 @@ fn scan_for_secrets(
         &skill_bonus,
         &mut (map, pos, visibility_map),
         |disp: Displacement,
-         data: &i32,
+         data: &GameValueFixed,
          data_mut: &mut (&mut Tilemap, &mut Position, &mut VisibilityMap)| {
             let skill_bonus = data;
             let (map, pos, visibility_map) = data_mut;

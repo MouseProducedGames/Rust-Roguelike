@@ -93,7 +93,7 @@ impl EventManager {
                     for body_slot in body.get().values() {
                         if body_slot.is_attack() {
                             let item_entity = body_slot.item();
-                            let mut attack_modifier = AttackValue::new(0);
+                            let mut attack_modifier = AttackValue::from(0);
                             let mut weapon_group = WeaponGroup::Unarmed;
                             let mut damage_type = DamageType::Blunt;
                             if let Some(weapon) = weapons.get(item_entity) {
@@ -110,7 +110,7 @@ impl EventManager {
                                     event_data.attacker(),
                                     event_data.defender(),
                                     attack_modifier,
-                                    DefenceValue::new(0),
+                                    DefenceValue::from(0),
                                     weapon_group,
                                     damage_type,
                                 ),
@@ -133,7 +133,7 @@ impl EventManager {
                     let damage_data = DamageData::new(
                         event.data().attacker(),
                         event.data().defender(),
-                        DamageValue::new(result.margin_of_success()),
+                        DamageValue::from(result.margin_of_success()),
                         event.data().weapon_group(),
                         event.data().damage_type(),
                     );
@@ -149,12 +149,12 @@ impl EventManager {
                 let event_data = *event.data();
                 let damage_type = event_data.damage_type();
                 let damage = damage_type.damage_to_damage(event_data.damage());
-                if damage > 0 {
+                if damage.raw() > 0 {
                     let protection_data = ProtectionData::new(
                         event_data.attacker(),
                         event_data.defender(),
                         damage,
-                        ProtectionValue::new(0),
+                        ProtectionValue::from(0),
                         ArmourGroup::Default,
                         event_data.weapon_group(),
                         damage_type,
@@ -174,7 +174,7 @@ impl EventManager {
                 let protection = event_data.protection();
                 let injury_total = damage_type.damage_to_injury(damage - protection);
 
-                if injury_total > 0 {
+                if injury_total.raw() > 0 {
                     let injury_data = InjuryData::new(
                         event_data.attacker(),
                         event_data.defender(),
@@ -190,13 +190,13 @@ impl EventManager {
         {
             let mut injury_events = self.injury_events.lock().unwrap();
             while let Some(event) = injury_events.run_once(current_time, world) {
-                if event.data().injury() > 0 {
+                if event.data().injury().raw() > 0 {
                     let defender = event.data().defender();
                     let injury = event.data().injury();
                     if let Some(defender_stats) =
                         world.write_storage::<CreatureStats>().get_mut(defender)
                     {
-                        *defender_stats.health_mut().value_mut() -= injury.raw();
+                        *defender_stats.health_mut().value_mut() -= i32::from(injury.raw());
                     }
                 }
             }

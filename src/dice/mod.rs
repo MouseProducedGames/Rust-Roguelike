@@ -44,7 +44,7 @@ fn random_wander_command() -> u32 {
 }
 
 pub fn roll_attack(attack_value: AttackValue, defence_value: DefenceValue) -> SuccessResult {
-    roll_success(attack_value.raw() - defence_value.raw())
+    roll_success(i32::from(attack_value.raw() - defence_value.raw()))
 }
 
 pub fn roll_success(skill_bonus: i32) -> SuccessResult {

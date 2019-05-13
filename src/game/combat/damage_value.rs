@@ -14,7 +14,7 @@ use std::ops::{Sub, SubAssign};
 // Internal includes.
 use super::ProtectionValue;
 use crate::game::points::{BuildLevel, BuildPoints, CostsBuildPoints, HasBuildLevel};
-use crate::game::GameValue;
+use crate::game::{GameValue, GameValueFixed};
 
 #[derive(Copy, Clone, Default)]
 pub struct DamageMarker;
@@ -29,7 +29,7 @@ impl CostsBuildPoints for DamageValue {
 
 impl HasBuildLevel for DamageValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::new((self.raw() * 10) - 30)
+        BuildLevel::new(self.raw() - GameValueFixed::from_int(3))
     }
 }
 

@@ -29,10 +29,10 @@ impl Default for BattleAxeFactory {
                 Name::new("Battle Axe"),
                 Weapon::new(
                     WeaponGroup::Axes,
-                    AttackValue::new(1),
+                    AttackValue::from(1),
                     DamageType::Slashing,
-                    DamageValue::new(6),
-                    DefenceValue::new(2),
+                    DamageValue::from(6),
+                    DefenceValue::from(2),
                 ),
             ),
         }

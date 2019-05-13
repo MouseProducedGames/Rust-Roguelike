@@ -50,7 +50,7 @@ impl Default for BanditFactory {
 
 fn creature_level_func() -> BuildLevel {
     let chance = thread_rng().gen_range(1, 9);
-    BuildLevel::new(if chance <= 1 {
+    BuildLevel::from(if chance <= 1 {
         2
     } else if chance <= 2 {
         1

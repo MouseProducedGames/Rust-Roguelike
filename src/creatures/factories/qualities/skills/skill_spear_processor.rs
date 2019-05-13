@@ -14,6 +14,7 @@ use std::default::Default;
 // Internal includes.
 use crate::creatures::factories::LeveledCreatureProcessor;
 use crate::game::points::BuildLevel;
+use crate::game::GameValueFixed;
 use crate::items::weapons::WeaponGroup;
 use crate::skills::{
     SkillActivation, SkillLookup, SkillPassiveOp, SkillTag, SkillType, SkillValue,
@@ -34,7 +35,7 @@ impl LeveledCreatureProcessor for SkillSpearProcessor {
     fn process(&self, world: &mut World, creature_entity: Entity, level: BuildLevel) -> Entity {
         // Only in non-delagating processors.
         // The general creature level is too low to use for skills.
-        let level = level + BuildLevel::new(2);
+        let level = level + BuildLevel::from(2);
         {
             let mut skill_lookup_storage = world.write_storage::<SkillLookup>();
             let skill_lookup = skill_lookup_storage.get_mut(creature_entity).unwrap();
@@ -63,7 +64,7 @@ impl LeveledCreatureProcessor for SkillSpearProcessor {
                     SkillType::Weapon(
                         WeaponGroup::Spears,
                         // We add 1 here to apply the BuildLevel reduction.
-                        SkillValue::new(level.raw() + 1),
+                        SkillValue::new(level.raw() + GameValueFixed::from_int(1)),
                     ),
                 );
             }

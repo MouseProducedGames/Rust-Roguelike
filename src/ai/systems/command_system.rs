@@ -16,7 +16,7 @@ use crate::ai::Command;
 use crate::events::EventManager;
 use crate::factions::Faction;
 use crate::game::combat::AttackActionData;
-use crate::game::{EntityPositionTracker, Time};
+use crate::game::{EntityPositionTracker, GameValueFixed, Time};
 use crate::maps::{execute_tile_func, Mapping, Tilemap, VisibilityMapLookup};
 use crate::rrl_math::Position;
 
@@ -77,7 +77,13 @@ impl<'a> System<'a> for CommandSystem {
 
                         let visibility_type = visibility_map.value_pos(new_position);
 
-                        execute_tile_func(false, 100, map, visibility_type, new_position);
+                        execute_tile_func(
+                            false,
+                            GameValueFixed::from_int(100),
+                            map,
+                            visibility_type,
+                            new_position
+                        );
                     }
                 }
                 _ => (),

@@ -65,7 +65,7 @@ impl fmt::Display for AttackValue {
 
 impl HasBuildLevel for AttackValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::new(self.raw() * 10)
+        BuildLevel::new(self.raw())
     }
 }
 

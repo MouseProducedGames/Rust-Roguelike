@@ -38,7 +38,7 @@ impl WeaponProcessor for DamagingWeaponProcessor {
         {
             let mut storage = world.write_storage::<Weapon>();
             let weapon = storage.get_mut(item_entity).unwrap();
-            *weapon.damage_value_mut() += DamageValue::new(2);
+            *weapon.damage_value_mut() += DamageValue::from(2);
             damage_type = weapon.damage_type();
         }
 

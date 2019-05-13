@@ -29,10 +29,10 @@ impl Default for ArmingSwordFactory {
                 Name::new("Arming Sword"),
                 Weapon::new(
                     WeaponGroup::Swords,
-                    AttackValue::new(3),
+                    AttackValue::from(3),
                     DamageType::Slashing,
-                    DamageValue::new(3),
-                    DefenceValue::new(3),
+                    DamageValue::from(3),
+                    DefenceValue::from(3),
                 ),
             ),
         }

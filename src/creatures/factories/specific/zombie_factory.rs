@@ -36,7 +36,7 @@ impl ZombieFactory {
 
     fn generate_leveled_weapon(&self, world: &mut World, creature_entity: Entity) -> Entity {
         self.0
-            .process(world, creature_entity, BuildLevel::new(weapon_level_func()))
+            .process(world, creature_entity, BuildLevel::from(weapon_level_func()))
     }
 
     fn apply_zombie(&self, world: &mut World, creature_entity: Entity) -> Entity {

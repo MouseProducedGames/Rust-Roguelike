@@ -14,7 +14,7 @@ use std::fmt;
 
 // Internal includes.
 use super::{BuildPoints, CurrencyValue};
-use crate::game::GameValue;
+use crate::game::{GameValue, GameValueFixed};
 
 #[derive(Copy, Clone, Default)]
 pub struct BuildLevelMarker;
@@ -34,9 +34,9 @@ impl fmt::Display for BuildLevel {
 impl From<BuildPoints> for BuildLevel {
     fn from(build_points: BuildPoints) -> Self {
         let raw_build_points = build_points.raw();
-        let float_build_points = f64::from(raw_build_points) / 10.0;
+        let float_build_points = f64::from(raw_build_points);
         let float_build_level = float_build_points.log(1.259_921_049_894_873_2);
-        let raw_build_level = (float_build_level * 10.0).ceil() as i32;
+        let raw_build_level = GameValueFixed::from_float(float_build_level);
         BuildLevel::new(raw_build_level)
     }
 }

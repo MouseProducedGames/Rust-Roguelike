@@ -11,9 +11,10 @@ Documentation:
 
 // Internal includes.
 use super::Stat;
+use crate::game::GameValueFixed;
 
 pub trait StatModifier: Stat {
-    fn modifier(&self) -> i32 {
-        (self.value() / 2) - 5
+    fn modifier(&self) -> GameValueFixed {
+        (self.value() / 2) - GameValueFixed::from_int(5)
     }
 }

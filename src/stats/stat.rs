@@ -11,9 +11,10 @@ Documentation:
 // Standard includes.
 
 // Internal includes.
+use crate::game::GameValueFixed;
 
 pub trait Stat {
-    fn value(&self) -> i32;
+    fn value(&self) -> GameValueFixed;
 
-    fn value_mut(&mut self) -> &mut i32;
+    fn value_mut(&mut self) -> &mut GameValueFixed;
 }

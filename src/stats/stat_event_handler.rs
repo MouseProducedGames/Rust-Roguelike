@@ -62,7 +62,7 @@ impl StatEventHandler {
         let mut creature_stats = world.write_storage::<CreatureStats>();
         if let Some(defender_stats) = creature_stats.get_mut(event_data.defender()) {
             *defender_stats.health_mut().value_mut() -= event_data.injury().raw();
-            *event_data.injury_mut() = InjuryValue::new(0);
+            *event_data.injury_mut() = InjuryValue::from(0);
 
             *event.data_mut() = event_data;
         }
