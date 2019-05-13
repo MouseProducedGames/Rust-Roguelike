@@ -17,6 +17,7 @@ use std::iter::Iterator;
 // Internal includes.
 use super::ConsoleChar;
 use crate::data_types::Immut;
+use crate::game::GameValueFixed;
 use crate::io::{Display, LongDescription, ShortDescription};
 use crate::multidim::Multidim;
 use crate::rrl_math::Bounds;
@@ -275,7 +276,14 @@ impl ConsoleDisplay {
         *self.buffers[self.back_buffer_index].value_mut(y as usize, x as usize) = ch;
     }
 
-    pub(crate) fn put_health(&mut self, x: i32, y: i32, name: &str, max: i32, stat: Attribute) {
+    pub(crate) fn put_health(
+        &mut self,
+        x: i32,
+        y: i32,
+        name: &str,
+        max: GameValueFixed,
+        stat: Attribute
+    ) {
         let formatted = format!("{:.>13} {:>2}/{:+>2}", name, stat.value(), max);
         self.put_string(x, y, &formatted, Color::Grey, Color::Black);
     }

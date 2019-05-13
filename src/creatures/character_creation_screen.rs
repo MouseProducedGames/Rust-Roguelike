@@ -128,7 +128,7 @@ impl Screen for CharacterCreationScreen {
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Perception, SkillPassiveOp::EveryRound),
-                SkillType::Skill(GameValueFixed::from_int(2)),
+                SkillType::Skill(SkillValue::from(2)),
             );
 
             skills.insert(

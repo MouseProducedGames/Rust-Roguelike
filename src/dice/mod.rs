@@ -16,6 +16,7 @@ mod success_result;
 pub use success_result::SuccessResult;
 
 use crate::game::combat::{AttackValue, DefenceValue};
+use crate::game::GameValueFixed;
 use crate::rrl_math::Displacement;
 
 type SuccessRoll = RollSet<u32, Die<u32>, i32>;
@@ -44,11 +45,12 @@ fn random_wander_command() -> u32 {
 }
 
 pub fn roll_attack(attack_value: AttackValue, defence_value: DefenceValue) -> SuccessResult {
-    roll_success(i32::from(attack_value.raw() - defence_value.raw()))
+    roll_success(attack_value.raw() - defence_value.raw())
 }
 
-pub fn roll_success(skill_bonus: i32) -> SuccessResult {
-    let natural_roll = SuccessRoll::new(3, Die::new(6), 0).roll().total();
-    let roll = natural_roll + i64::from(skill_bonus);
-    SuccessResult::new(roll as i32, natural_roll as i32)
+pub fn roll_success(skill_bonus: GameValueFixed) -> SuccessResult {
+    let natural_roll_raw = SuccessRoll::new(3, Die::new(6), 0).roll().total();
+    let natural_roll = GameValueFixed::from_int(natural_roll_raw);
+    let roll = natural_roll + skill_bonus;
+    SuccessResult::new(roll, natural_roll)
 }

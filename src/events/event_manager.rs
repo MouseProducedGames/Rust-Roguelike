@@ -133,7 +133,7 @@ impl EventManager {
                     let damage_data = DamageData::new(
                         event.data().attacker(),
                         event.data().defender(),
-                        DamageValue::from(result.margin_of_success()),
+                        DamageValue::new(result.margin_of_success()),
                         event.data().weapon_group(),
                         event.data().damage_type(),
                     );
@@ -196,7 +196,7 @@ impl EventManager {
                     if let Some(defender_stats) =
                         world.write_storage::<CreatureStats>().get_mut(defender)
                     {
-                        *defender_stats.health_mut().value_mut() -= i32::from(injury.raw());
+                        *defender_stats.health_mut().value_mut() -= injury.raw();
                     }
                 }
             }

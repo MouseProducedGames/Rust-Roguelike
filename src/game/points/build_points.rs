@@ -38,7 +38,7 @@ impl From<BuildLevel> for BuildPoints {
         let float_build_points = 1.259_921_049_894_873_2_f64.powf(float_build_level);
         let raw_build_points = GameValueFixed::from_float(float_build_points);
 
-        BuildPoints::from(raw_build_points)
+        BuildPoints::new(raw_build_points)
     }
 }
 

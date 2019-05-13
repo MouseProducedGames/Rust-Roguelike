@@ -67,7 +67,7 @@ impl WeaponGenerator for TemplatedLeveledWeaponGenerator {
                 {
                     let mut weapon_storage = world.write_storage::<Weapon>();
                     let weapon = weapon_storage.get_mut(item_entity).unwrap();
-                    *weapon.attack_value_mut() += AttackValue::from(level);
+                    *weapon.attack_value_mut() += AttackValue::new(level);
                 }
 
                 {
@@ -94,7 +94,7 @@ impl WeaponGenerator for TemplatedLeveledWeaponGenerator {
                 {
                     let mut weapon_storage = world.write_storage::<Weapon>();
                     let weapon = weapon_storage.get_mut(item_entity).unwrap();
-                    *weapon.attack_value_mut() += AttackValue::from(level);
+                    *weapon.attack_value_mut() += AttackValue::new(level);
                 }
 
                 {

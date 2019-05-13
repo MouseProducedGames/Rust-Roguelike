@@ -11,12 +11,13 @@ Documentation:
 use std::ops::Deref;
 
 // Internal includes.
+use crate::game::GameValueFixed;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub struct SuccessResult(bool, i32);
+pub struct SuccessResult(bool, GameValueFixed);
 
 impl SuccessResult {
-    pub fn new(roll: i32, natural_roll: i32) -> Self {
+    pub fn new(roll: GameValueFixed, natural_roll: GameValueFixed) -> Self {
         SuccessResult((roll > 10) || (natural_roll >= 17), roll)
     }
 
@@ -28,11 +29,11 @@ impl SuccessResult {
         self.0
     }
 
-    pub fn margin_of_success(self) -> i32 {
-        self.roll() - 10
+    pub fn margin_of_success(self) -> GameValueFixed {
+        self.roll() - GameValueFixed::from_int(10)
     }
 
-    pub fn roll(self) -> i32 {
+    pub fn roll(self) -> GameValueFixed {
         self.1
     }
 }

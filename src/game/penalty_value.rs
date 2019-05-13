@@ -15,7 +15,7 @@ use std::marker::PhantomData;
 use std::ops::{Add, AddAssign, Deref, DerefMut, Sub, SubAssign};
 
 // Internal includes.
-use super::GameValue;
+use super::{GameValue, GameValueFixed};
 
 #[derive(Copy, Clone, Default)]
 pub struct PenaltyValue<T, TPenalty>(GameValue<T>, PhantomData<TPenalty>)
@@ -110,7 +110,7 @@ where
     TPenalty: Copy + Clone + Default,
 {
     fn from(value: i32) -> Self {
-        Self::new(GameValue::<T>::new(value))
+        Self::new(GameValue::from(value))
     }
 }
 
@@ -190,7 +190,7 @@ where
     TPenalty: Copy + Clone + Default,
 {
     fn eq(&self, other: &i32) -> bool {
-        self.0 == *other
+        self.0 == GameValueFixed::from_int(*other)
     }
 }
 
