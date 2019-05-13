@@ -29,10 +29,10 @@ impl Default for LongSpearFactory {
                 Name::new("Long Spear"),
                 Weapon::new(
                     WeaponGroup::Spears,
-                    AttackValue::from(5),
+                    AttackValue::new(5),
                     DamageType::Piercing,
-                    DamageValue::from(3),
-                    DefenceValue::from(1),
+                    DamageValue::new(3),
+                    DefenceValue::new(1),
                 ),
             ),
         }

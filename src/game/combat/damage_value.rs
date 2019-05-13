@@ -29,7 +29,7 @@ impl CostsBuildPoints for DamageValue {
 
 impl HasBuildLevel for DamageValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from((i32::from(self) * 10) - 30)
+        BuildLevel::new((self.raw() * 10) - 30)
     }
 }
 
@@ -37,12 +37,12 @@ impl Sub<ProtectionValue> for DamageValue {
     type Output = DamageValue;
 
     fn sub(self, other: ProtectionValue) -> DamageValue {
-        self - DamageValue::from(i32::from(other))
+        self - DamageValue::new(other.raw())
     }
 }
 
 impl SubAssign<ProtectionValue> for DamageValue {
     fn sub_assign(&mut self, other: ProtectionValue) {
-        self.sub_assign(DamageValue::from(i32::from(other)));
+        self.sub_assign(DamageValue::new(other.raw()));
     }
 }

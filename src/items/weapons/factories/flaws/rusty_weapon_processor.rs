@@ -37,7 +37,7 @@ impl WeaponProcessor for RustyWeaponProcessor {
         {
             let mut storage = world.write_storage::<Weapon>();
             let weapon = storage.get_mut(item_entity).unwrap();
-            *weapon.damage_value_mut() += DamageValue::from(-2);
+            *weapon.damage_value_mut() += DamageValue::new(-2);
         }
 
         {

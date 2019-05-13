@@ -93,7 +93,7 @@ impl EventManager {
                     for body_slot in body.get().values() {
                         if body_slot.is_attack() {
                             let item_entity = body_slot.item();
-                            let mut attack_modifier = AttackValue::from(0);
+                            let mut attack_modifier = AttackValue::new(0);
                             let mut weapon_group = WeaponGroup::Unarmed;
                             let mut damage_type = DamageType::Blunt;
                             if let Some(weapon) = weapons.get(item_entity) {
@@ -110,7 +110,7 @@ impl EventManager {
                                     event_data.attacker(),
                                     event_data.defender(),
                                     attack_modifier,
-                                    DefenceValue::from(0),
+                                    DefenceValue::new(0),
                                     weapon_group,
                                     damage_type,
                                 ),
@@ -133,7 +133,7 @@ impl EventManager {
                     let damage_data = DamageData::new(
                         event.data().attacker(),
                         event.data().defender(),
-                        DamageValue::from(result.margin_of_success()),
+                        DamageValue::new(result.margin_of_success()),
                         event.data().weapon_group(),
                         event.data().damage_type(),
                     );
@@ -154,7 +154,7 @@ impl EventManager {
                         event_data.attacker(),
                         event_data.defender(),
                         damage,
-                        ProtectionValue::from(0),
+                        ProtectionValue::new(0),
                         ArmourGroup::Default,
                         event_data.weapon_group(),
                         damage_type,
@@ -196,7 +196,7 @@ impl EventManager {
                     if let Some(defender_stats) =
                         world.write_storage::<CreatureStats>().get_mut(defender)
                     {
-                        *defender_stats.health_mut().value_mut() -= i32::from(injury);
+                        *defender_stats.health_mut().value_mut() -= injury.raw();
                     }
                 }
             }

@@ -37,7 +37,7 @@ impl WeaponProcessor for FineShieldProcessor {
         {
             let mut storage = world.write_storage::<Weapon>();
             let weapon = storage.get_mut(item_entity).unwrap();
-            *weapon.defence_value_mut() += DefenceValue::from(1);
+            *weapon.defence_value_mut() += DefenceValue::new(1);
         }
 
         {

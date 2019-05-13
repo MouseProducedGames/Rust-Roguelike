@@ -27,7 +27,7 @@ impl Component for CurrencyValue {
 
 impl fmt::Display for CurrencyValue {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let raw_value = i32::from(self);
+        let raw_value = self.raw();
         // CurrencyValue tracks down to 1 units.
         let rrl_bucks = raw_value;
         /*
@@ -81,9 +81,9 @@ impl From<&BuildLevel> for CurrencyValue {
 
 impl From<BuildPoints> for CurrencyValue {
     fn from(build_points: BuildPoints) -> Self {
-        let raw_build_points = i32::from(build_points);
+        let raw_build_points = build_points.raw();
         let raw_currency_value = raw_build_points.pow(2) / 5;
-        CurrencyValue::from(raw_currency_value as i32)
+        CurrencyValue::new(raw_currency_value as i32)
     }
 }
 

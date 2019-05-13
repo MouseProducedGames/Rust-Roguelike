@@ -26,7 +26,7 @@ impl Add<SkillValue> for DefenceValue {
     type Output = DefenceValue;
 
     fn add(self, other: SkillValue) -> Self {
-        self + DefenceValue::from(i32::from(other))
+        self + DefenceValue::new(other.raw())
     }
 }
 
@@ -40,7 +40,7 @@ impl Add<&SkillValue> for DefenceValue {
 
 impl AddAssign<SkillValue> for DefenceValue {
     fn add_assign(&mut self, other: SkillValue) {
-        *self += DefenceValue::from(i32::from(other));
+        *self += DefenceValue::new(other.raw());
     }
 }
 
@@ -58,12 +58,12 @@ impl CostsBuildPoints for DefenceValue {
 
 impl fmt::Display for DefenceValue {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", i32::from(self))
+        write!(f, "{}", self.raw())
     }
 }
 
 impl HasBuildLevel for DefenceValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from(i32::from(self) * 10)
+        BuildLevel::new(self.raw() * 10)
     }
 }

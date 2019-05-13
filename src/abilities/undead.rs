@@ -38,8 +38,8 @@ impl UndeadEventHandler {
         let mut event_data = *event.data();
         let undead_lookup = world.read_storage::<Undead>();
         if undead_lookup.get(event_data.defender()).is_some() {
-            let injury_value = i32::from(event_data.injury());
-            *event_data.injury_mut() = InjuryValue::from(match event_data.damage_type() {
+            let injury_value = event_data.injury().raw();
+            *event_data.injury_mut() = InjuryValue::new(match event_data.damage_type() {
                 DamageType::Blunt => (injury_value * 2) / 3,
                 DamageType::Crushing => injury_value / 2,
                 // The value-relative spillover of Blunt and Slashing, rounded to the tens place.

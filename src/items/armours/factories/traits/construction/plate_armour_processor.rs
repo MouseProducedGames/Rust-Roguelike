@@ -37,8 +37,8 @@ impl ArmourProcessor for PlateArmourProcessor {
         {
             let mut storage = world.write_storage::<Armour>();
             let armour = storage.get_mut(item_entity).unwrap();
-            *armour.defence_value_mut() += DefenceValue::from(-3);
-            *armour.protection_value_mut() += ProtectionValue::from(12);
+            *armour.defence_value_mut() += DefenceValue::new(-3);
+            *armour.protection_value_mut() += ProtectionValue::new(12);
         }
 
         {

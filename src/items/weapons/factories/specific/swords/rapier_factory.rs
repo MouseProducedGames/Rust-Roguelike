@@ -29,10 +29,10 @@ impl Default for RapierFactory {
                 Name::new("Rapier"),
                 Weapon::new(
                     WeaponGroup::Swords,
-                    AttackValue::from(4),
+                    AttackValue::new(4),
                     DamageType::Piercing,
-                    DamageValue::from(1),
-                    DefenceValue::from(3),
+                    DamageValue::new(1),
+                    DefenceValue::new(3),
                 ),
             ),
         }

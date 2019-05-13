@@ -42,7 +42,7 @@ impl TemplatedLeveledShieldGenerator {
 
 impl WeaponGenerator for TemplatedLeveledShieldGenerator {
     fn create(&self, world: &mut World, level: BuildLevel) -> Entity {
-        let level = i32::from(level);
+        let level = level.raw();
 
         let item_entity;
         {
@@ -66,7 +66,7 @@ impl WeaponGenerator for TemplatedLeveledShieldGenerator {
                 {
                     let mut weapon_storage = world.write_storage::<Weapon>();
                     let weapon = weapon_storage.get_mut(item_entity).unwrap();
-                    *weapon.defence_value_mut() += DefenceValue::from(level);
+                    *weapon.defence_value_mut() += DefenceValue::new(level);
                 }
 
                 {
@@ -93,7 +93,7 @@ impl WeaponGenerator for TemplatedLeveledShieldGenerator {
                 {
                     let mut weapon_storage = world.write_storage::<Weapon>();
                     let weapon = weapon_storage.get_mut(item_entity).unwrap();
-                    *weapon.defence_value_mut() += DefenceValue::from(level);
+                    *weapon.defence_value_mut() += DefenceValue::new(level);
                 }
 
                 {

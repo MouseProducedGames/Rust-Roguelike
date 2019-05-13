@@ -37,7 +37,7 @@ impl ArmourProcessor for RustyArmourProcessor {
         {
             let mut storage = world.write_storage::<Armour>();
             let armour = storage.get_mut(item_entity).unwrap();
-            *armour.protection_value_mut() += ProtectionValue::from(-2);
+            *armour.protection_value_mut() += ProtectionValue::new(-2);
         }
 
         {

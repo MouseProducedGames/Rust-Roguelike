@@ -29,10 +29,10 @@ impl Default for ShortSpearFactory {
                 Name::new("Short Spear"),
                 Weapon::new(
                     WeaponGroup::Spears,
-                    AttackValue::from(3),
+                    AttackValue::new(3),
                     DamageType::Piercing,
-                    DamageValue::from(3),
-                    DefenceValue::from(3),
+                    DamageValue::new(3),
+                    DefenceValue::new(3),
                 ),
             ),
         }

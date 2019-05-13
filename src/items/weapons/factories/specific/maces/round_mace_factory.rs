@@ -29,10 +29,10 @@ impl Default for RoundMaceFactory {
                 Name::new("Mace"),
                 Weapon::new(
                     WeaponGroup::Maces,
-                    AttackValue::from(1),
+                    AttackValue::new(1),
                     DamageType::Crushing,
-                    DamageValue::from(7),
-                    DefenceValue::from(1),
+                    DamageValue::new(7),
+                    DefenceValue::new(1),
                 ),
             ),
         }

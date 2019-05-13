@@ -27,17 +27,17 @@ impl Component for BuildLevel {
 
 impl fmt::Display for BuildLevel {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", i32::from(self))
+        write!(f, "{}", self.raw())
     }
 }
 
 impl From<BuildPoints> for BuildLevel {
     fn from(build_points: BuildPoints) -> Self {
-        let raw_build_points = i32::from(build_points);
+        let raw_build_points = build_points.raw();
         let float_build_points = f64::from(raw_build_points) / 10.0;
         let float_build_level = float_build_points.log(1.259_921_049_894_873_2);
         let raw_build_level = (float_build_level * 10.0).ceil() as i32;
-        BuildLevel::from(raw_build_level)
+        BuildLevel::new(raw_build_level)
     }
 }
 

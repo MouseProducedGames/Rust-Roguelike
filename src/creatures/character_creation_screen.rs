@@ -133,32 +133,32 @@ impl Screen for CharacterCreationScreen {
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(WeaponGroup::Axes, SkillValue::from(0)),
+                SkillType::Weapon(WeaponGroup::Axes, SkillValue::new(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(WeaponGroup::Maces, SkillValue::from(0)),
+                SkillType::Weapon(WeaponGroup::Maces, SkillValue::new(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(WeaponGroup::Shields, SkillValue::from(0)),
+                SkillType::Weapon(WeaponGroup::Shields, SkillValue::new(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(WeaponGroup::Spears, SkillValue::from(0)),
+                SkillType::Weapon(WeaponGroup::Spears, SkillValue::new(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(WeaponGroup::Swords, SkillValue::from(0)),
+                SkillType::Weapon(WeaponGroup::Swords, SkillValue::new(0)),
             );
 
             skills.insert(
                 SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-                SkillType::Weapon(WeaponGroup::Unarmed, SkillValue::from(0)),
+                SkillType::Weapon(WeaponGroup::Unarmed, SkillValue::new(0)),
             );
 
             let mut talents = TalentLookup::new();
@@ -260,11 +260,11 @@ impl Screen for CharacterCreationScreen {
                         + CreatureStats::from(origin_type)
                         + CreatureStats::new(0, 0, 0, 0, 4, 0),
                 )
-                .with(MultiAttackPenalty::new(AttackValue::from(0)))
+                .with(MultiAttackPenalty::new(AttackValue::new(0)))
                 .with(Position::new(8, 5))
                 .with(PlayerMarker)
                 .with(skills)
-                .with(SkillPoints::from(120))
+                .with(SkillPoints::new(120))
                 .with(talents)
                 .with(TransferItem::None)
                 .with(ViewpointMarker)

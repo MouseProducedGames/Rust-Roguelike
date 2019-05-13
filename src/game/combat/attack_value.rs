@@ -27,7 +27,7 @@ impl Add<SkillValue> for AttackValue {
     type Output = AttackValue;
 
     fn add(self, other: SkillValue) -> Self {
-        self + AttackValue::from(i32::from(other))
+        self + AttackValue::new(other.raw())
     }
 }
 
@@ -41,7 +41,7 @@ impl Add<&SkillValue> for AttackValue {
 
 impl AddAssign<SkillValue> for AttackValue {
     fn add_assign(&mut self, other: SkillValue) {
-        *self += AttackValue::from(i32::from(other));
+        *self += AttackValue::new(other.raw());
     }
 }
 
@@ -59,13 +59,13 @@ impl CostsBuildPoints for AttackValue {
 
 impl fmt::Display for AttackValue {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", i32::from(self))
+        write!(f, "{}", self.raw())
     }
 }
 
 impl HasBuildLevel for AttackValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from(i32::from(self) * 10)
+        BuildLevel::new(self.raw() * 10)
     }
 }
 
@@ -73,12 +73,12 @@ impl Sub<DefenceValue> for AttackValue {
     type Output = AttackValue;
 
     fn sub(self, other: DefenceValue) -> Self {
-        self - AttackValue::from(i32::from(other))
+        self - AttackValue::new(other.raw())
     }
 }
 
 impl SubAssign<DefenceValue> for AttackValue {
     fn sub_assign(&mut self, other: DefenceValue) {
-        *self -= AttackValue::from(i32::from(other));
+        *self -= AttackValue::new(other.raw());
     }
 }

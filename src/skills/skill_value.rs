@@ -28,12 +28,12 @@ impl CostsBuildPoints for SkillValue {
 
 impl fmt::Display for SkillValue {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", i32::from(self))
+        write!(f, "{}", self.raw())
     }
 }
 
 impl HasBuildLevel for SkillValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from((i32::from(self) * 10) + 30)
+        BuildLevel::new((self.raw() * 10) + 30)
     }
 }

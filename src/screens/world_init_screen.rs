@@ -101,49 +101,49 @@ impl Screen for WorldInitScreen {
                 (
                     WeaponGroup::Axes,
                     WeaponSkillTypeData::new(
-                        AttackValue::from(-1),
-                        BuildLevel::from(-5),
-                        DefenceValue::from(0),
+                        AttackValue::new(-1),
+                        BuildLevel::new(-5),
+                        DefenceValue::new(0),
                     ),
                 ),
                 (
                     WeaponGroup::Maces,
                     WeaponSkillTypeData::new(
-                        AttackValue::from(0),
-                        BuildLevel::from(-5),
-                        DefenceValue::from(-1),
+                        AttackValue::new(0),
+                        BuildLevel::new(-5),
+                        DefenceValue::new(-1),
                     ),
                 ),
                 (
                     WeaponGroup::Shields,
                     WeaponSkillTypeData::new(
-                        AttackValue::from(-2),
-                        BuildLevel::from(-10),
-                        DefenceValue::from(0),
+                        AttackValue::new(-2),
+                        BuildLevel::new(-10),
+                        DefenceValue::new(0),
                     ),
                 ),
                 (
                     WeaponGroup::Spears,
                     WeaponSkillTypeData::new(
-                        AttackValue::from(-1),
-                        BuildLevel::from(-10),
-                        DefenceValue::from(-1),
+                        AttackValue::new(-1),
+                        BuildLevel::new(-10),
+                        DefenceValue::new(-1),
                     ),
                 ),
                 (
                     WeaponGroup::Swords,
                     WeaponSkillTypeData::new(
-                        AttackValue::from(1),
-                        BuildLevel::from(10),
-                        DefenceValue::from(1),
+                        AttackValue::new(1),
+                        BuildLevel::new(10),
+                        DefenceValue::new(1),
                     ),
                 ),
                 (
                     WeaponGroup::Unarmed,
                     WeaponSkillTypeData::new(
-                        AttackValue::from(5),
-                        BuildLevel::from(20),
-                        DefenceValue::from(5),
+                        AttackValue::new(5),
+                        BuildLevel::new(20),
+                        DefenceValue::new(5),
                     ),
                 ),
             ])));

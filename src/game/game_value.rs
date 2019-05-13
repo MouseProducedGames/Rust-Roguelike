@@ -15,7 +15,7 @@ use std::convert::From;
 
 pub type GameValue<TMarker> = TemplateGameValue<i32, TMarker>;
 
-impl<TMarker> From<i32> for GameValue<TMarker>
+/* impl<TMarker> From<i32> for GameValue<TMarker>
 where
     TMarker: Copy + Clone + Default,
 {
@@ -49,4 +49,4 @@ where
     fn from(other: &GameValue<TMarker>) -> Self {
         Self::from(*other)
     }
-}
+} */

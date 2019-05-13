@@ -37,7 +37,7 @@ impl ArmourProcessor for FineArmourProcessor {
         {
             let mut storage = world.write_storage::<Armour>();
             let armour = storage.get_mut(item_entity).unwrap();
-            *armour.defence_value_mut() += DefenceValue::from(1);
+            *armour.defence_value_mut() += DefenceValue::new(1);
         }
 
         {

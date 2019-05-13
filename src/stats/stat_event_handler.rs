@@ -38,9 +38,9 @@ impl StatEventHandler {
         if let Some(attacker_stats) = creature_stats.get(event_data.attacker()) {
             if let Some(defender_stats) = creature_stats.get(event_data.defender()) {
                 *event_data.attack_modifier_mut() +=
-                    AttackValue::from(attacker_stats.coordination().modifier());
+                    AttackValue::new(attacker_stats.coordination().modifier());
                 *event_data.defence_modifier_mut() +=
-                    DefenceValue::from(defender_stats.agility().modifier());
+                    DefenceValue::new(defender_stats.agility().modifier());
 
                 *event.data_mut() = event_data;
             }
@@ -51,7 +51,7 @@ impl StatEventHandler {
         let mut event_data = *event.data();
         let creature_stats = world.read_storage::<CreatureStats>();
         if let Some(attacker_stats) = creature_stats.get(event_data.attacker()) {
-            *event_data.damage_mut() += DamageValue::from(attacker_stats.strength().modifier());
+            *event_data.damage_mut() += DamageValue::new(attacker_stats.strength().modifier());
 
             *event.data_mut() = event_data;
         }
@@ -61,8 +61,8 @@ impl StatEventHandler {
         let mut event_data = *event.data();
         let mut creature_stats = world.write_storage::<CreatureStats>();
         if let Some(defender_stats) = creature_stats.get_mut(event_data.defender()) {
-            *defender_stats.health_mut().value_mut() -= i32::from(event_data.injury());
-            *event_data.injury_mut() = InjuryValue::from(0);
+            *defender_stats.health_mut().value_mut() -= event_data.injury().raw();
+            *event_data.injury_mut() = InjuryValue::new(0);
 
             *event.data_mut() = event_data;
         }

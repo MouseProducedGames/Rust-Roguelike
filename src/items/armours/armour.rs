@@ -77,9 +77,9 @@ impl CostsCurrency for Armour {
 impl HasBuildLevel for Armour {
     fn build_level_total(&self, world: &World) -> BuildLevel {
         let base_level = self.protection_value().build_level_total(world);
-        let raw_base_level = i32::from(base_level);
-        let raw_defence_level = self.defence_value().build_level_total(world);
-        let raw_restriction_level = i32::from(raw_defence_level) / 3;
-        BuildLevel::from(raw_base_level - raw_restriction_level)
+        let raw_base_level = base_level.raw();
+        let raw_defence_level = self.defence_value().build_level_total(world).raw();
+        let raw_restriction_level = raw_defence_level / 3;
+        BuildLevel::new(raw_base_level - raw_restriction_level)
     }
 }

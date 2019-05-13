@@ -71,7 +71,7 @@ impl StartScreen {
 
         skills.insert(
             SkillActivation::Passive(SkillTag::Combat, SkillPassiveOp::OnUse),
-            SkillType::Weapon(WeaponGroup::Unarmed, SkillValue::from(2)),
+            SkillType::Weapon(WeaponGroup::Unarmed, SkillValue::new(2)),
         );
 
         let body = SpeciesType::Human.create_body(world);
@@ -85,7 +85,7 @@ impl StartScreen {
             .with(CreatureStats::default() + CreatureStats::new(4, 0, 0, 4, 4, 4))
             .with(Inventory::new())
             .with(maslow_tree)
-            .with(MultiAttackPenalty::new(AttackValue::from(0)))
+            .with(MultiAttackPenalty::new(AttackValue::new(0)))
             .with(Position::new(12, 8))
             .with(skills)
             .with(TalentLookup::new())

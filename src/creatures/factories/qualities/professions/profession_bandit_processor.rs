@@ -58,16 +58,16 @@ impl LeveledCreatureProcessor for ProfessionBanditProcessor {
         match thread_rng().gen_range(0, 8) {
             0 => self
                 .axe
-                .process(world, creature_entity, level + BuildLevel::from(1)),
+                .process(world, creature_entity, level + BuildLevel::new(1)),
             1 => self
                 .mace
-                .process(world, creature_entity, level + BuildLevel::from(1)),
+                .process(world, creature_entity, level + BuildLevel::new(1)),
             2 => self
                 .spear
-                .process(world, creature_entity, level + BuildLevel::from(1)),
+                .process(world, creature_entity, level + BuildLevel::new(1)),
             3 => self
                 .sword
-                .process(world, creature_entity, level + BuildLevel::from(1)),
+                .process(world, creature_entity, level + BuildLevel::new(1)),
             4 => self.axe_and_shield.process(world, creature_entity, level),
             5 => self.mace_and_shield.process(world, creature_entity, level),
             6 => self.spear_and_shield.process(world, creature_entity, level),

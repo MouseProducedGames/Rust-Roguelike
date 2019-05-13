@@ -27,13 +27,13 @@ impl Component for SkillPoints {
 
 impl fmt::Display for SkillPoints {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", i32::from(self))
+        write!(f, "{}", self.raw())
     }
 }
 
 impl From<BuildPoints> for SkillPoints {
     fn from(build_points: BuildPoints) -> Self {
-        SkillPoints::from(i32::from(build_points))
+        SkillPoints::new(build_points.raw())
     }
 }
 
@@ -45,7 +45,7 @@ impl From<&BuildPoints> for SkillPoints {
 
 impl From<SkillPoints> for BuildPoints {
     fn from(skill_points: SkillPoints) -> Self {
-        BuildPoints::from(i32::from(skill_points))
+        BuildPoints::new(skill_points.raw())
     }
 }
 

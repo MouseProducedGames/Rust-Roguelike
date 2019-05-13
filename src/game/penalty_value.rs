@@ -29,7 +29,7 @@ where
     TPenalty: Copy + Clone + Default,
 {
     pub fn new(value: GameValue<T>) -> Self {
-        Self(value.min(GameValue::from(0)), PhantomData)
+        Self(value.min(GameValue::new(0)), PhantomData)
     }
 }
 
@@ -110,7 +110,7 @@ where
     TPenalty: Copy + Clone + Default,
 {
     fn from(value: i32) -> Self {
-        Self::new(GameValue::<T>::from(value))
+        Self::new(GameValue::<T>::new(value))
     }
 }
 
@@ -130,7 +130,7 @@ where
     TPenalty: Copy + Clone + Default,
 {
     fn from(value: PenaltyValue<T, TPenalty>) -> Self {
-        i32::from(value.0)
+        value.0.raw()
     }
 }
 

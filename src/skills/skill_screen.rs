@@ -134,14 +134,14 @@ impl Screen for SkillScreen {
                             weapon_skill_type_lookup.get(*weapon_group).cost_modifier();
                         let skill_cost_level = skill_level + skill_cost_modifier;
                         let current_skill_cost = BuildPoints::from(skill_cost_level);
-                        let next_skill_cost_level = skill_cost_level + BuildLevel::from(10);
+                        let next_skill_cost_level = skill_cost_level + BuildLevel::new(10);
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);
                         let build_points_difference = next_skill_cost - current_skill_cost;
                         let skill_points_difference = SkillPoints::from(build_points_difference);
 
                         if skill_points_difference <= *skill_points {
                             *skill_points -= skill_points_difference;
-                            *skill_value += SkillValue::from(1);
+                            *skill_value += SkillValue::new(1);
                         }
                     }
                 }

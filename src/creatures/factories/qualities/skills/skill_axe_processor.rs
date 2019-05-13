@@ -34,7 +34,7 @@ impl LeveledCreatureProcessor for SkillAxeProcessor {
     fn process(&self, world: &mut World, creature_entity: Entity, level: BuildLevel) -> Entity {
         // Only in non-delagating processors.
         // The general creature level is too low to use for skills.
-        let level = level + BuildLevel::from(2);
+        let level = level + BuildLevel::new(2);
         {
             let mut skill_lookup_storage = world.write_storage::<SkillLookup>();
             let skill_lookup = skill_lookup_storage.get_mut(creature_entity).unwrap();
@@ -51,7 +51,7 @@ impl LeveledCreatureProcessor for SkillAxeProcessor {
                             // We do not add ?? here, because it was done when the skill was
                             // constructed.
                             // Hmm... bit of a problem.
-                            *skill_value += SkillValue::from(i32::from(level));
+                            *skill_value += SkillValue::new(level.raw());
                         }
                     }
                 }
@@ -65,7 +65,7 @@ impl LeveledCreatureProcessor for SkillAxeProcessor {
                         WeaponGroup::Axes,
                         // We add ?? here to apply the BuildLevel reduction.
                         // Hmm... bit of a problem.
-                        SkillValue::from(i32::from(level)),
+                        SkillValue::new(level.raw()),
                     ),
                 );
             }

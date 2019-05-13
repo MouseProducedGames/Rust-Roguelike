@@ -29,10 +29,10 @@ impl Default for LongSwordFactory {
                 Name::new("Long Sword"),
                 Weapon::new(
                     WeaponGroup::Swords,
-                    AttackValue::from(2),
+                    AttackValue::new(2),
                     DamageType::Slashing,
-                    DamageValue::from(7),
-                    DefenceValue::from(2),
+                    DamageValue::new(7),
+                    DefenceValue::new(2),
                 ),
             ),
         }

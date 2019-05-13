@@ -32,7 +32,7 @@ impl AttackPenaltyEventHandler {
         if let Some(multi_attack_penalty) = multi_attack_penalty {
             let attack_value = **multi_attack_penalty;
             *event_data.attack_modifier_mut() -= attack_value;
-            **multi_attack_penalty += AttackValue::from(-4);
+            **multi_attack_penalty += AttackValue::new(-4);
         }
 
         *event.data_mut() = event_data;

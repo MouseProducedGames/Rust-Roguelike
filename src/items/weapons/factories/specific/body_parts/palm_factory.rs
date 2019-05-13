@@ -29,10 +29,10 @@ impl Default for PalmFactory {
                 Name::new("Palm"),
                 Weapon::new(
                     WeaponGroup::Unarmed,
-                    AttackValue::from(0),
+                    AttackValue::new(0),
                     DamageType::Blunt,
-                    DamageValue::from(0),
-                    DefenceValue::from(0),
+                    DamageValue::new(0),
+                    DefenceValue::new(0),
                 ),
             ),
         }

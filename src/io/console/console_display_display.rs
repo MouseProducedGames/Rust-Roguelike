@@ -41,7 +41,7 @@ impl Display for ConsoleDisplay {
         for (i, body_slot) in body.get().values().enumerate() {
             let item_entity = body_slot.item();
             #[allow(unused_variables)]
-            let mut use_build_points = BuildPoints::from(0);
+            let mut use_build_points = BuildPoints::new(0);
             if let Some(build_points) = build_points_storage.get(item_entity) {
                 use_build_points = *build_points;
             }
@@ -49,7 +49,7 @@ impl Display for ConsoleDisplay {
             let use_build_points = use_build_points;
 
             #[allow(unused_variables)]
-            let mut use_currency_total = CurrencyValue::from(0);
+            let mut use_currency_total = CurrencyValue::new(0);
             if let Some(currency_value) = currency_storage.get(item_entity) {
                 use_currency_total = *currency_value;
             }
@@ -87,7 +87,7 @@ impl Display for ConsoleDisplay {
         for (i, item_entity) in inventory.get().iter().enumerate() {
             let item_entity = *item_entity;
             #[allow(unused_variables)]
-            let mut use_build_points = BuildPoints::from(0);
+            let mut use_build_points = BuildPoints::new(0);
             if let Some(build_points) = build_points_storage.get(item_entity) {
                 use_build_points = *build_points;
             }
@@ -95,7 +95,7 @@ impl Display for ConsoleDisplay {
             let use_build_points = use_build_points;
 
             #[allow(unused_variables)]
-            let mut use_currency_total = CurrencyValue::from(0);
+            let mut use_currency_total = CurrencyValue::new(0);
             if let Some(currency_value) = currency_storage.get(item_entity) {
                 use_currency_total = *currency_value;
             }
@@ -174,7 +174,7 @@ impl Display for ConsoleDisplay {
                             weapon_skill_type_lookup.get(*weapon_group).cost_modifier();
                         let skill_cost_level = skill_level + skill_cost_modifier;
                         let current_skill_cost = BuildPoints::from(skill_cost_level);
-                        let next_skill_cost_level = skill_cost_level + BuildLevel::from(10);
+                        let next_skill_cost_level = skill_cost_level + BuildLevel::new(10);
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);
                         format!(
                             "{}: Skill: {} [{} -> {} = {}]",

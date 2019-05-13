@@ -21,6 +21,6 @@ pub type ProtectionValue = GameValue<ProtectionMarker>;
 
 impl HasBuildLevel for ProtectionValue {
     fn build_level_total(&self, _world: &World) -> BuildLevel {
-        BuildLevel::from((i32::from(self) * 10) - 30)
+        BuildLevel::new((self.raw() * 10) - 30)
     }
 }
