@@ -19,6 +19,7 @@ use crate::bodies::Body;
 use crate::data_types::Name;
 use crate::factions::Faction;
 use crate::game::points::{BuildLevel, BuildPoints, CurrencyValue, HasBuildLevel};
+use crate::game::GameValueFixed;
 use crate::io::{Display, DisplayOption};
 use crate::items::{Inventory, Item};
 use crate::maps::{Tilemap, VisibilityMap, VisibilityType};
@@ -173,8 +174,12 @@ impl Display for ConsoleDisplay {
                         let skill_cost_modifier =
                             weapon_skill_type_lookup.get(*weapon_group).cost_modifier();
                         let skill_cost_level = skill_level + skill_cost_modifier;
-                        let current_skill_cost = BuildPoints::from(skill_cost_level);
-                        let next_skill_cost_level = skill_cost_level + BuildLevel::from(1);
+                        let bigger_numbers_skill_cost_level =
+                            BuildLevel::new(skill_cost_level.raw() + GameValueFixed::from_int(10));
+                        let current_skill_cost =
+                            BuildPoints::from(bigger_numbers_skill_cost_level);
+                        let next_skill_cost_level =
+                            bigger_numbers_skill_cost_level + BuildLevel::from(1);
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);
                         format!(
                             "{}: Skill: {} [{} -> {} = {}]",

@@ -17,7 +17,7 @@ use super::{
     WeaponSkillTypeLookup,
 };
 use crate::game::points::{BuildLevel, BuildPoints, HasBuildLevel};
-use crate::game::GameState;
+use crate::game::{GameState, GameValueFixed};
 use crate::io::{Display, Input};
 use crate::screens::{Screen, ScreenPushWrapper, ScreenState};
 
@@ -133,8 +133,12 @@ impl Screen for SkillScreen {
                         let skill_cost_modifier =
                             weapon_skill_type_lookup.get(*weapon_group).cost_modifier();
                         let skill_cost_level = skill_level + skill_cost_modifier;
-                        let current_skill_cost = BuildPoints::from(skill_cost_level);
-                        let next_skill_cost_level = skill_cost_level + BuildLevel::from(1);
+                        let bigger_numbers_skill_cost_level =
+                            BuildLevel::new(skill_cost_level.raw() + GameValueFixed::from_int(10));
+                        let current_skill_cost =
+                            BuildPoints::from(bigger_numbers_skill_cost_level);
+                        let next_skill_cost_level =
+                            bigger_numbers_skill_cost_level + BuildLevel::from(1);
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);
                         let build_points_difference = next_skill_cost - current_skill_cost;
                         let skill_points_difference = SkillPoints::from(build_points_difference);
