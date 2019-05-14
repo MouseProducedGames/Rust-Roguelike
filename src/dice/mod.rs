@@ -7,7 +7,7 @@ Documentation:
  **/
 // External includes.
 use rand::{thread_rng, Rng};
-use rust_dice::{Die, Roll, RollSet};
+use rust_dice::{Die, /*Roll,*/ RollSet};
 
 // Standard includes.
 
@@ -19,7 +19,7 @@ use crate::game::combat::{AttackValue, DefenceValue};
 use crate::game::GameValueFixed;
 use crate::rrl_math::Displacement;
 
-type SuccessRoll = RollSet<u32, Die<u32>, i32>;
+type _SuccessRoll = RollSet<u32, Die<u32>, i32>;
 
 pub fn get_random_move() -> Displacement {
     let key_command = random_wander_command();
@@ -49,8 +49,13 @@ pub fn roll_attack(attack_value: AttackValue, defence_value: DefenceValue) -> Su
 }
 
 pub fn roll_success(skill_bonus: GameValueFixed) -> SuccessResult {
-    let natural_roll_raw = SuccessRoll::new(3, Die::new(6), 0).roll().total();
-    let natural_roll = GameValueFixed::from_int(natural_roll_raw);
+    // let natural_roll_raw = SuccessRoll::new(3, Die::new(6), 0).roll().total();
+    // let natural_roll = GameValueFixed::from_int(natural_roll_raw);
+    // 3d6 using base 4096 fixed_point numbers.
+    let natural_roll_raw = thread_rng().gen_range(4096, 24_577)
+        + thread_rng().gen_range(4096, 24_577)
+        + thread_rng().gen_range(4096, 24_577);
+    let natural_roll = GameValueFixed::from_int(natural_roll_raw) / 4096;
     let roll = natural_roll + skill_bonus;
     SuccessResult::new(roll, natural_roll)
 }
