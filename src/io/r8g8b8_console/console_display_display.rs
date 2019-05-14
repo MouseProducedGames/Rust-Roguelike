@@ -177,8 +177,11 @@ impl Display for ConsoleDisplay {
                         let bigger_numbers_skill_cost_level =
                             BuildLevel::new(skill_cost_level.raw() + GameValueFixed::from_int(10));
                         let current_skill_cost = BuildPoints::from(bigger_numbers_skill_cost_level);
+                        let add_build_level = BuildLevel::new(GameValueFixed::from_int(1) / 4096);
+                        let next_skill_cost_level_raw =
+                            (bigger_numbers_skill_cost_level + add_build_level).raw();
                         let next_skill_cost_level =
-                            bigger_numbers_skill_cost_level + BuildLevel::from(1);
+                            BuildLevel::new(next_skill_cost_level_raw.ceil());
                         let next_skill_cost = BuildPoints::from(next_skill_cost_level);
                         format!(
                             "{}: Skill: {} [{} -> {} = {}]",
