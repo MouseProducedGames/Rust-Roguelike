@@ -52,6 +52,7 @@ impl WeaponEventHandler {
                     let item = body_slot.item();
                     if let Some(weapon) = weapons.get(item) {
                         *event_data.defence_modifier_mut() += weapon.defence_value();
+                        *event_data.defence_group_mut() = weapon.weapon_group();
                         break;
                     }
                 }

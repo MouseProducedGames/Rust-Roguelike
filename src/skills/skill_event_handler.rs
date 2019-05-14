@@ -19,7 +19,6 @@ use super::{
 use crate::events::{Event, EventManager};
 use crate::game::combat::AttackData;
 use crate::game::GameValueFixed;
-use crate::items::weapons::WeaponGroup;
 
 pub struct SkillEventHandler;
 
@@ -86,7 +85,7 @@ impl SkillEventHandler {
                 )) {
                     for (i, combat_skill) in passive_combat_skills.iter().enumerate() {
                         if let SkillType::Weapon(weapon_group, skill_value) = combat_skill {
-                            if *weapon_group == WeaponGroup::Unarmed {
+                            if *weapon_group == event_data.defence_group() {
                                 found = Some(i);
                                 let defence_modifier = weapon_skill_type_lookup
                                     .get(*weapon_group)

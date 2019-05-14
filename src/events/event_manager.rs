@@ -113,6 +113,7 @@ impl EventManager {
                                     DefenceValue::from(0),
                                     weapon_group,
                                     damage_type,
+                                    WeaponGroup::Unarmed,
                                 ),
                             );
                         }

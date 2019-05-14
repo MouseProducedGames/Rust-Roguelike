@@ -22,6 +22,7 @@ pub struct AttackData {
     defence_modifier: DefenceValue,
     weapon_group: WeaponGroup,
     damage_type: DamageType,
+    defence_group: WeaponGroup,
 }
 
 impl AttackData {
@@ -32,6 +33,7 @@ impl AttackData {
         defence_modifier: DefenceValue,
         weapon_group: WeaponGroup,
         damage_type: DamageType,
+        defence_group: WeaponGroup,
     ) -> Self {
         Self {
             attacker,
@@ -40,6 +42,7 @@ impl AttackData {
             defence_modifier,
             weapon_group,
             damage_type,
+            defence_group,
         }
     }
 
@@ -81,5 +84,13 @@ impl AttackData {
 
     pub fn _weapon_group_mut(&mut self) -> &mut WeaponGroup {
         &mut self.weapon_group
+    }
+
+    pub fn defence_group(&self) -> WeaponGroup {
+        self.defence_group
+    }
+
+    pub fn defence_group_mut(&mut self) -> &mut WeaponGroup {
+        &mut self.defence_group
     }
 }
