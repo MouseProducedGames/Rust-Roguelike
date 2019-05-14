@@ -382,7 +382,7 @@ impl ConsoleDisplay {
         y: i32,
         name: &str,
         max: GameValueFixed,
-        stat: Attribute
+        stat: Attribute,
     ) {
         let formatted = format!("{:.>13} {:>2}/{:+>2}", name, stat.value(), max);
         self.put_string(x, y, &formatted, Color::Grey, Color::Black);

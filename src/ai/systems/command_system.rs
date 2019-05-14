@@ -82,7 +82,7 @@ impl<'a> System<'a> for CommandSystem {
                             GameValueFixed::from_int(100),
                             map,
                             visibility_type,
-                            new_position
+                            new_position,
                         );
                     }
                 }

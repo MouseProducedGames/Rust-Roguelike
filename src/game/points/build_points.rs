@@ -50,8 +50,9 @@ impl From<&BuildLevel> for BuildPoints {
 
 impl From<CurrencyValue> for BuildPoints {
     fn from(currency_value: CurrencyValue) -> Self {
-        let raw_currency_value = currency_value.raw();
-        let float_currency_value = f64::from(raw_currency_value * 5);
+        let bigger_numbers_raw_currency_value = currency_value.raw();
+        let bigger_numbers_float_currency_value = f64::from(bigger_numbers_raw_currency_value * 5);
+        let float_currency_value = bigger_numbers_float_currency_value / 100.0;
         let float_build_points = float_currency_value.sqrt();
         let raw_build_points = float_build_points as i32;
         BuildPoints::from(raw_build_points)

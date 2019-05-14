@@ -44,7 +44,7 @@ impl CreatureStats {
             health: Attribute::new(health),
         }
     }
-    
+
     pub fn from_ints(
         strength: i32,
         agility: i32,

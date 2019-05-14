@@ -5,7 +5,6 @@ See license in the LICENSE file
 Documentation:
 
 **/
-
 // External includes.
 
 // Standard includes.
