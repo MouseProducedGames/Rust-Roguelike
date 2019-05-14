@@ -124,7 +124,6 @@ impl Screen for SkillScreen {
             }
             '+' => {
                 if skills_len > 0 {
-                    let maybe_skill_points: Option<SkillPoints>;
                     if let SkillType::Weapon(weapon_group, skill_value) =
                         &mut skills[self.skill_index]
                     {
@@ -148,19 +147,10 @@ impl Screen for SkillScreen {
 
                         if skill_points_difference <= *skill_points {
                             *skill_points -= skill_points_difference;
-                            let bigger_skill_points_raw = SkillPoints::from(next_skill_cost).raw();
-                            let actual_skill_points =
-                                SkillPoints::new(bigger_skill_points_raw / 10);
-                            maybe_skill_points = Some(actual_skill_points);
-                        } else {
-                            maybe_skill_points = None;
+                            *skill_value = SkillValue::new(
+                                (skill_value.raw() + (GameValueFixed::from_int(1) / 4096)).ceil(),
+                            );
                         }
-                    } else {
-                        maybe_skill_points = None;
-                    }
-
-                    if let Some(skill_points) = maybe_skill_points {
-                        skills[self.skill_index].skill_points_mut(world, skill_points);
                     }
                 }
             }
