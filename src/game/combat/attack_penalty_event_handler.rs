@@ -30,9 +30,11 @@ impl AttackPenaltyEventHandler {
         let mut multi_attack_penalties = world.write_storage::<MultiAttackPenalty>();
         let multi_attack_penalty = multi_attack_penalties.get_mut(event_data.attacker());
         if let Some(multi_attack_penalty) = multi_attack_penalty {
-            let attack_value = **multi_attack_penalty;
+            let attack_value = multi_attack_penalty.raw();
             *event_data.attack_modifier_mut() -= attack_value;
-            **multi_attack_penalty += AttackValue::from(-4);
+            let new_multi_attack_penalty =
+                MultiAttackPenalty::new(attack_value + AttackValue::from(-4));
+            *multi_attack_penalty = new_multi_attack_penalty;
         }
 
         *event.data_mut() = event_data;
