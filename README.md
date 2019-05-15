@@ -2,6 +2,8 @@
 
 Rust Roguelike is a text-based roguelike written in Rust, and licensed under the MIT license.
 
+Development continues in private on a commercial release. Some engine changes may be back-ported.
+
 # Current State
 
 * Wander around a small map with a generated dungeon.
